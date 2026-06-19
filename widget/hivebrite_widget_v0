@@ -1,0 +1,378 @@
+<!--
+  FutureSelf AI Advisor Widget // Version #0
+  Goal: Inject this into the Hivebrite HTML block via admin panel
+  Last updated: June 19, 2026
+  Author: Jerald Arden Freeman
+
+  SETUP:
+  1. Replace YOUR_API_KEY_HERE with your OpenAI API key
+  2. Paste entire file contents into Hivebrite HTML block
+  3. Save and publish
+
+  NOTE: API key is exposed in client-side HTML (temporary for beta testing)
+  TODO: Move key to Vercel serverless proxy before broader rollout
+-->
+
+<style>
+  #fs-bubble {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #534AB7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2147483647;
+    box-shadow: 0 4px 16px rgba(83,74,183,0.35);
+  }
+  #fs-bubble:hover { transform: scale(1.08); }
+  #fs-bubble svg {
+    width: 26px; height: 26px; fill: none; stroke: #fff;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    pointer-events: none;
+  }
+  #fs-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #EEEDFE;
+    border: 1.5px solid #AFA9EC;
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin: 12px 0 12px 0;
+    gap: 14px;
+  }
+  #fs-banner.hidden { display: none; }
+  .fs-banner-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+  .fs-banner-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: #534AB7; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .fs-banner-icon svg {
+    width: 18px; height: 18px; fill: none; stroke: #fff;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    pointer-events: none;
+  }
+  .fs-banner-text {
+    font-size: 14px; color: #3C3489; line-height: 1.5;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .fs-banner-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: #534AB7;
+    white-space: nowrap; cursor: pointer;
+  }
+  .fs-banner-cta:hover { color: #3C3489; }
+  .fs-banner-cta svg {
+    width: 16px; height: 16px; fill: none; stroke: #534AB7;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    pointer-events: none;
+  }
+  .fs-banner-x {
+    background: none; border: none; color: #AFA9EC;
+    font-size: 18px; cursor: pointer; padding: 0 0 0 8px;
+    line-height: 1; flex-shrink: 0;
+  }
+  .fs-banner-x:hover { color: #534AB7; }
+  #fs-chat {
+    position: fixed;
+    bottom: 96px;
+    right: 28px;
+    width: 320px;
+    height: 480px;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid #ddd;
+    z-index: 2147483646;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #fs-chat.open { display: flex; }
+  .fs-hdr {
+    background: #534AB7; padding: 12px 14px;
+    display: flex; align-items: center;
+    justify-content: space-between; flex-shrink: 0;
+  }
+  .fs-hdr-left { display: flex; align-items: center; gap: 10px; }
+  .fs-hdr-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fs-hdr-icon svg {
+    width: 16px; height: 16px; fill: none; stroke: #fff;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .fs-hdr-name { font-size: 13px; font-weight: 600; color: #fff; }
+  .fs-hdr-beta {
+    font-size: 9px; font-weight: 600; color: #534AB7;
+    background: rgba(255,255,255,0.9); border-radius: 4px;
+    padding: 1px 5px; margin-left: 6px; vertical-align: middle;
+    letter-spacing: 0.5px;
+  }
+  .fs-hdr-sub { font-size: 10px; color: rgba(255,255,255,0.65); margin-top: 1px; }
+  .fs-x {
+    background: none; border: none; color: rgba(255,255,255,0.7);
+    font-size: 20px; cursor: pointer; line-height: 1; padding: 0;
+  }
+  .fs-x:hover { color: #fff; }
+  #fs-body {
+    flex: 1; padding: 14px 12px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .fs-row { display: flex; gap: 8px; align-items: flex-end; }
+  .fs-av {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #534AB7; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .fs-av svg {
+    width: 12px; height: 12px; fill: none; stroke: #fff;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .fs-msg {
+    font-size: 12px; line-height: 1.6; border-radius: 12px;
+    padding: 9px 12px; max-width: 220px;
+  }
+  .fs-ai { background: #EEEDFE; color: #3C3489; border-bottom-left-radius: 3px; }
+  .fs-usr { background: #534AB7; color: #fff; border-bottom-right-radius: 3px; margin-left: auto; }
+  #fs-qr {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 0 12px 10px; flex-shrink: 0;
+  }
+  .fs-pill {
+    font-size: 11px; border: 1px solid #AFA9EC; border-radius: 20px;
+    padding: 5px 12px; color: #534AB7; background: #EEEDFE;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .fs-pill:hover { background: #CECBF6; }
+  .fs-bar {
+    border-top: 1px solid #eee; padding: 10px 12px;
+    display: flex; gap: 8px; align-items: center; flex-shrink: 0;
+  }
+  #fs-input {
+    flex: 1; border: 1px solid #ddd; border-radius: 20px;
+    padding: 7px 14px; font-size: 12px; outline: none;
+  }
+  #fs-input:focus { border-color: #534AB7; }
+  .fs-send {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #534AB7; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fs-send svg {
+    width: 14px; height: 14px; fill: none; stroke: #fff;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    pointer-events: none;
+  }
+  .fs-pwr {
+    text-align: center; font-size: 10px; color: #aaa;
+    padding: 5px 0 4px; border-top: 1px solid #eee;
+  }
+</style>
+
+<!-- Banner -->
+<div id="fs-banner">
+  <div class="fs-banner-left">
+    <div class="fs-banner-icon">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+    <div class="fs-banner-text">Hi, I'm your AI Advisor. I help students like you figure out what's next. Want to get started?</div>
+  </div>
+  <span class="fs-banner-cta" onclick="fsOpenChat()">
+    <span>Get started</span>
+    <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </span>
+  <button class="fs-banner-x" onclick="fsDismiss(event)">&#x2715;</button>
+</div>
+
+<!-- Floating bubble -->
+<div id="fs-bubble" onclick="fsToggle()">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</div>
+
+<!-- Chat window -->
+<div id="fs-chat">
+  <div class="fs-hdr">
+    <div class="fs-hdr-left">
+      <div class="fs-hdr-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div>
+        <div class="fs-hdr-name">AI Advisor <span class="fs-hdr-beta">BETA</span></div>
+        <div class="fs-hdr-sub">FutureSelf career advisor</div>
+      </div>
+    </div>
+    <button class="fs-x" onclick="fsToggle()">&#x2715;</button>
+  </div>
+  <div id="fs-body"></div>
+  <div id="fs-qr"></div>
+  <div class="fs-bar">
+    <input id="fs-input" type="text" placeholder="Type a message..." />
+    <button class="fs-send" onclick="fsSend()">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    </button>
+  </div>
+  <div class="fs-pwr">Powered by FutureSelf</div>
+</div>
+
+<script>
+(function () {
+  var opened = false;
+  var icon = '<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+  var history = [];
+
+  // TODO: Move to Vercel proxy before broader rollout
+  var API_KEY = 'YOUR_API_KEY_HERE';
+
+  var SYS = 'You are an AI career advisor built into FutureSelf, a career community for college students. Be direct, honest, and mentor-like. No filler phrases. Give specific actionable advice. Ask one follow-up question at a time. Keep responses to 2 to 3 sentences unless asked for more. Stay focused on career topics only. If something is off-topic, gently redirect.';
+
+  window.fsToggle = function () {
+    var w = document.getElementById('fs-chat');
+    if (!w) return;
+    if (w.className.indexOf('open') > -1) {
+      w.className = w.className.replace(' open', '');
+    } else {
+      w.className = w.className + ' open';
+      if (!opened) { startChat(); opened = true; }
+    }
+  };
+
+  window.fsOpenChat = function () {
+    var w = document.getElementById('fs-chat');
+    if (!w) return;
+    if (w.className.indexOf('open') < 0) {
+      w.className = w.className + ' open';
+    }
+    if (!opened) { startChat(); opened = true; }
+  };
+
+  window.fsDismiss = function (e) {
+    e.stopPropagation();
+    var b = document.getElementById('fs-banner');
+    if (b) b.className = b.className + ' hidden';
+  };
+
+  window.fsSend = function () {
+    var input = document.getElementById('fs-input');
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    document.getElementById('fs-qr').innerHTML = '';
+    addUser(text);
+    history.push({ role: 'user', content: text });
+    callAPI();
+  };
+
+  window.fsPill = function (text) {
+    document.getElementById('fs-qr').innerHTML = '';
+    addUser(text);
+    history.push({ role: 'user', content: text });
+    callAPI();
+  };
+
+  function startChat() {
+    var opening = "Hi! I'm your FutureSelf AI Advisor. I'm here to help you explore career paths, find internships, and make the most of this community. What best describes where you are right now?";
+    addAI(opening);
+    history.push({ role: 'assistant', content: opening });
+    setPills(['Exploring career options', 'Actively recruiting', 'Preparing for interviews', 'Not sure yet']);
+  }
+
+  function callAPI() {
+    showTyping();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://api.openai.com/v1/chat/completions', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + API_KEY);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        hideTyping();
+        try {
+          var data = JSON.parse(xhr.responseText);
+          var reply = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+          if (!reply) reply = "I'm having trouble connecting right now. Try again in a moment.";
+          addAI(reply);
+          history.push({ role: 'assistant', content: reply });
+        } catch (e) {
+          addAI("Something went wrong on my end. Please try again.");
+        }
+      }
+    };
+    xhr.onerror = function () {
+      hideTyping();
+      addAI("Something went wrong on my end. Please try again.");
+    };
+    xhr.send(JSON.stringify({
+      model: 'gpt-4o',
+      messages: [{ role: 'system', content: SYS }].concat(history)
+    }));
+  }
+
+  function showTyping() {
+    var body = document.getElementById('fs-body');
+    if (!body) return;
+    var div = document.createElement('div');
+    div.className = 'fs-row';
+    div.id = 'fs-typing';
+    div.innerHTML = '<div class="fs-av">' + icon + '</div><div class="fs-msg fs-ai" style="padding:10px 14px;"><span style="display:inline-flex;gap:4px;align-items:center;"><span style="width:6px;height:6px;border-radius:50%;background:#AFA9EC;animation:fsDot 1.2s infinite;display:inline-block;"></span><span style="width:6px;height:6px;border-radius:50%;background:#AFA9EC;animation:fsDot 1.2s 0.2s infinite;display:inline-block;"></span><span style="width:6px;height:6px;border-radius:50%;background:#AFA9EC;animation:fsDot 1.2s 0.4s infinite;display:inline-block;"></span></span></div>';
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+    if (!document.getElementById('fs-dot-style')) {
+      var s = document.createElement('style');
+      s.id = 'fs-dot-style';
+      s.innerText = '@keyframes fsDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}';
+      document.head.appendChild(s);
+    }
+  }
+
+  function hideTyping() {
+    var t = document.getElementById('fs-typing');
+    if (t && t.parentNode) t.parentNode.removeChild(t);
+  }
+
+  function setPills(arr) {
+    var c = document.getElementById('fs-qr');
+    if (!c) return;
+    c.innerHTML = '';
+    for (var i = 0; i < arr.length; i++) {
+      var p = document.createElement('div');
+      p.className = 'fs-pill';
+      p.innerText = arr[i];
+      p.setAttribute('onclick', 'fsPill("' + arr[i] + '")');
+      c.appendChild(p);
+    }
+  }
+
+  function addAI(text) {
+    var body = document.getElementById('fs-body');
+    if (!body) return;
+    var div = document.createElement('div');
+    div.className = 'fs-row';
+    div.innerHTML = '<div class="fs-av">' + icon + '</div><div class="fs-msg fs-ai">' + text + '</div>';
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function addUser(text) {
+    var body = document.getElementById('fs-body');
+    if (!body) return;
+    var div = document.createElement('div');
+    div.className = 'fs-row';
+    div.innerHTML = '<div class="fs-msg fs-usr">' + text + '</div>';
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  var inp = document.getElementById('fs-input');
+  if (inp) inp.onkeydown = function (e) { if (e.key === 'Enter') fsSend(); };
+})();
+</script>
