@@ -1,6 +1,5 @@
 .env
 __pycache__/
 node_modules/
-.DS_Storebackend/venv/
-.vercel
-.env.local
+.DS_Store
+backend/venv/
