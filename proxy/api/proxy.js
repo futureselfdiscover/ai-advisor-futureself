@@ -64,10 +64,28 @@ async function getMemory(userId) {
   } catch(e) { return null; }
 }
 
-async function saveMemory(userId, fields) {
+async function saveMemory(userId, fields, existing) {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) return;
   try {
     const hash = hashUserId(userId);
+
+    // knowledge and conversation_history are append-only: merge new entries
+    // onto whatever's already stored rather than overwriting.
+    const prevKnowledge = (existing && existing.knowledge) || [];
+    const newKnowledge = fields.knowledge || [];
+    const mergedKnowledge = prevKnowledge.concat(newKnowledge);
+
+    const prevHistory = (existing && existing.conversation_history) || [];
+    const newHistory = fields.conversationTurn ? [fields.conversationTurn] : [];
+    const mergedHistory = prevHistory.concat(newHistory);
+
+    // current_term and direction are OVERWRITTEN wholesale when provided,
+    // otherwise keep whatever's already stored.
+    const currentTerm = fields.currentTerm || (existing && existing.current_term) || {};
+    const direction = fields.direction || (existing && existing.direction) || {};
+
+    const sessionCount = ((existing && existing.session_count) || 0) + (fields.newSession ? 1 : 0);
+
     await fetch(process.env.SUPABASE_URL + '/rest/v1/user_memory', {
       method: 'POST',
       headers: {
@@ -80,10 +98,15 @@ async function saveMemory(userId, fields) {
         user_hash: hash,
         updated_at: new Date().toISOString(),
         last_session: new Date().toISOString(),
-        focus: fields.focus || null,
-        summary: fields.summary || null,
-        topics: fields.topics || [],
-        frequent_pages: fields.frequentPages || []
+        focus: fields.focus || (existing && existing.focus) || null,
+        summary: fields.summary || (existing && existing.summary) || null,
+        topics: fields.topics || (existing && existing.topics) || [],
+        frequent_pages: fields.frequentPages || (existing && existing.frequent_pages) || [],
+        session_count: sessionCount,
+        knowledge: mergedKnowledge,
+        current_term: currentTerm,
+        direction: direction,
+        conversation_history: mergedHistory
       })
     });
   } catch(e) {}
@@ -172,7 +195,8 @@ export default async function handler(req, res) {
     // ---- memory: save per-user memory ----
     if (type === 'save_memory') {
       if (!userId) return res.status(400).json({ error: 'userId required' });
-      await saveMemory(userId, req.body);
+      const existing = await getMemory(userId);
+      await saveMemory(userId, req.body, existing);
       return res.status(200).json({ ok: true });
     }
 
