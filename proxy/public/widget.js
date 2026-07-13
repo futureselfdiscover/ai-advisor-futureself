@@ -340,7 +340,17 @@
       if (bar) bar.style.display = '';
       fetchMemory(function(m) {
         memory = m;
-        history = (m && m.conversation_history) || [];
+        // stored conversation_history uses {user, assistant, timestamp} turn
+        // pairs; convert back into the {role, content} message list the
+        // widget renders and sends to the model.
+        history = [];
+        var stored = (m && m.conversation_history) || [];
+        for (var i = 0; i < stored.length; i++) {
+          var t = stored[i];
+          if (t && t.role && t.content) { history.push(t); continue; }
+          if (t && t.user) history.push({ role: 'user', content: t.user, timestamp: t.timestamp });
+          if (t && t.assistant) history.push({ role: 'assistant', content: t.assistant, timestamp: t.timestamp });
+        }
         if (history.length > MAX_HISTORY) history = history.slice(-MAX_HISTORY);
         if (history.length > 0) renderHistory();
         else startChat();
