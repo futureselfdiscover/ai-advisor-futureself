@@ -8,6 +8,9 @@
   var routed = false;
   var hbUserId = null; // window.__HB_USER__.id - used as the memory key (server hashes it)
   var isNewSession = true; // flips false after first save_memory call this page-load
+  // random per-page-load session ID for ANONYMOUS conversation_logs grouping.
+  // not derived from user identity, never shown to the user, not linkable to user_hash.
+  var sessionId = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
 
   var pageMap = {
     '/news': 'Business News page.',
@@ -473,7 +476,13 @@
       }
     };
     xhr.onerror = function () { hideTyping(); addAI("Something went wrong on my end. Please try again.", true); };
-    xhr.send(JSON.stringify({ type: 'chat', messages: [{ role: 'system', content: buildSYS() }].concat(history) }));
+    xhr.send(JSON.stringify({
+      type: 'chat',
+      sessionId: sessionId,
+      page: path,
+      profileName: (profile && profile.name) || null,
+      messages: [{ role: 'system', content: buildSYS() }].concat(history)
+    }));
   }
 
   function showTyping() {
