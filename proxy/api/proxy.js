@@ -65,7 +65,7 @@ async function getMemory(userId) {
 }
 
 async function saveMemory(userId, fields, existing) {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) return;
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) return { error: 'missing env' };
   try {
     const hash = hashUserId(userId);
 
@@ -86,7 +86,7 @@ async function saveMemory(userId, fields, existing) {
 
     const sessionCount = ((existing && existing.session_count) || 0) + (fields.newSession ? 1 : 0);
 
-    await fetch(process.env.SUPABASE_URL + '/rest/v1/user_memory', {
+    const res = await fetch(process.env.SUPABASE_URL + '/rest/v1/user_memory?on_conflict=user_hash', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -109,7 +109,12 @@ async function saveMemory(userId, fields, existing) {
         conversation_history: mergedHistory
       })
     });
-  } catch(e) {}
+    if (!res.ok) {
+      const errText = await res.text();
+      return { error: 'supabase ' + res.status + ': ' + errText };
+    }
+    return { ok: true };
+  } catch(e) { return { error: e.message }; }
 }
 
 // ---- main handler ----
@@ -196,8 +201,8 @@ export default async function handler(req, res) {
     if (type === 'save_memory') {
       if (!userId) return res.status(400).json({ error: 'userId required' });
       const existing = await getMemory(userId);
-      await saveMemory(userId, req.body, existing);
-      return res.status(200).json({ ok: true });
+      const result = await saveMemory(userId, req.body, existing);
+      return res.status(200).json(result);
     }
 
     return res.status(400).json({ error: 'Invalid request type' });
