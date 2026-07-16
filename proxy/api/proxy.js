@@ -26,9 +26,9 @@ function scrub(text, profileName) {
 }
 
 async function logTurn(sessionId, page, role, content, profileName) {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) return;
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) return { error: 'missing env' };
   try {
-    await fetch(process.env.SUPABASE_URL + '/rest/v1/conversation_logs', {
+    const r = await fetch(process.env.SUPABASE_URL + '/rest/v1/conversation_logs', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +43,12 @@ async function logTurn(sessionId, page, role, content, profileName) {
         content: scrub(content, profileName)
       })
     });
-  } catch(e) {}
+    if (!r.ok) {
+      const errText = await r.text();
+      return { error: 'supabase ' + r.status + ': ' + errText };
+    }
+    return { ok: true };
+  } catch(e) { return { error: e.message }; }
 }
 
 async function getMemory(userId) {
@@ -142,20 +147,25 @@ export default async function handler(req, res) {
       });
       const data = await response.json();
 
-      // log the last user message and the assistant response anonymously
+      // log the last user message and the assistant response anonymously.
+      // results are attached to the response as _log so silent failures
+      // (grants, schema) are visible in the Network tab during debugging.
+      let logResult = { skipped: 'no sessionId' };
       if (sessionId && messages && messages.length > 0) {
         const lastUser = [...messages].reverse().find(m => m.role === 'user');
         if (lastUser) {
-          await logTurn(sessionId, page, 'user', lastUser.content, profileName);
+          logResult = await logTurn(sessionId, page, 'user', lastUser.content, profileName);
         }
         const assistantContent = data.choices &&
           data.choices[0] &&
           data.choices[0].message &&
           data.choices[0].message.content;
         if (assistantContent) {
-          await logTurn(sessionId, page, 'assistant', assistantContent, profileName);
+          const r2 = await logTurn(sessionId, page, 'assistant', assistantContent, profileName);
+          if (r2 && r2.error) logResult = r2;
         }
       }
+      data._log = logResult;
 
       return res.status(200).json(data);
     }
@@ -203,6 +213,26 @@ export default async function handler(req, res) {
       const existing = await getMemory(userId);
       const result = await saveMemory(userId, req.body, existing);
       return res.status(200).json(result);
+    }
+
+    // ---- memory: delete per-user memory (student-initiated full reset) ----
+    if (type === 'delete_memory') {
+      if (!userId) return res.status(400).json({ error: 'userId required' });
+      try {
+        const hash = hashUserId(userId);
+        const del = await fetch(process.env.SUPABASE_URL + '/rest/v1/user_memory?user_hash=eq.' + hash, {
+          method: 'DELETE',
+          headers: {
+            'apikey': process.env.SUPABASE_SERVICE_KEY,
+            'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY
+          }
+        });
+        if (!del.ok) {
+          const errText = await del.text();
+          return res.status(200).json({ error: 'supabase ' + del.status + ': ' + errText });
+        }
+        return res.status(200).json({ ok: true });
+      } catch(e) { return res.status(200).json({ error: e.message }); }
     }
 
     return res.status(400).json({ error: 'Invalid request type' });
