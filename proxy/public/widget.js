@@ -179,7 +179,7 @@
   function buildSYS() {
     var q = String.fromCharCode(34);
     var suggestExample = '{' + q + 'suggestions' + q + ':[' + q + 'short reply' + q + ',' + q + 'short reply' + q + ',' + q + 'short reply' + q + ']}';
-    var memExample = '{' + q + 'memory' + q + ':{' + q + 'knowledge' + q + ':[{' + q + 'detail' + q + ':' + q + '...' + q + ',' + q + 'category' + q + ':' + q + '...' + q + '}],' + q + 'current_term' + q + ':{},' + q + 'direction' + q + ':{},' + q + 'focus' + q + ':' + q + '...' + q + '}}';
+    var memExample = '{' + q + 'memory' + q + ':{' + q + 'knowledge' + q + ':[{' + q + 'detail' + q + ':' + q + '...' + q + ',' + q + 'category' + q + ':' + q + '...' + q + '}],' + q + 'current_term' + q + ':{},' + q + 'direction' + q + ':{},' + q + 'focus' + q + ':' + q + '...' + q + ',' + q + 'summary' + q + ':' + q + '...' + q + '}}';
     return [
       'You are the FutureSelf AI Advisor, a warm but direct career mentor for college students. You are not a generic chatbot. You behave like a real advisor in a one-on-one session.',
       '',
@@ -203,6 +203,7 @@
       '- "current_term": only include this if the student mentioned something about their CURRENT semester (current classes, current commitments) that should replace prior current-term info. Otherwise omit or leave as {}.',
       '- "direction": only include this if the student stated or updated a career aspiration, target role, or target company. This OVERWRITES prior direction, so only include when there is a genuine update. Otherwise omit or leave as {}.',
       '- "focus": a short 1-sentence description of what the student seems focused on right now, updated each turn if it changed.',
+      '- "summary": a rolling 2-4 sentence synthesis of everything you know about this student so far: who they are, what they are working on, what they care about, and where they are headed. Mesh together their profile, past memory (below), and this conversation into one coherent picture. Rewrite it fully each turn as your understanding improves. This is your own working portrait of the student.',
       'If nothing memory-worthy happened this turn, still include the memory JSON with empty/omitted fields. Never skip this line.',
       '',
       'LINKS: when pointing to a page use this exact HTML format: anchor tag with href set to the full URL and target set to _top. Never paste raw URLs as text.',
@@ -435,10 +436,37 @@
       reply = reply.replace(suggestMatch[0], '').trim();
     }
 
-    var memMatch = raw.match(/\{\s*"memory"\s*:\s*\{[\s\S]*?\}\s*\}(?!.*"memory")/);
-    if (memMatch) {
-      try { memoryUpdate = JSON.parse(memMatch[0]).memory || null; } catch(e) {}
-      reply = reply.replace(memMatch[0], '').trim();
+    // strip the memory JSON from display no matter what shape the model
+    // used (object, array, malformed). Find the start of the memory blob
+    // and cut from there through its balanced closing brace.
+    var memIdx = reply.lastIndexOf('{"memory"');
+    if (memIdx === -1) memIdx = reply.search(/\{\s*"memory"/);
+    if (memIdx > -1) {
+      var depth = 0, endIdx = -1;
+      for (var ci = memIdx; ci < reply.length; ci++) {
+        var ch = reply[ci];
+        if (ch === '{') depth++;
+        else if (ch === '}') { depth--; if (depth === 0) { endIdx = ci; break; } }
+      }
+      var blob = endIdx > -1 ? reply.slice(memIdx, endIdx + 1) : reply.slice(memIdx);
+      try {
+        var parsedBlob = JSON.parse(blob);
+        // accept only a proper object shape; ignore arrays/other malformed output
+        if (parsedBlob && parsedBlob.memory && !Array.isArray(parsedBlob.memory) && typeof parsedBlob.memory === 'object') {
+          memoryUpdate = parsedBlob.memory;
+        } else if (parsedBlob && typeof parsedBlob === 'object') {
+          // model sometimes flattens fields next to an empty memory key,
+          // e.g. {"memory": [], "focus": "..."}; salvage known fields
+          memoryUpdate = {
+            knowledge: Array.isArray(parsedBlob.memory) ? parsedBlob.memory : (parsedBlob.knowledge || []),
+            current_term: parsedBlob.current_term || {},
+            direction: parsedBlob.direction || {},
+            focus: parsedBlob.focus || null,
+            summary: parsedBlob.summary || null
+          };
+        }
+      } catch(e) {}
+      reply = (reply.slice(0, memIdx) + (endIdx > -1 ? reply.slice(endIdx + 1) : '')).trim();
     }
 
     return { reply: reply, suggestions: suggestions, memoryUpdate: memoryUpdate };
@@ -468,6 +496,7 @@
             currentTerm: (mu.current_term && Object.keys(mu.current_term).length) ? mu.current_term : undefined,
             direction: (mu.direction && Object.keys(mu.direction).length) ? mu.direction : undefined,
             focus: mu.focus || undefined,
+            summary: mu.summary || undefined,
             conversationTurn: lastUser ? { user: lastUser.content, assistant: parsed.reply, timestamp: new Date().toISOString() } : undefined
           });
         } catch (e) {
