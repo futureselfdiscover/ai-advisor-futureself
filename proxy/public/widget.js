@@ -82,6 +82,7 @@
     var bits = [];
     if (memory.focus) bits.push('Focus: ' + memory.focus);
     if (memory.summary) bits.push('Summary: ' + memory.summary);
+    if (memory.topics && memory.topics.length) bits.push('Topics: ' + memory.topics.join(', '));
     if (memory.direction && Object.keys(memory.direction).length) {
       bits.push('Direction: ' + JSON.stringify(memory.direction));
     }
@@ -179,7 +180,7 @@
   function buildSYS() {
     var q = String.fromCharCode(34);
     var suggestExample = '{' + q + 'suggestions' + q + ':[' + q + 'short reply' + q + ',' + q + 'short reply' + q + ',' + q + 'short reply' + q + ']}';
-    var memExample = '{' + q + 'memory' + q + ':{' + q + 'knowledge' + q + ':[{' + q + 'detail' + q + ':' + q + '...' + q + ',' + q + 'category' + q + ':' + q + '...' + q + '}],' + q + 'current_term' + q + ':{},' + q + 'direction' + q + ':{},' + q + 'focus' + q + ':' + q + '...' + q + ',' + q + 'summary' + q + ':' + q + '...' + q + '}}';
+    var memExample = '{' + q + 'memory' + q + ':{' + q + 'knowledge' + q + ':[{' + q + 'detail' + q + ':' + q + '...' + q + ',' + q + 'category' + q + ':' + q + '...' + q + '}],' + q + 'current_term' + q + ':{},' + q + 'direction' + q + ':{},' + q + 'focus' + q + ':' + q + '...' + q + ',' + q + 'summary' + q + ':' + q + '...' + q + ',' + q + 'topics' + q + ':[' + q + '...' + q + ']}}';
     return [
       'You are the FutureSelf AI Advisor, a warm but direct career mentor for college students. You are not a generic chatbot. You behave like a real advisor in a one-on-one session.',
       '',
@@ -202,8 +203,9 @@
       '- "knowledge": an array of NEW specific things the student just shared this turn (classes, professors, jobs, hobbies, interests, contacts). Only include NEW items, not things already listed under "WHAT YOU ALREADY KNOW" below. Leave as an empty array [] if nothing new came up.',
       '- "current_term": only include this if the student mentioned something about their CURRENT semester (current classes, current commitments) that should replace prior current-term info. Otherwise omit or leave as {}.',
       '- "direction": only include this if the student stated or updated a career aspiration, target role, or target company. This OVERWRITES prior direction, so only include when there is a genuine update. Otherwise omit or leave as {}.',
-      '- "focus": a short 1-sentence description of what the student seems focused on right now, updated each turn if it changed.',
-      '- "summary": a rolling 2-4 sentence synthesis of everything you know about this student so far: who they are, what they are working on, what they care about, and where they are headed. Mesh together their profile, past memory (below), and this conversation into one coherent picture. Rewrite it fully each turn as your understanding improves. This is your own working portrait of the student.',
+      '- "focus": the sharpest single-sentence read of this student: the best interpolation of who they are (summary) and where they are headed (direction). One well-said line. Update it whenever your understanding improves.',
+      '- "summary": a SURFACE-LEVEL 1-2 sentence portrait of the student. No course numbers, professor names, or program specifics; those belong in knowledge. Think: "Jerald is a current senior planning to recruit and serve as a TA for engineering classes." Rewrite fully each turn as your picture improves.',
+      '- "topics": a short array of recurring theme tags for this student, e.g. ["recruiting", "undergraduate engineering", "studying for PE exam"]. 2-5 words each, lowercase. Return the FULL updated list each turn (existing themes plus any new ones), not just new additions. Merge and dedupe; drop themes that no longer apply.',
       'If nothing memory-worthy happened this turn, still include the memory JSON with empty/omitted fields. Never skip this line.',
       '',
       'LINKS: when pointing to a page use this exact HTML format: anchor tag with href set to the full URL and target set to _top. Never paste raw URLs as text.',
@@ -344,6 +346,12 @@
       if (bar) bar.style.display = '';
       fetchMemory(function(m) {
         memory = m;
+        // mechanical frequent_pages tracking: append current path on each
+        // open, keep the most recent 50 entries (proxy overwrites the field)
+        var fp = (m && m.frequent_pages) || [];
+        fp.push(path);
+        if (fp.length > 50) fp = fp.slice(-50);
+        pushMemory({ frequentPages: fp });
         // stored conversation_history uses {user, assistant, timestamp} turn
         // pairs; convert back into the {role, content} message list the
         // widget renders and sends to the model.
@@ -365,14 +373,30 @@
   window.fsConsent = function() { setConsent(); verifyAndRoute(); };
 
   window.fsReset = function() {
-    if (!confirm('Reset your conversation? This clears your chat history on this device, but your advisor will still remember past context.')) return;
+    if (!confirm('Reset your advisor? This permanently deletes your conversation history and everything the advisor remembers about you, and starts fresh.')) return;
     try { localStorage.removeItem('fs_consent'); } catch(e) {}
     history = [];
+    memory = null;
     routed = false;
-    var textEl = document.getElementById('fs-banner-text');
-    var ctaEl = document.getElementById('fs-banner-cta-label');
-    if (textEl) textEl.innerText = 'Hi, I\'m your AI Advisor. I help students like you figure out what\'s next. Want to get started?';
-    if (ctaEl) ctaEl.innerText = 'Get started';
+    // wipe server-side memory, then re-run the full gate (profile check + consent)
+    if (hbUserId) {
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', PROXY_URL, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            var textEl = document.getElementById('fs-banner-text');
+            var ctaEl = document.getElementById('fs-banner-cta-label');
+            if (textEl) textEl.innerText = 'Hi, I\'m your AI Advisor. I help students like you figure out what\'s next. Want to get started?';
+            if (ctaEl) ctaEl.innerText = 'Get started';
+            verifyAndRoute();
+          }
+        };
+        xhr.send(JSON.stringify({ type: 'delete_memory', userId: hbUserId }));
+        return;
+      } catch(e) {}
+    }
     verifyAndRoute();
   };
 
@@ -462,7 +486,8 @@
             current_term: parsedBlob.current_term || {},
             direction: parsedBlob.direction || {},
             focus: parsedBlob.focus || null,
-            summary: parsedBlob.summary || null
+            summary: parsedBlob.summary || null,
+            topics: parsedBlob.topics || null
           };
         }
       } catch(e) {}
@@ -497,6 +522,7 @@
             direction: (mu.direction && Object.keys(mu.direction).length) ? mu.direction : undefined,
             focus: mu.focus || undefined,
             summary: mu.summary || undefined,
+            topics: (mu.topics && mu.topics.length) ? mu.topics : undefined,
             conversationTurn: lastUser ? { user: lastUser.content, assistant: parsed.reply, timestamp: new Date().toISOString() } : undefined
           });
         } catch (e) {
