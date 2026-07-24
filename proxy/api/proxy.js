@@ -359,6 +359,33 @@ export default async function handler(req, res) {
       } catch(e) { return res.status(200).json({ error: e.message }); }
     }
 
+    // ---- TEMPORARY DEBUG: test Hivebrite v3.1 admin API read access ----
+    // remove once custom_attributes shape is confirmed and the real
+    // fsd_profile -> Hivebrite push is built.
+    if (type === 'debug_hivebrite_get_user') {
+      const tokenRes = await fetch('https://futureselfdiscover.hivebrite.com/oauth/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          grant_type: 'client_credentials',
+          client_id: process.env.HIVEBRITE_CLIENT_ID,
+          client_secret: process.env.HIVEBRITE_CLIENT_SECRET
+        })
+      });
+      const tokenData = await tokenRes.json();
+      if (!tokenData.access_token) {
+        return res.status(200).json({ step: 'token_exchange', error: tokenData });
+      }
+      const userRes = await fetch(
+        'https://api.eu.hivebrite.com/admin/v3.1/users/' + (userId || '18275972'),
+        { headers: {
+            'Authorization': 'Bearer ' + tokenData.access_token,
+            'accept': 'application/json' } }
+      );
+      const userData = await userRes.json();
+      return res.status(200).json({ step: 'user_fetch', status: userRes.status, user: userData });
+    }
+
     return res.status(400).json({ error: 'Invalid request type' });
 
   } catch(err) {
