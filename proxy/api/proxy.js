@@ -359,52 +359,37 @@ export default async function handler(req, res) {
       } catch(e) { return res.status(200).json({ error: e.message }); }
     }
 
-    // ---- TEMPORARY DEBUG: test Hivebrite admin API read access ----
-    // remove once custom_attributes shape is confirmed and the real
-    // fsd_profile -> Hivebrite push is built.
+    // ---- Hivebrite admin API helpers (confirmed against official docs) ----
+    // base url is /api on the community subdomain, routes are
+    // /admin/v1|v2|v3/... . there is no v3.1 and no api.eu.hivebrite.com.
+    // auth is Doorkeeper OAuth2 bearer tokens.
     //
-    // per Hivebrite's official admin API docs, the admin token endpoint is
-    // POST <subdomain>/api/oauth/token supporting two grants:
+    // token grants supported by POST /api/oauth/token:
     //   grant_type=refresh_token  (refresh_token + client_id + client_secret)
     //   grant_type=password       (admin_email + password + client_id + client_secret)
-    // client_credentials is NOT supported, which is why every prior attempt
-    // returned invalid_client.
+    // client_credentials is NOT supported.
     //
-    // PREFERRED: the back office (Settings > External integrations) has a
-    // "Generate refresh token" button on the OAuth2 application. that avoids
-    // storing any admin password. set this Vercel env var:
-    //   HIVEBRITE_REFRESH_TOKEN
-    // fallback (only if refresh token unavailable):
-    //   HIVEBRITE_ADMIN_EMAIL + HIVEBRITE_ADMIN_PASSWORD
-    //
-    // NOTE on rotation: some OAuth servers issue a NEW refresh token on each
-    // exchange, invalidating the old one. the response includes
-    // refresh_token_rotated so we can detect this. if true, a static env var
-    // will break on the next call and the production push handler must store
-    // the latest refresh token in Supabase instead.
-    //
-    // this handler tests, in order:
-    //   1. token exchange (password grant)
-    //   2. GET user on api.eu.hivebrite.com/admin/v3.1 (new API gateway)
-    //   3. if that 401/403s: GET user on the community subdomain v2 path
-    //      as a fallback, so one test run tells us which host the token
-    //      is valid for
-    //   4. GET the network's customizable attributes list, which is the
-    //      canonical source of the custom_attributes names we need for
-    //      the eventual profile write
-    if (type === 'debug_hivebrite_get_user') {
+    // credentials required (Vercel env vars), either:
+    //   HIVEBRITE_REFRESH_TOKEN                          (preferred)
+    //   HIVEBRITE_ADMIN_EMAIL + HIVEBRITE_ADMIN_PASSWORD (fallback)
+    // BOTH require a real BACK OFFICE ADMIN account, which is separate from
+    // a community member login. a member email will fail here.
+
+    if (type === 'debug_hivebrite_get_user' || type === 'push_profile') {
+      const HB_BASE = process.env.HIVEBRITE_BASE_URL ||
+        'https://futureselfdiscover.hivebrite.com/api';
+
       const hasRefresh = !!process.env.HIVEBRITE_REFRESH_TOKEN;
       const hasPassword = !!(process.env.HIVEBRITE_ADMIN_EMAIL && process.env.HIVEBRITE_ADMIN_PASSWORD);
       if (!hasRefresh && !hasPassword) {
         return res.status(200).json({
           step: 'preflight',
-          error: 'Set HIVEBRITE_REFRESH_TOKEN (preferred, from the back office Generate refresh token button) or HIVEBRITE_ADMIN_EMAIL + HIVEBRITE_ADMIN_PASSWORD in Vercel'
+          error: 'No admin credentials configured. Set HIVEBRITE_REFRESH_TOKEN (preferred) or HIVEBRITE_ADMIN_EMAIL + HIVEBRITE_ADMIN_PASSWORD in Vercel. Both require a back office ADMIN account, not a community member login.'
         });
       }
 
-      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL ||
-        'https://futureselfdiscover.hivebrite.com/api/oauth/token';
-
+      // ---- token exchange ----
+      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL || (HB_BASE + '/oauth/token');
       const grantParams = hasRefresh
         ? {
             grant_type: 'refresh_token',
@@ -425,78 +410,196 @@ export default async function handler(req, res) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(grantParams).toString()
       });
-
       const tokenText = await tokenRes.text();
       let tokenData;
       try { tokenData = JSON.parse(tokenText); }
       catch(e) {
         return res.status(200).json({
-          step: 'token_exchange',
-          error: 'non-JSON response',
-          status: tokenRes.status,
-          raw: tokenText.slice(0, 500),
-          tokenUrl: tokenUrl
+          step: 'token_exchange', error: 'non-JSON response',
+          status: tokenRes.status, raw: tokenText.slice(0, 500), tokenUrl: tokenUrl
         });
       }
-
       if (!tokenData.access_token) {
         return res.status(200).json({
-          step: 'token_exchange',
-          error: tokenData,
-          status: tokenRes.status,
-          tokenUrl: tokenUrl
+          step: 'token_exchange', error: tokenData,
+          status: tokenRes.status, tokenUrl: tokenUrl
         });
       }
 
       const token = tokenData.access_token;
-      const uid = userId || '18275972';
-      const out = {
-        step: 'authenticated',
-        grant_used: hasRefresh ? 'refresh_token' : 'password',
-        token_type: tokenData.token_type || null,
-        expires_in: tokenData.expires_in || null,
-        has_refresh_token: !!tokenData.refresh_token,
-        // true means the server issued a DIFFERENT refresh token than the one
-        // sent, i.e. rotation is on and the env var value is now stale. never
-        // echoes the tokens themselves.
-        refresh_token_rotated: hasRefresh && !!tokenData.refresh_token &&
-          tokenData.refresh_token !== process.env.HIVEBRITE_REFRESH_TOKEN
+      const hb = function(pathname, options) {
+        const opts = options || {};
+        return fetch(HB_BASE + pathname, {
+          method: opts.method || 'GET',
+          headers: Object.assign({
+            'Authorization': 'Bearer ' + token,
+            'accept': 'application/json'
+          }, opts.body ? { 'Content-Type': 'application/json' } : {}),
+          body: opts.body ? JSON.stringify(opts.body) : undefined
+        });
+      };
+      const readJson = async function(r) {
+        const t = await r.text();
+        try { return JSON.parse(t); } catch(e) { return { raw: t.slice(0, 500) }; }
       };
 
-      // attempt 1: new v3.1 gateway
-      const v3Res = await fetch(
-        'https://api.eu.hivebrite.com/admin/v3.1/users/' + uid,
-        { headers: { 'Authorization': 'Bearer ' + token, 'accept': 'application/json' } }
-      );
-      const v3Text = await v3Res.text();
-      out.v3_status = v3Res.status;
-      try { out.v3_user = JSON.parse(v3Text); }
-      catch(e) { out.v3_user = { raw: v3Text.slice(0, 500) }; }
+      // ================= DEBUG / DISCOVERY =================
+      // remove this branch once the attribute names are recorded.
+      if (type === 'debug_hivebrite_get_user') {
+        const out = {
+          step: 'authenticated',
+          grant_used: hasRefresh ? 'refresh_token' : 'password',
+          token_type: tokenData.token_type || null,
+          expires_in: tokenData.expires_in || null,
+          // true means the server rotated the refresh token, so the env var
+          // value is now stale and production must persist the new one.
+          refresh_token_rotated: hasRefresh && !!tokenData.refresh_token &&
+            tokenData.refresh_token !== process.env.HIVEBRITE_REFRESH_TOKEN
+        };
 
-      // attempt 2 (fallback): community subdomain v2 admin path
-      if (v3Res.status === 401 || v3Res.status === 403) {
-        const v2Res = await fetch(
-          'https://futureselfdiscover.hivebrite.com/api/admin/v2/users/' + uid,
-          { headers: { 'Authorization': 'Bearer ' + token, 'accept': 'application/json' } }
-        );
-        const v2Text = await v2Res.text();
-        out.v2_status = v2Res.status;
-        try { out.v2_user = JSON.parse(v2Text); }
-        catch(e) { out.v2_user = { raw: v2Text.slice(0, 500) }; }
+        // smoke test: cheapest possible authenticated call
+        const meRes = await hb('/admin/v1/me');
+        out.me_status = meRes.status;
+        out.me = await readJson(meRes);
+
+        // the canonical list of valid custom attribute names for writes
+        const attrRes = await hb('/admin/v1/settings/customizable_attributes');
+        out.attrs_status = attrRes.status;
+        out.customizable_attributes = await readJson(attrRes);
+
+        // controlled vocabulary for the industries field
+        const indRes = await hb('/admin/v1/settings/industries');
+        out.industries_status = indRes.status;
+        const industries = await readJson(indRes);
+        out.industries_sample = Array.isArray(industries) ? industries.slice(0, 10) : industries;
+
+        // a real user profile, to see which fields are actually populated
+        const userRes = await hb('/admin/v1/users/' + (userId || '18275972'));
+        out.user_status = userRes.status;
+        out.user = await readJson(userRes);
+
+        return res.status(200).json(out);
       }
 
-      // attempt 3: the network's customizable attributes list, the
-      // canonical source of valid custom_attributes names for writes
-      const attrRes = await fetch(
-        'https://futureselfdiscover.hivebrite.com/api/admin/v2/settings/customizable_attributes',
-        { headers: { 'Authorization': 'Bearer ' + token, 'accept': 'application/json' } }
-      );
-      const attrText = await attrRes.text();
-      out.attrs_status = attrRes.status;
-      try { out.customizable_attributes = JSON.parse(attrText); }
-      catch(e) { out.customizable_attributes = { raw: attrText.slice(0, 500) }; }
+      // ================= PRODUCTION PUSH =================
+      // pushes unpushed fsd_profile staging entries to the real Hivebrite
+      // profile via PUT /admin/v1/users/{id}, then marks them pushed.
+      //
+      // safety: dryRun defaults to TRUE. it will NOT write to a real student
+      // profile unless the caller explicitly passes dryRun: false.
+      if (type === 'push_profile') {
+        if (!userId) return res.status(400).json({ error: 'userId required' });
+        const dryRun = req.body.dryRun !== false;
 
-      return res.status(200).json(out);
+        // ATTRIBUTE_MAP: fsd_profile column -> Hivebrite target.
+        // kind 'native' writes a top level field on the user object.
+        // kind 'custom' writes into custom_attributes by name.
+        // these names are PLACEHOLDERS until the debug run above returns
+        // the real customizable_attributes list. verify before dryRun:false.
+        const ATTRIBUTE_MAP = {
+          skills:                  { kind: 'custom', name: 'skills' },
+          industries_of_interest:  { kind: 'custom', name: 'industries_of_interest' },
+          hobbies_interests:       { kind: 'custom', name: 'hobbies_interests' },
+          clubs_and_organizations: { kind: 'custom', name: 'clubs_and_organizations' },
+          languages:               { kind: 'custom', name: 'languages' },
+          awards_honors:           { kind: 'custom', name: 'awards_honors' },
+          target_cities_regions:   { kind: 'custom', name: 'target_cities_regions' },
+          currently_exploring:     { kind: 'custom', name: 'currently_exploring' },
+          career_priorities:       { kind: 'custom', name: 'career_priorities' },
+          bio:                     { kind: 'native', name: 'description' }
+        };
+
+        const hash = hashUserId(userId);
+        const stageRes = await fetch(
+          process.env.SUPABASE_URL + '/rest/v1/fsd_profile?user_hash=eq.' + hash + '&select=*',
+          { headers: {
+              'apikey': process.env.SUPABASE_SERVICE_KEY,
+              'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY } }
+        );
+        const stageRows = stageRes.ok ? await stageRes.json() : [];
+        const staged = stageRows[0];
+        if (!staged) return res.status(200).json({ step: 'push', error: 'no staging row for this user' });
+
+        const pushLog = staged.push_log || [];
+        const pending = pushLog.filter(function(e) { return !e.pushed; });
+        if (pending.length === 0) {
+          return res.status(200).json({ step: 'push', ok: true, note: 'nothing pending' });
+        }
+
+        // build the payload from pending entries only
+        const nativeFields = {};
+        const customByName = {};
+        const unmapped = [];
+        pending.forEach(function(entry) {
+          const target = ATTRIBUTE_MAP[entry.field];
+          if (!target) { unmapped.push(entry.field); return; }
+          if (target.kind === 'native') {
+            nativeFields[target.name] = entry.value;
+          } else {
+            if (!customByName[target.name]) customByName[target.name] = [];
+            if (customByName[target.name].indexOf(entry.value) === -1) {
+              customByName[target.name].push(entry.value);
+            }
+          }
+        });
+
+        const custom_attributes = Object.keys(customByName).map(function(name) {
+          const vals = customByName[name];
+          return { name: name, value: vals.length === 1 ? vals[0] : vals };
+        });
+        const payload = Object.assign({}, nativeFields);
+        if (custom_attributes.length > 0) payload.custom_attributes = custom_attributes;
+
+        if (dryRun) {
+          return res.status(200).json({
+            step: 'push_dry_run',
+            note: 'nothing was written. pass dryRun:false to write for real.',
+            pending_count: pending.length,
+            unmapped_fields: unmapped,
+            would_PUT: HB_BASE + '/admin/v1/users/' + userId,
+            payload: payload
+          });
+        }
+
+        const putRes = await hb('/admin/v1/users/' + userId, { method: 'PUT', body: payload });
+        const putBody = await readJson(putRes);
+        if (putRes.status < 200 || putRes.status >= 300) {
+          return res.status(200).json({
+            step: 'push_failed', status: putRes.status,
+            response: putBody, payload: payload
+          });
+        }
+
+        // mark pushed only after a confirmed success
+        const nowIso = new Date().toISOString();
+        const pushedFields = {};
+        Object.keys(ATTRIBUTE_MAP).forEach(function(f) {
+          if (pending.some(function(e) { return e.field === f; })) pushedFields[f] = true;
+        });
+        const updatedLog = pushLog.map(function(entry) {
+          if (!entry.pushed && pushedFields[entry.field]) {
+            return Object.assign({}, entry, { pushed: true, pushed_at: nowIso });
+          }
+          return entry;
+        });
+
+        await fetch(process.env.SUPABASE_URL + '/rest/v1/fsd_profile?user_hash=eq.' + hash, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': process.env.SUPABASE_SERVICE_KEY,
+            'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ push_log: updatedLog, updated_at: nowIso })
+        });
+
+        return res.status(200).json({
+          step: 'push', ok: true, status: putRes.status,
+          pushed_count: pending.length - unmapped.length,
+          unmapped_fields: unmapped
+        });
+      }
     }
 
     return res.status(400).json({ error: 'Invalid request type' });
