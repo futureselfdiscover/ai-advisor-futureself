@@ -362,20 +362,54 @@ export default async function handler(req, res) {
     // ---- TEMPORARY DEBUG: test Hivebrite v3.1 admin API read access ----
     // remove once custom_attributes shape is confirmed and the real
     // fsd_profile -> Hivebrite push is built.
+    //
+    // fixed vs prior version: Hydra's token endpoint expects client auth
+    // via HTTP Basic header + form-urlencoded body, not a JSON body with
+    // client_id/client_secret in it. that mismatch was producing the
+    // "invalid_client: no client authentication included" error.
+    //
+    // token URL is still a guess (HIVEBRITE_ADMIN_TOKEN_URL). confirm the
+    // real admin token endpoint from Hivebrite's docs/support, then either
+    // set that env var in Vercel or update the fallback below.
     if (type === 'debug_hivebrite_get_user') {
-      const tokenRes = await fetch('https://futureselfdiscover.hivebrite.com/oauth/token', {
+      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL ||
+        'https://futureselfdiscover.hivebrite.com/admin/oauth/token';
+
+      const basicAuth = Buffer.from(
+        process.env.HIVEBRITE_CLIENT_ID + ':' + process.env.HIVEBRITE_CLIENT_SECRET
+      ).toString('base64');
+
+      const tokenRes = await fetch(tokenUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          grant_type: 'client_credentials',
-          client_id: process.env.HIVEBRITE_CLIENT_ID,
-          client_secret: process.env.HIVEBRITE_CLIENT_SECRET
-        })
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Basic ' + basicAuth
+        },
+        body: new URLSearchParams({ grant_type: 'client_credentials' }).toString()
       });
-      const tokenData = await tokenRes.json();
-      if (!tokenData.access_token) {
-        return res.status(200).json({ step: 'token_exchange', error: tokenData });
+
+      const tokenText = await tokenRes.text();
+      let tokenData;
+      try { tokenData = JSON.parse(tokenText); }
+      catch(e) {
+        return res.status(200).json({
+          step: 'token_exchange',
+          error: 'non-JSON response',
+          status: tokenRes.status,
+          raw: tokenText,
+          tokenUrl: tokenUrl
+        });
       }
+
+      if (!tokenData.access_token) {
+        return res.status(200).json({
+          step: 'token_exchange',
+          error: tokenData,
+          status: tokenRes.status,
+          tokenUrl: tokenUrl
+        });
+      }
+
       const userRes = await fetch(
         'https://api.eu.hivebrite.com/admin/v3.1/users/' + (userId || '18275972'),
         { headers: {
