@@ -42,40 +42,62 @@
     '/page/home-x2': 'Home page.'
   };
 
-  var urlMap = {
-    'Business News': 'https://futureselfdiscover.com/news',
-    'Careers & Internships': 'https://futureselfdiscover.com/page/careersinternships',
-    'Internship Database': 'https://futureselfdiscover.com/page/internship-database',
-    'Find a Job': 'https://futureselfdiscover.com/page/find-a-job-30edfa1d-c8cf-4c88-b66a-804ccfacea21',
-    'Career Center': 'https://futureselfdiscover.com/page/explore-career-center',
-    'Networking': 'https://futureselfdiscover.com/page/network-leadership',
-    'Coffee Chats': 'https://futureselfdiscover.com/page/coffee-chats-and-cold-calls',
-    'LinkedIn': 'https://futureselfdiscover.com/page/leveraging-linkedin-dfb39de3-e1dd-4c61-ae1d-86e2c08e7e2d',
-    'Skills': 'https://futureselfdiscover.com/page/skills-business-basics-11508ae5-15d3-41dd-a447-113db421c698',
-    'AI Skills': 'https://futureselfdiscover.com/page/get-smart-on-ai',
-    'Certifications': 'https://futureselfdiscover.com/page/explore-certifications',
-    'Applications & Interviews': 'https://futureselfdiscover.com/page/apps&interviews',
-    'Application Essentials': 'https://futureselfdiscover.com/page/application-necessities',
-    'Explore Companies': 'https://futureselfdiscover.com/page/explore-companies',
-    'Explore Cities': 'https://futureselfdiscover.com/page/exploring-cities',
-    'Clubs': 'https://futureselfdiscover.com/page/clubsandorganizations',
-    'International Students': 'https://futureselfdiscover.com/page/international-students',
-    'Student Athletes': 'https://futureselfdiscover.com/page/student-athletes',
-    'Explore Yourself': 'https://futureselfdiscover.com/page/explore-yourself',
-    'Build Your Plan': 'https://futureselfdiscover.com/page/build-your-plan-',
-    'Wellbeing': 'https://futureselfdiscover.com/page/life%20&%20wellbeing',
-    'Health & Wellness': 'https://futureselfdiscover.com/page/healthandwellness',
-    'Work-Life Balance': 'https://futureselfdiscover.com/page/profbalance',
-    'Academic Help': 'https://futureselfdiscover.com/page/academic-assistance',
-    'Time Management': 'https://futureselfdiscover.com/page/time-management',
-    'Community': 'https://futureselfdiscover.com/topics'
-  };
-
   var path = window.location.pathname;
   var pageDesc = pageMap[path] || 'a FutureSelf page';
   var icon = '<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
   var history = [];
   var memory = null; // loaded from Supabase via get_memory on open
+  var pendingProfileSuggestion = null; // suggestion awaiting student consent
+  var declinedSuggestions = []; // values declined this session, never re-prompted
+
+  // render a consent prompt for a profile suggestion with Yes/No choices
+  function showProfileConsent(sug) {
+    pendingProfileSuggestion = sug;
+    var body = document.getElementById('fs-body');
+    if (!body) return;
+    var div = document.createElement('div');
+    div.className = 'fs-row';
+    div.id = 'fs-profile-consent';
+    div.innerHTML = '<div class="fs-av">' + icon + '</div>' +
+      '<div class="fs-msg fs-ai">Want me to add <b>' + (sug.label || sug.value) + '</b> to your FutureSelf profile?' +
+      '<div style="margin-top:8px;display:flex;gap:6px;">' +
+      '<span class="fs-pill" onclick="fsProfileYes()">Yes, add it</span>' +
+      '<span class="fs-pill" onclick="fsProfileNo()">No thanks</span>' +
+      '</div></div>';
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function removeProfileConsent() {
+    var el = document.getElementById('fs-profile-consent');
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+  }
+
+  window.fsProfileYes = function () {
+    if (!pendingProfileSuggestion || !hbUserId) { removeProfileConsent(); return; }
+    var sug = pendingProfileSuggestion;
+    pendingProfileSuggestion = null;
+    removeProfileConsent();
+    try {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', PROXY_URL, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          var ok = false;
+          try { ok = JSON.parse(xhr.responseText).ok === true; } catch(e) {}
+          addAI(ok ? 'Added to your profile.' : 'Hmm, that did not save. I will try again next time it comes up.', true);
+        }
+      };
+      xhr.send(JSON.stringify({ type: 'save_profile', userId: hbUserId, field: sug.field, value: sug.value }));
+    } catch(e) {}
+  };
+
+  window.fsProfileNo = function () {
+    if (pendingProfileSuggestion) declinedSuggestions.push(pendingProfileSuggestion.value);
+    pendingProfileSuggestion = null;
+    removeProfileConsent();
+  };
 
   function buildMemoryContext() {
     if (!memory) return 'No prior memory for this student yet.';
@@ -132,12 +154,6 @@
     return { ready: allDone, items: items };
   }
 
-  function buildURLList() {
-    var list = [];
-    for (var label in urlMap) list.push(label + ': ' + urlMap[label]);
-    return list.join('\n');
-  }
-
   function buildProfileContext() {
     if (!profile) return 'No profile data available.';
     var bits = [];
@@ -177,50 +193,16 @@
     return bits.join('\n');
   }
 
-  function buildSYS() {
-    var q = String.fromCharCode(34);
-    var suggestExample = '{' + q + 'suggestions' + q + ':[' + q + 'short reply' + q + ',' + q + 'short reply' + q + ',' + q + 'short reply' + q + ']}';
-    var memExample = '{' + q + 'memory' + q + ':{' + q + 'knowledge' + q + ':[{' + q + 'detail' + q + ':' + q + '...' + q + ',' + q + 'category' + q + ':' + q + '...' + q + '}],' + q + 'current_term' + q + ':{},' + q + 'direction' + q + ':{},' + q + 'focus' + q + ':' + q + '...' + q + ',' + q + 'summary' + q + ':' + q + '...' + q + ',' + q + 'topics' + q + ':[' + q + '...' + q + ']}}';
-    return [
-      'You are the FutureSelf AI Advisor, a warm but direct career mentor for college students. You are not a generic chatbot. You behave like a real advisor in a one-on-one session.',
-      '',
-      'CORE BEHAVIOR:',
-      '- Keep every response SHORT: 1-2 sentences plus one focused question. Never write thick paragraphs.',
-      '- Ask ONE question at a time. Build understanding of the student gradually.',
-      '- Your goal is to understand the student, then guide them toward concrete, actionable next steps.',
-      '- When the student shares something useful (an interest, goal, target industry), acknowledge it briefly and suggest they add it to their FutureSelf profile so it stays with them. Profile page: ' + (profile && profile.id ? 'https://futureselfdiscover.com/users/' + profile.id : 'their profile') + '.',
-      '- Use what you already know about them (below). Never ask for info you already have.',
-      '- NEVER proactively fish for personal details across multiple categories. Let information surface naturally from what the student brings up. Never ask more than one profile-building question per response. You are a career advisor, not an interviewer collecting a checklist.',
-      '',
-      'CRITICAL FORMAT RULE 1 (suggestions):',
-      'You MUST end EVERY single response with a JSON object on its own line, exactly like this:',
-      suggestExample,
-      'These are 2-3 things the STUDENT might tap to reply, each under 5 words, written in first person from the student. Never skip this line.',
-      '',
-      'CRITICAL FORMAT RULE 2 (memory):',
-      'Immediately after the suggestions JSON, on its own line, include a memory JSON object, exactly like this shape:',
-      memExample,
-      '- "knowledge": an array of NEW specific things the student just shared this turn (classes, professors, jobs, hobbies, interests, contacts). Only include NEW items, not things already listed under "WHAT YOU ALREADY KNOW" below. Leave as an empty array [] if nothing new came up.',
-      '- "current_term": only include this if the student mentioned something about their CURRENT semester (current classes, current commitments) that should replace prior current-term info. Otherwise omit or leave as {}.',
-      '- "direction": only include this if the student stated or updated a career aspiration, target role, or target company. This OVERWRITES prior direction, so only include when there is a genuine update. Otherwise omit or leave as {}.',
-      '- "focus": the sharpest single-sentence read of this student: the best interpolation of who they are (summary) and where they are headed (direction). One well-said line. Update it whenever your understanding improves.',
-      '- "summary": a SURFACE-LEVEL 1-2 sentence portrait of the student. No course numbers, professor names, or program specifics; those belong in knowledge. Think: "Jerald is a current senior planning to recruit and serve as a TA for engineering classes." Rewrite fully each turn as your picture improves.',
-      '- "topics": a short array of recurring theme tags for this student, e.g. ["recruiting", "undergraduate engineering", "studying for PE exam"]. 2-5 words each, lowercase. Return the FULL updated list each turn (existing themes plus any new ones), not just new additions. Merge and dedupe; drop themes that no longer apply.',
-      'If nothing memory-worthy happened this turn, still include the memory JSON with empty/omitted fields. Never skip this line.',
-      '',
-      'LINKS: when pointing to a page use this exact HTML format: anchor tag with href set to the full URL and target set to _top. Never paste raw URLs as text.',
-      '',
-      'AVAILABLE PAGES:',
-      buildURLList(),
-      '',
-      'CURRENT PAGE THE STUDENT IS ON: ' + pageDesc,
-      '',
-      'WHAT YOU ALREADY KNOW ABOUT THIS STUDENT (from FutureSelf profile):',
-      buildProfileContext(),
-      '',
-      'WHAT YOU ALREADY REMEMBER ABOUT THIS STUDENT (from past conversations):',
-      buildMemoryContext()
-    ].join('\n');
+  // package raw context for the proxy to build the system prompt from.
+  // behavior/method/resource content now lives server-side in
+  // proxy/behavior/*.txt, editable without a widget deploy.
+  function buildContext() {
+    return {
+      profile: profile ? { id: profile.id } : null,
+      pageDesc: pageDesc,
+      profileContext: buildProfileContext(),
+      memoryContext: buildMemoryContext()
+    };
   }
 
   // fetch memory (including conversation_history) from Supabase via the proxy
@@ -487,7 +469,8 @@
             direction: parsedBlob.direction || {},
             focus: parsedBlob.focus || null,
             summary: parsedBlob.summary || null,
-            topics: parsedBlob.topics || null
+            topics: parsedBlob.topics || null,
+            profile_suggestion: parsedBlob.profile_suggestion || null
           };
         }
       } catch(e) {}
@@ -525,6 +508,14 @@
             topics: (mu.topics && mu.topics.length) ? mu.topics : undefined,
             conversationTurn: lastUser ? { user: lastUser.content, assistant: parsed.reply, timestamp: new Date().toISOString() } : undefined
           });
+
+          // consent-gated profile suggestion: show prompt only for allowed
+          // fields and values not already declined this session
+          var sug = mu.profile_suggestion;
+          var allowedFields = ['skills','industries_of_interest','hobbies_interests','clubs_and_organizations','languages','awards_honors','currently_exploring','target_cities_regions','career_priorities','bio'];
+          if (sug && sug.field && sug.value && allowedFields.indexOf(sug.field) > -1 && declinedSuggestions.indexOf(sug.value) === -1) {
+            showProfileConsent(sug);
+          }
         } catch (e) {
           addAI("Something went wrong on my end. Please try again.", true);
         }
@@ -536,7 +527,8 @@
       sessionId: sessionId,
       page: path,
       profileName: (profile && profile.name) || null,
-      messages: [{ role: 'system', content: buildSYS() }].concat(history)
+      context: buildContext(),
+      messages: history
     }));
   }
 
