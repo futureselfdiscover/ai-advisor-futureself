@@ -1,4 +1,18 @@
 import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
+
+// ---- behavior files (loaded once per cold start, not per request) ----
+// edit these plain text files to change advisor personality, advising
+// method, or the resource URL map. no code changes needed for content edits.
+const BEHAVIOR_DIR = path.join(process.cwd(), 'behavior');
+function loadBehaviorFile(name) {
+  try { return fs.readFileSync(path.join(BEHAVIOR_DIR, name), 'utf8'); }
+  catch(e) { return ''; }
+}
+const ADVISOR_BEHAVIOR = loadBehaviorFile('advisor-behavior.txt');
+const ADVISING_FRAMEWORKS = loadBehaviorFile('advising-frameworks.txt');
+const FUTURESELF_RESOURCES = loadBehaviorFile('futureself-resources.txt');
 
 // ---- Supabase helpers ----
 
@@ -122,6 +136,50 @@ async function saveMemory(userId, fields, existing) {
   } catch(e) { return { error: e.message }; }
 }
 
+// ---- system prompt assembly ----
+// builds the full system prompt server-side from the three behavior files
+// plus per-request context (profile, memory, page). editing personality,
+// advising method, or the resource list never requires a widget deploy.
+function buildSystemPrompt(ctx) {
+  const q = '"';
+  const suggestExample = '{' + q + 'suggestions' + q + ':[' + q + 'short reply' + q + ',' + q + 'short reply' + q + ',' + q + 'short reply' + q + ']}';
+  const memExample = '{' + q + 'memory' + q + ':{' + q + 'knowledge' + q + ':[{' + q + 'detail' + q + ':' + q + '...' + q + ',' + q + 'category' + q + ':' + q + '...' + q + '}],' + q + 'current_term' + q + ':{},' + q + 'direction' + q + ':{},' + q + 'focus' + q + ':' + q + '...' + q + ',' + q + 'summary' + q + ':' + q + '...' + q + ',' + q + 'topics' + q + ':[' + q + '...' + q + ']}}';
+  const profileUrl = (ctx.profile && ctx.profile.id) ? 'https://futureselfdiscover.com/users/' + ctx.profile.id : 'their profile';
+
+  return [
+    ADVISOR_BEHAVIOR.replace('add it to their FutureSelf profile so it stays with them.', 'add it to their FutureSelf profile so it stays with them. Profile page: ' + profileUrl + '.'),
+    '',
+    ADVISING_FRAMEWORKS,
+    '',
+    'CRITICAL FORMAT RULE 1 (suggestions):',
+    'You MUST end EVERY single response with a JSON object on its own line, exactly like this:',
+    suggestExample,
+    'These are 2-3 things the STUDENT might tap to reply, each under 5 words, written in first person from the student. Never skip this line.',
+    '',
+    'CRITICAL FORMAT RULE 2 (memory):',
+    'Immediately after the suggestions JSON, on its own line, include a memory JSON object, exactly like this shape:',
+    memExample,
+    '- "knowledge": an array of NEW specific things the student just shared this turn (classes, professors, jobs, hobbies, interests, contacts). Only include NEW items, not things already listed under "WHAT YOU ALREADY KNOW" below. Leave as an empty array [] if nothing new came up.',
+    '- "current_term": only include this if the student mentioned something about their CURRENT semester (current classes, current commitments) that should replace prior current-term info. Otherwise omit or leave as {}.',
+    '- "direction": only include this if the student stated or updated a career aspiration, target role, or target company. This OVERWRITES prior direction, so only include when there is a genuine update. Otherwise omit or leave as {}.',
+    '- "focus": the sharpest single-sentence read of this student: the best interpolation of who they are (summary) and where they are headed (direction). One well-said line. Update it whenever your understanding improves.',
+    '- "summary": a SURFACE-LEVEL 1-2 sentence portrait of the student. No course numbers, professor names, or program specifics; those belong in knowledge. Think: "Jerald is a current senior planning to recruit and serve as a TA for engineering classes." Rewrite fully each turn as your picture improves.',
+    '- "topics": a short array of recurring theme tags for this student, e.g. ["recruiting", "undergraduate engineering", "studying for PE exam"]. 2-5 words each, lowercase. Return the FULL updated list each turn (existing themes plus any new ones), not just new additions. Merge and dedupe; drop themes that no longer apply.',
+    '- "profile_suggestion": OPTIONAL. Include ONLY when the student just shared something concrete that belongs on their FutureSelf profile. Shape: {' + q + 'field' + q + ':' + q + 'skills' + q + ',' + q + 'value' + q + ':' + q + 'Python' + q + ',' + q + 'label' + q + ':' + q + 'Python as a skill' + q + '}. Allowed field values ONLY: skills, industries_of_interest, hobbies_interests, clubs_and_organizations, languages, awards_honors, currently_exploring, target_cities_regions, career_priorities, bio. At most ONE suggestion per response, and never re-suggest something already declined this session. Omit the key entirely when nothing fits.',
+    'If nothing memory-worthy happened this turn, still include the memory JSON with empty/omitted fields. Never skip this line.',
+    '',
+    FUTURESELF_RESOURCES,
+    '',
+    'CURRENT PAGE THE STUDENT IS ON: ' + (ctx.pageDesc || 'a FutureSelf page'),
+    '',
+    'WHAT YOU ALREADY KNOW ABOUT THIS STUDENT (from FutureSelf profile):',
+    ctx.profileContext || 'No profile data available.',
+    '',
+    'WHAT YOU ALREADY REMEMBER ABOUT THIS STUDENT (from past conversations):',
+    ctx.memoryContext || 'No prior memory for this student yet.'
+  ].join('\n');
+}
+
 // ---- main handler ----
 
 export default async function handler(req, res) {
@@ -131,19 +189,29 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { type, messages, userId, sessionId, page, profileName } = req.body;
+  const { type, messages, userId, sessionId, page, profileName, context } = req.body;
 
   try {
 
     // ---- chat: proxy to OpenAI + log anonymously ----
     if (type === 'chat') {
+      // messages arrives WITHOUT a system message; the proxy builds and
+      // prepends it from the behavior files + context sent by the widget.
+      // backward compatible: if messages already has a system message
+      // (older widget), use it as-is instead of building a new one.
+      let fullMessages = messages;
+      const hasSystem = messages && messages.length > 0 && messages[0].role === 'system';
+      if (!hasSystem && context) {
+        fullMessages = [{ role: 'system', content: buildSystemPrompt(context) }].concat(messages || []);
+      }
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY
         },
-        body: JSON.stringify({ model: 'gpt-4o', messages })
+        body: JSON.stringify({ model: 'gpt-4o', messages: fullMessages })
       });
       const data = await response.json();
 
@@ -159,6 +227,7 @@ export default async function handler(req, res) {
         const assistantContent = data.choices &&
           data.choices[0] &&
           data.choices[0].message &&
+
           data.choices[0].message.content;
         if (assistantContent) {
           const r2 = await logTurn(sessionId, page, 'assistant', assistantContent, profileName);
@@ -230,6 +299,61 @@ export default async function handler(req, res) {
         if (!del.ok) {
           const errText = await del.text();
           return res.status(200).json({ error: 'supabase ' + del.status + ': ' + errText });
+        }
+        return res.status(200).json({ ok: true });
+      } catch(e) { return res.status(200).json({ error: e.message }); }
+    }
+
+    // ---- profile: consent-confirmed write to fsd_profile staging ----
+    if (type === 'save_profile') {
+      const { field, value } = req.body;
+      if (!userId) return res.status(400).json({ error: 'userId required' });
+      const ARRAY_FIELDS = ['skills','industries_of_interest','hobbies_interests','clubs_and_organizations','languages','awards_honors','target_cities_regions'];
+      const TEXT_FIELDS = ['currently_exploring','career_priorities','bio'];
+      if (!field || value === undefined || (ARRAY_FIELDS.indexOf(field) === -1 && TEXT_FIELDS.indexOf(field) === -1)) {
+        return res.status(400).json({ error: 'invalid field' });
+      }
+      try {
+        const hash = hashUserId(userId);
+
+        // fetch existing staging row, if any
+        const getRes = await fetch(
+          process.env.SUPABASE_URL + '/rest/v1/fsd_profile?user_hash=eq.' + hash + '&select=*',
+          { headers: {
+              'apikey': process.env.SUPABASE_SERVICE_KEY,
+              'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY } }
+        );
+        const rows = getRes.ok ? await getRes.json() : [];
+        const existing = rows[0] || {};
+
+        const body = {
+          user_hash: hash,
+          updated_at: new Date().toISOString()
+        };
+        if (ARRAY_FIELDS.indexOf(field) > -1) {
+          const arr = existing[field] || [];
+          if (arr.indexOf(value) === -1) arr.push(value); // append, dedupe
+          body[field] = arr;
+        } else {
+          body[field] = value; // text fields overwrite
+        }
+        const log = existing.push_log || [];
+        log.push({ field: field, value: value, confirmed_at: new Date().toISOString(), pushed: false });
+        body.push_log = log;
+
+        const up = await fetch(process.env.SUPABASE_URL + '/rest/v1/fsd_profile?on_conflict=user_hash', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': process.env.SUPABASE_SERVICE_KEY,
+            'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
+            'Prefer': 'resolution=merge-duplicates,return=minimal'
+          },
+          body: JSON.stringify(body)
+        });
+        if (!up.ok) {
+          const errText = await up.text();
+          return res.status(200).json({ error: 'supabase ' + up.status + ': ' + errText });
         }
         return res.status(200).json({ ok: true });
       } catch(e) { return res.status(200).json({ error: e.message }); }
