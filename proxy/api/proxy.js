@@ -363,17 +363,25 @@ export default async function handler(req, res) {
     // remove once custom_attributes shape is confirmed and the real
     // fsd_profile -> Hivebrite push is built.
     //
-    // per Hivebrite's official admin API docs: the admin token endpoint is
-    // POST <subdomain>/api/oauth/token with grant_type=password and params
-    // admin_email, password, client_id, client_secret. client_credentials
-    // is NOT a supported grant for the admin API, which is why every prior
-    // attempt returned invalid_client. the issued token acts AS that admin
-    // ("current admin is the owner of the access_token"), so use a
-    // dedicated service admin account, not a personal login.
+    // per Hivebrite's official admin API docs, the admin token endpoint is
+    // POST <subdomain>/api/oauth/token supporting two grants:
+    //   grant_type=refresh_token  (refresh_token + client_id + client_secret)
+    //   grant_type=password       (admin_email + password + client_id + client_secret)
+    // client_credentials is NOT supported, which is why every prior attempt
+    // returned invalid_client.
     //
-    // requires two new Vercel env vars:
-    //   HIVEBRITE_ADMIN_EMAIL     (dedicated service admin account email)
-    //   HIVEBRITE_ADMIN_PASSWORD  (its password)
+    // PREFERRED: the back office (Settings > External integrations) has a
+    // "Generate refresh token" button on the OAuth2 application. that avoids
+    // storing any admin password. set this Vercel env var:
+    //   HIVEBRITE_REFRESH_TOKEN
+    // fallback (only if refresh token unavailable):
+    //   HIVEBRITE_ADMIN_EMAIL + HIVEBRITE_ADMIN_PASSWORD
+    //
+    // NOTE on rotation: some OAuth servers issue a NEW refresh token on each
+    // exchange, invalidating the old one. the response includes
+    // refresh_token_rotated so we can detect this. if true, a static env var
+    // will break on the next call and the production push handler must store
+    // the latest refresh token in Supabase instead.
     //
     // this handler tests, in order:
     //   1. token exchange (password grant)
@@ -385,26 +393,37 @@ export default async function handler(req, res) {
     //      canonical source of the custom_attributes names we need for
     //      the eventual profile write
     if (type === 'debug_hivebrite_get_user') {
-      if (!process.env.HIVEBRITE_ADMIN_EMAIL || !process.env.HIVEBRITE_ADMIN_PASSWORD) {
+      const hasRefresh = !!process.env.HIVEBRITE_REFRESH_TOKEN;
+      const hasPassword = !!(process.env.HIVEBRITE_ADMIN_EMAIL && process.env.HIVEBRITE_ADMIN_PASSWORD);
+      if (!hasRefresh && !hasPassword) {
         return res.status(200).json({
           step: 'preflight',
-          error: 'HIVEBRITE_ADMIN_EMAIL and HIVEBRITE_ADMIN_PASSWORD env vars are not set in Vercel yet'
+          error: 'Set HIVEBRITE_REFRESH_TOKEN (preferred, from the back office Generate refresh token button) or HIVEBRITE_ADMIN_EMAIL + HIVEBRITE_ADMIN_PASSWORD in Vercel'
         });
       }
 
       const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL ||
         'https://futureselfdiscover.hivebrite.com/api/oauth/token';
 
+      const grantParams = hasRefresh
+        ? {
+            grant_type: 'refresh_token',
+            refresh_token: process.env.HIVEBRITE_REFRESH_TOKEN,
+            client_id: process.env.HIVEBRITE_CLIENT_ID,
+            client_secret: process.env.HIVEBRITE_CLIENT_SECRET
+          }
+        : {
+            grant_type: 'password',
+            admin_email: process.env.HIVEBRITE_ADMIN_EMAIL,
+            password: process.env.HIVEBRITE_ADMIN_PASSWORD,
+            client_id: process.env.HIVEBRITE_CLIENT_ID,
+            client_secret: process.env.HIVEBRITE_CLIENT_SECRET
+          };
+
       const tokenRes = await fetch(tokenUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          grant_type: 'password',
-          admin_email: process.env.HIVEBRITE_ADMIN_EMAIL,
-          password: process.env.HIVEBRITE_ADMIN_PASSWORD,
-          client_id: process.env.HIVEBRITE_CLIENT_ID,
-          client_secret: process.env.HIVEBRITE_CLIENT_SECRET
-        }).toString()
+        body: new URLSearchParams(grantParams).toString()
       });
 
       const tokenText = await tokenRes.text();
@@ -433,9 +452,15 @@ export default async function handler(req, res) {
       const uid = userId || '18275972';
       const out = {
         step: 'authenticated',
+        grant_used: hasRefresh ? 'refresh_token' : 'password',
         token_type: tokenData.token_type || null,
         expires_in: tokenData.expires_in || null,
-        has_refresh_token: !!tokenData.refresh_token
+        has_refresh_token: !!tokenData.refresh_token,
+        // true means the server issued a DIFFERENT refresh token than the one
+        // sent, i.e. rotation is on and the env var value is now stale. never
+        // echoes the tokens themselves.
+        refresh_token_rotated: hasRefresh && !!tokenData.refresh_token &&
+          tokenData.refresh_token !== process.env.HIVEBRITE_REFRESH_TOKEN
       };
 
       // attempt 1: new v3.1 gateway
