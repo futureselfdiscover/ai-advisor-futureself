@@ -359,33 +359,52 @@ export default async function handler(req, res) {
       } catch(e) { return res.status(200).json({ error: e.message }); }
     }
 
-    // ---- TEMPORARY DEBUG: test Hivebrite v3.1 admin API read access ----
+    // ---- TEMPORARY DEBUG: test Hivebrite admin API read access ----
     // remove once custom_attributes shape is confirmed and the real
     // fsd_profile -> Hivebrite push is built.
     //
-    // fixed vs prior version: Hydra's token endpoint expects client auth
-    // via HTTP Basic header + form-urlencoded body, not a JSON body with
-    // client_id/client_secret in it. that mismatch was producing the
-    // "invalid_client: no client authentication included" error.
+    // per Hivebrite's official admin API docs: the admin token endpoint is
+    // POST <subdomain>/api/oauth/token with grant_type=password and params
+    // admin_email, password, client_id, client_secret. client_credentials
+    // is NOT a supported grant for the admin API, which is why every prior
+    // attempt returned invalid_client. the issued token acts AS that admin
+    // ("current admin is the owner of the access_token"), so use a
+    // dedicated service admin account, not a personal login.
     //
-    // token URL is still a guess (HIVEBRITE_ADMIN_TOKEN_URL). confirm the
-    // real admin token endpoint from Hivebrite's docs/support, then either
-    // set that env var in Vercel or update the fallback below.
+    // requires two new Vercel env vars:
+    //   HIVEBRITE_ADMIN_EMAIL     (dedicated service admin account email)
+    //   HIVEBRITE_ADMIN_PASSWORD  (its password)
+    //
+    // this handler tests, in order:
+    //   1. token exchange (password grant)
+    //   2. GET user on api.eu.hivebrite.com/admin/v3.1 (new API gateway)
+    //   3. if that 401/403s: GET user on the community subdomain v2 path
+    //      as a fallback, so one test run tells us which host the token
+    //      is valid for
+    //   4. GET the network's customizable attributes list, which is the
+    //      canonical source of the custom_attributes names we need for
+    //      the eventual profile write
     if (type === 'debug_hivebrite_get_user') {
-      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL ||
-        'https://futureselfdiscover.hivebrite.com/admin/oauth/token';
+      if (!process.env.HIVEBRITE_ADMIN_EMAIL || !process.env.HIVEBRITE_ADMIN_PASSWORD) {
+        return res.status(200).json({
+          step: 'preflight',
+          error: 'HIVEBRITE_ADMIN_EMAIL and HIVEBRITE_ADMIN_PASSWORD env vars are not set in Vercel yet'
+        });
+      }
 
-      const basicAuth = Buffer.from(
-        process.env.HIVEBRITE_CLIENT_ID + ':' + process.env.HIVEBRITE_CLIENT_SECRET
-      ).toString('base64');
+      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL ||
+        'https://futureselfdiscover.hivebrite.com/api/oauth/token';
 
       const tokenRes = await fetch(tokenUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + basicAuth
-        },
-        body: new URLSearchParams({ grant_type: 'client_credentials' }).toString()
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          grant_type: 'password',
+          admin_email: process.env.HIVEBRITE_ADMIN_EMAIL,
+          password: process.env.HIVEBRITE_ADMIN_PASSWORD,
+          client_id: process.env.HIVEBRITE_CLIENT_ID,
+          client_secret: process.env.HIVEBRITE_CLIENT_SECRET
+        }).toString()
       });
 
       const tokenText = await tokenRes.text();
@@ -396,7 +415,7 @@ export default async function handler(req, res) {
           step: 'token_exchange',
           error: 'non-JSON response',
           status: tokenRes.status,
-          raw: tokenText,
+          raw: tokenText.slice(0, 500),
           tokenUrl: tokenUrl
         });
       }
@@ -410,14 +429,49 @@ export default async function handler(req, res) {
         });
       }
 
-      const userRes = await fetch(
-        'https://api.eu.hivebrite.com/admin/v3.1/users/' + (userId || '18275972'),
-        { headers: {
-            'Authorization': 'Bearer ' + tokenData.access_token,
-            'accept': 'application/json' } }
+      const token = tokenData.access_token;
+      const uid = userId || '18275972';
+      const out = {
+        step: 'authenticated',
+        token_type: tokenData.token_type || null,
+        expires_in: tokenData.expires_in || null,
+        has_refresh_token: !!tokenData.refresh_token
+      };
+
+      // attempt 1: new v3.1 gateway
+      const v3Res = await fetch(
+        'https://api.eu.hivebrite.com/admin/v3.1/users/' + uid,
+        { headers: { 'Authorization': 'Bearer ' + token, 'accept': 'application/json' } }
       );
-      const userData = await userRes.json();
-      return res.status(200).json({ step: 'user_fetch', status: userRes.status, user: userData });
+      const v3Text = await v3Res.text();
+      out.v3_status = v3Res.status;
+      try { out.v3_user = JSON.parse(v3Text); }
+      catch(e) { out.v3_user = { raw: v3Text.slice(0, 500) }; }
+
+      // attempt 2 (fallback): community subdomain v2 admin path
+      if (v3Res.status === 401 || v3Res.status === 403) {
+        const v2Res = await fetch(
+          'https://futureselfdiscover.hivebrite.com/api/admin/v2/users/' + uid,
+          { headers: { 'Authorization': 'Bearer ' + token, 'accept': 'application/json' } }
+        );
+        const v2Text = await v2Res.text();
+        out.v2_status = v2Res.status;
+        try { out.v2_user = JSON.parse(v2Text); }
+        catch(e) { out.v2_user = { raw: v2Text.slice(0, 500) }; }
+      }
+
+      // attempt 3: the network's customizable attributes list, the
+      // canonical source of valid custom_attributes names for writes
+      const attrRes = await fetch(
+        'https://futureselfdiscover.hivebrite.com/api/admin/v2/settings/customizable_attributes',
+        { headers: { 'Authorization': 'Bearer ' + token, 'accept': 'application/json' } }
+      );
+      const attrText = await attrRes.text();
+      out.attrs_status = attrRes.status;
+      try { out.customizable_attributes = JSON.parse(attrText); }
+      catch(e) { out.customizable_attributes = { raw: attrText.slice(0, 500) }; }
+
+      return res.status(200).json(out);
     }
 
     return res.status(400).json({ error: 'Invalid request type' });
