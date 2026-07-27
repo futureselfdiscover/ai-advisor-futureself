@@ -202,8 +202,9 @@ function buildSystemPrompt(ctx) {
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key, authorization');
+  res.setHeader('Access-Control-Max-Age', '86400');
+  if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { type, messages, userId, sessionId, page, profileName, context } = req.body;
@@ -786,7 +787,46 @@ export default async function handler(req, res) {
         const t = await ins.text();
         return res.status(200).json({ step: 'generate_digest', error: 'supabase ' + ins.status + ': ' + t });
       }
-      return res.status(200).json({ step: 'generate_digest', ok: true, user_turns: userTurns.length });
+
+      // notify: only email when there's a real suggestion worth a human's time,
+      // and only if email is configured. failures here never break the digest.
+      let emailResult = { skipped: 'not configured' };
+      const hasSuggestion = parsed.suggestion && parsed.suggestion.trim() &&
+        parsed.suggestion.trim().toLowerCase() !== 'none';
+      if (hasSuggestion && process.env.RESEND_API_KEY && process.env.DIGEST_NOTIFY_EMAILS) {
+        const recipients = process.env.DIGEST_NOTIFY_EMAILS.split(',')
+          .map(function(s){ return s.trim(); }).filter(Boolean);
+        const reviewUrl = process.env.DIGEST_REVIEW_URL || 'https://ai-advisor-futureself.vercel.app/digest-review.html';
+        const fromAddr = process.env.DIGEST_FROM_EMAIL || 'FutureSelf Advisor <onboarding@resend.dev>';
+        // plain-text body; keep it short. no student data, just the summary.
+        const textBody =
+          'A new advisor digest is ready for review.\n\n' +
+          'Summary: ' + (parsed.summary || '') + '\n\n' +
+          'Suggestion: ' + parsed.suggestion + '\n\n' +
+          'Review, edit, or dismiss it here:\n' + reviewUrl + '\n\n' +
+          '(' + userTurns.length + ' student messages over the last ' + days + ' days.)';
+        try {
+          const mailRes = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + process.env.RESEND_API_KEY
+            },
+            body: JSON.stringify({
+              from: fromAddr,
+              to: recipients,
+              subject: 'Advisor digest ready for review',
+              text: textBody
+            })
+          });
+          emailResult = mailRes.ok ? { ok: true, to: recipients.length }
+            : { error: 'resend ' + mailRes.status + ': ' + (await mailRes.text()).slice(0, 200) };
+        } catch(e) { emailResult = { error: e.message }; }
+      } else if (!hasSuggestion) {
+        emailResult = { skipped: 'no actionable suggestion' };
+      }
+
+      return res.status(200).json({ step: 'generate_digest', ok: true, user_turns: userTurns.length, email: emailResult });
     }
 
     // ---- list_digests: admin-only, feeds the review page ----
@@ -805,6 +845,39 @@ export default async function handler(req, res) {
       );
       const digests = listRes.ok ? await listRes.json() : [];
       return res.status(200).json({ digests: digests });
+    }
+
+    // ---- get_file: admin-only, read current file contents from the repo ----
+    // used by the review page to pre-fill the edit box with the FULL current
+    // file, so an approve never accidentally replaces the file with a snippet.
+    if (type === 'get_file') {
+      const adminKey = req.body.adminKey || req.headers['x-admin-key'];
+      if (!process.env.ADMIN_KEY || adminKey !== process.env.ADMIN_KEY) {
+        return res.status(403).json({ error: 'forbidden' });
+      }
+      if (!process.env.GITHUB_TOKEN) {
+        return res.status(200).json({ error: 'GITHUB_TOKEN not configured' });
+      }
+      const targetFile = req.body.targetFile || 'proxy/behavior/advisor-behavior.txt';
+      const repo = process.env.GITHUB_REPO || 'futureselfdiscover/ai-advisor-futureself';
+      const branch = process.env.GITHUB_BRANCH || 'main';
+      const ghHeaders = {
+        'Authorization': 'Bearer ' + process.env.GITHUB_TOKEN,
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'futureself-advisor-digest',
+        'X-GitHub-Api-Version': '2022-11-28'
+      };
+      const r = await fetch(
+        'https://api.github.com/repos/' + repo + '/contents/' + targetFile + '?ref=' + branch,
+        { headers: ghHeaders }
+      );
+      if (r.status !== 200) {
+        const t = await r.text();
+        return res.status(200).json({ error: 'github ' + r.status + ': ' + t.slice(0, 200) });
+      }
+      const meta = await r.json();
+      const content = Buffer.from(meta.content || '', 'base64').toString('utf8');
+      return res.status(200).json({ content: content, sha: meta.sha, targetFile: targetFile });
     }
 
     // ---- apply_digest: admin-only, commits human-edited text to the repo ----
