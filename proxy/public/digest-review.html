@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FutureSelf Advisor - Digest Review</title>
+<style>
+  :root {
+    --bg: #f4f4f7; --card: #ffffff; --ink: #1e1b3a; --muted: #6b6790;
+    --accent: #5a3fd6; --accent-ink: #ffffff; --line: #e6e4f0;
+    --ok: #1f8a4c; --danger: #b23b3b; --pending: #b8860b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         background: var(--bg); color: var(--ink); }
+  header { background: var(--accent); color: var(--accent-ink); padding: 18px 24px; }
+  header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+  header p { margin: 4px 0 0; font-size: 13px; opacity: .85; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 24px; }
+  .keybar { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
+  .keybar input { flex: 1; padding: 10px 12px; border: 1px solid var(--line);
+                  border-radius: 8px; font-size: 14px; }
+  button { font-size: 14px; border: none; border-radius: 8px; padding: 10px 16px;
+           cursor: pointer; font-weight: 500; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-ghost { background: #eceaf6; color: var(--accent); }
+  .btn-ok { background: var(--ok); color: #fff; }
+  .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+          padding: 18px; margin-bottom: 16px; }
+  .meta { display: flex; gap: 12px; font-size: 12px; color: var(--muted); margin-bottom: 10px;
+          flex-wrap: wrap; align-items: center; }
+  .badge { padding: 2px 8px; border-radius: 999px; font-weight: 600; font-size: 11px;
+           text-transform: uppercase; letter-spacing: .03em; }
+  .badge.pending { background: #fdf3d7; color: var(--pending); }
+  .badge.applied { background: #dcf3e5; color: var(--ok); }
+  .badge.dismissed { background: #f0eef7; color: var(--muted); }
+  .summary { font-size: 14px; line-height: 1.5; margin: 0 0 12px; }
+  .suggestion { font-size: 14px; line-height: 1.5; background: #f7f6fc; border-left: 3px solid var(--accent);
+                padding: 10px 12px; border-radius: 0 8px 8px 0; margin: 0 0 14px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--muted);
+          margin: 0 0 6px; text-transform: uppercase; letter-spacing: .03em; }
+  textarea { width: 100%; min-height: 220px; padding: 12px; border: 1px solid var(--line);
+             border-radius: 8px; font-family: ui-monospace, "SF Mono", Menlo, monospace;
+             font-size: 13px; line-height: 1.5; resize: vertical; }
+  .actions { display: flex; gap: 8px; margin-top: 12px; }
+  .hint { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+  .empty { text-align: center; color: var(--muted); padding: 40px; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+           background: var(--ink); color: #fff; padding: 12px 20px; border-radius: 8px;
+           font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  details { margin-bottom: 14px; }
+  summary.load-label { cursor: pointer; font-size: 12px; color: var(--muted);
+                       text-transform: uppercase; letter-spacing: .03em; font-weight: 600; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Advisor Digest Review</h1>
+  <p>Weekly suggestions from conversation logs. You approve, edit, or dismiss. Nothing reaches the bot without your click.</p>
+</header>
+
+<div class="wrap">
+  <div class="keybar">
+    <input id="adminKey" type="password" placeholder="Admin key" autocomplete="off">
+    <button class="btn-primary" onclick="loadDigests()">Load</button>
+    <button class="btn-ghost" onclick="runGenerate()">Run now</button>
+  </div>
+  <div id="list"></div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  var PROXY = "https://ai-advisor-futureself.vercel.app/api/proxy";
+
+  function key() { return document.getElementById("adminKey").value.trim(); }
+  function toast(msg) {
+    var t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    setTimeout(function(){ t.classList.remove("show"); }, 2600);
+  }
+
+  function post(body) {
+    return fetch(PROXY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).then(function(r){ return r.json(); });
+  }
+
+  function loadDigests() {
+    if (!key()) { toast("Enter the admin key first"); return; }
+    post({ type: "list_digests", adminKey: key() }).then(function(res){
+      if (res.error) { toast("Error: " + res.error); return; }
+      render(res.digests || []);
+    }).catch(function(e){ toast("Request failed"); });
+  }
+
+  function runGenerate() {
+    if (!key()) { toast("Enter the admin key first"); return; }
+    toast("Generating digest...");
+    post({ type: "generate_digest", adminKey: key(), days: 7 }).then(function(res){
+      if (res.error) { toast("Error: " + res.error); return; }
+      toast(res.low_data ? "Ran: not enough data this period" : "Digest generated");
+      loadDigests();
+    });
+  }
+
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+
+  function render(digests) {
+    var list = document.getElementById("list");
+    if (!digests.length) {
+      list.innerHTML = '<div class="empty">No digests yet. Click "Run now" to generate one from recent logs.</div>';
+      return;
+    }
+    list.innerHTML = digests.map(function(d){
+      var editable = d.status === "pending";
+      var proposed = d.proposed_edit || "";
+      return '' +
+      '<div class="card" data-id="' + d.id + '">' +
+        '<div class="meta">' +
+          '<span class="badge ' + d.status + '">' + d.status + '</span>' +
+          '<span>' + new Date(d.created_at).toLocaleString() + '</span>' +
+          '<span>window: ' + (d.window_days || "?") + 'd</span>' +
+          '<span>' + (d.user_turn_count || 0) + ' student msgs</span>' +
+        '</div>' +
+        '<p class="summary">' + esc(d.summary) + '</p>' +
+        (d.suggestion ? '<p class="suggestion">' + esc(d.suggestion) + '</p>' : '') +
+        (editable ?
+          '<label>Model suggestion (guidance only, not committed)</label>' +
+          '<div class="suggestion" style="border-left-color:#b8860b;background:#fdfaf0;">' + esc(proposed || 'None') + '</div>' +
+          '<label>Full file to commit &mdash; edit here</label>' +
+          '<textarea id="edit-' + d.id + '" placeholder="Click Load current file to pull the live contents...">' + '</textarea>' +
+          '<div class="actions" style="margin-bottom:10px;">' +
+            '<button class="btn-ghost" onclick="loadFile(' + d.id + ',\'' + esc(d.target_file || "") + '\')">Load current file</button>' +
+          '</div>' +
+          '<p class="hint">Approve commits the FULL text above to ' + esc(d.target_file || "the behavior file") + ' and triggers a redeploy. Load the current file first, then fold in the suggestion by hand.</p>' +
+          '<div class="actions">' +
+            '<button class="btn-ok" onclick="approve(' + d.id + ',\'' + esc(d.target_file || "") + '\')">Approve &amp; commit</button>' +
+            '<button class="btn-danger" onclick="dismiss(' + d.id + ')">Dismiss</button>' +
+          '</div>'
+          :
+          (proposed ? '<details><summary class="load-label">Proposed edit</summary><pre style="white-space:pre-wrap;font-size:13px;">' + esc(proposed) + '</pre></details>' : '')
+        ) +
+      '</div>';
+    }).join("");
+  }
+
+  function loadFile(id, targetFile) {
+    var ta = document.getElementById("edit-" + id);
+    if (!ta) return;
+    toast("Loading current file...");
+    post({ type: "get_file", adminKey: key(), targetFile: targetFile }).then(function(res){
+      if (res.content != null) { ta.value = res.content; toast("Loaded. Edit, then approve."); }
+      else { toast("Load failed: " + JSON.stringify(res.error || res)); }
+    });
+  }
+
+  function approve(id, targetFile) {
+    var ta = document.getElementById("edit-" + id);
+    var newContent = ta ? ta.value : "";
+    if (!newContent.trim()) { toast("Load the current file first, then edit"); return; }
+    if (newContent.trim().length < 200) {
+      if (!confirm("This text is very short (" + newContent.trim().length + " chars). Committing it will REPLACE the entire file with just this. Are you sure you loaded the full file first?")) return;
+    }
+    if (!confirm("Commit this FULL text to " + (targetFile || "the behavior file") + " on main? This changes live advisor behavior after redeploy.")) return;
+    toast("Committing...");
+    post({ type: "apply_digest", adminKey: key(), digestId: id, newContent: newContent, targetFile: targetFile })
+      .then(function(res){
+        if (res.ok) { toast("Committed. Redeploy will pick it up."); loadDigests(); }
+        else { toast("Failed: " + JSON.stringify(res.error || res)); }
+      });
+  }
+
+  function dismiss(id) {
+    if (!confirm("Dismiss this suggestion? It won't be applied.")) return;
+    post({ type: "dismiss_digest", adminKey: key(), digestId: id }).then(function(res){
+      if (res.ok) { toast("Dismissed"); loadDigests(); }
+      else { toast("Failed"); }
+    });
+  }
+</script>
+</body>
+</html>
