@@ -5,10 +5,27 @@ import path from 'path';
 // ---- behavior files (loaded once per cold start, not per request) ----
 // edit these plain text files to change advisor personality, advising
 // method, or the resource URL map. no code changes needed for content edits.
-const BEHAVIOR_DIR = path.join(process.cwd(), 'behavior');
+// try several candidate locations for the behavior dir, since process.cwd()
+// on Vercel depends on the configured root directory. record which one wins
+// (and any load errors) so the debug_behavior_files endpoint can report it.
+const BEHAVIOR_DIR_CANDIDATES = [
+  path.join(process.cwd(), 'behavior'),
+  path.join(process.cwd(), 'proxy', 'behavior'),
+  path.join(process.cwd(), 'api', '..', 'behavior'),
+  '/var/task/behavior',
+  '/var/task/proxy/behavior'
+];
+const BEHAVIOR_LOAD_LOG = [];
 function loadBehaviorFile(name) {
-  try { return fs.readFileSync(path.join(BEHAVIOR_DIR, name), 'utf8'); }
-  catch(e) { return ''; }
+  for (const dir of BEHAVIOR_DIR_CANDIDATES) {
+    try {
+      const content = fs.readFileSync(path.join(dir, name), 'utf8');
+      BEHAVIOR_LOAD_LOG.push({ name: name, dir: dir, ok: true, length: content.length });
+      return content;
+    } catch(e) { /* try next candidate */ }
+  }
+  BEHAVIOR_LOAD_LOG.push({ name: name, dir: null, ok: false, length: 0 });
+  return '';
 }
 const ADVISOR_BEHAVIOR = loadBehaviorFile('advisor-behavior.txt');
 const ADVISING_FRAMEWORKS = loadBehaviorFile('advising-frameworks.txt');
@@ -192,6 +209,27 @@ export default async function handler(req, res) {
   const { type, messages, userId, sessionId, page, profileName, context } = req.body;
 
   try {
+
+    // ---- TEMPORARY DEBUG: report which behavior files loaded and from where.
+    // remove once the behavior-dir path is confirmed correct in production.
+    if (type === 'debug_behavior_files') {
+      return res.status(200).json({
+        cwd: process.cwd(),
+        candidates_tried: BEHAVIOR_DIR_CANDIDATES,
+        load_log: BEHAVIOR_LOAD_LOG,
+        lengths: {
+          advisor_behavior: ADVISOR_BEHAVIOR.length,
+          advising_frameworks: ADVISING_FRAMEWORKS.length,
+          futureself_resources: FUTURESELF_RESOURCES.length
+        },
+        // first 300 chars of each so we can eyeball that the NEW content
+        // (strict link rules, grouped resources) is actually present
+        previews: {
+          advisor_behavior: ADVISOR_BEHAVIOR.slice(0, 300),
+          futureself_resources: FUTURESELF_RESOURCES.slice(0, 300)
+        }
+      });
+    }
 
     // ---- chat: proxy to OpenAI + log anonymously ----
     if (type === 'chat') {
