@@ -243,6 +243,15 @@ export default async function handler(req, res) {
         fullMessages = [{ role: 'system', content: buildSystemPrompt(context) }].concat(messages || []);
       }
 
+      // TEMPORARY DEBUG: return the exact system prompt without calling
+      // OpenAI or logging, so we can inspect what the model actually receives.
+      if (req.body.debugReturnPrompt) {
+        return res.status(200).json({
+          _debug_system_prompt: hasSystem ? messages[0].content : buildSystemPrompt(context || {}),
+          _built_from_context: !hasSystem && !!context
+        });
+      }
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -638,6 +647,257 @@ export default async function handler(req, res) {
           unmapped_fields: unmapped
         });
       }
+    }
+
+    // =====================================================================
+    // LOG DIGEST SYSTEM (Design A: human-in-the-loop)
+    // ---------------------------------------------------------------------
+    // generate_digest : (cron, weekly) reads conversation_logs, summarizes
+    //   via the model, writes a pending suggestion row to log_digests.
+    // list_digests    : (admin) returns digests for the review page.
+    // apply_digest    : (admin) takes the human-EDITED behavior text and
+    //   commits it to the repo via the GitHub API, marks the digest applied.
+    //
+    // security: list_digests and apply_digest require the ADMIN_KEY. the
+    // public widget never sends it, so the open proxy URL cannot trigger a
+    // commit or read digests. generate_digest requires either the ADMIN_KEY
+    // or the Vercel cron secret, so it cannot be triggered anonymously.
+    // =====================================================================
+
+    // ---- generate_digest: summarize recent logs into a pending suggestion ----
+    if (type === 'generate_digest') {
+      // auth: allow if admin key matches, OR if the Vercel cron secret header
+      // is present (Vercel sets Authorization: Bearer <CRON_SECRET> on cron
+      // invocations when CRON_SECRET is configured).
+      const adminKey = req.body.adminKey || req.headers['x-admin-key'];
+      const cronAuth = req.headers['authorization'];
+      const isAdmin = process.env.ADMIN_KEY && adminKey === process.env.ADMIN_KEY;
+      const isCron = process.env.CRON_SECRET && cronAuth === ('Bearer ' + process.env.CRON_SECRET);
+      if (!isAdmin && !isCron) {
+        return res.status(403).json({ error: 'forbidden: admin key or cron secret required' });
+      }
+      if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+        return res.status(200).json({ error: 'missing supabase env' });
+      }
+
+      // window: default last 7 days, overridable for manual runs
+      const days = req.body.days || 7;
+      const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+
+      // pull recent logs (user turns are the signal for "what students ask")
+      const logsRes = await fetch(
+        process.env.SUPABASE_URL + '/rest/v1/conversation_logs' +
+          '?created_at=gte.' + since +
+          '&select=role,content,page,created_at' +
+          '&order=created_at.desc&limit=1000',
+        { headers: {
+            'apikey': process.env.SUPABASE_SERVICE_KEY,
+            'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY } }
+      );
+      const logs = logsRes.ok ? await logsRes.json() : [];
+      const userTurns = logs.filter(function(l) { return l.role === 'user'; });
+
+      // if there's essentially no data, write a low-signal digest and stop.
+      // this is expected at current traffic; the machine still runs.
+      if (userTurns.length < 3) {
+        const emptyRow = {
+          created_at: new Date().toISOString(),
+          window_days: days,
+          user_turn_count: userTurns.length,
+          status: 'pending',
+          summary: 'Not enough activity this period (' + userTurns.length +
+            ' student messages) to surface reliable patterns.',
+          suggestion: 'No changes recommended. Let more traffic accumulate.',
+          proposed_edit: null,
+          target_file: null
+        };
+        await fetch(process.env.SUPABASE_URL + '/rest/v1/log_digests', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': process.env.SUPABASE_SERVICE_KEY,
+            'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(emptyRow)
+        });
+        return res.status(200).json({ step: 'generate_digest', ok: true, low_data: true, user_turns: userTurns.length });
+      }
+
+      // build a compact, PII-free corpus for the model. logs are already
+      // scrubbed at write time, but truncate hard and cap count as defense.
+      const corpus = userTurns.slice(0, 300).map(function(l) {
+        return '- ' + String(l.content || '').slice(0, 200);
+      }).join('\n');
+
+      const digestSystem =
+        'You analyze anonymized student questions sent to a college career advising assistant. ' +
+        'Identify the 3-5 most common themes or needs, and note any timely pattern (e.g. a spike in a topic). ' +
+        'Then, IF AND ONLY IF the data clearly supports it, propose ONE concrete adjustment to the advisor. ' +
+        'Be conservative: if the data is thin or mixed, say no change is warranted. ' +
+        'Never invent patterns that are not in the data. ' +
+        'Respond ONLY with JSON, no prose, no markdown, exactly this shape: ' +
+        '{"summary":"2-3 sentences on what students asked about","suggestion":"a recommendation TO THE HUMAN reviewer, phrased as a question they can accept or reject","proposed_edit":"optional: a short snippet of advisor-behavior guidance to consider adding, or null"}';
+
+      const digestRes = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            { role: 'system', content: digestSystem },
+            { role: 'user', content: 'Student questions from the last ' + days + ' days:\n\n' + corpus }
+          ]
+        })
+      });
+      const digestData = await digestRes.json();
+      let parsed = { summary: '', suggestion: '', proposed_edit: null };
+      try {
+        const raw = digestData.choices[0].message.content.replace(/```json|```/g, '').trim();
+        parsed = JSON.parse(raw);
+      } catch(e) {
+        parsed = { summary: 'Model returned unparseable output; review manually.', suggestion: 'None', proposed_edit: null };
+      }
+
+      const row = {
+        created_at: new Date().toISOString(),
+        window_days: days,
+        user_turn_count: userTurns.length,
+        status: 'pending',
+        summary: parsed.summary || '',
+        suggestion: parsed.suggestion || '',
+        proposed_edit: parsed.proposed_edit || null,
+        target_file: 'proxy/behavior/advisor-behavior.txt'
+      };
+      const ins = await fetch(process.env.SUPABASE_URL + '/rest/v1/log_digests', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': process.env.SUPABASE_SERVICE_KEY,
+          'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(row)
+      });
+      if (!ins.ok) {
+        const t = await ins.text();
+        return res.status(200).json({ step: 'generate_digest', error: 'supabase ' + ins.status + ': ' + t });
+      }
+      return res.status(200).json({ step: 'generate_digest', ok: true, user_turns: userTurns.length });
+    }
+
+    // ---- list_digests: admin-only, feeds the review page ----
+    if (type === 'list_digests') {
+      const adminKey = req.body.adminKey || req.headers['x-admin-key'];
+      if (!process.env.ADMIN_KEY || adminKey !== process.env.ADMIN_KEY) {
+        return res.status(403).json({ error: 'forbidden' });
+      }
+      const statusFilter = req.body.status ? '&status=eq.' + encodeURIComponent(req.body.status) : '';
+      const listRes = await fetch(
+        process.env.SUPABASE_URL + '/rest/v1/log_digests?select=*' + statusFilter +
+          '&order=created_at.desc&limit=50',
+        { headers: {
+            'apikey': process.env.SUPABASE_SERVICE_KEY,
+            'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY } }
+      );
+      const digests = listRes.ok ? await listRes.json() : [];
+      return res.status(200).json({ digests: digests });
+    }
+
+    // ---- apply_digest: admin-only, commits human-edited text to the repo ----
+    // this is the ONLY endpoint that writes to GitHub. it never uses the
+    // model's raw suggestion; it commits exactly the text the human approved.
+    if (type === 'apply_digest') {
+      const adminKey = req.body.adminKey || req.headers['x-admin-key'];
+      if (!process.env.ADMIN_KEY || adminKey !== process.env.ADMIN_KEY) {
+        return res.status(403).json({ error: 'forbidden' });
+      }
+      if (!process.env.GITHUB_TOKEN) {
+        return res.status(200).json({ error: 'GITHUB_TOKEN not configured' });
+      }
+
+      const digestId = req.body.digestId;
+      const newContent = req.body.newContent;      // full new file contents, human-approved
+      const targetFile = req.body.targetFile || 'proxy/behavior/advisor-behavior.txt';
+      const repo = process.env.GITHUB_REPO || 'futureselfdiscover/ai-advisor-futureself';
+      const branch = process.env.GITHUB_BRANCH || 'main';
+      if (!newContent || typeof newContent !== 'string') {
+        return res.status(400).json({ error: 'newContent (full file text) required' });
+      }
+
+      const ghHeaders = {
+        'Authorization': 'Bearer ' + process.env.GITHUB_TOKEN,
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'futureself-advisor-digest',
+        'X-GitHub-Api-Version': '2022-11-28'
+      };
+      const contentsUrl = 'https://api.github.com/repos/' + repo + '/contents/' + targetFile;
+
+      // 1. get the current file SHA (required to update an existing file)
+      const getFile = await fetch(contentsUrl + '?ref=' + branch, { headers: ghHeaders });
+      if (getFile.status !== 200) {
+        const t = await getFile.text();
+        return res.status(200).json({ step: 'github_get', status: getFile.status, error: t.slice(0, 300) });
+      }
+      const fileMeta = await getFile.json();
+
+      // 2. PUT the new contents (base64) with that SHA
+      const putBody = {
+        message: 'chore(advisor): apply reviewed digest suggestion' +
+          (digestId ? ' (#' + digestId + ')' : ''),
+        content: Buffer.from(newContent, 'utf8').toString('base64'),
+        sha: fileMeta.sha,
+        branch: branch
+      };
+      const putFile = await fetch(contentsUrl, {
+        method: 'PUT', headers: ghHeaders, body: JSON.stringify(putBody)
+      });
+      const putResult = await putFile.json();
+      if (putFile.status < 200 || putFile.status >= 300) {
+        return res.status(200).json({ step: 'github_put', status: putFile.status, error: putResult });
+      }
+
+      // 3. mark the digest applied (best-effort)
+      if (digestId && process.env.SUPABASE_URL) {
+        await fetch(process.env.SUPABASE_URL + '/rest/v1/log_digests?id=eq.' + digestId, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': process.env.SUPABASE_SERVICE_KEY,
+            'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ status: 'applied', applied_at: new Date().toISOString() })
+        });
+      }
+
+      return res.status(200).json({
+        step: 'apply_digest', ok: true,
+        commit: putResult.commit && putResult.commit.html_url
+      });
+    }
+
+    // ---- dismiss_digest: admin-only, mark a suggestion rejected ----
+    if (type === 'dismiss_digest') {
+      const adminKey = req.body.adminKey || req.headers['x-admin-key'];
+      if (!process.env.ADMIN_KEY || adminKey !== process.env.ADMIN_KEY) {
+        return res.status(403).json({ error: 'forbidden' });
+      }
+      if (!req.body.digestId) return res.status(400).json({ error: 'digestId required' });
+      await fetch(process.env.SUPABASE_URL + '/rest/v1/log_digests?id=eq.' + req.body.digestId, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': process.env.SUPABASE_SERVICE_KEY,
+          'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ status: 'dismissed', dismissed_at: new Date().toISOString() })
+      });
+      return res.status(200).json({ step: 'dismiss_digest', ok: true });
     }
 
     return res.status(400).json({ error: 'Invalid request type' });
