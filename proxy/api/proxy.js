@@ -468,9 +468,23 @@ export default async function handler(req, res) {
         });
       }
       if (!tokenData.access_token) {
+        // diagnostics to pin down invalid_grant without exposing secrets.
+        // shows the last 4 chars of the client_id actually being sent and
+        // the length of the refresh token, so you can verify they match the
+        // app you generated the token from.
+        var cid = process.env.HIVEBRITE_CLIENT_ID || '';
+        var rt = process.env.HIVEBRITE_REFRESH_TOKEN || '';
         return res.status(200).json({
           step: 'token_exchange', error: tokenData,
-          status: tokenRes.status, tokenUrl: tokenUrl
+          status: tokenRes.status, tokenUrl: tokenUrl,
+          diagnostics: {
+            grant_type_used: grantParams.grant_type,
+            client_id_last4: cid ? cid.slice(-4) : '(unset)',
+            client_id_length: cid.length,
+            refresh_token_last4: rt ? rt.slice(-4) : '(unset)',
+            refresh_token_length: rt.length,
+            client_secret_set: !!process.env.HIVEBRITE_CLIENT_SECRET
+          }
         });
       }
 
