@@ -438,24 +438,32 @@ export default async function handler(req, res) {
 
       // ---- token exchange ----
       const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL || (HB_BASE + '/oauth/token');
-      const grantParams = hasRefresh
-        ? {
-            grant_type: 'refresh_token',
-            refresh_token: process.env.HIVEBRITE_REFRESH_TOKEN,
-            client_id: process.env.HIVEBRITE_CLIENT_ID,
-            client_secret: process.env.HIVEBRITE_CLIENT_SECRET
-          }
-        : {
-            grant_type: 'password',
+      // allow forcing the auth style for diagnostics: req.body.clientAuth
+      //   'body'  -> client_id/secret in the form body (default)
+      //   'basic' -> client_id/secret as HTTP Basic auth header
+      const clientAuthStyle = req.body.clientAuth || 'body';
+
+      const baseParams = hasRefresh
+        ? { grant_type: 'refresh_token', refresh_token: process.env.HIVEBRITE_REFRESH_TOKEN }
+        : { grant_type: 'password',
             admin_email: process.env.HIVEBRITE_ADMIN_EMAIL,
-            password: process.env.HIVEBRITE_ADMIN_PASSWORD,
-            client_id: process.env.HIVEBRITE_CLIENT_ID,
-            client_secret: process.env.HIVEBRITE_CLIENT_SECRET
-          };
+            password: process.env.HIVEBRITE_ADMIN_PASSWORD };
+
+      const grantParams = Object.assign({}, baseParams);
+      const tokenHeaders = { 'Content-Type': 'application/x-www-form-urlencoded' };
+      if (clientAuthStyle === 'basic') {
+        const basic = Buffer.from(
+          process.env.HIVEBRITE_CLIENT_ID + ':' + process.env.HIVEBRITE_CLIENT_SECRET
+        ).toString('base64');
+        tokenHeaders['Authorization'] = 'Basic ' + basic;
+      } else {
+        grantParams.client_id = process.env.HIVEBRITE_CLIENT_ID;
+        grantParams.client_secret = process.env.HIVEBRITE_CLIENT_SECRET;
+      }
 
       const tokenRes = await fetch(tokenUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: tokenHeaders,
         body: new URLSearchParams(grantParams).toString()
       });
       const tokenText = await tokenRes.text();
