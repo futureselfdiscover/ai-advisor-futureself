@@ -434,47 +434,78 @@
   function parseReply(raw) {
     var suggestions = [];
     var memoryUpdate = null;
+    var salvagedSuggestion = null;
     var reply = raw;
 
-    var suggestMatch = raw.match(/\{\s*"suggestions"\s*:\s*\[[^\]]*\]\s*\}/);
-    if (suggestMatch) {
-      try { suggestions = JSON.parse(suggestMatch[0]).suggestions || []; } catch(e) {}
-      reply = reply.replace(suggestMatch[0], '').trim();
-    }
-
-    // strip the memory JSON from display no matter what shape the model
-    // used (object, array, malformed). Find the start of the memory blob
-    // and cut from there through its balanced closing brace.
-    var memIdx = reply.lastIndexOf('{"memory"');
-    if (memIdx === -1) memIdx = reply.search(/\{\s*"memory"/);
-    if (memIdx > -1) {
+    // helper: cut a balanced-brace JSON blob starting at a given "key"
+    // returns {obj, cleaned} or null if not found / unparseable
+    function extractBlob(text, keyRegex) {
+      var m = text.search(keyRegex);
+      if (m === -1) return null;
       var depth = 0, endIdx = -1;
-      for (var ci = memIdx; ci < reply.length; ci++) {
-        var ch = reply[ci];
+      for (var ci = m; ci < text.length; ci++) {
+        var ch = text[ci];
         if (ch === '{') depth++;
         else if (ch === '}') { depth--; if (depth === 0) { endIdx = ci; break; } }
       }
-      var blob = endIdx > -1 ? reply.slice(memIdx, endIdx + 1) : reply.slice(memIdx);
-      try {
-        var parsedBlob = JSON.parse(blob);
-        // accept only a proper object shape; ignore arrays/other malformed output
-        if (parsedBlob && parsedBlob.memory && !Array.isArray(parsedBlob.memory) && typeof parsedBlob.memory === 'object') {
-          memoryUpdate = parsedBlob.memory;
-        } else if (parsedBlob && typeof parsedBlob === 'object') {
-          // model sometimes flattens fields next to an empty memory key,
-          // e.g. {"memory": [], "focus": "..."}; salvage known fields
-          memoryUpdate = {
-            knowledge: Array.isArray(parsedBlob.memory) ? parsedBlob.memory : (parsedBlob.knowledge || []),
-            current_term: parsedBlob.current_term || {},
-            direction: parsedBlob.direction || {},
-            focus: parsedBlob.focus || null,
-            summary: parsedBlob.summary || null,
-            topics: parsedBlob.topics || null,
-            profile_suggestion: parsedBlob.profile_suggestion || null
-          };
-        }
-      } catch(e) {}
-      reply = (reply.slice(0, memIdx) + (endIdx > -1 ? reply.slice(endIdx + 1) : '')).trim();
+      var blob = endIdx > -1 ? text.slice(m, endIdx + 1) : text.slice(m);
+      var obj = null;
+      try { obj = JSON.parse(blob); } catch(e) {}
+      var cleaned = (text.slice(0, m) + (endIdx > -1 ? text.slice(endIdx + 1) : '')).trim();
+      return { obj: obj, cleaned: cleaned, blob: blob };
+    }
+
+    // 1. suggestions JSON
+    var suggMatch = reply.match(/\{\s*"suggestions"\s*:\s*\[[^\]]*\]\s*\}/);
+    if (suggMatch) {
+      try { suggestions = JSON.parse(suggMatch[0]).suggestions || []; } catch(e) {}
+      reply = reply.replace(suggMatch[0], '').trim();
+    }
+
+    // 2. memory JSON (balanced-brace, any shape)
+    var memRes = extractBlob(reply, /\{\s*"memory"/);
+    if (memRes) {
+      var pb = memRes.obj;
+      if (pb && pb.memory && !Array.isArray(pb.memory) && typeof pb.memory === 'object') {
+        memoryUpdate = pb.memory;
+      } else if (pb && typeof pb === 'object') {
+        memoryUpdate = {
+          knowledge: Array.isArray(pb.memory) ? pb.memory : (pb.knowledge || []),
+          current_term: pb.current_term || {},
+          direction: pb.direction || {},
+          focus: pb.focus || null,
+          summary: pb.summary || null,
+          topics: pb.topics || null,
+          profile_suggestion: pb.profile_suggestion || null
+        };
+      }
+      reply = memRes.cleaned;
+    }
+
+    // 3. standalone profile_suggestion JSON (the leak: model emits this
+    //    OUTSIDE the memory object, so strip it separately and salvage it)
+    var psRes = extractBlob(reply, /\{\s*"profile_suggestion"/);
+    if (psRes) {
+      if (psRes.obj && psRes.obj.profile_suggestion) {
+        salvagedSuggestion = psRes.obj.profile_suggestion;
+      }
+      reply = psRes.cleaned;
+    }
+
+    // 4. final cleanup: remove orphaned leading/trailing commas, stray
+    //    empty braces, and dangling whitespace left by the strips above
+    reply = reply
+      .replace(/^[\s,]+/, '')          // leading commas/space
+      .replace(/[\s,]+$/, '')          // trailing commas/space
+      .replace(/\{\s*\}/g, '')         // empty braces
+      .replace(/,\s*$/, '')            // trailing comma
+      .trim();
+
+    // if memory carried a profile_suggestion, prefer it; else use salvaged
+    if (memoryUpdate && !memoryUpdate.profile_suggestion && salvagedSuggestion) {
+      memoryUpdate.profile_suggestion = salvagedSuggestion;
+    } else if (!memoryUpdate && salvagedSuggestion) {
+      memoryUpdate = { profile_suggestion: salvagedSuggestion };
     }
 
     return { reply: reply, suggestions: suggestions, memoryUpdate: memoryUpdate };
