@@ -16,7 +16,7 @@
   function autoGrow(el) {
     if (!el) return;
     el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+    el.style.height = Math.min(el.scrollHeight, 190) + 'px';
   }
 
   var pageMap = {
@@ -574,7 +574,7 @@
   // rotating "thinking" labels. these are deliberately honest about what is
   // actually happening (a request is in flight) rather than claiming specific
   // internal steps the code isn't really performing.
-  var THINK_LABELS = ['Thinking', 'Still thinking', 'Putting it together'];
+  var THINK_LABELS = ['Thinking...', 'Still thinking...', 'Putting it together...'];
   var thinkTimer = null;
 
   function showTyping() {
@@ -601,9 +601,9 @@
       var el = document.getElementById('fs-think-label');
       if (el) {
         el.innerText = THINK_LABELS[idx];
-        el.style.animation = 'none';
-        void el.offsetWidth;
-        el.style.animation = '';
+        el.classList.remove('fs-think-swap');
+        void el.offsetWidth;          // force reflow so the class re-triggers
+        el.classList.add('fs-think-swap');
       }
     }, 2600);
   }
