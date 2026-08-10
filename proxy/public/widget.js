@@ -12,11 +12,21 @@
   // not derived from user identity, never shown to the user, not linkable to user_hash.
   var sessionId = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
 
-  // grow the textarea with its content up to the CSS max-height, then scroll
+  // grow the textarea with its content up to a max, then scroll.
+  // NOTE: never CSS-transition `height` on this element - doing so makes
+  // scrollHeight read a mid-animation value and the box stops growing.
+  var INPUT_MAX_H = 190;
   function autoGrow(el) {
     if (!el) return;
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 190) + 'px';
+    el.style.height = 'auto';                    // collapse so scrollHeight is true content height
+    var h = el.scrollHeight;
+    if (h > INPUT_MAX_H) {
+      el.style.height = INPUT_MAX_H + 'px';
+      el.style.overflowY = 'auto';
+    } else {
+      el.style.height = h + 'px';
+      el.style.overflowY = 'hidden';             // no scrollbar until it's actually needed
+    }
   }
 
   var pageMap = {
