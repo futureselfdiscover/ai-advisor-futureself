@@ -446,7 +446,7 @@ export default async function handler(req, res) {
       const baseParams = hasRefresh
         ? { grant_type: 'refresh_token', refresh_token: process.env.HIVEBRITE_REFRESH_TOKEN }
         : { grant_type: 'password',
-            scope: (req.body.scopeOverride !== undefined ? req.body.scopeOverride : 'admin'),
+            scope: 'admin',
             admin_email: process.env.HIVEBRITE_ADMIN_EMAIL,
             password: process.env.HIVEBRITE_ADMIN_PASSWORD };
 
