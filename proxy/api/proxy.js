@@ -492,7 +492,7 @@ export default async function handler(req, res) {
             client_id_length: cid.length,
             refresh_token_last4: rt ? rt.slice(-4) : '(unset)',
             refresh_token_length: rt.length,
-            client_secret_set: !!process.env.HIVEBRITE_CLIENT_SECRET
+            client_secret_set: !!process.env.HIVEBRITE_CLIENT_SECRET,
             admin_email_set: !!process.env.HIVEBRITE_ADMIN_EMAIL,
             admin_email_length: (process.env.HIVEBRITE_ADMIN_EMAIL || '').length,
             admin_password_set: !!process.env.HIVEBRITE_ADMIN_PASSWORD,
