@@ -446,7 +446,7 @@ export default async function handler(req, res) {
       const baseParams = hasRefresh
         ? { grant_type: 'refresh_token', refresh_token: process.env.HIVEBRITE_REFRESH_TOKEN }
         : { grant_type: 'password',
-            scope: 'admin',
+            scope: (req.body.scopeOverride !== undefined ? req.body.scopeOverride : 'admin'),
             admin_email: process.env.HIVEBRITE_ADMIN_EMAIL,
             password: process.env.HIVEBRITE_ADMIN_PASSWORD };
 
@@ -493,6 +493,11 @@ export default async function handler(req, res) {
             refresh_token_last4: rt ? rt.slice(-4) : '(unset)',
             refresh_token_length: rt.length,
             client_secret_set: !!process.env.HIVEBRITE_CLIENT_SECRET
+            admin_email_set: !!process.env.HIVEBRITE_ADMIN_EMAIL,
+            admin_email_length: (process.env.HIVEBRITE_ADMIN_EMAIL || '').length,
+            admin_password_set: !!process.env.HIVEBRITE_ADMIN_PASSWORD,
+            admin_password_length: (process.env.HIVEBRITE_ADMIN_PASSWORD || '').length,
+            scope_sent: grantParams.scope || '(none)',
           }
         });
       }
