@@ -437,7 +437,7 @@ export default async function handler(req, res) {
       }
 
       // ---- token exchange ----
-      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL || (HB_BASE + '/oauth/token');
+      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL || 'https://futureselfdiscover.com/api/oauth/token';
       // allow forcing the auth style for diagnostics: req.body.clientAuth
       //   'body'  -> client_id/secret in the form body (default)
       //   'basic' -> client_id/secret as HTTP Basic auth header
@@ -446,6 +446,7 @@ export default async function handler(req, res) {
       const baseParams = hasRefresh
         ? { grant_type: 'refresh_token', refresh_token: process.env.HIVEBRITE_REFRESH_TOKEN }
         : { grant_type: 'password',
+            scope: 'admin',
             admin_email: process.env.HIVEBRITE_ADMIN_EMAIL,
             password: process.env.HIVEBRITE_ADMIN_PASSWORD };
 
