@@ -437,7 +437,7 @@ export default async function handler(req, res) {
       }
 
       // ---- token exchange ----
-      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL || 'https://futureselfdiscover.hivebrite.com/api/oauth/token';
+      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL || 'https://futureselfdiscover.com/api/oauth/token';
       // allow forcing the auth style for diagnostics: req.body.clientAuth
       //   'body'  -> client_id/secret in the form body (default)
       //   'basic' -> client_id/secret as HTTP Basic auth header
