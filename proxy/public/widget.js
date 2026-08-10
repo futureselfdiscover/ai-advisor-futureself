@@ -12,6 +12,13 @@
   // not derived from user identity, never shown to the user, not linkable to user_hash.
   var sessionId = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
 
+  // grow the textarea with its content up to the CSS max-height, then scroll
+  function autoGrow(el) {
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+
   var pageMap = {
     '/news': 'Business News page.',
     '/page/careersinternships': 'Careers and Internships hub.',
@@ -86,7 +93,7 @@
         if (xhr.readyState === 4) {
           var ok = false;
           try { ok = JSON.parse(xhr.responseText).ok === true; } catch(e) {}
-          addAI(ok ? 'Added to your profile.' : 'Hmm, that did not save. I will try again next time it comes up.', true);
+          addAI(ok ? "Noted, I'll get that added to your profile." : 'Hmm, that did not save. I will try again next time it comes up.', true);
         }
       };
       xhr.send(JSON.stringify({ type: 'save_profile', userId: hbUserId, field: sug.field, value: sug.value }));
@@ -370,7 +377,7 @@
           if (xhr.readyState === 4) {
             var textEl = document.getElementById('fs-banner-text');
             var ctaEl = document.getElementById('fs-banner-cta-label');
-            if (textEl) textEl.innerText = 'Hi, I\'m your AI Advisor. I help students like you figure out what\'s next. Want to get started?';
+            if (textEl) textEl.innerText = 'Hi, I\'m Compass, your FutureSelf advisor. I help students like you figure out what\'s next. Want to get started?';
             if (ctaEl) ctaEl.innerText = 'Get started';
             verifyAndRoute();
           }
@@ -404,7 +411,7 @@
 
   function startChat() {
     var greeting = userName ? 'Hi ' + userName + '!' : 'Hi!';
-    var opening = greeting + " I'm your FutureSelf advisor. To point you in the right direction, tell me where your head's at right now.";
+    var opening = greeting + " I'm Compass, your FutureSelf advisor. To point you in the right direction, tell me where your head's at right now.";
     addAI(opening, true);
     history.push({ role: 'assistant', content: opening, timestamp: new Date().toISOString() });
     setPills(['Exploring options', 'Recruiting now', 'Interview prep', 'Totally unsure']);
@@ -417,6 +424,7 @@
     var text = input.value.trim();
     if (!text) return;
     input.value = '';
+    autoGrow(input);            // collapse back to one line after sending
     document.getElementById('fs-qr').innerHTML = '';
     addUser(text, true);
     history.push({ role: 'user', content: text, timestamp: new Date().toISOString() });
@@ -563,23 +571,45 @@
     }));
   }
 
+  // rotating "thinking" labels. these are deliberately honest about what is
+  // actually happening (a request is in flight) rather than claiming specific
+  // internal steps the code isn't really performing.
+  var THINK_LABELS = ['Thinking', 'Still thinking', 'Putting it together'];
+  var thinkTimer = null;
+
   function showTyping() {
     var body = document.getElementById('fs-body');
     if (!body) return;
     var div = document.createElement('div');
-    div.className = 'fs-row'; div.id = 'fs-typing';
-    div.innerHTML = '<div class="fs-av">' + icon + '</div><div class="fs-msg fs-ai" style="padding:10px 14px;"><span style="display:inline-flex;gap:4px;align-items:center;"><span style="width:6px;height:6px;border-radius:50%;background:#AFA9EC;animation:fsDot 1.2s infinite;display:inline-block;"></span><span style="width:6px;height:6px;border-radius:50%;background:#AFA9EC;animation:fsDot 1.2s 0.2s infinite;display:inline-block;"></span><span style="width:6px;height:6px;border-radius:50%;background:#AFA9EC;animation:fsDot 1.2s 0.4s infinite;display:inline-block;"></span></span></div>';
+    div.className = 'fs-row';
+    div.id = 'fs-typing';
+    div.innerHTML = '<div class="fs-av">' + icon + '</div>' +
+      '<div class="fs-msg fs-ai">' +
+        '<span class="fs-think">' +
+          '<span class="fs-think-dots"><span></span><span></span><span></span></span>' +
+          '<span class="fs-think-label" id="fs-think-label">' + THINK_LABELS[0] + '</span>' +
+        '</span>' +
+      '</div>';
     body.appendChild(div);
     body.scrollTop = body.scrollHeight;
-    if (!document.getElementById('fs-dot-style')) {
-      var s = document.createElement('style');
-      s.id = 'fs-dot-style';
-      s.innerText = '@keyframes fsDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}';
-      document.head.appendChild(s);
-    }
+
+    // advance the label every few seconds so a slow reply still feels alive
+    var idx = 0;
+    thinkTimer = setInterval(function () {
+      idx++;
+      if (idx >= THINK_LABELS.length) { clearInterval(thinkTimer); thinkTimer = null; return; }
+      var el = document.getElementById('fs-think-label');
+      if (el) {
+        el.innerText = THINK_LABELS[idx];
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = '';
+      }
+    }, 2600);
   }
 
   function hideTyping() {
+    if (thinkTimer) { clearInterval(thinkTimer); thinkTimer = null; }
     var t = document.getElementById('fs-typing');
     if (t && t.parentNode) t.parentNode.removeChild(t);
   }
@@ -617,8 +647,19 @@
     if (scroll) body.scrollTop = body.scrollHeight;
   }
 
+  // auto-growing textarea: expands with content up to the CSS max-height,
+  // then scrolls. Enter sends; Shift+Enter inserts a newline.
   var inp = document.getElementById('fs-input');
-  if (inp) inp.onkeydown = function (e) { if (e.key === 'Enter') fsSend(); };
+  if (inp) {
+    inp.onkeydown = function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        fsSend();
+      }
+    };
+    inp.oninput = function () { autoGrow(inp); };
+    autoGrow(inp);
+  }
   }
 
   if (document.readyState === 'loading') {
