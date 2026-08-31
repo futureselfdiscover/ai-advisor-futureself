@@ -2,12 +2,11 @@
 backend/rag/retrieve.py
 
 Takes a student's question, embeds it, and searches Supabase for the most
-relevant chunks (courses, degree requirements, student orgs) using the
-match_document_chunks() function defined in the schema.
+relevant chunks - scoped to the student's specific school.
 
 Usage:
     from retrieve import retrieve_context
-    results = retrieve_context("What courses should I take for a CS major?")
+    results = retrieve_context("What courses should I take?", school="vanderbilt")
 """
 
 import os
@@ -21,6 +20,7 @@ from supabase import create_client
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 EMBEDDING_MODEL = "text-embedding-3-small"
+DEFAULT_SCHOOL = "vanderbilt"
 
 _openai_client = None
 _supabase_client = None
@@ -41,14 +41,12 @@ def embed_query(query: str) -> list:
     return response.data[0].embedding
 
 
-def retrieve_context(query: str, source_type: str = None, top_k: int = 5) -> list:
-    """
-    Returns the top_k most relevant chunks for a query, optionally filtered
-    to a specific source_type ('course_catalog', 'degree_requirements',
-    'student_org'). Each result includes content, metadata, and a
-    similarity score.
-    """
+def retrieve_context(query: str, school: str = None, source_type: str = None, top_k: int = 5) -> list:
     _, supabase_client = _get_clients()
+
+    effective_school = school or DEFAULT_SCHOOL
+    if school is None:
+        print(f"WARNING: no school provided, defaulting to '{DEFAULT_SCHOOL}'.")
 
     query_embedding = embed_query(query)
 
@@ -58,6 +56,7 @@ def retrieve_context(query: str, source_type: str = None, top_k: int = 5) -> lis
             "query_embedding": query_embedding,
             "match_count": top_k,
             "filter_source_type": source_type,
+            "filter_school": effective_school,
         },
     ).execute()
 
@@ -66,9 +65,10 @@ def retrieve_context(query: str, source_type: str = None, top_k: int = 5) -> lis
 
 if __name__ == "__main__":
     test_query = sys.argv[1] if len(sys.argv) > 1 else "What courses should I take for a computer science major?"
+    test_school = sys.argv[2] if len(sys.argv) > 2 else "vanderbilt"
 
-    print(f"Query: {test_query}\n")
-    results = retrieve_context(test_query, top_k=5)
+    print(f"Query: {test_query}  (school={test_school})\n")
+    results = retrieve_context(test_query, school=test_school, top_k=5)
 
     for i, r in enumerate(results, 1):
         print(f"{i}. [{r['source_type']}] similarity={r['similarity']:.3f}")
