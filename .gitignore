@@ -4,3 +4,12 @@ node_modules/
 .DS_Store
 backend/venv/
 cmake-build-debug/
+
+*.pdf
+*.xlsx
+*.zip
+backend/data/scrapers/oesm25ma/
+backend/data/scrapers/catalog_text.txt
+backend/data/scrapers/catalog_pages.json
+backend/data/scrapers/toc_text.txt
+backend/data/scrapers/chunks.json
