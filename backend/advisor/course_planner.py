@@ -49,7 +49,7 @@ doesn't clearly cover this major (e.g. it's missing or looks unrelated),
 say so honestly rather than making up requirements - recommend they check
 with their academic advisor or department instead.
 
-Be specific about course codes where the data supports it. Note any
+Be specific about course codes where the data supports it. Only write a course title if it appears in the requirement info above. If no title is given, write just the course code. Never guess a title from memory. Note any
 prerequisite chains that matter for sequencing. Keep the response focused
 and practical, not an essay."""
 
