@@ -94,8 +94,59 @@ def format_clubs(result: dict) -> str:
     return "\n".join(lines)
 
 
-def route(message: str, user_hash: str = None) -> dict:
-    """Returns {"answer": str, "feature": str, "category": str}"""
+def clean_turn(content) -> str:
+    """Drops the suggestions/memory JSON lines the widget appends to replies."""
+    lines = [
+        line for line in str(content).splitlines()
+        if not line.strip().startswith(('{"suggestions"', '{"memory"'))
+    ]
+    return "\n".join(lines).strip()
+
+
+def condense_question(message: str, history: list) -> str:
+    """Turns a follow-up like 'what about Chicago?' into a standalone question."""
+    turns = [
+        t for t in (history or [])
+        if isinstance(t, dict) and t.get("role") in ("user", "assistant") and t.get("content")
+    ][-6:]
+    if not turns:
+        return message
+
+    convo = "\n".join(f"{t['role']}: {clean_turn(t['content'])[:600]}" for t in turns)
+    try:
+        response = _get_client().chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "Rewrite the student's latest message as a standalone question that "
+                        "makes sense without the conversation. Keep any course codes, majors, "
+                        "jobs, cities, or clubs they are referring to. If the message already "
+                        "stands on its own, return it unchanged. Return only the question."
+                    ),
+                },
+                {"role": "user", "content": f"Conversation:\n{convo}\n\nLatest message: {message}"},
+            ],
+            max_tokens=120,
+            temperature=0,
+        )
+        rewritten = response.choices[0].message.content.strip()
+        return rewritten or message
+    except Exception as e:
+        print(f"condense_question failed, using original message: {e}")
+        return message
+
+
+def route(message: str, user_hash: str = None, history: list = None) -> dict:
+    """Returns {"answer": str, "feature": str, "category": str, "question": str}"""
+    standalone = condense_question(message, history)
+    result = _route(standalone, user_hash)
+    result["question"] = standalone
+    return result
+
+
+def _route(message: str, user_hash: str = None) -> dict:
     text = message.lower()
     category = classify_intent(message)["category"]
 

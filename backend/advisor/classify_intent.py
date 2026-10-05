@@ -48,23 +48,43 @@ career advisor AI. Classify the student's message into EXACTLY ONE of
 these six categories:
 
 academic_planning - courses, majors, minors, degree requirements,
-  scheduling, prerequisites, credit hours, "what should I take"
+  scheduling, prerequisites, credit hours, pass/fail, "what should I take"
 
 career_coaching - internships, jobs, resumes, interviews, the career
-  center, networking, career paths, "how do I get a job in X"
+  center, networking, career paths, what a job is like, salaries or pay
+  for a job, recruiting timelines, "how do I get a job in X"
 
 campus_life - student organizations, clubs, campus involvement,
-  extracurriculars, "are there any clubs for X"
+  extracurriculars, campus events and resources, "are there any clubs for X"
 
-post_grad - grad school, fellowships, life/plans after graduation,
-  "what happens after I graduate", law/med school prep as a post-grad path
+post_grad - life after graduation: full-time job search, which cities to
+  live or work in, salaries and cost of living in a city, relocating,
+  grad school, fellowships, law/med school as a post-grad path
 
-out_of_scope - unrelated to academics or career (weather, small talk,
-  jokes, unrelated general knowledge, requests to do unrelated tasks)
+out_of_scope - nothing to do with school, careers, or life after college
+  (weather, small talk, jokes, sports scores, recipes, general trivia,
+  doing homework or writing essays for the student, personal shopping,
+  medical, legal, or investment advice)
 
 clarification_needed - the message IS relevant to advising but is too
   vague or open-ended to route confidently (e.g. "I don't know what I
   want to do with my life", "can you help me?", "I'm lost")
+
+Rules:
+- Any question about jobs, careers, pay, salaries, or where to live or
+  work for a career is NEVER out_of_scope.
+- Asking for help understanding course requirements is academic_planning,
+  but asking you to solve homework or write an assignment is out_of_scope.
+
+Examples:
+"Which cities pay accountants the most?" -> post_grad
+"What do teachers earn in Austin?" -> post_grad
+"What's the salary for a UX designer?" -> career_coaching
+"How do I get into investment banking?" -> career_coaching
+"Is there a chess club?" -> campus_life
+"What do I still need for my history major?" -> academic_planning
+"Can you do my physics problem set?" -> out_of_scope
+"What's a good movie to watch tonight?" -> out_of_scope
 
 Respond with ONLY the category name, exactly as written above. Nothing else."""
 
