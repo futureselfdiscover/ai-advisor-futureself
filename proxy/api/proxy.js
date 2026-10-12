@@ -254,6 +254,14 @@ function buildSystemPrompt(ctx) {
   ].join('\n');
 }
 
+// ---- admin check for debug endpoints ----
+// debug output includes the full system prompt, so only callers with the
+// ADMIN_KEY (body.adminKey or x-admin-key header) may use it.
+function isAdminRequest(req) {
+  const key = (req.body && req.body.adminKey) || req.headers['x-admin-key'];
+  return !!process.env.ADMIN_KEY && key === process.env.ADMIN_KEY;
+}
+
 // ---- main handler ----
 
 export default async function handler(req, res) {
@@ -271,6 +279,7 @@ export default async function handler(req, res) {
     // ---- TEMPORARY DEBUG: report which behavior files loaded and from where.
     // remove once the behavior-dir path is confirmed correct in production.
     if (type === 'debug_behavior_files') {
+      if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
       return res.status(200).json({
         cwd: process.cwd(),
         candidates_tried: BEHAVIOR_DIR_CANDIDATES,
@@ -315,6 +324,7 @@ export default async function handler(req, res) {
       // TEMPORARY DEBUG: return the exact system prompt without calling
       // OpenAI or logging, so we can inspect what the model actually receives.
       if (req.body.debugReturnPrompt) {
+        if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
         return res.status(200).json({
           _debug_system_prompt: (fullMessages && fullMessages[0] && fullMessages[0].role === 'system') ? fullMessages[0].content : buildSystemPrompt(context || {}),
           _advisor: advisor ? { feature: advisor.feature, category: advisor.category, question: advisor.question } : null,
