@@ -266,39 +266,93 @@ def requirements_outline(program_name: str):
             + f"\n\nSource: {program['name']}, 2025/2026 Vanderbilt Undergraduate Catalog "
               f"(pages {program['start_page']}-{program['end_page']}).")
 
-def requirements_html(program_name: str):
-    """Student-facing HTML list of every requirement group for the chat widget, or None."""
+def compact_codes(codes: list, titles: dict) -> str:
+    """['CS 2201', 'ECE 2201', 'CS 3250', 'CHEM 1601', 'CHEM 1601L'] -> 'CS/ECE 2201; CS 3250; CHEM 1601/L'"""
+    codes = list(dict.fromkeys(codes))
+    present = set(codes)
+    cross, skip = {}, set()
+    for i, a in enumerate(codes):  # cross-listed: same number and same title in two subjects
+        sa, na = a.split(" ", 1)
+        for b in codes[i + 1:]:
+            sb, nb = b.split(" ", 1)
+            if na == nb and sa != sb and b not in skip and titles.get(a) and titles.get(a) == titles.get(b):
+                cross[a] = f"{sa}/{sb}"
+                skip.add(b)
+    runs = []
+    for code in codes:
+        if code in skip:
+            continue
+        subject, number = code.split(" ", 1)
+        if number.endswith("L") and f"{subject} {number[:-1]}" in present:
+            continue  # lab folded into its lecture: 1601/L
+        label = number + ("/L" if f"{subject} {number}L" in present else "")
+        key = cross.get(code, subject)
+        if runs and runs[-1][0] == key:
+            runs[-1][1].append(label)
+        else:
+            runs.append((key, [label]))
+    return "; ".join(f"{key} {', '.join(nums)}" for key, nums in runs)
+
+
+def _display_title(program: dict) -> str:
+    title = program["name"].replace(" (department overview)", "")
+    if program["kind"] == "overview" and not any(
+            p["subject"] == program["subject"] and p["kind"] == "major" for p in load_programs()):
+        title += " major"
+    return title
+
+
+def _chosen_structured(program_name: str):
     program = get_program(program_name)
     if not program:
-        return None
+        return None, None
     structured = load_structured()
     related = [program] + [p for p in load_programs()
                            if p["subject"] == program["subject"] and p["name"] != program["name"]]
     chosen = next((p for p in related if structured.get(p["name"], {}).get("groups")), None)
+    return (chosen, structured[chosen["name"]]) if chosen else (None, None)
+
+
+def requirements_html(program_name: str):
+    """Short, scannable HTML list of every requirement group for the chat widget, or None."""
+    chosen, d = _chosen_structured(program_name)
     if not chosen:
         return None
-    d = structured[chosen["name"]]
     titles = course_titles()
     esc = html.escape
 
-    title = chosen["name"].replace(" (department overview)", "")
-    parts = [f"<b>{esc(title)}</b>" + (f" ({esc(str(d['total_hours']))} total hours)" if d.get("total_hours") else "")]
+    hours = f" · {esc(str(d['total_hours']))} credit hours" if d.get("total_hours") else ""
+    lines = [f"<b>{esc(_display_title(chosen))}</b>{hours}"]
     for g in d.get("groups") or []:
-        details = [g.get("rule"), f"{g['hours']} hours" if g.get("hours") else None, g.get("level_or_range")]
-        line = f"<b>{esc(str(g.get('name') or 'Requirement'))}</b>"
-        detail_text = " · ".join(esc(str(x)) for x in details if x)
-        if detail_text:
-            line += f": {detail_text}"
-        if g.get("courses"):
-            line += "<br>" + ", ".join(esc(f"{c} {titles[c]}") if titles.get(c) else esc(c) for c in g["courses"])
-        if g.get("notes"):
-            line += f"<br><i>{esc(str(g['notes']))}</i>"
-        parts.append(line)
-    for rule in d.get("other_rules") or []:
-        parts.append(f"<i>{esc(str(rule))}</i>")
-    parts.append(f"<i>Source: 2025/2026 Vanderbilt Undergraduate Catalog, pages "
-                 f"{chosen['start_page']}-{chosen['end_page']}. Confirm with your advisor before registering.</i>")
-    return "<br><br>".join(parts)
+        name = esc(str(g.get("name") or "Requirement"))
+        label = f"<b>{name}</b>" + (f" ({esc(str(g['hours']))} hrs)" if g.get("hours") else "")
+        rule = str(g.get("rule") or "").strip()
+        if rule.lower() in ("take all", "complete all", "complete all requirements", "required"):
+            rule = "required"
+        if len(rule) > 90:
+            rule = rule[:87].rstrip() + "..."
+        detail = "; ".join(x for x in [esc(rule) if rule else "", esc(str(g.get("level_or_range") or ""))] if x)
+        codes = compact_codes(g.get("courses") or [], titles)
+        line = "• " + label
+        if detail:
+            line += f": {detail}"
+        if codes:
+            line += f"<br>&nbsp;&nbsp;{esc(codes)}"
+        lines.append(line)
+    lines.append(f"<i>2025–26 Vanderbilt Undergraduate Catalog, pp. {chosen['start_page']}–{chosen['end_page']}. "
+                 f"Confirm with your advisor before registering.</i>")
+    return "<br>".join(lines)
+
+
+def requirements_brief(program_name: str):
+    """One-line summary for the chat model (the full list is attached separately)."""
+    chosen, d = _chosen_structured(program_name)
+    if not chosen:
+        return None
+    groups = ", ".join(str(g.get("name")) for g in d.get("groups") or [] if g.get("name"))
+    hours = f" ({d['total_hours']} credit hours)" if d.get("total_hours") else ""
+    return f"{_display_title(chosen)}{hours}. Requirement groups: {groups}."
+
 
 if __name__ == "__main__":
     q = sys.argv[1] if len(sys.argv) > 1 else "what classes do cs majors need to take"
