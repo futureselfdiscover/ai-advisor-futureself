@@ -36,7 +36,7 @@ load_dotenv(HERE.parents[1] / ".env")
 
 OUT_FILE = HERE / "program_requirements.json"
 MAX_TEXT = 40000
-CODE = re.compile(r"\b[A-Z]{2,5} \d{4}[A-Z]?\b")
+CODE = re.compile(r"\b[A-Z]{2,5}(?:-[A-Z]{2,4})? \d{4}[A-Z]?\b")
 GROUP_TYPES = ["core", "depth_elective", "elective", "project_capstone", "math", "science",
                "writing", "liberal_arts_core", "concentration", "honors", "other"]
 
@@ -71,7 +71,7 @@ Rules:
 - Include every group: core/required courses, choose-N groups, depth or level-based electives, project or
   capstone, math, science, writing, liberal arts core, concentrations or tracks, honors, open electives.
 - Expand shorthand: "CS 3250, 3251, and 3270" means CS 3250, CS 3251, CS 3270, and "CS or ECE 3258"
-  means both CS 3258 and ECE 3258. Expand an explicit list,
+  means both CS 3258 and ECE 3258. Keep hyphenated subjects as written, e.g. "PSY-PC 1250". Expand an explicit list,
   but describe ranges ("any CS 3000-level course") in level_or_range instead of inventing codes.
 - Use only what is in the text. Never invent courses, hours, or rules.
 - If this text is only a department introduction with no requirements, return "has_requirements": false
@@ -88,9 +88,10 @@ def client():
 
 
 def expand_codes(text: str) -> set:
-    text = re.sub(r"\b([A-Z]{2,5}) or ([A-Z]{2,5}) (\d{4}[A-Z]?)", r"\1 \3 or \2 \3", text)
+    text = re.sub(r"\b([A-Z]{2,5}(?:-[A-Z]{2,4})?) or ([A-Z]{2,5}(?:-[A-Z]{2,4})?) (\d{4}[A-Z]?)", r"\1 \3 or \2 \3", text)
     codes = set()
-    for subj, first, rest in re.findall(r"\b([A-Z]{2,5})\s(\d{4}[A-Z]?)((?:\s*(?:,|and|or|/)\s*\d{4}[A-Z]?)*)", text):
+    for subj, first, rest in re.findall(
+            r"\b([A-Z]{2,5}(?:-[A-Z]{2,4})?)\s(\d{4}[A-Z]?)((?:\s*(?:,|and|or|/)\s*\d{4}[A-Z]?)*)", text):
         codes.add(f"{subj} {first}")
         codes.update(f"{subj} {n}" for n in re.findall(r"\d{4}[A-Z]?", rest))
     return codes
@@ -147,6 +148,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--only", default=None)
+    ap.add_argument("--text-regex", default=None,
+                    help="also re-extract programs whose catalog text matches this regex")
     ap.add_argument("--since", default=None,
                     help="previous programs.json; only re-extract programs whose catalog text changed")
     args = ap.parse_args()
@@ -165,6 +168,8 @@ def main():
         if args.only is not None:
             return p["name"] == args.only
         if args.force or p["name"] not in done:
+            return True
+        if args.text_regex and re.search(args.text_regex, p["text"]):
             return True
         return bool(args.since) and old_text.get(p["name"]) != p["text"]
 

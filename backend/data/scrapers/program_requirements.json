@@ -1846,7 +1846,7 @@
  {
   "program": "Business minor",
   "total_hours": "16.5",
-  "summary": "The undergraduate business minor requires 16.5 credit hours, including 7.5 hours of required courses and 9 hours of electives from specified pathways or business-in-society courses.",
+  "summary": "The undergraduate business minor requires 16.5 credit hours, including 7.5 hours of required courses, at least 6 hours from BUS pathways, and at least 3 hours from BUS pathways or business-in-society electives.",
   "groups": [
    {
     "name": "Required course work",
@@ -1861,7 +1861,7 @@
      "BUS 1700"
     ],
     "level_or_range": null,
-    "notes": "It is recommended that students complete these courses prior to fulfilling the elective requirement. Students may concurrently enroll in two of the five required courses."
+    "notes": "It is recommended that students complete these courses prior to fulfilling the elective requirement. Students may concurrently enroll in two of these courses."
    },
    {
     "name": "BUS pathways",
@@ -1964,13 +1964,16 @@
      "MENT 1135",
      "MENT 1140",
      "MENT 3200",
+     "PSY-PC 2120",
+     "PSY-PC 3735",
+     "PSY-PC 3749",
      "SOC 1020",
      "SOC 3316",
      "SOC 3318",
      "SPAN 3345"
     ],
     "level_or_range": null,
-    "notes": "Courses can be selected from either the BUS pathways or the business-in-society electives."
+    "notes": null
    }
   ],
   "other_rules": [],
@@ -2194,16 +2197,16 @@
     "hours": "31",
     "courses": [],
     "level_or_range": null,
-    "notes": "Includes required coursework from Humanities/Fine Arts, Mathematics, Science, and Social Science. A score of 5 on the AP Statistics exam will waive the Statistics requirement."
+    "notes": "Composed of required coursework from the areas of Humanities/Fine Arts, Mathematics, Science, and Social Science. A score of 5 on the AP Statistics exam will waive students from the Statistics General Education Core requirement."
    },
    {
     "name": "Writing Requirement",
     "type": "writing",
-    "rule": "See the 'Writing Requirement' section of the general Peabody academic policy section",
+    "rule": "See the 'Writing Requirement' section of the general Peabody academic policy section of the Undergraduate Catalog.",
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "First-year Seminars (courses numbered 1111) may count as writing intensive courses."
+    "notes": "First-year Seminars (courses numbered 1111) offered through the College of Arts and Science and the Blair School of Music may count as writing intensive courses."
    },
    {
     "name": "Major Requirements",
@@ -2220,13 +2223,30 @@
     "rule": "Take all",
     "hours": "21",
     "courses": [
+     "PSY-PC 1250",
+     "PSY-PC 2250",
+     "PSY-PC 2257",
+     "PSY-PC 2400",
+     "PSY-PC 2120",
+     "PSY-PC 2500",
+     "PSY-PC 2550",
+     "PSY-PC 2170",
+     "PSY-PC 2150",
+     "PSY-PC 3722",
+     "PSY-PC 3724",
+     "PSY-PC 3220",
+     "PSY-PC 3860",
+     "PSY-PC 3980",
+     "PSY-PC 3981",
+     "PSY-PC 4998",
+     "PSY-PC 4999",
      "PSY 3840",
      "PSY 3980",
      "PSY 4998",
      "PSY 4999"
     ],
     "level_or_range": null,
-    "notes": "Two courses from PSY-PC 2170, PSY-PC 2150, PSY-PC 3722, PSY-PC 3724, PSY-PC 3220, PSY-PC 3860, PSY-PC 3980, PSY-PC 3981, PSY-PC 4998, PSY-PC 4999, PSY 3840, PSY 3980, PSY 4998, PSY 4999. Only 3 hours of either Directed Research or Honors Research can be applied to this requirement."
+    "notes": "Choose one from PSY-PC 2250 or PSY-PC 2257. Choose one from PSY-PC 2500 or PSY-PC 2550. Choose two from PSY-PC 2170, PSY-PC 2150, PSY-PC 3722, PSY-PC 3724, PSY-PC 3220, PSY-PC 3860, PSY-PC 3980, PSY-PC 3981, PSY-PC 4998, PSY-PC 4999, PSY 3840, PSY 3980, PSY 4998, PSY 4999. Only 3 hours of either Directed Research or Honors Research can be applied to this requirement."
    },
    {
     "name": "Major Elective Area",
@@ -2244,6 +2264,12 @@
      "NSC 2201",
      "NSC 3269",
      "PHIL 3617",
+     "PSY-PC 3850",
+     "PSY-PC 3860",
+     "PSY-PC 3980",
+     "PSY-PC 3981",
+     "PSY-PC 4998",
+     "PSY-PC 4999",
      "SPED 2120",
      "SPED 2160",
      "SPED 2310",
@@ -2269,12 +2295,12 @@
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Overall GPA of at least 3.2 and at least a 3.2 in child development courses required to apply. Successful completion and a final GPA of at least 3.2 will receive Honors or Highest Honors."
+    "notes": "Overall GPA of at least 3.2 and at least a 3.2 in child development courses required to apply. Successful completion with a final GPA of at least 3.2 will receive Honors or Highest Honors in child development."
    }
   ],
   "other_rules": [
    "Students must have an overall GPA of at least 3.2 and at least a 3.2 in child development courses to apply for the Honors Program.",
-   "A score of 5 on the AP Statistics exam will waive the Statistics General Education Core requirement.",
+   "A score of 5 on the AP Statistics exam will waive students from the Statistics General Education Core requirement.",
    "Only 3 hours of either Directed Research or Honors Research can be applied to the Major Core requirement.",
    "Only a total of 6 hours from among research/experiential courses, in any combination, may be used as elective credit within the major."
   ],
@@ -2295,7 +2321,14 @@
     "type": "core",
     "rule": "Choose 3 courses",
     "hours": "9",
-    "courses": [],
+    "courses": [
+     "PSY-PC 1250",
+     "PSY-PC 2250",
+     "PSY-PC 2257",
+     "PSY-PC 2400",
+     "PSY-PC 2500",
+     "PSY-PC 2550"
+    ],
     "level_or_range": null,
     "notes": null
    },
@@ -2308,6 +2341,7 @@
      "MTED 2200",
      "SCED 2200",
      "SSED 2100",
+     "PSY-PC 2600",
      "SPED 2310"
     ],
     "level_or_range": null,
@@ -2319,6 +2353,10 @@
     "rule": "Choose 1 course",
     "hours": "3",
     "courses": [
+     "PSY-PC 2170",
+     "PSY-PC 2150",
+     "PSY-PC 3722",
+     "PSY-PC 3724",
      "HOD 2500"
     ],
     "level_or_range": null,
@@ -2357,6 +2395,10 @@
      "ENED 2100",
      "ENED 2200",
      "PHIL 3617",
+     "PSY-PC 3130",
+     "PSY-PC 3190",
+     "PSY-PC 3140",
+     "PSY-PC 3150",
      "SPEDS 2430",
      "SPEDH 3348"
     ],
@@ -2366,7 +2408,7 @@
    {
     "name": "ELECTIVES IN CHILD STUDIES",
     "type": "elective",
-    "rule": "Choose courses totaling 9 hours",
+    "rule": "Choose 3 courses",
     "hours": "9",
     "courses": [
      "ANTH 2601",
@@ -2385,6 +2427,12 @@
      "SPED 2160",
      "SPEDH 3348",
      "SPEDS 2430",
+     "PSY-PC 3850",
+     "PSY-PC 3860",
+     "PSY-PC 3980",
+     "PSY-PC 3981",
+     "PSY-PC 4998",
+     "PSY-PC 4999",
      "PSY 3980",
      "PSY 3981",
      "PSY 4998",
@@ -2393,12 +2441,14 @@
      "HODC 3202"
     ],
     "level_or_range": null,
-    "notes": "Only a total of 6 hours from research/experiential courses (PSY-PC 3850, 3860, 3980, 3981, 4998, 4999, PSY 3980, 3981, 4998, 4999) may be used as elective credit within the major."
+    "notes": "Any course in the Department of Psychology and Human Development (Peabody) or the Department of Psychology (A&S) that is not being used to meet another psychology requirement can be used as an elective (except PSY 1200, PSY-PC 2100, PSY-PC 1205/1207, 1250, 2110, and 3870). Research/experiential courses marked * may be repeated freely for elective credit toward graduation. However, only a total of 6 hours from among these courses, in any combination, may be used as elective credit within the major."
    }
   ],
   "other_rules": [
-   "Students must have an overall GPA of at least 3.2 and a 3.2 in child studies courses to apply for the Honors Program.",
-   "Students who complete the Honors Program successfully and have a final GPA of at least 3.2 will receive Honors or Highest Honors in child studies."
+   "Students who major in child studies are eligible to apply for the Honors Program at the end of their sophomore year if they have an overall grade point average of at least 3.2 and a 3.2 in child studies courses.",
+   "Students who complete the Honors Program successfully and who have a final grade point average of at least 3.2 will receive Honors or Highest Honors in child studies.",
+   "A score of 5 on the AP Statistics exam will waive students from the Statistics General Education Core requirement (applied to all PSYHD majors).",
+   "A score of 5 on the AP Statistics exam will serve as a pre-requisite in all places that 2110 currently serves as a pre-requisite."
   ],
   "has_requirements": true,
   "subject": "child studies",
@@ -2917,7 +2967,7 @@
  {
   "program": "Cognitive Studies major",
   "total_hours": "120",
-  "summary": "The Cognitive Studies major requires a minimum of 120 credit hours, including a core curriculum, methods of inquiry, and elective courses, with an emphasis on problem solving and complex decision making.",
+  "summary": "The Cognitive Studies major requires a minimum of 120 credit hours, including general education, core courses, methods of inquiry, and electives, with an emphasis on problem solving and complex decision making.",
   "groups": [
    {
     "name": "General Education Core Requirements",
@@ -2926,12 +2976,12 @@
     "hours": "31",
     "courses": [],
     "level_or_range": null,
-    "notes": "Includes required coursework from Humanities/Fine Arts, Mathematics, Science, and Social Science. A score of 5 on the AP Statistics exam will waive the Statistics requirement."
+    "notes": "Includes Humanities/Fine Arts, Mathematics, Science, and Social Science. A score of 5 on the AP Statistics exam will waive the Statistics requirement."
    },
    {
     "name": "Writing Requirement",
     "type": "writing",
-    "rule": "See the 'Writing Requirement' section of the general Peabody academic policy section of the Undergraduate Catalog.",
+    "rule": "See the 'Writing Requirement' section of the general Peabody academic policy section",
     "hours": null,
     "courses": [],
     "level_or_range": null,
@@ -2952,6 +3002,12 @@
     "rule": "Take all",
     "hours": "12",
     "courses": [
+     "PSY-PC 1205",
+     "PSY-PC 1207",
+     "PSY-PC 2200",
+     "PSY-PC 3120",
+     "PSY-PC 3650",
+     "PSY-PC 2170",
      "PSY 2150"
     ],
     "level_or_range": null,
@@ -2976,9 +3032,13 @@
      "PHIL 1003",
      "PHIL 3003",
      "PHIL 3616",
+     "PSY-PC 2120",
+     "PSY-PC 3722",
+     "PSY-PC 3724",
      "PSY 3840",
      "PSY 3980",
      "PSY 3981",
+     "PSY-PC 3220",
      "SOC 3002",
      "SPED 2310",
      "SPEDH 3871",
@@ -3004,7 +3064,13 @@
      "PSY 3270",
      "NSC 3270",
      "PSY 4218",
+     "PSY-PC 3850",
+     "PSY-PC 3860",
      "PSY 3840",
+     "PSY-PC 3980",
+     "PSY-PC 3981",
+     "PSY-PC 4998",
+     "PSY-PC 4999",
      "PSY 3980",
      "PSY 3981",
      "PSY 4998",
@@ -3022,7 +3088,7 @@
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Requires an overall GPA of at least 3.2 and a 3.2 in cognitive studies courses. Successful completion and a final GPA of at least 3.2 will result in Honors or Highest Honors in cognitive studies."
+    "notes": "Requires an overall GPA of at least 3.2 and a 3.2 in cognitive studies courses. Successful completion and a final GPA of at least 3.2 will result in Honors or Highest Honors."
    }
   ],
   "other_rules": [
@@ -3038,8 +3104,8 @@
  },
  {
   "program": "Communication of Science and Technology major",
-  "total_hours": "42",
-  "summary": "The program combines core courses, storytelling, bridging sciences and humanities, natural science/engineering depth, and electives, with multiple tracks for integration with other majors.",
+  "total_hours": null,
+  "summary": "The program combines core courses, storytelling, bridging sciences and humanities, natural science or engineering depth, and electives, with options for specialized tracks.",
   "groups": [
    {
     "name": "Core",
@@ -3134,7 +3200,7 @@
    },
    {
     "name": "Bridging the Sciences and Humanities",
-    "type": "depth_elective",
+    "type": "liberal_arts_core",
     "rule": "Any three courses, at least one from CSET",
     "hours": "9",
     "courses": [
@@ -3241,6 +3307,8 @@
      "MATH 2810",
      "MATH 2820",
      "PSY 2100",
+     "PSY-PC 2110",
+     "PSY-PC 2120",
      "SOC 2100",
      "ES 1401",
      "ES 1402",
@@ -3930,6 +3998,7 @@
      "MATH 2810",
      "MATH 2821",
      "PSY 2100",
+     "PSY-PC 2100",
      "SOC 2100"
     ],
     "level_or_range": null,
@@ -4001,6 +4070,17 @@
      "MATH 3641",
      "MATH 4650",
      "PSY 3891",
+     "PSY-PC 2120",
+     "PSY-PC 3722",
+     "PSY-PC 3724",
+     "PSY-PC 3738",
+     "PSY-PC 3743",
+     "PSY-PC 3749",
+     "PSY-PC 3746",
+     "PSY-PC 3737",
+     "PSY-PC 3732",
+     "PSY-PC 3727",
+     "PSY-PC 7878",
      "ANTH 3261",
      "ANTH 3867",
      "ASTR 8080",
@@ -4018,14 +4098,15 @@
      "MATH 3670",
      "MATH 4620",
      "MATH 4630",
-     "NSC 3270"
+     "NSC 3270",
+     "PSY-PC 3751"
     ],
     "level_or_range": null,
     "notes": "Students and faculty are encouraged to petition for new courses with data science content to be considered as electives for the minor."
    }
   ],
   "other_rules": [
-   "Students electing the undergraduate minor in Data Science must follow academic regulations regarding minors in their home school, including but not limited to regulations regarding unique hours.",
+   "Students must follow academic regulations regarding minors in their home school, including but not limited to regulations regarding unique hours.",
    "Additional credit hours in Data Science that must be earned because of college-specific regulations regarding unique hours must be earned by taking additional courses chosen from the list of electives."
   ],
   "has_requirements": true,
@@ -4999,7 +5080,7 @@
  {
   "program": "Ensembles (department overview)",
   "total_hours": null,
-  "summary": "The Blair School of Music offers a variety of major performing ensembles and smaller chamber music groups, with auditions required for participation.",
+  "summary": "The Blair School of Music offers a variety of major performing ensembles and smaller chamber groups, with auditions required for participation.",
   "groups": [],
   "other_rules": [],
   "has_requirements": false,
@@ -6908,7 +6989,7 @@
    }
   ],
   "other_rules": [
-   "15 unique hours that are not counted toward any other major or minor."
+   "15 unique hours that are not counted toward any other major or minor"
   ],
   "has_requirements": true,
   "subject": "human and organizational development",
@@ -6933,7 +7014,7 @@
  {
   "program": "Immersion Vanderbilt (department overview)",
   "total_hours": null,
-  "summary": "Immersion Vanderbilt is a graduation requirement for all undergraduates, involving at least one immersive experience and one culminating project.",
+  "summary": "Immersion Vanderbilt requires students to complete at least one immersive experience and one culminating project, supported by faculty and staff, across six experiential pathways.",
   "groups": [
    {
     "name": "Immersive Experience",
@@ -6951,13 +7032,12 @@
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "The project can relate to an immersive experience already completed or a new topic, and can take many forms such as presentations, artistic displays, performances, design projects, short films, websites, prototypes, white papers, or senior theses."
+    "notes": "The culminating project can relate to an immersive experience already completed or a new topic and can take various forms such as presentations, artistic displays, performances, design projects, short films, websites, prototypes, white papers, or senior theses."
    }
   ],
   "other_rules": [
-   "Completion of the Immersion Vanderbilt graduation requirement is noted on the student\u2019s degree audit and transcript.",
-   "Students are supported by faculty and Immersion Vanderbilt staff throughout the process.",
-   "Students are prompted to reflect upon their immersive experiences to inform the development of the culminating project."
+   "Immersion Vanderbilt is a graduation requirement for all undergraduates.",
+   "Completion of the Immersion Vanderbilt graduation requirement is noted on the student\u2019s degree audit and the student transcript is updated with the culminating project title and project pathway."
   ],
   "has_requirements": true,
   "subject": "immersion vanderbilt",
@@ -6969,7 +7049,7 @@
  {
   "program": "Instruction in Special Education minor",
   "total_hours": "19",
-  "summary": "The minor in Instruction in Special Education requires 19 credit hours, focusing on academic and behavioral pedagogy and intervention for students with disabilities.",
+  "summary": "The minor in Instruction in Special Education requires 19 credit hours and is designed for general education teacher education majors to prepare them for working with students with disabilities.",
   "groups": [
    {
     "name": "Required Courses",
@@ -7495,28 +7575,36 @@
    {
     "name": "Major Core",
     "type": "core",
-    "rule": "9 hours (3 of the following)",
+    "rule": "Choose 3",
     "hours": "9",
-    "courses": [],
+    "courses": [
+     "PSY-PC 3130",
+     "PSY-PC 3140",
+     "PSY-PC 3150",
+     "PSY-PC 3190"
+    ],
     "level_or_range": null,
     "notes": null
    },
    {
     "name": "Seminar",
     "type": "core",
-    "rule": "3 hours, 1 of the following",
+    "rule": "Choose 1",
     "hours": "3",
-    "courses": [],
+    "courses": [
+     "PSY-PC 3650"
+    ],
     "level_or_range": null,
     "notes": null
    },
    {
     "name": "Design",
     "type": "core",
-    "rule": "3 hours, 1 of the following",
+    "rule": "Choose 1",
     "hours": "3",
     "courses": [
-     "PSY 2150"
+     "PSY 2150",
+     "PSY-PC 2170"
     ],
     "level_or_range": null,
     "notes": null
@@ -7524,11 +7612,16 @@
    {
     "name": "Methods",
     "type": "core",
-    "rule": "6 hours",
+    "rule": "Choose 2",
     "hours": "6",
     "courses": [
      "HOD 2500",
+     "PSY-PC 2170",
      "PSY 2150",
+     "PSY-PC 3722",
+     "PSY-PC 3724",
+     "PSY-PC 3850",
+     "PSY-PC 3860",
      "PSY 3890",
      "PSY 3891"
     ],
@@ -7541,6 +7634,11 @@
     "rule": "12 hours",
     "hours": "12",
     "courses": [
+     "PSY-PC 3160",
+     "PSY-PC 3170",
+     "PSY-PC 3180",
+     "PSY-PC 3190",
+     "PSY-PC 3860",
      "SPEDS 2430",
      "SPEDH 3348",
      "PHIL 3617",
@@ -7864,7 +7962,7 @@
      "ULAW 1000"
     ],
     "level_or_range": null,
-    "notes": "Introduction to Law and the Legal System is required and offered each semester."
+    "notes": "Introduction to Law and the Legal System is required."
    },
    {
     "name": "Minor-Specific Law School Courses",
@@ -7891,7 +7989,7 @@
      "ULAW 2890"
     ],
     "level_or_range": null,
-    "notes": "At least one course will be offered every semester. One of these four courses may be taken from an approved list of non-Law School Vanderbilt University courses."
+    "notes": "At least one course will be offered every semester. One of these four additional courses may be taken from an approved list of non-Law School Vanderbilt University courses."
    },
    {
     "name": "Approved Non-Law School Courses",
@@ -8491,10 +8589,17 @@
    {
     "name": "Foundations Course",
     "type": "core",
-    "rule": "Take MHS 2100",
+    "rule": "Take MHS 2100 or an approved substitute taken prior to Fall 2025",
     "hours": "3",
     "courses": [
-     "MHS 2100"
+     "MHS 2100",
+     "MHS 1920",
+     "MHS 1930",
+     "MHS 1940",
+     "MHS 1950",
+     "MHS 1960",
+     "MHS 2110",
+     "MHS 2800"
     ],
     "level_or_range": null,
     "notes": "MHS 1920, 1930, 1940, 1950, 1960, 2110, or 2800 may satisfy this requirement when taken prior to Fall 2025."
@@ -8502,7 +8607,7 @@
    {
     "name": "Concentration",
     "type": "concentration",
-    "rule": "Choose three courses in one concentration",
+    "rule": "Complete three courses in one concentration",
     "hours": "9",
     "courses": [
      "CORE 2500"
@@ -8621,8 +8726,21 @@
     "type": "depth_elective",
     "rule": "Choose 15 credit hours",
     "hours": "15",
-    "courses": [],
-    "level_or_range": "2060-level or above",
+    "courses": [
+     "ARA 1101",
+     "ARA 1102",
+     "ARA 2201",
+     "RLST 4593",
+     "CHEB 2300",
+     "ARAM 2400",
+     "ARAM 2500",
+     "CHEB 3030",
+     "CLAS 3300",
+     "CLAS 3301",
+     "ITAL 3100",
+     "SPAN 4400"
+    ],
+    "level_or_range": "2060 or above",
     "notes": "At least 9 credit hours must be from courses numbered 2060 or above."
    }
   ],
@@ -8633,6 +8751,7 @@
   "start_page": 313,
   "end_page": 318,
   "removed_codes": [
+   "ARA 3301",
    "GREEK 1101",
    "GREEK 1102",
    "GREEK 2201",
@@ -8645,6 +8764,7 @@
    "GREEK 3200",
    "GREEK 3850",
    "GREEK 3890",
+   "ITAL 3242",
    "LATIN 1101",
    "LATIN 1102",
    "LATIN 1103",
@@ -8830,10 +8950,12 @@
     "courses": [
      "NS 1100",
      "HIST 1690",
+     "NS-PC 2410",
      "ES 3231",
      "ES 3230",
      "ES 3232",
-     "ES 4233"
+     "ES 4233",
+     "NS-PC 4242"
     ],
     "level_or_range": null,
     "notes": "Includes appropriate labs"
@@ -8846,8 +8968,10 @@
     "courses": [
      "NS 1100",
      "HIST 1690",
+     "NS-PC 2410",
      "HIST 1691",
-     "HIST 1693"
+     "HIST 1693",
+     "NS-PC 4242"
     ],
     "level_or_range": null,
     "notes": "Includes appropriate labs"
@@ -8870,6 +8994,7 @@
     "rule": "Take all",
     "hours": null,
     "courses": [
+     "NS-PC 2410",
      "ES 3231"
     ],
     "level_or_range": null,
@@ -8893,7 +9018,8 @@
     "rule": "Take all",
     "hours": null,
     "courses": [
-     "ES 3233"
+     "ES 3233",
+     "NS-PC 4242"
     ],
     "level_or_range": null,
     "notes": null
@@ -8901,14 +9027,14 @@
    {
     "name": "Marine Option Spring Courses",
     "type": "core",
-    "rule": "Courses rotate yearly",
+    "rule": "Take all",
     "hours": null,
     "courses": [
      "HIST 1691",
      "HIST 1693"
     ],
     "level_or_range": null,
-    "notes": "Taken in sophomore and junior year"
+    "notes": "Courses rotate on a yearly basis"
    }
   ],
   "other_rules": [],
@@ -8937,50 +9063,31 @@
      "MATH 1301",
      "BSCI 3270",
      "PSY 2100",
+     "PSY-PC 2110",
      "CS 1101",
      "CS 1103",
      "CS 1104"
     ],
     "level_or_range": null,
-    "notes": null
+    "notes": "Choose one course from MATH 1100, 1200, or 1300; and one from MATH 1201, 1301, BSCI 3270, PSY 2100, PSY-PC 2110, CS 1101, 1103, or 1104."
    },
    {
     "name": "Required Math and Science Courses",
     "type": "science",
     "rule": "Take all",
-    "hours": "8",
+    "hours": "24",
     "courses": [
      "BSCI 1510",
      "BSCI 1511",
      "BSCI 1510L",
      "BSCI 1511L",
-     "BSCI 1512L"
-    ],
-    "level_or_range": null,
-    "notes": null
-   },
-   {
-    "name": "Required Math and Science Courses",
-    "type": "science",
-    "rule": "Take all",
-    "hours": "8",
-    "courses": [
+     "BSCI 1512L",
      "CHEM 2211",
      "CHEM 2221",
      "CHEM 2212",
      "CHEM 2222",
      "CHEM 2221L",
-     "CHEM 2222L"
-    ],
-    "level_or_range": null,
-    "notes": null
-   },
-   {
-    "name": "Required Math and Science Courses",
-    "type": "science",
-    "rule": "Take all",
-    "hours": "8",
-    "courses": [
+     "CHEM 2222L",
      "PHYS 1501",
      "PHYS 1601",
      "PHYS 2051",
@@ -8994,7 +9101,7 @@
      "PHYS 1602L"
     ],
     "level_or_range": null,
-    "notes": null
+    "notes": "Biological Sciences: BSCI 1510, 1511, 1510L, and either 1511L or 1512L. Chemistry: CHEM 2211 or 2221; CHEM 2212 or 2222; and CHEM 2221L and 2222L. Physics: PHYS 1501, 1601 or 2051; PHYS 1502, 1602 or 2053; PHYS 1501L, 1601L or 2052; and PHYS 1502L, 1602L, or 2054."
    },
    {
     "name": "Neuroscience Courses",
@@ -9005,10 +9112,10 @@
      "NSC 1400"
     ],
     "level_or_range": null,
-    "notes": "NSC 1400 was formerly NSC 2201"
+    "notes": "Introduction to Neuroscience"
    },
    {
-    "name": "Cellular and Molecular Neuroscience",
+    "name": "Neuroscience Courses",
     "type": "depth_elective",
     "rule": "Choose courses totaling 6 credit hours",
     "hours": "6",
@@ -9025,10 +9132,10 @@
      "NSC 3891"
     ],
     "level_or_range": null,
-    "notes": "NSC 2235 was formerly NSC 3235, NSC 2260 was formerly NSC 3260, NSC 2269 was formerly NSC 3269"
+    "notes": "Cellular and Molecular Neuroscience"
    },
    {
-    "name": "Systems, Integrative, and Cognitive Neuroscience",
+    "name": "Neuroscience Courses",
     "type": "depth_elective",
     "rule": "Choose courses totaling 6 credit hours",
     "hours": "6",
@@ -9054,10 +9161,11 @@
      "PSY 3780",
      "PSY 3785",
      "PSY 3892",
-     "PSY 4720"
+     "PSY 4720",
+     "PSY-PC 3190"
     ],
     "level_or_range": null,
-    "notes": null
+    "notes": "Systems, Integrative, and Cognitive Neuroscience"
    },
    {
     "name": "Neuroscience Laboratory",
@@ -9109,11 +9217,12 @@
      "PSY 3785",
      "PSY 3892",
      "PSY 4720",
+     "PSY-PC 3190",
      "NSC 3863",
      "NSC 4999"
     ],
     "level_or_range": null,
-    "notes": "NSC 3863 or NSC 4999 may be used to count for one elective course"
+    "notes": "NSC 3863 or NSC 4999 may be used to count for one elective course."
    },
    {
     "name": "Related Course Electives",
@@ -9151,25 +9260,25 @@
      "PSY 3810"
     ],
     "level_or_range": null,
-    "notes": "One course not used to satisfy the Required Math and Science course requirement above"
+    "notes": "One course not used to satisfy the Required Math and Science course requirement above."
    },
    {
     "name": "Honors Program",
     "type": "honors",
     "rule": "Optional",
-    "hours": null,
+    "hours": "6",
     "courses": [
      "NSC 3863",
      "NSC 3864",
      "NSC 4999"
     ],
     "level_or_range": null,
-    "notes": "Requires a cumulative GPA of 3.3 and a GPA of 3.3 in courses counting toward the neuroscience major. Honors candidates must complete at least 6 hours of advanced research course work, write an honors thesis, present the thesis, and pass an oral examination."
+    "notes": "Requires a cumulative GPA of 3.3 and a GPA of 3.3 in courses counting toward the neuroscience major. Honors candidates must complete at least 6 hours of advanced research course work. Three of these research-credit hours may count toward neuroscience elective course work. Includes writing an honors thesis, presenting it, and passing an oral examination."
    }
   ],
   "other_rules": [
    "Students seeking a second major within the College of Arts and Science may count a maximum of 6 credit hours of 2000-or-higher-level course work to meet the requirements of both majors.",
-   "Excluding research credit (NSC 3861, 3862, 3863, 3864, and 4999), the neuroscience and related courses must be drawn from at least two departments or programs."
+   "Excluding research credit (3861, 3862, 3863, 3864, and 4999), the neuroscience and related courses must be drawn from at least two departments or programs."
   ],
   "has_requirements": true,
   "subject": "neuroscience",
@@ -9221,6 +9330,7 @@
     "courses": [
      "BSCI 3270",
      "PSY 2100",
+     "PSY-PC 2110",
      "CS 1101",
      "CS 1103",
      "CS 1104"
@@ -9277,7 +9387,7 @@
   "summary": "The program offers a Bachelor of Science with majors in various education and human development fields, requiring a General Education Core, a professional core, a major area of specialization, and electives.",
   "groups": [
    {
-    "name": "General Education Core",
+    "name": "General Education Core Program",
     "type": "liberal_arts_core",
     "rule": "Complete all areas",
     "hours": null,
@@ -9325,10 +9435,7 @@
   "other_rules": [
    "The bachelor of science is granted on the basis of 120 semester hours of college work with a final grade point average of 2.000.",
    "Transfer students may use credits from other colleges to fulfill Peabody\u2019s General Education Core requirements if the credits are equivalent to the courses offered at Vanderbilt.",
-   "Students must meet licensure requirements in effect at the time of their program completion.",
-   "Screening deadlines are October 1 and April 1.",
-   "Undergraduates must apply for Screening I during spring of the sophomore year. Screening II must be done in the fall of the senior year.",
-   "Students must maintain a minimum grade point average of 2.75 for teacher licensure programs."
+   "Requirements still to be fulfilled will be noted at the time of enrollment for transfer students."
   ],
   "has_requirements": true,
   "subject": "peabody college",
@@ -10287,17 +10394,18 @@
  },
  {
   "program": "Psychology major",
-  "total_hours": "36",
-  "summary": "The Psychology major requires core courses, distribution courses, electives, and a comprehensive exam.",
+  "total_hours": "36 for General Program, 42 for Honors Program",
+  "summary": "The Psychology major at Vanderbilt requires core courses, distribution courses, electives, and a comprehensive exam, with an optional Honors Program for research and thesis work.",
   "groups": [
    {
     "name": "General Program",
     "type": "core",
     "rule": "Take all",
-    "hours": null,
+    "hours": "36",
     "courses": [
      "PSY 1200",
      "PSY 2100",
+     "PSY-PC 2110",
      "PSY 2150"
     ],
     "level_or_range": null,
@@ -10313,10 +10421,11 @@
      "PSY 2210",
      "PSY 2220",
      "PSY 2230",
-     "NSC 1400"
+     "NSC 1400",
+     "PSY-PC 1250"
     ],
     "level_or_range": null,
-    "notes": "At least 4 of the following 6 courses are required"
+    "notes": "Courses provide grounding in core content areas of psychological science."
    },
    {
     "name": "Psychology Electives",
@@ -10325,7 +10434,7 @@
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Any course in the Department of Psychology (A&S) or the Department of Psychology and Human Development (Peabody) that is not being used to meet another psychology requirement can be used as an elective, unless otherwise stated in the course catalog."
+    "notes": "Any course in the Department of Psychology (A&S) or the Department of Psychology and Human Development (Peabody) not used to meet another requirement."
    },
    {
     "name": "Honors Program",
@@ -10335,6 +10444,7 @@
     "courses": [
      "PSY 1200",
      "PSY 2100",
+     "PSY-PC 2110",
      "PSY 2150",
      "PSY 3980",
      "PSY 3981",
@@ -10342,14 +10452,23 @@
      "PSY 4999"
     ],
     "level_or_range": null,
-    "notes": "2 or all 3 of PSY 3980, 3981, and 4998; Students who only take two semesters of PSY 3980, 3981, and 4998 will need to take an additional elective course to fulfill their 42 credit hours."
+    "notes": "PSY 2100 or PSY-PC 2110 (Peabody); 2 or all 3 of PSY 3980, 3981, and 4998; additional elective if only two semesters of PSY 3980, 3981, and 4998 are taken."
+   },
+   {
+    "name": "Honors Program Electives",
+    "type": "elective",
+    "rule": "Choose 3",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Additional elective required if only two semesters of PSY 3980, 3981, and 4998 are taken."
    }
   ],
   "other_rules": [
-   "Students must take a comprehensive exam during their senior year.",
-   "Applicants to the Honors Program are required to have a cumulative GPA of at least 3.3, both overall and in all courses that count toward the psychology major.",
-   "Students must find a faculty mentor who is willing to sponsor them in the Honors Program.",
-   "Students who complete the Honors Program successfully and have a final cumulative and major GPA of 3.3 or higher will receive honors or highest honors in psychology."
+   "Comprehensive exam required during senior year.",
+   "Honors Program applicants need a cumulative GPA of at least 3.3 overall and in psychology courses.",
+   "Honors Program requires a faculty mentor and application at the end of sophomore year.",
+   "Successful completion of Honors Program with a GPA of 3.3 or higher results in honors or highest honors."
   ],
   "has_requirements": true,
   "subject": "psychology",
@@ -10371,6 +10490,7 @@
     "courses": [
      "PSY 1200",
      "PSY 2100",
+     "PSY-PC 2110",
      "PSY 2150"
     ],
     "level_or_range": null,
@@ -11302,17 +11422,22 @@
     "hours": null,
     "courses": [
      "EDUC 1227",
+     "PSY-PC 2600",
      "SPED 1210"
     ],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Severe Disabilities Program/Comprehensive Core",
+    "name": "Specialization in Severe Disabilities",
     "type": "concentration",
     "rule": "Take all",
     "hours": null,
     "courses": [
+     "SPED 1175",
+     "SPED 2317",
+     "SPED 4950",
+     "SPED 4954",
      "SPEDS 2120",
      "SPEDS 2430",
      "SPEDS 2450",
@@ -11329,11 +11454,15 @@
     "notes": "Students in the Severe Incidence track will need 22 hours of elective credit or a second major to fulfill this requirement."
    },
    {
-    "name": "High-Incidence Program/Interventionist Core",
+    "name": "Specialization in High-Incidence Disabilities",
     "type": "concentration",
-    "rule": "Courses are specific to choice of K-8 or 6-12 licensure track",
+    "rule": "Take all",
     "hours": null,
     "courses": [
+     "SPED 1175",
+     "SPED 2317",
+     "SPED 4950",
+     "SPED 4951",
      "SPED 2160",
      "SPEDH 3308",
      "SPEDH 3318",
@@ -11361,8 +11490,7 @@
   ],
   "other_rules": [
    "Vanderbilt students seeking teacher licensure must apply through the Office of Teacher Licensure at Vanderbilt and must meet licensure requirements in effect at the time of their graduation.",
-   "Students must consult the current Vanderbilt Undergraduate Catalog, the Undergraduate Guide to Teacher Licensure, and the Undergraduate Handbook each year.",
-   "Disability studies is an alternative major available only to special education majors who cannot complete required SPED pre-student teaching and/or student teaching capstone."
+   "Students must consult the current Vanderbilt Undergraduate Catalog, the Undergraduate Guide to Teacher Licensure, and the Undergraduate Handbook each year."
   ],
   "has_requirements": true,
   "subject": "special education",
