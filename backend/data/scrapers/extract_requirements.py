@@ -147,6 +147,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--only", default=None)
+    ap.add_argument("--since", default=None,
+                    help="previous programs.json; only re-extract programs whose catalog text changed")
     args = ap.parse_args()
 
     programs = json.loads((HERE / "programs.json").read_text())
@@ -155,8 +157,18 @@ def main():
     if OUT_FILE.exists() and not args.force:
         done = {d["program"]: d for d in json.loads(OUT_FILE.read_text()) if not d.get("error")}
 
-    todo = [p for p in programs if (args.only is None or p["name"] == args.only)
-            and (args.force or args.only or p["name"] not in done)]
+    old_text = {}
+    if args.since and Path(args.since).exists():
+        old_text = {p["name"]: p["text"] for p in json.loads(Path(args.since).read_text())}
+
+    def needs_work(p):
+        if args.only is not None:
+            return p["name"] == args.only
+        if args.force or p["name"] not in done:
+            return True
+        return bool(args.since) and old_text.get(p["name"]) != p["text"]
+
+    todo = [p for p in programs if needs_work(p)]
     print(f"{len(programs)} programs, {len(done)} already extracted, extracting {len(todo)} now...")
 
     with ThreadPoolExecutor(max_workers=6) as pool:

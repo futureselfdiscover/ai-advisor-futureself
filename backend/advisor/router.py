@@ -32,7 +32,7 @@ from club_matcher import match_clubs
 from career_coach import resume_feedback, interview_prep, explore_industry_path
 from city_explorer import explore_cities
 from clarifying_questions import CLARIFICATION_CONFIG
-from requirements import find_program, program_requirements, requirements_outline
+from requirements import find_program, program_requirements, requirements_outline, requirements_html
 from student_profile import get_student_profile
 
 load_dotenv(base / ".env")
@@ -198,8 +198,12 @@ def _route(message: str, user_hash: str = None) -> dict:
             major = _profile_major(user_hash)
             official = find_program(major) if major else None
         if official:
-            return done(requirements_outline(official) or program_requirements(message, official),
-                        "program_requirements")
+            result = done(requirements_outline(official) or program_requirements(message, official),
+                          "program_requirements")
+            view = requirements_html(official)
+            if view:
+                result["display_html"] = view
+            return result
         if feature == "course_planner" and user_hash and _profile_major(user_hash):
             return done(plan_courses(user_hash)["plan"], "course_planner")
         if program:
