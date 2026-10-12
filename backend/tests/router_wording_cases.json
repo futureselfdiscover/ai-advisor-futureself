@@ -1,0 +1,41 @@
+[
+  {"message": "computer science maybe, what classes would i need to take", "feature": "program_requirements", "program": "computer science"},
+  {"message": "what do CS majors have to take", "feature": "program_requirements", "program": "computer science"},
+  {"message": "reqs for comp sci?", "feature": "program_requirements", "program": "computer science"},
+  {"message": "can you give me every course I need for a computer science degree", "feature": "program_requirements", "program": "computer science"},
+  {"message": "what classes are required for the econ major", "feature": "program_requirements", "program": "economics"},
+  {"message": "how many credits is the economics minor", "feature": "program_requirements", "program": "economics"},
+  {"message": "whats in the neuroscience major", "feature": "program_requirements", "program": "neuroscience"},
+  {"message": "im thinking about HOD, what courses would that involve", "feature": "program_requirements", "program": "human and organizational development"},
+  {"message": "requirements for child development", "feature": "program_requirements", "program": "child development"},
+  {"message": "what do I need to complete a chemistry minor", "feature": "program_requirements", "program": "chemistry"},
+  {"message": "core courses for mechanical engineering", "feature": "program_requirements", "program": "mechanical engineering"},
+  {"message": "what classes do i need for a math major", "feature": "program_requirements", "program": "mathematics"},
+  {"message": "psych major requirements?", "feature": "program_requirements", "program": "psychology"},
+  {"message": "what would I have to take to major in political science", "feature": "program_requirements", "program": "political science"},
+  {"message": "list every requirement for biomedical engineering", "feature": "program_requirements", "program": "biomedical engineering"},
+  {"message": "what does the english major look like course-wise", "feature": "program_requirements", "program": "english"},
+
+  {"message": "what should I take next semester", "feature": "course_planner"},
+  {"message": "help me plan my classes for spring", "feature": "course_planner"},
+
+  {"message": "any hiking clubs?", "feature": "club_matcher"},
+  {"message": "how can I get involved on campus if I like debate", "feature": "club_matcher"},
+  {"message": "groups for people into investing", "feature": "club_matcher"},
+
+  {"message": "where should I live as a software developer", "feature": "city_explorer"},
+  {"message": "how much do nurses make in Chicago", "feature": "city_explorer"},
+  {"message": "best cities for accountants", "feature": "city_explorer"},
+
+  {"message": "how do I break into consulting", "feature": "industry_path"},
+  {"message": "what's the path to becoming a product manager", "feature": "industry_path"},
+
+  {"message": "help me prep for a software engineering interview", "feature": "interview_prep"},
+  {"message": "give me practice interview questions for investment banking", "feature": "interview_prep"},
+
+  {"message": "can you look at my resume", "feature": "resume_feedback"},
+  {"message": "how should I format my resume for internships", "feature": "resume_feedback"},
+
+  {"message": "what does the career center offer", "feature": "general"},
+  {"message": "when do I have to declare my major", "feature": "general"}
+]
