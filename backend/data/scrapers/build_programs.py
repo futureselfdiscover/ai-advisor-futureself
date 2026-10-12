@@ -24,10 +24,12 @@ MAX_CHARS = 40000
 CODE_RUN = re.compile(r"\b([A-Z]{2,5})\s(\d{4}[A-Z]?)((?:\s*(?:,|and|or|/)\s*\d{4}[A-Z]?)*)")
 FOOTER = re.compile(r"(?m)^\s*Page \d+ of \d+\s*$")
 PROGRAM_NAME = re.compile(
-    r"^(?:(?:second|interdisciplinary|undergraduate)\s+)?(?:majors?|minors?|programs? of concentration)\s+in\s+(.+)$",
+    r"^(?:(?:second|interdisciplinary|undergraduate)\s+)?(?:majors?|minors?|programs? of concentration|concentration)\s+in\s+(.+)$",
     re.I,
 )
 GENERIC = {"departmental minors", "potential peabody second majors"}
+# headings like "Program of Concentration" that belong to the department just above them
+GENERIC_MAJOR = re.compile(r"(?i)^programs? of concentration(\s*[-–]?\s*(ba|bs))?$")
 NOT_A_PROGRAM = re.compile(
     r"(?i)\b(requirements?|for the|approved|optional|outside|advice|polic(y|ies)|school of|college of|all programs)\b"
 )
@@ -62,6 +64,8 @@ def classify(toc_name: str, subjects: set):
     key = norm(name)
     if not key or key in GENERIC or NOT_A_PROGRAM.search(name):
         return None
+    if GENERIC_MAJOR.match(name):
+        return "", "", "generic_major"
     m = PROGRAM_NAME.match(name)
     if m:
         subject = re.sub(r"\(.*?\)", "", m.group(1)).strip()
@@ -139,6 +143,19 @@ def main():
             heads.append({"display": c[0], "subject": c[1], "kind": c[2], "toc_name": e["name"],
                           "start": start, "found": how})
     heads.sort(key=lambda h: h["start"])
+
+    # attach "Program of Concentration" headings to the department above them
+    last_overview = None
+    for h in heads:
+        if h["kind"] == "overview":
+            last_overview = h
+        elif h["kind"] == "generic_major":
+            if last_overview:
+                base = last_overview["display"].replace(" (department overview)", "")
+                h.update(display=f"{base} major", subject=last_overview["subject"], kind="major")
+            else:
+                h["kind"] = "drop"
+    heads = [h for h in heads if h["kind"] != "drop"]
     stop = off(req_end - 1)
 
     merged = {}
@@ -150,22 +167,40 @@ def main():
         text = re.sub(r"\n{3,}", "\n\n", FOOTER.sub("", full[h["start"]:end])).strip()
         p = merged.setdefault((h["subject"], h["kind"]), {
             "name": h["display"], "subject": h["subject"], "kind": h["kind"],
-            "start_page": page_of(h["start"]), "end_page": page_of(end - 1),
-            "found": h["found"], "text": "", "longest": 0, "toc_upper": str(h["toc_name"]).isupper(),
+            "segments": [], "toc_upper": str(h["toc_name"]).isupper(),
         })
         if p["toc_upper"] and not str(h["toc_name"]).isupper():  # prefer "Mathematics" over "MATHEMATICS"
             p["name"], p["toc_upper"] = h["display"], False
-        if len(text) > p["longest"]:  # report the pages of the main section
-            p["longest"] = len(text)
-            p["start_page"], p["end_page"], p["found"] = page_of(h["start"]), page_of(end - 1), h["found"]
-        p["text"] = (p["text"] + "\n\n" + text).strip()
+        p["segments"].append({"text": text, "start_page": page_of(h["start"]),
+                              "end_page": page_of(end - 1), "found": h["found"]})
+
+    # where each subject's own majors/minors start, to find its real department section
+    program_pages = {}
+    for p in merged.values():
+        if p["kind"] != "overview":
+            first = min(s["start_page"] for s in p["segments"])
+            program_pages[p["subject"]] = min(program_pages.get(p["subject"], first), first)
 
     programs = []
     for p in merged.values():
-        p.pop("longest", None)
+        segs = p.pop("segments")
         p.pop("toc_upper", None)
-        p["capped"] = len(p["text"]) > MAX_CHARS
-        p["text"] = p["text"][:MAX_CHARS]
+        if p["kind"] == "overview":
+            # a department name can appear in several places; keep the real department section:
+            # the one just before its own majors/minors, otherwise the one with the most course codes
+            limit = program_pages.get(p["subject"])
+            before = [s for s in segs if limit and s["start_page"] <= limit]
+            if before:
+                best = max(before, key=lambda s: s["start_page"])
+            else:
+                best = max(segs, key=lambda s: (len(course_codes(s["text"])), len(s["text"])))
+            text = best["text"]
+        else:
+            best = max(segs, key=lambda s: len(s["text"]))
+            text = "\n\n".join(s["text"] for s in segs)
+        p["start_page"], p["end_page"], p["found"] = best["start_page"], best["end_page"], best["found"]
+        p["capped"] = len(text) > MAX_CHARS
+        p["text"] = text[:MAX_CHARS]
         p["chars"] = len(p["text"])
         p["course_codes"] = course_codes(p["text"])
         programs.append(p)

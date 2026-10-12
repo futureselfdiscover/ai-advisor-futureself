@@ -13,6 +13,7 @@ Usage:
 """
 
 import difflib
+import html
 import json
 import os
 import re
@@ -264,6 +265,40 @@ def requirements_outline(program_name: str):
             f"The student asked about: {program['name']}.\n\n" + "\n\n".join(blocks)
             + f"\n\nSource: {program['name']}, 2025/2026 Vanderbilt Undergraduate Catalog "
               f"(pages {program['start_page']}-{program['end_page']}).")
+
+def requirements_html(program_name: str):
+    """Student-facing HTML list of every requirement group for the chat widget, or None."""
+    program = get_program(program_name)
+    if not program:
+        return None
+    structured = load_structured()
+    related = [program] + [p for p in load_programs()
+                           if p["subject"] == program["subject"] and p["name"] != program["name"]]
+    chosen = next((p for p in related if structured.get(p["name"], {}).get("groups")), None)
+    if not chosen:
+        return None
+    d = structured[chosen["name"]]
+    titles = course_titles()
+    esc = html.escape
+
+    title = chosen["name"].replace(" (department overview)", "")
+    parts = [f"<b>{esc(title)}</b>" + (f" ({esc(str(d['total_hours']))} total hours)" if d.get("total_hours") else "")]
+    for g in d.get("groups") or []:
+        details = [g.get("rule"), f"{g['hours']} hours" if g.get("hours") else None, g.get("level_or_range")]
+        line = f"<b>{esc(str(g.get('name') or 'Requirement'))}</b>"
+        detail_text = " · ".join(esc(str(x)) for x in details if x)
+        if detail_text:
+            line += f": {detail_text}"
+        if g.get("courses"):
+            line += "<br>" + ", ".join(esc(f"{c} {titles[c]}") if titles.get(c) else esc(c) for c in g["courses"])
+        if g.get("notes"):
+            line += f"<br><i>{esc(str(g['notes']))}</i>"
+        parts.append(line)
+    for rule in d.get("other_rules") or []:
+        parts.append(f"<i>{esc(str(rule))}</i>")
+    parts.append(f"<i>Source: 2025/2026 Vanderbilt Undergraduate Catalog, pages "
+                 f"{chosen['start_page']}-{chosen['end_page']}. Confirm with your advisor before registering.</i>")
+    return "<br><br>".join(parts)
 
 if __name__ == "__main__":
     q = sys.argv[1] if len(sys.argv) > 1 else "what classes do cs majors need to take"
