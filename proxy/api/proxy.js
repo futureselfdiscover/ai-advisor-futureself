@@ -216,11 +216,12 @@ function advisorContextBlock(advisor) {
 // puts the advisor backend's complete requirements list (HTML) under the model's
 // short reply, keeping the suggestions/memory JSON lines at the end for the widget
 function attachRequirements(content, listHtml) {
-  const lines = String(content).split('\n');
-  const idx = lines.findIndex(function(l) { return /^\s*\{\s*"(suggestions|memory)"/.test(l); });
-  const text = (idx === -1 ? lines : lines.slice(0, idx)).join('\n').trim();
-  const tail = idx === -1 ? '' : lines.slice(idx).join('\n');
-  return text + '<br><br>' + listHtml + (tail ? '\n' + tail : '');
+  // the list replaces the model text: requirements replies are just the clean list,
+  // plus the model's suggestions/memory JSON so the widget buttons and memory still work
+  const s = String(content);
+  const at = s.search(/\{\s*"(suggestions|memory)"/);
+  const tail = at === -1 ? '' : s.slice(at).trim();
+  return listHtml + (tail ? '\n' + tail : '');
 }
 
 // ---- system prompt assembly ----
