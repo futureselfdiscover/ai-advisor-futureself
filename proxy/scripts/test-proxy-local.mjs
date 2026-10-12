@@ -1,7 +1,7 @@
 // Runs proxy.js on your laptop in debug mode (no OpenAI call, no logging)
 // and prints the verified data block the advisor backend added.
 // Usage, from the proxy/ folder:
-//   ADVISOR_BACKEND_URL=... ADVISOR_BACKEND_KEY=... node scripts/test-proxy-local.mjs "your question"
+//   ADMIN_KEY=local-test ADVISOR_BACKEND_URL=... ADVISOR_BACKEND_KEY=... node scripts/test-proxy-local.mjs "your question"
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -36,7 +36,8 @@ const out = await run({
   messages: messages,
   userId: 'local-test-user',
   context: { pageDesc: 'local test' },
-  debugReturnPrompt: true
+  debugReturnPrompt: true,
+  adminKey: process.env.ADMIN_KEY
 });
 
 const adv = out.data && out.data._advisor;
