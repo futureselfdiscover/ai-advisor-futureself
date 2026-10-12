@@ -204,11 +204,23 @@ function advisorContextBlock(advisor) {
     'How to use this data:',
     '- Base your reply on it. Use its course codes, club names, salaries, programs, and resources exactly as written.',
     '- Do not add courses, clubs, numbers, people, or programs that are not in this data or in the student profile above.',
-    '- When the data lists degree requirements, keep every requirement group and every course in it. Do not shorten, summarize, or drop any of them.',
+    advisor.display_html
+      ? '- The complete requirements list is attached automatically under your reply. Do not list the requirements yourself: write one or two sentences introducing them, then ask your one question.'
+      : '- When the data lists degree requirements, keep every requirement group and every course in it. Do not shorten, summarize, or drop any of them.',
     '- Rewrite it in your own voice and keep all your usual format rules, including the suggestions and memory JSON lines.',
     '- If the data says the question is outside what you help with, politely redirect instead of answering it.',
     '- If the data asks the student a clarifying question, ask that question.'
-  ].join('\n');
+  ].filter(Boolean).join('\n');
+}
+
+// puts the advisor backend's complete requirements list (HTML) under the model's
+// short reply, keeping the suggestions/memory JSON lines at the end for the widget
+function attachRequirements(content, listHtml) {
+  const lines = String(content).split('\n');
+  const idx = lines.findIndex(function(l) { return /^\s*\{\s*"(suggestions|memory)"/.test(l); });
+  const text = (idx === -1 ? lines : lines.slice(0, idx)).join('\n').trim();
+  const tail = idx === -1 ? '' : lines.slice(idx).join('\n');
+  return text + '<br><br>' + listHtml + (tail ? '\n' + tail : '');
 }
 
 // ---- system prompt assembly ----
@@ -342,6 +354,10 @@ export default async function handler(req, res) {
         body: JSON.stringify({ model: 'gpt-4o', messages: fullMessages })
       });
       const data = await response.json();
+      if (advisor && advisor.display_html && data.choices && data.choices[0] && data.choices[0].message &&
+          typeof data.choices[0].message.content === 'string') {
+        data.choices[0].message.content = attachRequirements(data.choices[0].message.content, advisor.display_html);
+      }
 
       // log the last user message and the assistant response anonymously.
       // results are attached to the response as _log so silent failures
