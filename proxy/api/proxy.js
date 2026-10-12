@@ -199,13 +199,13 @@ function advisorContextBlock(advisor) {
     'VERIFIED VANDERBILT DATA FOR THE STUDENT\'S LATEST MESSAGE',
     '(from the FutureSelf advisor database; feature: ' + advisor.feature + ', category: ' + advisor.category + ')',
     '---',
-    advisor.answer,
+    advisor.display_html ? (advisor.brief || 'The requirements list is attached below the reply.') : advisor.answer,
     '---',
     'How to use this data:',
     '- Base your reply on it. Use its course codes, club names, salaries, programs, and resources exactly as written.',
     '- Do not add courses, clubs, numbers, people, or programs that are not in this data or in the student profile above.',
     advisor.display_html
-      ? '- The complete requirements list is attached automatically under your reply. Do not list the requirements yourself: write one or two sentences introducing them, then ask your one question.'
+      ? '- The full requirements list is attached automatically right after your reply. Write exactly ONE short sentence (under 20 words) introducing it. Do not list courses or requirements, do not ask a question, and add nothing else before the JSON lines. This overrides the usual one-question rule for this reply.'
       : '- When the data lists degree requirements, keep every requirement group and every course in it. Do not shorten, summarize, or drop any of them.',
     '- Rewrite it in your own voice and keep all your usual format rules, including the suggestions and memory JSON lines.',
     '- If the data says the question is outside what you help with, politely redirect instead of answering it.',
