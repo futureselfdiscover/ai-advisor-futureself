@@ -153,6 +153,63 @@ async function saveMemory(userId, fields, existing) {
   } catch(e) { return { error: e.message }; }
 }
 
+// ---- grounded school data from the Python advisor backend (Railway) ----
+// asks the backend (router.py) for real Vanderbilt course, club, salary and
+// career data for the student's latest message. returns null on any problem
+// (env not set, timeout, error) so the chat keeps working exactly as before.
+async function getAdvisorData(messages, userId) {
+  const url = process.env.ADVISOR_BACKEND_URL;
+  const key = process.env.ADVISOR_BACKEND_KEY;
+  if (!url || !key || !Array.isArray(messages) || messages.length === 0) return null;
+
+  const last = messages[messages.length - 1];
+  if (!last || last.role !== 'user' || !last.content) return null;
+
+  const history = messages.slice(0, -1)
+    .filter(function(m) { return m && (m.role === 'user' || m.role === 'assistant') && m.content; })
+    .slice(-6)
+    .map(function(m) { return { role: m.role, content: String(m.content).slice(0, 2000) }; });
+
+  const controller = new AbortController();
+  const timer = setTimeout(function() { controller.abort(); }, 20000);
+  try {
+    const r = await fetch(url.replace(/\/+$/, '') + '/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+      body: JSON.stringify({
+        message: String(last.content).slice(0, 8000),
+        user_hash: userId ? hashUserId(userId) : null,
+        history: history
+      }),
+      signal: controller.signal
+    });
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (!d || !d.answer || ['error', 'empty', 'too_long'].indexOf(d.feature) > -1) return null;
+    return d;
+  } catch(e) {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function advisorContextBlock(advisor) {
+  return [
+    'VERIFIED VANDERBILT DATA FOR THE STUDENT\'S LATEST MESSAGE',
+    '(from the FutureSelf advisor database; feature: ' + advisor.feature + ', category: ' + advisor.category + ')',
+    '---',
+    advisor.answer,
+    '---',
+    'How to use this data:',
+    '- Base your reply on it. Use its course codes, club names, salaries, programs, and resources exactly as written.',
+    '- Do not add courses, clubs, numbers, people, or programs that are not in this data or in the student profile above.',
+    '- Rewrite it in your own voice and keep all your usual format rules, including the suggestions and memory JSON lines.',
+    '- If the data says the question is outside what you help with, politely redirect instead of answering it.',
+    '- If the data asks the student a clarifying question, ask that question.'
+  ].join('\n');
+}
+
 // ---- system prompt assembly ----
 // builds the full system prompt server-side from the three behavior files
 // plus per-request context (profile, memory, page). editing personality,
@@ -244,11 +301,23 @@ export default async function handler(req, res) {
         fullMessages = [{ role: 'system', content: buildSystemPrompt(context) }].concat(messages || []);
       }
 
+      // add verified school data from the advisor backend, if available
+      const advisor = await getAdvisorData(messages, userId);
+      if (advisor) {
+        const block = advisorContextBlock(advisor);
+        if (fullMessages && fullMessages.length && fullMessages[0].role === 'system') {
+          fullMessages = [{ role: 'system', content: fullMessages[0].content + '\n\n' + block }].concat(fullMessages.slice(1));
+        } else {
+          fullMessages = [{ role: 'system', content: block }].concat(fullMessages || []);
+        }
+      }
+
       // TEMPORARY DEBUG: return the exact system prompt without calling
       // OpenAI or logging, so we can inspect what the model actually receives.
       if (req.body.debugReturnPrompt) {
         return res.status(200).json({
-          _debug_system_prompt: hasSystem ? messages[0].content : buildSystemPrompt(context || {}),
+          _debug_system_prompt: (fullMessages && fullMessages[0] && fullMessages[0].role === 'system') ? fullMessages[0].content : buildSystemPrompt(context || {}),
+          _advisor: advisor ? { feature: advisor.feature, category: advisor.category, question: advisor.question } : null,
           _built_from_context: !hasSystem && !!context
         });
       }
@@ -283,6 +352,7 @@ export default async function handler(req, res) {
         }
       }
       data._log = logResult;
+      data._advisor = advisor ? { feature: advisor.feature, category: advisor.category } : null;
 
       return res.status(200).json(data);
     }
