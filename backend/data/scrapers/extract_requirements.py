@@ -73,6 +73,10 @@ Rules:
 - Expand shorthand: "CS 3250, 3251, and 3270" means CS 3250, CS 3251, CS 3270, and "CS or ECE 3258"
   means both CS 3258 and ECE 3258. Keep hyphenated subjects as written, e.g. "PSY-PC 1250". Expand an explicit list,
   but describe ranges ("any CS 3000-level course") in level_or_range instead of inventing codes.
+- Split choices: when the catalog says "one of", "choose two from", "either", or "X or Y", put those
+  courses in their OWN group with that rule (e.g. name "Major Core: Infancy or Adolescence", rule
+  "Choose 1"). A group whose rule is "Take all" must contain ONLY courses that are all required.
+  Directed research, honors, or substitution options go in their own group or in notes.
 - Use only what is in the text. Never invent courses, hours, or rules.
 - If this text is only a department introduction with no requirements, return "has_requirements": false
   and an empty groups list."""
@@ -144,12 +148,27 @@ def extract(program: dict, catalog_codes: set) -> dict:
     return data
 
 
+TAKE_ALL = {"take all", "complete all", "complete all requirements", "required", "all required"}
+
+
+def looks_mixed(d) -> bool:
+    """A 'take all' group that mentions choices, or is suspiciously long, probably mixes in options."""
+    for g in (d or {}).get("groups") or []:
+        if str(g.get("rule") or "").strip().lower() in TAKE_ALL:
+            text = f"{g.get('notes') or ''} {g.get('name') or ''}"
+            if re.search(r"(?i)\b(choose|one of|two of|either|select|or)\b", text) or len(g.get("courses") or []) > 8:
+                return True
+    return False
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--only", default=None)
     ap.add_argument("--text-regex", default=None,
                     help="also re-extract programs whose catalog text matches this regex")
+    ap.add_argument("--recheck-choices", action="store_true",
+                    help="re-extract programs whose 'take all' groups look like they mix in optional choices")
     ap.add_argument("--since", default=None,
                     help="previous programs.json; only re-extract programs whose catalog text changed")
     args = ap.parse_args()
@@ -170,6 +189,8 @@ def main():
         if args.force or p["name"] not in done:
             return True
         if args.text_regex and re.search(args.text_regex, p["text"]):
+            return True
+        if args.recheck_choices and looks_mixed(done.get(p["name"])):
             return True
         return bool(args.since) and old_text.get(p["name"]) != p["text"]
 
