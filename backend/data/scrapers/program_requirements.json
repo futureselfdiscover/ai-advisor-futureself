@@ -151,7 +151,7 @@
  {
   "program": "Anthropology major",
   "total_hours": "30",
-  "summary": "The Anthropology major requires at least 30 credit hours, including core courses, a seminar, methods, thematic courses, a capstone, and electives.",
+  "summary": "The Anthropology major requires at least 30 credit hours, including foundational courses, a theory seminar, a methods course, themed upper-level courses, a capstone experience, and electives.",
   "groups": [
    {
     "name": "1000-level Surveys",
@@ -170,7 +170,7 @@
    {
     "name": "Anthropological Theory Seminar",
     "type": "core",
-    "rule": "Take 1",
+    "rule": "Choose 1",
     "hours": "3",
     "courses": [
      "ANTH 2101",
@@ -182,7 +182,7 @@
    {
     "name": "Anthropological Methods",
     "type": "core",
-    "rule": "Take 1",
+    "rule": "Choose 1",
     "hours": "3",
     "courses": [
      "ANTH 2211",
@@ -211,7 +211,7 @@
     "notes": "This class may not count towards the theme requirement. Other anthropology courses, including those at the 5000- and 6000-level, can count in consultation with the adviser and instructor."
    },
    {
-    "name": "Thematic Courses",
+    "name": "Themed Upper-Level Courses",
     "type": "concentration",
     "rule": "Choose 4",
     "hours": "12",
@@ -255,7 +255,6 @@
      "ANTH 2113W",
      "ANTH 2342",
      "ANTH 2371",
-     "ANTH 3125",
      "ANTH 3132",
      "ANTH 3141",
      "ANTH 3143",
@@ -278,10 +277,9 @@
      "ANTH 2120",
      "ANTH 2122",
      "ANTH 2130",
-     "ANTH 2375",
+     "ANTH 2229W",
      "ANTH 2385W",
      "ANTH 2400",
-     "ANTH 2602W",
      "ANTH 2800",
      "ANTH 3050",
      "ANTH 3130",
@@ -293,10 +291,15 @@
      "ANTH 3241",
      "ANTH 3243",
      "ANTH 4153",
-     "ANTH 2229W",
      "ANTH 3243W",
      "ANTH 4156",
      "ANTH 2301",
+     "ANTH 2375",
+     "ANTH 2601",
+     "ANTH 2602",
+     "ANTH 2602W",
+     "ANTH 2603",
+     "ANTH 3150W",
      "ANTH 3620",
      "ANTH 3622W",
      "KICH 1101",
@@ -310,7 +313,7 @@
    {
     "name": "Capstone Experience",
     "type": "project_capstone",
-    "rule": "Take 1",
+    "rule": "Choose 1",
     "hours": "3",
     "courses": [
      "ANTH 3125"
@@ -325,16 +328,14 @@
     "hours": "3",
     "courses": [],
     "level_or_range": null,
-    "notes": "Chosen from ANTH courses not already used to satisfy the requirements listed above, to total 30 credit hours toward the major."
+    "notes": "Minimum 3 credit hours of electives chosen from ANTH courses not already used to satisfy the requirements listed above, to total 30 credit hours toward the major."
    },
    {
-    "name": "Courses from Other Departments",
+    "name": "External Course",
     "type": "elective",
-    "rule": "Maximum of 3 credit hours",
-    "hours": "3",
+    "rule": "Maximum 3 credit hours",
+    "hours": null,
     "courses": [
-     "AADS 2178",
-     "AADS 3178",
      "CLAS 1020",
      "CLAS 1150",
      "CLAS 2180",
@@ -399,9 +400,9 @@
    }
   ],
   "other_rules": [
-   "The Honors Program is open to all Anthropology majors with junior standing who have a 3.3 GPA in all general University courses and Anthropology courses who are approved for acceptance into the Honors Program by Department faculty.",
-   "Students must submit a written thesis, give an oral presentation, and pass an oral examination for the Honors Program.",
-   "A maximum of 3 credit hours for a course taken in another department or program may be counted toward the major requirement with approval."
+   "The Honors Program is open to all Anthropology majors with junior standing who have a 3.3 GPA in all general University courses and Anthropology courses.",
+   "A maximum of 3 credit hours for a course taken in another department or program may be counted toward the major requirement with approval.",
+   "The honors thesis hours are expected to be in excess of the 30 hours required for the Major in Anthropology."
   ],
   "has_requirements": true,
   "subject": "anthropology",
@@ -409,6 +410,8 @@
   "start_page": 270,
   "end_page": 271,
   "removed_codes": [
+   "AFR 2178",
+   "AFR 3178",
    "ANTH 2113",
    "ANTH 3133",
    "ANTH 3134",
@@ -880,29 +883,39 @@
  {
   "program": "Art minor",
   "total_hours": "18",
-  "summary": "The minor in art requires 18 credit hours, including specific foundational courses and additional ARTS courses with at least one at the 2000-or-higher level.",
+  "summary": "The minor in art requires 18 credit hours, including a choice between HART 1105 or ARTS 1800, a required course ARTS 1102, and four additional ARTS courses with at least one at the 2000-or-higher level.",
   "groups": [
    {
-    "name": "Core Courses",
+    "name": "Introductory Course",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "HART 1105",
+     "ARTS 1800"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Required Course",
     "type": "core",
     "rule": "Take all",
     "hours": null,
     "courses": [
-     "HART 1105",
-     "ARTS 1800",
      "ARTS 1102"
     ],
     "level_or_range": null,
-    "notes": "HART 1105 or ARTS 1800 must be taken."
+    "notes": null
    },
    {
     "name": "Additional ARTS Courses",
     "type": "depth_elective",
-    "rule": "Choose four",
+    "rule": "Choose 4",
     "hours": null,
     "courses": [],
-    "level_or_range": "at least one at the 2000-or-higher level",
-    "notes": null
+    "level_or_range": "ARTS 2000-level or higher",
+    "notes": "At least one course must be at the 2000-or-higher level."
    }
   ],
   "other_rules": [],
@@ -1286,28 +1299,48 @@
  {
   "program": "Astronomy minor",
   "total_hours": "16",
-  "summary": "The Astronomy minor requires a minimum of 16 credit hours, including specific core courses and electives, with an option for a research project.",
+  "summary": "The minor in Astronomy requires a minimum of 16 credit hours, including specific core courses and electives, with an option for a research project.",
   "groups": [
    {
-    "name": "Core Courses",
+    "name": "Introductory Astronomy Courses",
     "type": "core",
-    "rule": "Take all",
-    "hours": "10",
+    "rule": "Choose 1",
+    "hours": "4",
     "courses": [
      "ASTR 1010",
      "ASTR 1010L",
      "ASTR 1020L",
-     "ASTR 1210",
-     "ASTR 2110",
+     "ASTR 1210"
+    ],
+    "level_or_range": null,
+    "notes": "Choose ASTR 1010 and either ASTR 1010L or ASTR 1020L; or ASTR 1210."
+   },
+   {
+    "name": "Intermediate Astronomy Course",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "3",
+    "courses": [
+     "ASTR 2110"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Advanced Astronomy Course",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "3",
+    "courses": [
      "ASTR 3000"
     ],
     "level_or_range": null,
-    "notes": "ASTR 1010 and either 1010L or 1020L; or 1210"
+    "notes": null
    },
    {
-    "name": "Elective Courses",
+    "name": "Astronomy Electives",
     "type": "depth_elective",
-    "rule": "Choose two",
+    "rule": "Choose 2",
     "hours": "6",
     "courses": [
      "ASTR 2130",
@@ -1320,7 +1353,7 @@
      "ASTR 4998"
     ],
     "level_or_range": null,
-    "notes": "One of the electives may be a 3 credit hour one-semester research project (3850, 3851, 4998). Only physics majors pursuing honors in astronomy are eligible to enroll in 4998."
+    "notes": "One of the courses may be a 3 credit hour one-semester research project (ASTR 3850, ASTR 3851, ASTR 4998). Only physics majors pursuing honors in astronomy are eligible to enroll in ASTR 4998."
    }
   ],
   "other_rules": [],
@@ -1417,7 +1450,7 @@
      "CHEM 4320"
     ],
     "level_or_range": null,
-    "notes": "Courses taken to fulfill BCB elective requirements are not eligible for general elective credit."
+    "notes": null
    },
    {
     "name": "General Electives",
@@ -1475,17 +1508,18 @@
    {
     "name": "Honors Program",
     "type": "honors",
-    "rule": "Complete two semesters of Honors Research",
+    "rule": "Optional",
     "hours": null,
     "courses": [
      "BCB 4999"
     ],
     "level_or_range": null,
-    "notes": "Students must hold a minimum cumulative GPA of 3.3 and a GPA of at least 3.4 in courses that count toward the major at the end of their junior year. The successful completion of one semester of BCB 4999 may substitute for the BCB 4965 course requirement. Candidates must submit a written thesis and give an oral defense of their research."
+    "notes": "Students may apply if they hold a minimum cumulative GPA of 3.3 and a GPA of at least 3.4 in courses that count toward the major at the end of their junior year. Honors candidates must complete two semesters (3 credit hours each semester) of Honors Research (BCB 4999). The successful completion of one semester of BCB 4999 may substitute for the BCB 4965 course requirement. Candidates assemble a committee of the major research adviser and two additional faculty members. Candidates must submit a written thesis and give an oral defense of their research."
    }
   ],
   "other_rules": [
-   "Students may apply to the Honors Program if they hold a minimum cumulative GPA of 3.3 and a GPA of at least 3.4 in courses that count toward the major at the end of their junior year."
+   "AP credit may satisfy some of the required math and science courses.",
+   "Courses taken to fulfill BCB elective requirements are not eligible for general elective credit."
   ],
   "has_requirements": true,
   "subject": "biochemistry and chemical biology",
@@ -1510,7 +1544,7 @@
  {
   "program": "Biological Sciences minor",
   "total_hours": "18",
-  "summary": "A minor in biological sciences requires 18 credit hours, including core courses and electives, with at least 9 hours earned in residence at Vanderbilt.",
+  "summary": "The minor in biological sciences requires 18 credit hours, including core courses and electives, with at least 9 hours earned in residence at Vanderbilt.",
   "groups": [
    {
     "name": "Core Courses",
@@ -1519,13 +1553,21 @@
     "hours": null,
     "courses": [
      "BSCI 1510",
-     "BSCI 1511",
-     "BSCI 1510L",
-     "BSCI 1511L",
-     "BSCI 1512L"
+     "BSCI 1511"
     ],
     "level_or_range": null,
     "notes": "BSCI 1509 (or AP/IB credit) is a pre-requisite for BSCI 1510 and BSCI 1511."
+   },
+   {
+    "name": "Core Labs",
+    "type": "core",
+    "rule": "Choose 1 set",
+    "hours": null,
+    "courses": [
+     "BSCI 1512L"
+    ],
+    "level_or_range": null,
+    "notes": null
    },
    {
     "name": "2000-level Courses",
@@ -1535,11 +1577,24 @@
     "courses": [],
     "level_or_range": "2000-level",
     "notes": null
+   },
+   {
+    "name": "Directed Readings or Research",
+    "type": "other",
+    "rule": "Up to 2 credit hours",
+    "hours": "2",
+    "courses": [
+     "BSCI 3850",
+     "BSCI 3860",
+     "BSCI 3861",
+     "BSCI 3961"
+    ],
+    "level_or_range": null,
+    "notes": "No more than 2 credit hours of directed readings or directed/independent research may be counted toward the minor."
    }
   ],
   "other_rules": [
-   "At least 9 credit hours must be earned in residence at Vanderbilt.",
-   "No more than 2 credit hours of directed readings or directed/independent research (BSCI 3850, BSCI 3860, BSCI 3861, or BSCI 3961) may be counted toward the minor."
+   "At least 9 credit hours must be earned in residence at Vanderbilt."
   ],
   "has_requirements": true,
   "subject": "biological sciences",
@@ -1551,10 +1606,19 @@
  {
   "program": "Biological Sciences (department overview)",
   "total_hours": null,
-  "summary": "The Biological Sciences program offers a BA degree with a broad base in biological sciences and BS degrees with a focus on independent laboratory research, including Molecular and Cellular Biology and Integrative Biology majors.",
+  "summary": "The program offers a BA degree with a broad base in biological sciences and two BS degrees with an emphasis on independent laboratory research, along with honors tracks and a minor.",
   "groups": [
    {
-    "name": "Requirements for Biological Sciences BA degree",
+    "name": "General Chemistry and Organic Chemistry",
+    "type": "science",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": "These 19 credit hours do not count toward the major. AP credit may satisfy some of these requirements."
+   },
+   {
+    "name": "Biological Sciences BA Core",
     "type": "core",
     "rule": "Take all",
     "hours": null,
@@ -1563,14 +1627,92 @@
      "BSCI 1511",
      "BSCI 1510L",
      "BSCI 1511L",
-     "BSCI 1512L",
-     "BSCI 4965"
+     "BSCI 1512L"
     ],
-    "level_or_range": "BSCI 2100-2199, BSCI 2200-2599, 2000-level, 3000- or 4000-level",
-    "notes": "No more than 4 credit hours of 4965 may count toward the major. A total of no more than 5 credit hours of directed readings or directed/independent research (3850, 3860, 3861, or 3961) may count toward the major."
+    "level_or_range": null,
+    "notes": null
    },
    {
-    "name": "Requirements for the Molecular and Cellular Biology (MCB) BS degree",
+    "name": "Ecology, Evolution, and Organismal Biology",
+    "type": "depth_elective",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "BSCI 2100-2199",
+    "notes": null
+   },
+   {
+    "name": "Molecular and Cellular Biology Core",
+    "type": "depth_elective",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "BSCI 2200-2599",
+    "notes": null
+   },
+   {
+    "name": "Additional 2000-level Course",
+    "type": "depth_elective",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "2000-level",
+    "notes": null
+   },
+   {
+    "name": "Laboratory Courses",
+    "type": "depth_elective",
+    "rule": "Choose 2",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "2000-level",
+    "notes": "Includes laboratory associated with 2119"
+   },
+   {
+    "name": "Advanced Courses",
+    "type": "depth_elective",
+    "rule": "At least 3 credit hours",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "3000- or 4000-level",
+    "notes": "Excluding 4965"
+   },
+   {
+    "name": "Elective Courses",
+    "type": "elective",
+    "rule": "Additional elective courses",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "2000-, 3000-, or 4000-level",
+    "notes": null
+   },
+   {
+    "name": "Research/Independent Study",
+    "type": "project_capstone",
+    "rule": "2 credit hours",
+    "hours": null,
+    "courses": [
+     "BSCI 4965"
+    ],
+    "level_or_range": null,
+    "notes": "No more than 4 credit hours of 4965 may count toward the major"
+   },
+   {
+    "name": "Directed Readings or Research",
+    "type": "project_capstone",
+    "rule": "No more than 5 credit hours",
+    "hours": null,
+    "courses": [
+     "BSCI 3850",
+     "BSCI 3860",
+     "BSCI 3861",
+     "BSCI 3961"
+    ],
+    "level_or_range": null,
+    "notes": "Students interested in doing research should consider the BS degree."
+   },
+   {
+    "name": "Molecular and Cellular Biology BS Core",
     "type": "core",
     "rule": "Take all",
     "hours": null,
@@ -1584,11 +1726,35 @@
      "BSCI 2210",
      "BSCI 2520"
     ],
-    "level_or_range": "2000-, 3000-, or 4000-level",
-    "notes": "No more than 2 credit hours of 4965 may count toward the major. A total of no more than 7 total credit hours of directed readings or directed/independent/Honors research (3850, 3860, 3861, 3961, or 4999) may count toward the major."
+    "level_or_range": null,
+    "notes": null
    },
    {
-    "name": "Requirements for the Integrative Biology (I-Bio) BS degree",
+    "name": "Research/Laboratory Requirement (MCB)",
+    "type": "project_capstone",
+    "rule": "Choose one of the two options",
+    "hours": null,
+    "courses": [
+     "BSCI 3861",
+     "BSCI 3961",
+     "BSCI 2201L",
+     "BSCI 2210L",
+     "BSCI 4999"
+    ],
+    "level_or_range": null,
+    "notes": "6-11 credit hours of BSCI 3861 and 3961 plus 2201L or 2210L OR a minimum of 12 credit hours of BSCI 3861, 3961 and/or 4999"
+   },
+   {
+    "name": "Elective Courses (MCB)",
+    "type": "elective",
+    "rule": "Elective courses",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "2000-, 3000-, or 4000-level",
+    "notes": "A minimum of 2 credit hours must be at the 4000-level (excluding 4999). BSCI 2101 or BSCI 4101 (but not both) can be used to fulfill elective credits."
+   },
+   {
+    "name": "Integrative Biology BS Core",
     "type": "core",
     "rule": "Take all",
     "hours": null,
@@ -1600,19 +1766,50 @@
      "BSCI 1512L",
      "BSCI 2105"
     ],
-    "level_or_range": "2000-, 3000-, or 4000-level",
-    "notes": "No more than 2 credit hours of 4965 may count toward the major. A total of no more than 7 total credit hours of directed readings or directed/independent/Honors research (3850, 3860, 3861, 3961, or 4999) may count toward the major."
+    "level_or_range": null,
+    "notes": null
    },
    {
-    "name": "Requirements for Honors",
+    "name": "Additional 2000-level Courses (I-Bio)",
+    "type": "depth_elective",
+    "rule": "Choose two additional 2000-level courses",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "2000-level",
+    "notes": null
+   },
+   {
+    "name": "Research/Laboratory Requirement (I-Bio)",
+    "type": "project_capstone",
+    "rule": "Choose one of the two options",
+    "hours": null,
+    "courses": [
+     "BSCI 3861",
+     "BSCI 3961",
+     "BSCI 4999"
+    ],
+    "level_or_range": null,
+    "notes": "6-11 credit hours of BSCI 3861 and 3961 plus one laboratory course at the 2000-level (includes laboratory associated with 2119) OR a minimum of 12 credit hours of BSCI 3861, 3961, and/or 4999"
+   },
+   {
+    "name": "Elective Courses (I-Bio)",
+    "type": "elective",
+    "rule": "Elective courses",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "2000-, 3000-, or 4000-level",
+    "notes": "A minimum of 2 credit hours must be at the 4000-level (excluding 4999)"
+   },
+   {
+    "name": "Honors Requirements",
     "type": "honors",
-    "rule": "Complete all",
+    "rule": "Complete additional requirements",
     "hours": null,
     "courses": [
      "BSCI 4999"
     ],
     "level_or_range": null,
-    "notes": "Minimum cumulative GPA of 3.4 in all courses that count toward the major. Satisfactorily pursue a research project with a minimum of 8 credit hours of Honors Research (BSCI 4999) during the last two semesters and a total of 12 or more total credit hours of research."
+    "notes": "Minimum cumulative GPA of 3.4 in all courses that count toward the major; minimum of 8 credit hours of Honors Research (BSCI 4999) during the last two semesters and a total of 12 or more total credit hours of research."
    }
   ],
   "other_rules": [
@@ -1620,7 +1817,9 @@
    "Students declaring a major offered by the Department of Biological Sciences may not minor in Biological Sciences.",
    "It is strongly recommended that all students take one year of calculus or calculus/statistics, and one year of physics.",
    "Courses numbered below 1500 do not count toward the major or minor.",
-   "Either BSCI 3229 or BSCI 3270, but not both, may count toward a major or minor."
+   "Either BSCI 3229 or BSCI 3270, but not both, may count toward a major or minor.",
+   "A total of no more than 5 credit hours of directed readings or directed/independent research (3850, 3860, 3861, or 3961) may count toward the BA major.",
+   "A total of no more than 7 total credit hours of directed readings or directed/independent/Honors research (3850, 3860, 3861, 3961, or 4999) may count toward the BS major."
   ],
   "has_requirements": true,
   "subject": "biological sciences",
@@ -1632,7 +1831,7 @@
  {
   "program": "Biomedical Engineering (department overview)",
   "total_hours": "127",
-  "summary": "The B.E. in Biomedical Engineering requires a minimum of 127 credit hours, covering core courses in mathematics, science, engineering fundamentals, and specialized biomedical engineering topics, along with electives and a liberal arts core.",
+  "summary": "The B.E. in Biomedical Engineering requires a combination of core courses, electives, and liberal arts courses, totaling 127 credit hours.",
   "groups": [
    {
     "name": "Mathematics",
@@ -1697,7 +1896,7 @@
     "notes": null
    },
    {
-    "name": "Biomedical Engineering",
+    "name": "Biomedical Engineering Core",
     "type": "core",
     "rule": "Take all",
     "hours": "38",
@@ -1730,6 +1929,8 @@
     "hours": "12",
     "courses": [
      "BME 2210",
+     "BME 3860",
+     "BME 3861",
      "CHBE 4500",
      "CHBE 4800",
      "CHBE 4805",
@@ -1742,8 +1943,8 @@
      "ENVE 4610",
      "ME 2220"
     ],
-    "level_or_range": "BME courses numbered 2210 and higher",
-    "notes": "Except BME 2860 and designated sections of 3890\u20133893. Up to 6 hours total of BME 3860, 3861."
+    "level_or_range": "BME courses numbered 2210 and higher (except BME 2860 and designated sections of 3890\u20133893)",
+    "notes": "Up to 6 hours total of BME 3860, 3861 can be included."
    },
    {
     "name": "Technical Electives",
@@ -1759,7 +1960,7 @@
      "MHS 1500",
      "MHS 1600"
     ],
-    "level_or_range": "Courses numbered 2000 or higher in specified departments",
+    "level_or_range": "Courses numbered 2000 or higher in BME, CHBE, CE, CS, DF, DS, ECE, ENGM, ENVE, ME, MSE, NANO, and SC except specified exclusions",
     "notes": "Up to 3 hours of independent study courses may be taken as technical electives. Up to 6 hours of Undergraduate Research (3860, 3861) may be counted as BME electives and/or technical electives."
    },
    {
@@ -1798,17 +1999,27 @@
   "summary": "The Brazilian Studies minor requires 15 credit hours, including core courses and distribution requirements across three areas.",
   "groups": [
    {
-    "name": "Core Courses",
+    "name": "Core Course: Brazil, Past, Present, and Future or Introduction to Brazil",
     "type": "core",
-    "rule": "Take all",
-    "hours": "6",
+    "rule": "Choose 1",
+    "hours": "3",
     "courses": [
      "LACX 2101",
-     "HIST 2101",
+     "HIST 2101"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Core Course: Intermediate Portuguese",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "3",
+    "courses": [
      "PORT 2203"
     ],
     "level_or_range": null,
-    "notes": "LACX 2101 or HIST 2101; Proficiency in Portuguese can substitute PORT 2203 with approved coursework."
+    "notes": "Proficiency at the intermediate level in Portuguese can also be demonstrated through testing. If this option is exercised, students must take 3 credit hours of coursework approved by the Director of Undergraduate Studies in lieu of the 3 credit hours of PORT 2203."
    },
    {
     "name": "Distribution Requirements",
@@ -1817,25 +2028,22 @@
     "hours": "9",
     "courses": [],
     "level_or_range": null,
-    "notes": "Areas: I. Portuguese Language and Literature; II. Brazilian Society, History, and Cultures; III. Brazil in Regional and Global Context."
+    "notes": "Area I: Portuguese Language and Literature; Area II: Brazilian Society, History, and Cultures; Area III: Brazil in Regional and Global Context. Other elective courses, including special topics courses, may be counted toward the minor with the approval of the Director of Undergraduate Studies."
    },
    {
     "name": "Honors Program",
     "type": "honors",
-    "rule": "Completion of 6 credit hours in LAS 3851 and 3852, honors thesis, and oral examination",
+    "rule": "Completion of 6 credit hours in LAS 3851 and 3852; the writing of an honors thesis; and passing an oral honors examination",
     "hours": null,
     "courses": [
      "LAS 3851",
      "LAS 3852"
     ],
     "level_or_range": null,
-    "notes": "Requires a minimum 3.3 cumulative GPA and 3.3 GPA in courses counting toward the Latin American studies major."
+    "notes": "Students must have a minimum 3.3 cumulative GPA and a 3.3 GPA in courses that count toward the Latin American studies major to be accepted into the program. Interested students should consult their academic adviser during their junior year."
    }
   ],
-  "other_rules": [
-   "Proficiency in Portuguese can be demonstrated through testing.",
-   "Honors program requires consultation with an academic adviser during junior year."
-  ],
+  "other_rules": [],
   "has_requirements": true,
   "subject": "brazilian studies",
   "kind": "minor",
@@ -1846,10 +2054,10 @@
  {
   "program": "Business minor",
   "total_hours": "16.5",
-  "summary": "The undergraduate business minor requires 16.5 credit hours, including 7.5 hours of required courses, at least 6 hours from BUS pathways, and at least 3 hours from BUS pathways or business-in-society electives.",
+  "summary": "The undergraduate business minor requires 16.5 credit hours, including 7.5 hours of required courses and 9 hours of electives from specified pathways or business-in-society courses.",
   "groups": [
    {
-    "name": "Required course work",
+    "name": "Required Courses",
     "type": "core",
     "rule": "Take all",
     "hours": "7.5",
@@ -1861,10 +2069,10 @@
      "BUS 1700"
     ],
     "level_or_range": null,
-    "notes": "It is recommended that students complete these courses prior to fulfilling the elective requirement. Students may concurrently enroll in two of these courses."
+    "notes": "It is recommended that students complete these courses prior to fulfilling the elective requirement. Students may concurrently enroll in two of the five required courses."
    },
    {
-    "name": "BUS pathways",
+    "name": "BUS Pathways Electives",
     "type": "depth_elective",
     "rule": "At least 6 credit hours",
     "hours": "6",
@@ -1932,7 +2140,7 @@
     "notes": null
    },
    {
-    "name": "BUS pathways or business-in-society electives",
+    "name": "Business-in-Society Electives",
     "type": "elective",
     "rule": "At least 3 credit hours",
     "hours": "3",
@@ -1973,7 +2181,7 @@
      "SPAN 3345"
     ],
     "level_or_range": null,
-    "notes": null
+    "notes": "Courses can be selected from either the BUS pathways or the business-in-society electives."
    }
   ],
   "other_rules": [],
@@ -2100,33 +2308,27 @@
     "notes": "B.S. majors must take all electives within the chemistry department, while B.A. majors may substitute up to 6 credit hours of approved, chemistry-related coursework from their primary major."
    },
    {
-    "name": "In-Depth Chemistry Courses",
+    "name": "In-Depth Chemistry Courses for B.S. degree path",
     "type": "depth_elective",
-    "rule": "B.S.: At least 6 hours at the 4000-level or higher; B.A.: At least 6 hours at the 3000-level or higher within the chemistry department",
+    "rule": "At least 6 hours at the 4000-level or higher",
     "hours": null,
-    "courses": [
-     "CHEM 3860",
-     "CHBE 3200",
-     "CHBE 3250",
-     "CSET 3200W",
-     "CSET 3240W",
-     "CSET 3410",
-     "SCED 3320",
-     "SCED 3400",
-     "EES 3280",
-     "ENVE 4600",
-     "MATH 3120",
-     "MATH 3620",
-     "MHS 3120",
-     "NSC 3245",
-     "PSY 3630"
-    ],
+    "courses": [],
+    "level_or_range": "4000-level or higher",
+    "notes": "3 credit hours may be at the 3000-level, including introductory chemistry research (CHEM 3860)."
+   },
+   {
+    "name": "In-Depth Chemistry Courses for B.A. degree path",
+    "type": "depth_elective",
+    "rule": "At least 6 hours at the 3000-level or higher within the chemistry department",
+    "hours": null,
+    "courses": [],
     "level_or_range": "3000-level or higher",
-    "notes": "B.S. students must take at least 6 credit hours at the 4000-level or higher. B.A. students may include up to 6 credit hours of chemistry-related coursework outside the chemistry department."
+    "notes": "Up to 6 credit hours of chemistry-related coursework, at the 3000-level or higher and as appropriate for a double major, may be taken outside of the chemistry department and may include up to 3 credit hours of CHEM 3860."
    }
   ],
   "other_rules": [
-   "Program-wide rules: GPA or grade minimums, pass/fail limits, residency, double counting, declaring"
+   "Both paths towards a chemistry major at Vanderbilt University meet the guidelines for the American Chemical Society approved program of study in chemistry.",
+   "Qualified seniors interested in graduate (5000-level) courses must obtain approval from the course instructor, their adviser, and the director of graduate studies in chemistry."
   ],
   "has_requirements": true,
   "subject": "chemistry",
@@ -2188,7 +2390,7 @@
  {
   "program": "Child Development major",
   "total_hours": "120",
-  "summary": "The Child Development major requires a combination of general education, core courses, and electives to provide a comprehensive understanding of child development and its contexts.",
+  "summary": "The Child Development major requires a minimum of 120 credit hours, including a General Education Core, major core courses, and electives, with opportunities for research and an Honors Program.",
   "groups": [
    {
     "name": "General Education Core Requirements",
@@ -2197,12 +2399,12 @@
     "hours": "31",
     "courses": [],
     "level_or_range": null,
-    "notes": "Composed of required coursework from the areas of Humanities/Fine Arts, Mathematics, Science, and Social Science. A score of 5 on the AP Statistics exam will waive students from the Statistics General Education Core requirement."
+    "notes": "Composed of required coursework from Humanities/Fine Arts, Mathematics, Science, and Social Science. A score of 5 on the AP Statistics exam will waive students from the Statistics General Education Core requirement."
    },
    {
     "name": "Writing Requirement",
     "type": "writing",
-    "rule": "See the 'Writing Requirement' section of the general Peabody academic policy section of the Undergraduate Catalog.",
+    "rule": "See the 'Writing Requirement' section of the general Peabody academic policy section of the Undergraduate Catalog",
     "hours": null,
     "courses": [],
     "level_or_range": null,
@@ -2224,12 +2426,42 @@
     "hours": "21",
     "courses": [
      "PSY-PC 1250",
-     "PSY-PC 2250",
-     "PSY-PC 2257",
      "PSY-PC 2400",
-     "PSY-PC 2120",
+     "PSY-PC 2120"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Major Core: Cognitive Aspects of Human Development",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "PSY-PC 2250",
+     "PSY-PC 2257"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Major Core: Infancy or Adolescence",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
      "PSY-PC 2500",
-     "PSY-PC 2550",
+     "PSY-PC 2550"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Major Core: Methods",
+    "type": "core",
+    "rule": "Choose 2",
+    "hours": null,
+    "courses": [
      "PSY-PC 2170",
      "PSY-PC 2150",
      "PSY-PC 3722",
@@ -2246,7 +2478,7 @@
      "PSY 4999"
     ],
     "level_or_range": null,
-    "notes": "Choose one from PSY-PC 2250 or PSY-PC 2257. Choose one from PSY-PC 2500 or PSY-PC 2550. Choose two from PSY-PC 2170, PSY-PC 2150, PSY-PC 3722, PSY-PC 3724, PSY-PC 3220, PSY-PC 3860, PSY-PC 3980, PSY-PC 3981, PSY-PC 4998, PSY-PC 4999, PSY 3840, PSY 3980, PSY 4998, PSY 4999. Only 3 hours of either Directed Research or Honors Research can be applied to this requirement."
+    "notes": "Only 3 hours of either Directed Research or Honors Research can be applied to this requirement."
    },
    {
     "name": "Major Elective Area",
@@ -2267,9 +2499,10 @@
      "PSY-PC 3850",
      "PSY-PC 3860",
      "PSY-PC 3980",
-     "PSY-PC 3981",
-     "PSY-PC 4998",
-     "PSY-PC 4999",
+     "PSY 3980",
+     "PSY 3981",
+     "PSY 4998",
+     "PSY 4999",
      "SPED 2120",
      "SPED 2160",
      "SPED 2310",
@@ -2295,13 +2528,13 @@
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Overall GPA of at least 3.2 and at least a 3.2 in child development courses required to apply. Successful completion with a final GPA of at least 3.2 will receive Honors or Highest Honors in child development."
+    "notes": "Overall GPA of at least 3.2 and at least a 3.2 in child development courses required to apply. Successful completion and a final GPA of at least 3.2 will receive Honors or Highest Honors in child development."
    }
   ],
   "other_rules": [
    "Students must have an overall GPA of at least 3.2 and at least a 3.2 in child development courses to apply for the Honors Program.",
    "A score of 5 on the AP Statistics exam will waive students from the Statistics General Education Core requirement.",
-   "Only 3 hours of either Directed Research or Honors Research can be applied to the Major Core requirement.",
+   "Only 3 hours of either Directed Research or Honors Research can be applied to the Major Core Methods requirement.",
    "Only a total of 6 hours from among research/experiential courses, in any combination, may be used as elective credit within the major."
   ],
   "has_requirements": true,
@@ -2630,7 +2863,7 @@
  {
   "program": "Civil Engineering (department overview)",
   "total_hours": "125",
-  "summary": "The program provides a comprehensive education in civil engineering fundamentals, including mathematics, science, engineering design, and liberal arts, preparing students for diverse careers and advanced studies.",
+  "summary": "The program provides a broad-based education in civil and environmental engineering fundamentals, coupled with leadership, management, and communication skills, preparing students for entry-level positions and advanced study.",
   "groups": [
    {
     "name": "Mathematics",
@@ -2647,7 +2880,7 @@
     "notes": null
    },
    {
-    "name": "Basic science",
+    "name": "Basic Science",
     "type": "science",
     "rule": "Take all",
     "hours": "16",
@@ -2667,7 +2900,7 @@
    {
     "name": "Computing",
     "type": "core",
-    "rule": "Take one",
+    "rule": "Choose 1",
     "hours": "3",
     "courses": [
      "CS 1100",
@@ -2702,29 +2935,29 @@
    {
     "name": "Liberal Arts Core",
     "type": "liberal_arts_core",
-    "rule": "To be selected to fulfill the Liberal Arts Core requirements",
+    "rule": "To fulfill the Liberal Arts Core requirements listed in the Degree Programs in Engineering",
     "hours": "18",
     "courses": [],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Open electives",
+    "name": "Open Electives",
     "type": "elective",
-    "rule": "Choose courses",
+    "rule": "Choose courses totaling 6 hours",
     "hours": "6",
     "courses": [],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Technical electives",
+    "name": "Technical Electives",
     "type": "depth_elective",
-    "rule": "Choose courses",
+    "rule": "Choose courses totaling 3 hours",
     "hours": "3",
     "courses": [],
-    "level_or_range": "BME, CHBE, CE, ENVE, ECE, ME, MSE (except any course numbered 2860); MSE (except MSE 3860, 3889, 3890); ENGM 3000, 3010, 3200, 3650; CHEM 1602 and above; PHYS courses above 2000 (astronomy not accepted); MATH 2410 or 2600, and courses 2811 and above (except 3000); all CS courses 2000 and above (except 2860 4959); DS 3100, 3262",
-    "notes": "Students with an interest in Structural Engineering are encouraged to take MATH 2410 or 2600 as their technical elective."
+    "level_or_range": null,
+    "notes": "To be selected from: (a) courses in BME, CHBE, CE, ENVE, ECE, ME, MSE (except any course numbered 2860); (b) MSE (except MSE 3860, 3889, 3890); (c) ENGM 3000, 3010, 3200, 3650; (d) CHEM 1602 and above; (e) PHYS courses above 2000 (astronomy not accepted); (f) MATH 2410 or 2600, and courses 2811 and above (except 3000); (g) all CS courses 2000 and above (except 2860 4959); and (h) DS 3100, 3262. Students with an interest in Structural Engineering are encouraged to take MATH 2410 or 2600 as their technical elective."
    },
    {
     "name": "Civil Engineering Core",
@@ -2750,7 +2983,7 @@
    {
     "name": "Civil Engineering Program Electives",
     "type": "depth_elective",
-    "rule": "Choose courses",
+    "rule": "Choose courses totaling 6 hours",
     "hours": "6",
     "courses": [
      "CE 3250",
@@ -2768,7 +3001,7 @@
    {
     "name": "Civil Engineering Design Electives",
     "type": "depth_elective",
-    "rule": "Choose courses",
+    "rule": "Choose courses totaling 6 hours",
     "hours": "6",
     "courses": [
      "CE 4150",
@@ -2967,7 +3200,7 @@
  {
   "program": "Cognitive Studies major",
   "total_hours": "120",
-  "summary": "The Cognitive Studies major requires a minimum of 120 credit hours, including general education, core courses, methods of inquiry, and electives, with an emphasis on problem solving and complex decision making.",
+  "summary": "The Cognitive Studies major requires a minimum of 120 credit hours, including a core curriculum, methods of inquiry, and elective courses, with an emphasis on problem solving and complex decision making.",
   "groups": [
    {
     "name": "General Education Core Requirements",
@@ -2981,20 +3214,11 @@
    {
     "name": "Writing Requirement",
     "type": "writing",
-    "rule": "See the 'Writing Requirement' section of the general Peabody academic policy section",
+    "rule": "See the 'Writing Requirement' section",
     "hours": null,
     "courses": [],
     "level_or_range": null,
     "notes": "First-year Seminars (courses numbered 1111) may count as writing intensive courses."
-   },
-   {
-    "name": "Major Requirements",
-    "type": "core",
-    "rule": "Minimum 33 hours",
-    "hours": "33",
-    "courses": [],
-    "level_or_range": null,
-    "notes": null
    },
    {
     "name": "Major Core",
@@ -3004,14 +3228,34 @@
     "courses": [
      "PSY-PC 1205",
      "PSY-PC 1207",
+     "PSY-PC 3650"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Major Core: Psychology of Thinking or Cognitive Psychology",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
      "PSY-PC 2200",
-     "PSY-PC 3120",
-     "PSY-PC 3650",
+     "PSY-PC 3120"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Major Core: Experimental Methods or Principles of Experimental Design",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
      "PSY-PC 2170",
      "PSY 2150"
     ],
     "level_or_range": null,
-    "notes": "Choose between PSY-PC 1205 or 1207, PSY-PC 2200 or 3120, and PSY-PC 2170 or PSY 2150."
+    "notes": null
    },
    {
     "name": "Methods of Inquiry",
@@ -3079,21 +3323,24 @@
      "SPEDS 2430"
     ],
     "level_or_range": null,
-    "notes": "Any course in the Department of Psychology and Human Development (Peabody) or the Department of Psychology (A&S) not used to meet another psychology requirement can be used as an elective, except PSY-PC 1250, 2110, 3870, PSY 1200, PSY 2100. Research/experiential courses marked * may be repeated freely for elective credit toward graduation, but only a total of 6 hours from among these courses, in any combination, may be used as elective credit within the major."
+    "notes": "Any course in the Department of Psychology and Human Development (Peabody) or the Department of Psychology (A&S) that is not being used to meet another psychology requirement can be used as an elective (except PSY-PC 1250, 2110, 3870, PSY 1200, PSY 2100). Research/experiential courses marked * may be repeated freely for elective credit toward graduation. However, only a total of 6 hours from among these courses, in any combination, may be used as elective credit within the major."
    },
    {
     "name": "Honors Program",
     "type": "honors",
-    "rule": "Eligible to apply at the end of sophomore year",
+    "rule": "Eligibility and completion requirements",
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Requires an overall GPA of at least 3.2 and a 3.2 in cognitive studies courses. Successful completion and a final GPA of at least 3.2 will result in Honors or Highest Honors."
+    "notes": "Students are eligible to apply at the end of their sophomore year with a GPA of at least 3.2 overall and in cognitive studies courses. Successful completion requires a final GPA of at least 3.2."
    }
   ],
   "other_rules": [
+   "Students must take a minimum of 120 hours.",
+   "A score of 5 on the AP Statistics exam will waive the Statistics General Education Core requirement.",
    "Students are encouraged to consult their advisers about pursuing a second major or developing an area of concentration.",
-   "A score of 5 on the AP Statistics exam will serve as a pre-requisite in all places that 2110 currently serves as a pre-requisite."
+   "Only 3 hours from PSY-PC or PSY 3980, 3981, 4998, 4999 can be applied to the Methods of Inquiry requirement.",
+   "Only a total of 6 hours from research/experiential courses may be used as elective credit within the major."
   ],
   "has_requirements": true,
   "subject": "cognitive studies",
@@ -3645,7 +3892,7 @@
    {
     "name": "Advanced Concepts",
     "type": "depth_elective",
-    "rule": "Choose one",
+    "rule": "Choose 1",
     "hours": "3-4",
     "courses": [
      "CS 2281",
@@ -3662,7 +3909,7 @@
    {
     "name": "Advanced Elective",
     "type": "elective",
-    "rule": "One additional CS course",
+    "rule": "Choose 1",
     "hours": "3",
     "courses": [],
     "level_or_range": "3000-level or above",
@@ -3694,17 +3941,18 @@
      "MATH 2410",
      "MATH 2500",
      "MATH 2501",
+     "MATH 2600",
      "MATH 2810",
      "MATH 2820",
      "MATH 3640"
     ],
     "level_or_range": null,
-    "notes": "Calculus/Linear algebra sequence and Statistics/Probability requirement"
+    "notes": "Calculus/Linear algebra sequence: MATH 1300, 1301, 2300, and one of 2410 or 2600, or MATH 1300, 1301, 2500, 2501. Statistics/Probability: MATH 2810, 2820, or 3640."
    },
    {
     "name": "Science",
     "type": "science",
-    "rule": "Choose courses totaling 12 hours, including at least one laboratory course",
+    "rule": "Choose courses to total 12 hours, including at least one laboratory course",
     "hours": "12",
     "courses": [
      "BSCI 1100",
@@ -3747,11 +3995,11 @@
    {
     "name": "Liberal Arts Core",
     "type": "liberal_arts_core",
-    "rule": "Fulfill the Liberal Arts Core requirements listed in the Degree Programs in Engineering",
+    "rule": "Fulfill the Liberal Arts Core requirements",
     "hours": "18",
     "courses": [],
     "level_or_range": null,
-    "notes": null
+    "notes": "To be selected to fulfill the Liberal Arts Core requirements listed in the Degree Programs in Engineering."
    },
    {
     "name": "Computer Science Core",
@@ -3775,12 +4023,12 @@
      "CS 3250"
     ],
     "level_or_range": null,
-    "notes": "Software/Problem Solving and Hardware/Systems components"
+    "notes": "Software/Problem Solving: CS 1101 or 1104, and CS 2201 or ECE 2201, CS 3251 or ECE 3251, and CS 3270. Hardware/Systems: CS or ECE 2281, CS or ECE 2281L, CS 3281. Foundations: CS 2212, 3250."
    },
    {
     "name": "Computer Science Depth",
     "type": "depth_elective",
-    "rule": "Select 15 hours from specified courses",
+    "rule": "15 hours from specified courses",
     "hours": "15",
     "courses": [
      "CS 3860",
@@ -3806,12 +4054,12 @@
      "MATH 4620"
     ],
     "level_or_range": "3000-level or higher",
-    "notes": "A maximum of 6 hours may come from CS 3860, 3861. No more than two from MATH 3320, 3620, 4600, 4620."
+    "notes": "Except CS 3262; a maximum of 6 hours may come from CS 3860, 3861. No more than two from MATH 3320, 3620, 4600, 4620."
    },
    {
     "name": "Computer Science Project",
     "type": "project_capstone",
-    "rule": "Select one course",
+    "rule": "Choose 1",
     "hours": "3",
     "courses": [
      "CS 3862",
@@ -3841,16 +4089,16 @@
    {
     "name": "Technical Electives",
     "type": "elective",
-    "rule": "Select 6 hours from specified courses",
+    "rule": "6 hours from specified courses",
     "hours": "6",
     "courses": [],
     "level_or_range": "2000-level or higher",
-    "notes": "Except 2860 in any program, ENGM 2440, ENGM 4800, ES 2700, ES 3884, and CS courses numbered below 3000"
+    "notes": "Except 2860 in any program, ENGM 2440, ENGM 4800, ES 2700, ES 3884, and CS courses numbered below 3000; or courses numbered 2000 or higher in the College of Arts and Science listed in the mathematics and natural science (MNS) AXLE distribution requirements."
    },
    {
     "name": "Open Electives",
     "type": "elective",
-    "rule": "Select 18-20 hours",
+    "rule": "18-20 hours",
     "hours": "18-20",
     "courses": [],
     "level_or_range": null,
@@ -3870,11 +4118,11 @@
    {
     "name": "Writing Component",
     "type": "writing",
-    "rule": "Take at least one 'W'-designated course or 1111 course in the English Language",
+    "rule": "Take all",
     "hours": "3",
     "courses": [],
     "level_or_range": null,
-    "notes": "Must be included from the Liberal Arts Core, Technical Electives, or Open Electives."
+    "notes": "At least one \u201cW\u201d-designated course or 1111 course in the English Language must be included from the Liberal Arts Core, Technical Electives, or Open Electives."
    }
   ],
   "other_rules": [
@@ -4373,7 +4621,7 @@
  {
   "program": "Economics major",
   "total_hours": "33",
-  "summary": "The Economics major requires completion of at least 33 credit hours in economics courses, including specific core courses and electives, with a mathematics prerequisite.",
+  "summary": "The Economics major requires at least 33 credit hours in economics courses, including core courses, electives, and advanced-level courses.",
   "groups": [
    {
     "name": "Core Courses",
@@ -4383,51 +4631,60 @@
     "courses": [
      "ECON 1010",
      "ECON 1020",
-     "ECON 1500",
-     "ECON 1510",
      "ECON 3012",
-     "ECON 3022",
+     "ECON 3022"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Intermediate or Advanced Statistics",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "ECON 1500",
+     "ECON 1510"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Advanced Economics Courses",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
      "ECON 3032",
      "ECON 3035"
     ],
     "level_or_range": null,
-    "notes": "ECON 1500 or ECON 1510 can be substituted with MATH 2820L with MATH 2810 or MATH 2820. ECON 3032 or ECON 3035 must be taken."
+    "notes": null
    },
    {
-    "name": "Advanced Economics Courses",
+    "name": "Advanced-Level Electives",
     "type": "depth_elective",
-    "rule": "At least 9 credit hours",
+    "rule": "At least 9 hours",
     "hours": null,
     "courses": [],
-    "level_or_range": "courses numbered above 3035",
+    "level_or_range": "above ECON 3035",
     "notes": null
    },
    {
     "name": "Electives",
     "type": "elective",
-    "rule": "Electives to reach 33 credit hours",
+    "rule": "Electives to reach 33 total hours",
     "hours": null,
     "courses": [
      "ECON 1111"
     ],
     "level_or_range": null,
     "notes": "No more than 3 credit hours of independent study may be included. Undergraduate Business Minor (BUSA) elective courses do not count toward the economics major."
-   },
-   {
-    "name": "Mathematics Prerequisite",
-    "type": "math",
-    "rule": "Prerequisite for 3000-level and above courses",
-    "hours": null,
-    "courses": [
-     "MATH 1201",
-     "MATH 1301"
-    ],
-    "level_or_range": null,
-    "notes": null
    }
   ],
   "other_rules": [
-   "At least 15 credit hours that count toward the economics major must be taken at Vanderbilt."
+   "At least 15 credit hours that count toward the economics major must be taken at Vanderbilt.",
+   "MATH 1201 (or MATH 1301) is a prerequisite for Economics courses numbered 3000 and above."
   ],
   "has_requirements": true,
   "subject": "economics",
@@ -4439,7 +4696,7 @@
  {
   "program": "Economics minor",
   "total_hours": "21",
-  "summary": "The minor in economics requires 21 credit hours, including core courses and electives, with specific course and level requirements.",
+  "summary": "The minor in economics requires 21 credit hours, including core courses and electives, with specific course options and level requirements.",
   "groups": [
    {
     "name": "Core Courses",
@@ -4452,24 +4709,24 @@
      "ECON 3012"
     ],
     "level_or_range": null,
-    "notes": "ECON 1500 or ECON 1510 is required unless ECON 3032 or ECON 3035 is taken with Math 2820L and Math 2810 or Math 2820 as a prerequisite."
+    "notes": null
    },
    {
-    "name": "Mathematics Requirement",
-    "type": "math",
-    "rule": "Take one",
+    "name": "Intermediate Economics",
+    "type": "core",
+    "rule": "Choose 1",
     "hours": null,
     "courses": [
      "ECON 1500",
      "ECON 1510"
     ],
     "level_or_range": null,
-    "notes": "Students who complete either ECON 3032 or ECON 3035 with Math 2820L and Math 2810 or Math 2820 as a prerequisite need not take ECON 1500 or ECON 1510."
+    "notes": "Students who complete either ECON 3032 or ECON 3035 with MATH 2820L and MATH 2810 or MATH 2820 as a prerequisite need not take ECON 1500 or 1510."
    },
    {
     "name": "Electives",
     "type": "elective",
-    "rule": "9 credit hours of electives",
+    "rule": "9 credit hours",
     "hours": "9",
     "courses": [],
     "level_or_range": "At least one elective must be numbered above 3015",
@@ -4534,8 +4791,8 @@
      "ECON 3160",
      "RUSS 2810"
     ],
-    "level_or_range": "One must be an economics course above 3000",
-    "notes": "ECON 3012 is a prerequisite for ECON 3150, and 3160."
+    "level_or_range": "3000-level or above for one economics course",
+    "notes": "ECON 3012 is a prerequisite for ECON 3150 and 3160."
    },
    {
     "name": "Economics",
@@ -4550,8 +4807,17 @@
      "ECON 3012",
      "ECON 3022"
     ],
-    "level_or_range": "One ECON course above 3022 not included in the economic history concentration",
+    "level_or_range": null,
     "notes": "One semester of calculus is a prerequisite for ECON 1500 and 1510. MATH 1201 (or MATH 1301) is a prerequisite for Economics courses numbered 3000 and above. The following course sequences may be substituted for ECON 1500 or 1510: Option 1: MATH 2810, 2820L, and either ECON 3032 or 3035. Option 2: MATH 2820, 2820L, and either ECON 3032 or 3035. In these cases, ECON 3032 or 3035 will also count as an elective."
+   },
+   {
+    "name": "Economics Elective",
+    "type": "elective",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "above ECON 3022 not included in the economic history concentration",
+    "notes": null
    },
    {
     "name": "History",
@@ -4565,8 +4831,17 @@
      "HIST 4980",
      "HIST 4981"
     ],
-    "level_or_range": "Four other history courses",
+    "level_or_range": null,
     "notes": "No more than 3 credit hours of AP or IB credit in history courses may count toward this total. History 3000W or 3980W must be taken by the end of the junior year. 3980W is limited to second-semester juniors who have been admitted to the Honors Program. Students entering the Honors Program who have already earned credit for 3000W will receive elective credit for that course. History 4960 (prerequisite: History 3000W), or History 4980\u20134981 (available only to students in the Honors Program). At the discretion of the director of honors and the director of undergraduate studies in history, a student who has earned credit for 4980 but does not take 4981 may be considered to have fulfilled the capstone requirement for the major."
+   },
+   {
+    "name": "History Electives",
+    "type": "elective",
+    "rule": "Choose 4",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Electives may include any courses, not used to satisfy any of the above requirements, offered by the Department of History, including any courses listed for the history major."
    },
    {
     "name": "Honors Program",
@@ -4584,9 +4859,8 @@
    }
   ],
   "other_rules": [
-   "One semester of calculus is a prerequisite for ECON 1500 and 1510.",
-   "MATH 1201 (or MATH 1301) is a prerequisite for Economics courses numbered 3000 and above.",
-   "No more than 3 credit hours of AP or IB credit in history courses may count toward the history total."
+   "Candidates for teacher licensure in economics at the secondary level should refer to the chapter on Licensure for Teaching in the Peabody College section of this catalog.",
+   "Candidates for teacher licensure in history at the secondary level should refer to the chapter on Licensure for Teaching in the Peabody College section of this catalog."
   ],
   "has_requirements": true,
   "subject": "economics and history",
@@ -4665,7 +4939,7 @@
  {
   "program": "Electrical and Computer Engineering (department overview)",
   "total_hours": "122",
-  "summary": "The B.E. in Electrical and Computer Engineering requires a minimum of 122 credit hours, covering core courses in mathematics, science, engineering fundamentals, and electrical and computer engineering, alongside electives and a culminating design experience.",
+  "summary": "The B.E. in electrical and computer engineering requires a minimum of 122 hours, offering a strong interdisciplinary foundation in mathematics, physics, and computer science, alongside core studies in circuit analysis, digital systems, and electronics, with opportunities to specialize in various areas of concentration.",
   "groups": [
    {
     "name": "Mathematics",
@@ -4700,7 +4974,7 @@
      "CHEM 1602L"
     ],
     "level_or_range": null,
-    "notes": "Choose between MSE 1500, 1500L or CHEM 1602, 1602L"
+    "notes": "Choose either MSE 1500, 1500L or CHEM 1602, 1602L"
    },
    {
     "name": "Engineering Fundamentals",
@@ -4749,7 +5023,7 @@
      "ECE 3235L"
     ],
     "level_or_range": null,
-    "notes": "Choose between CS 1100, 1101, or 1104; and ECE 2201 or 2204"
+    "notes": "Choose either CS 1100, 1101, or 1104; Choose either ECE 2201 or 2204"
    },
    {
     "name": "Electrical and Computer Engineering Electives",
@@ -4776,7 +5050,7 @@
     "hours": "12",
     "courses": [],
     "level_or_range": null,
-    "notes": "Up to 6 hours may be from optional technical electives"
+    "notes": "Up to 6 hours may be taken from optional technical electives"
    },
    {
     "name": "Open Elective",
@@ -4799,15 +5073,14 @@
      "CS 3861"
     ],
     "level_or_range": "5000-level ECE or CS courses",
-    "notes": "Complete 3 hours of undergraduate research and 6 hours of ECE program elective credit"
+    "notes": "Complete 3 hours of undergraduate research with final written report and 6 hours of ECE program elective credit"
    }
   ],
   "other_rules": [
-   "Courses with associated labs require completion of both the lecture and lab portions to count as Electrical and Computer Engineering Electives.",
-   "Courses count in only one Area of Concentration; they cannot be double counted.",
    "Certain mathematics and physics courses cannot be credited to a School of Engineering degree.",
    "Double majors have special curricula that require more than 122 hours and a different distribution of electives.",
-   "Undergraduates in electrical and computer engineering, including double majors, may apply the pass/fail option only to courses taken as open electives subject to the school requirements for pass/fail."
+   "A double major in Biomedical Engineering and Electrical and Computer engineering requires a minimum of 129 semester hours.",
+   "Undergraduates in electrical and computer engineering may apply the pass/fail option only to courses taken as open electives."
   ],
   "has_requirements": true,
   "subject": "electrical and computer engineering",
@@ -4924,39 +5197,39 @@
  {
   "program": "English major",
   "total_hours": "30",
-  "summary": "The English major offers three programs of concentration: Literary Studies, Creative Writing, and Specialized Critical Studies, each requiring 30 credit hours with specific course requirements.",
+  "summary": "The English major offers three programs: Literary Studies, Creative Writing, and Specialized Critical Studies, each requiring 30 credit hours with specific focus areas.",
   "groups": [
    {
     "name": "Program I: Literary Studies",
     "type": "concentration",
-    "rule": "Complete all requirements",
+    "rule": "30 total credit hours including specific requirements",
     "hours": "30",
     "courses": [],
     "level_or_range": null,
     "notes": "A course cannot be used to satisfy more than one requirement in the major."
    },
    {
-    "name": "History (literature before 1800)",
+    "name": "History (Literary Studies)",
     "type": "core",
-    "rule": "6 credit hours",
+    "rule": "6 credit hours in History (literature before 1800)",
     "hours": "6",
     "courses": [],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Diverse Perspectives (ethnic American or Anglophone literature)",
+    "name": "Diverse Perspectives (Literary Studies)",
     "type": "core",
-    "rule": "6 credit hours",
+    "rule": "6 credit hours of Diverse Perspectives (ethnic American or Anglophone literature)",
     "hours": "6",
     "courses": [],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Electives in English",
+    "name": "Electives (Literary Studies)",
     "type": "elective",
-    "rule": "18 additional credit hours",
+    "rule": "18 additional credit hours of electives in English",
     "hours": "18",
     "courses": [],
     "level_or_range": null,
@@ -4965,7 +5238,7 @@
    {
     "name": "Program II: Creative Writing",
     "type": "concentration",
-    "rule": "Complete all requirements",
+    "rule": "30 total credit hours including specific requirements",
     "hours": "30",
     "courses": [],
     "level_or_range": null,
@@ -4974,79 +5247,79 @@
    {
     "name": "Creative Writing Workshops",
     "type": "core",
-    "rule": "12 credit hours in at least two different genres",
+    "rule": "12 credit hours of 3000-level creative writing workshops in at least two different genres",
     "hours": "12",
     "courses": [],
     "level_or_range": "3000-level",
     "notes": "Admission to these courses is by consent of instructor or based on prior coursework."
    },
    {
-    "name": "History (literature before 1800)",
+    "name": "History (Creative Writing)",
     "type": "core",
-    "rule": "3 credit hours",
+    "rule": "3 credit hours in History (literature before 1800)",
     "hours": "3",
     "courses": [],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Diverse Perspectives (ethnic American or Anglophone literature)",
+    "name": "Diverse Perspectives (Creative Writing)",
     "type": "core",
-    "rule": "3 credit hours",
+    "rule": "3 credit hours in Diverse Perspectives (ethnic American or Anglophone literature)",
     "hours": "3",
     "courses": [],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Electives in English",
+    "name": "Electives (Creative Writing)",
     "type": "elective",
-    "rule": "12 credit hours",
+    "rule": "12 credit hours from courses that count toward the English major",
     "hours": "12",
     "courses": [],
     "level_or_range": null,
-    "notes": "May include one additional creative writing workshop or one course in another discipline with approval of the Director of Undergraduate Studies."
+    "notes": "May include one additional creative writing workshop or one course in another discipline with approval."
    },
    {
     "name": "Program III: Specialized Critical Studies",
     "type": "concentration",
-    "rule": "Complete all requirements",
+    "rule": "30 total credit hours including specific requirements",
     "hours": "30",
     "courses": [],
     "level_or_range": null,
     "notes": "A course cannot be used to satisfy more than one requirement in the major, except that courses in the Specialization may also count toward either 'History' or 'Diverse Perspective', provided the student completes 30 distinct credit hours within the major."
    },
    {
-    "name": "Specialized Course of Study",
+    "name": "Specialization",
     "type": "concentration",
-    "rule": "12 credit hours concentrated in a particular area",
+    "rule": "12 credit hours of course work concentrated in a particular area",
     "hours": "12",
     "courses": [],
     "level_or_range": null,
     "notes": "Up to 9 credit hours may be taken in courses from other departments relevant to the concentration."
    },
    {
-    "name": "History (literature before 1800)",
+    "name": "History (Specialized Critical Studies)",
     "type": "core",
-    "rule": "6 credit hours",
+    "rule": "6 credit hours in History (literature before 1800)",
     "hours": "6",
     "courses": [],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Diverse Perspectives (ethnic American or Anglophone literature)",
+    "name": "Diverse Perspectives (Specialized Critical Studies)",
     "type": "core",
-    "rule": "6 credit hours",
+    "rule": "6 credit hours in Diverse Perspectives (ethnic American or Anglophone literature)",
     "hours": "6",
     "courses": [],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Electives in English",
+    "name": "Electives (Specialized Critical Studies)",
     "type": "elective",
-    "rule": "6 credit hours",
+    "rule": "6 credit hours from any of the courses that count toward the English major",
     "hours": "6",
     "courses": [],
     "level_or_range": null,
@@ -5145,7 +5418,7 @@
  {
   "program": "Environmental Engineering (department overview)",
   "total_hours": "121",
-  "summary": "The B.E. in Environmental Engineering requires a combination of core courses, electives, and a senior design project to prepare students for various careers and further education.",
+  "summary": "The B.E. in Environmental Engineering requires foundational courses in mathematics, science, and engineering, along with specialized courses in environmental engineering, culminating in a senior design project.",
   "groups": [
    {
     "name": "Mathematics",
@@ -5162,7 +5435,7 @@
     "notes": null
    },
    {
-    "name": "Basic science",
+    "name": "Basic Science",
     "type": "science",
     "rule": "Take all",
     "hours": "18",
@@ -5234,7 +5507,7 @@
    },
    {
     "name": "Environmental Engineering Program Electives",
-    "type": "depth_elective",
+    "type": "elective",
     "rule": "Choose 2",
     "hours": "6",
     "courses": [
@@ -5286,10 +5559,10 @@
     "hours": "18",
     "courses": [],
     "level_or_range": null,
-    "notes": null
+    "notes": "See Degree Programs in Engineering for specific requirements"
    },
    {
-    "name": "Global Perspective electives",
+    "name": "Global Perspective Electives",
     "type": "elective",
     "rule": "At least 6 hours",
     "hours": "6",
@@ -5319,7 +5592,7 @@
     "notes": "Must be included in the Liberal Arts Core or Open Electives"
    },
    {
-    "name": "Data science electives",
+    "name": "Data Science Electives",
     "type": "elective",
     "rule": "Choose 2",
     "hours": "6",
@@ -5343,18 +5616,16 @@
     "notes": null
    },
    {
-    "name": "Technical electives",
+    "name": "Technical Electives",
     "type": "elective",
     "rule": "Choose 1",
     "hours": "3",
-    "courses": [
-     "MSE 1500"
-    ],
-    "level_or_range": "Courses numbered 2000 or above in BME, CHBE, CE, CS, DF, ECE, ENVE, ME, MSE, ENGM 3000, 3010, 3200, 3650",
-    "notes": "Except any course numbered 2860; courses numbered 1500 or above in the College of Arts and Science listed in the mathematics and natural sciences (MNS) AXLE distribution category; MATH 2410, 2600, and courses 2811 and above (except 3000)"
+    "courses": [],
+    "level_or_range": "Courses numbered 2000 or above in BME, CHBE, CE, CS, DF, ECE, ENVE, ME, MSE, and ENGM 3000, 3010, 3200, 3650, except any course numbered 2860; courses numbered 1500 or above in the College of Arts and Science listed in the mathematics and natural sciences (MNS) AXLE distribution category; MATH 2410, 2600, and courses 2811 and above (except 3000)",
+    "notes": null
    },
    {
-    "name": "Open electives",
+    "name": "Open Electives",
     "type": "elective",
     "rule": "Choose freely",
     "hours": "6",
@@ -5366,7 +5637,8 @@
   "other_rules": [
    "Undergraduates in environmental engineering may apply the pass/fail option only to courses taken as open or liberal arts core electives, subject to the school requirements for pass/fail.",
    "A double major in Environmental Engineering and Chemical Engineering requires a minimum of 137 semester hours.",
-   "Undergraduates in the double major may apply the pass/fail option only to courses taken as open electives, subject to the school requirements for pass/fail."
+   "The environmental engineering honors program requires a minimum overall GPA of 3.5.",
+   "Transfer students may be considered for admission to the honors program after completing one semester at Vanderbilt."
   ],
   "has_requirements": true,
   "subject": "environmental engineering",
@@ -5378,7 +5650,7 @@
  {
   "program": "Environmental Sociology major",
   "total_hours": "33-36",
-  "summary": "The program consists of foundation courses in sociology and environmental sciences, research skills, and environmental sociology courses, with an optional honors research track.",
+  "summary": "The Environmental Sociology major consists of foundation courses in sociology and environmental sciences, research skills, and environmental sociology courses, with an optional honors research track.",
   "groups": [
    {
     "name": "Foundation Courses in Sociology",
@@ -5392,7 +5664,7 @@
      "SOC 3001"
     ],
     "level_or_range": null,
-    "notes": "Choose between SOC 1020, SOC 1020W, or SOC 1030"
+    "notes": "SOC 1020, 1020W, or 1030"
    },
    {
     "name": "Foundation Courses in Environmental Sciences",
@@ -5414,7 +5686,7 @@
      "EES 4820"
     ],
     "level_or_range": null,
-    "notes": "At least one course must address climate-related issues. Some courses require prerequisites or permission."
+    "notes": "At least one course must address climate-related issues. EES 1111 requires permission. Some courses have prerequisites."
    },
    {
     "name": "Research Skills",
@@ -5427,12 +5699,12 @@
      "HOD 2500"
     ],
     "level_or_range": null,
-    "notes": "SOC 2100 or another approved statistics course, followed by or concurrent with SOC 2002; HOD 2500 for HOD majors."
+    "notes": "SOC 2100 or other approved statistics course, followed by or concurrent with SOC 2002. HOD 2500 for HOD majors."
    },
    {
     "name": "Environmental Sociology",
     "type": "concentration",
-    "rule": "Choose 15 credit hours",
+    "rule": "Choose 5",
     "hours": "15",
     "courses": [
      "SOC 3311",
@@ -5457,12 +5729,12 @@
     "name": "Honors Research Track in Environmental Sociology",
     "type": "honors",
     "rule": "Complete additional requirements",
-    "hours": "36",
+    "hours": "3-12",
     "courses": [
      "SOC 4981"
     ],
     "level_or_range": null,
-    "notes": "Requires a minimum GPA of 3.3. Includes two semesters of SOC 4981 and a successful thesis defense."
+    "notes": "Requires a minimum GPA of 3.3. Includes two semesters of SOC 4981 and successful thesis defense. Additional semesters of SOC 4981 may be taken."
    }
   ],
   "other_rules": [
@@ -5482,7 +5754,7 @@
  {
   "program": "European Studies (department overview)",
   "total_hours": "27-30",
-  "summary": "The program offers a combination of required courses, electives, and language requirements to prepare students for careers in international law, politics, and diplomacy, with opportunities for study abroad and participation in events.",
+  "summary": "The program offers a combination of required courses, electives, and language requirements to prepare students for careers in international law, politics, diplomacy, and cultural administration.",
   "groups": [
    {
     "name": "Required Courses",
@@ -5501,7 +5773,7 @@
    {
     "name": "Foreign Language Requirement",
     "type": "other",
-    "rule": "Satisfy in one of the specified ways",
+    "rule": "Satisfy one of the listed options",
     "hours": "6",
     "courses": [],
     "level_or_range": null,
@@ -5510,7 +5782,7 @@
    {
     "name": "Independent Study",
     "type": "project_capstone",
-    "rule": "Complete EUS 3850",
+    "rule": "Take all",
     "hours": "3",
     "courses": [
      "EUS 3850"
@@ -5521,7 +5793,7 @@
    {
     "name": "Electives",
     "type": "elective",
-    "rule": "Choose four courses",
+    "rule": "Choose 4",
     "hours": "12",
     "courses": [],
     "level_or_range": "usually above EUS 2204",
@@ -7088,16 +7360,26 @@
    {
     "name": "Required Courses",
     "type": "core",
-    "rule": "Take all",
-    "hours": "9",
+    "rule": "Choose 1",
+    "hours": null,
     "courses": [
      "RLST 1500",
-     "HIST 1190",
+     "HIST 1190"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Required Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
      "RLST 4554",
      "ARA 1102"
     ],
     "level_or_range": null,
-    "notes": "Students may substitute two semesters of Persian, Hindu/Urdu, or Persian to satisfy the third requirement. ARA 1101 does not count toward the minor."
+    "notes": "Students may substitute two semesters of Persian, Hindu/Urdu, or Persian to satisfy the third requirement."
    },
    {
     "name": "Elective Courses",
@@ -7106,7 +7388,7 @@
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Up to 8 credit hours of Arabic language may count toward the minor."
+    "notes": "Up to 8 credit hours of Arabic language may count toward the minor; however, ARA 1101 does not count toward the minor."
    }
   ],
   "other_rules": [],
@@ -7226,12 +7508,12 @@
     "hours": "6",
     "courses": [],
     "level_or_range": null,
-    "notes": "ITALIAN 2203 is required; choose either ITALIAN 2501W or ITALIAN 2614. ITA 1101, 1102, 1103 do not count toward the minor."
+    "notes": "ITALIAN 2501W or ITALIAN 2614 can be taken as a required course; ITALIAN 1101, 1102, 1103 do not count toward the minor."
    },
    {
     "name": "Elective courses",
     "type": "elective",
-    "rule": "Choose courses totaling 9 credit hours",
+    "rule": "Choose 9 credit hours",
     "hours": "9",
     "courses": [],
     "level_or_range": null,
@@ -8399,12 +8681,12 @@
  {
   "program": "Mechanical Engineering (department overview)",
   "total_hours": "126",
-  "summary": "The B.E. in mechanical engineering provides a broad-based engineering education with opportunities for specialization through elective courses.",
+  "summary": "The B.E. in Mechanical Engineering provides a broad-based engineering education with opportunities for specialization through elective courses.",
   "groups": [
    {
     "name": "Mathematics",
     "type": "math",
-    "rule": "Take all required courses and one elective",
+    "rule": "Take all",
     "hours": "17",
     "courses": [
      "MATH 1300",
@@ -8456,21 +8738,21 @@
      "MSE 2205"
     ],
     "level_or_range": null,
-    "notes": "Choose one from CS 1100, 1101, 1103, 1104, or DS 1100"
+    "notes": "Choose one from CS 1100, CS 1101, CS 1103, CS 1104, or DS 1100"
    },
    {
     "name": "Liberal Arts Core",
     "type": "liberal_arts_core",
-    "rule": "To fulfill the Liberal Arts Core requirements",
+    "rule": "To be selected",
     "hours": "18",
     "courses": [],
     "level_or_range": null,
-    "notes": "Refer to the Degree Programs in Engineering for specific requirements"
+    "notes": "To fulfill the Liberal Arts Core requirements listed in the Degree Programs in Engineering"
    },
    {
     "name": "Open Electives",
     "type": "elective",
-    "rule": "Choose any",
+    "rule": "Take all",
     "hours": "6",
     "courses": [],
     "level_or_range": null,
@@ -8498,12 +8780,12 @@
    },
    {
     "name": "Technical Electives",
-    "type": "depth_elective",
+    "type": "elective",
     "rule": "Choose 9 hours",
     "hours": "9",
     "courses": [],
     "level_or_range": "At least 3 hours must be numbered 2000 or above",
-    "notes": "Courses must be from approved list; see catalog for exclusions"
+    "notes": "Courses must be from approved list and designated as Mathematics and Natural Sciences (MNS) in the AXLE curriculum"
    },
    {
     "name": "Professional (ME) Depth",
@@ -8512,13 +8794,21 @@
     "hours": "9",
     "courses": [],
     "level_or_range": null,
-    "notes": "No more than 6 hours of ME 3850 and 3860 combined; no one-credit-hour ME course except 3841 can be used"
+    "notes": "No more than 6 hours of ME 3850 and ME 3860 combined can be credited; no one-credit-hour ME course except ME 3841 can be used as a mechanical engineering elective"
+   },
+   {
+    "name": "Writing",
+    "type": "writing",
+    "rule": "Take 1",
+    "hours": "3",
+    "courses": [],
+    "level_or_range": null,
+    "notes": "At least one 'W'-designated course in the English language must be included on a graded basis"
    }
   ],
   "other_rules": [
-   "At least one 'W'-designated course (3 hours) in the English language must be included on a graded basis.",
-   "Undergraduates may apply the pass/fail option only to non-departmental courses taken as open electives, technical electives, or part of the liberal arts core, subject to school requirements for pass/fail.",
-   "Certain mathematics and physics courses cannot be credited to a School of Engineering degree. See the Degree Programs in Engineering/Mathematics and Physics section of the catalog for more information."
+   "Undergraduates in mechanical engineering may apply the pass/fail option only to non-departmental courses taken as open electives, technical electives, or part of the liberal arts core, subject to the school requirements for pass/fail.",
+   "Certain mathematics and physics courses cannot be credited to a School of Engineering degree. Please see the Degree Programs in Engineering/Mathematics and Physics section of the catalog for more information."
   ],
   "has_requirements": true,
   "subject": "mechanical engineering",
@@ -8870,12 +9160,22 @@
     "hours": "9",
     "courses": [
      "NANO 3000",
-     "PHYS 2660",
+     "PHYS 2660"
+    ],
+    "level_or_range": null,
+    "notes": "Includes either CHEM 2610 or CHBE 4840."
+   },
+   {
+    "name": "Nano Core: Chemistry or Chemical Engineering",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
      "CHEM 2610",
      "CHBE 4840"
     ],
     "level_or_range": null,
-    "notes": "Choose either CHEM 2610 or CHBE 4840."
+    "notes": null
    },
    {
     "name": "Elective courses",
@@ -8911,12 +9211,10 @@
      "PHYS 3640"
     ],
     "level_or_range": null,
-    "notes": null
+    "notes": "Courses taken to satisfy relevant degree requirements for majors in the College of Arts and Science and the School of Engineering may also be counted toward fulfilling the minor."
    }
   ],
-  "other_rules": [
-   "Courses taken to satisfy relevant degree requirements for majors in the College of Arts and Science and the School of Engineering may also be counted toward fulfilling the minor."
-  ],
+  "other_rules": [],
   "has_requirements": true,
   "subject": "nanoscience and nanotechnology",
   "kind": "minor",
@@ -9051,9 +9349,40 @@
   "summary": "The neuroscience major consists of 38 credit hours, including 8 credit hours of organic chemistry and 30 credit hours of neuroscience and related courses, with additional introductory courses in math, statistics or computer science, biology, and physics.",
   "groups": [
    {
-    "name": "Required Math and Science Courses",
-    "type": "math",
+    "name": "Required Math and Science Courses: Biological Sciences",
+    "type": "science",
     "rule": "Take all",
+    "hours": "8",
+    "courses": [
+     "BSCI 1510",
+     "BSCI 1511",
+     "BSCI 1510L",
+     "BSCI 1511L",
+     "BSCI 1512L"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Required Math and Science Courses: Chemistry",
+    "type": "science",
+    "rule": "Take all",
+    "hours": "8",
+    "courses": [
+     "CHEM 2211",
+     "CHEM 2221",
+     "CHEM 2212",
+     "CHEM 2222",
+     "CHEM 2221L",
+     "CHEM 2222L"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Required Math and Science Courses: Mathematics, Statistics, Computer Science",
+    "type": "math",
+    "rule": "Choose 2",
     "hours": "6\u20138",
     "courses": [
      "MATH 1100",
@@ -9069,25 +9398,14 @@
      "CS 1104"
     ],
     "level_or_range": null,
-    "notes": "Choose one course from MATH 1100, 1200, or 1300; and one from MATH 1201, 1301, BSCI 3270, PSY 2100, PSY-PC 2110, CS 1101, 1103, or 1104."
+    "notes": null
    },
    {
-    "name": "Required Math and Science Courses",
+    "name": "Required Math and Science Courses: Physics",
     "type": "science",
     "rule": "Take all",
-    "hours": "24",
+    "hours": "8",
     "courses": [
-     "BSCI 1510",
-     "BSCI 1511",
-     "BSCI 1510L",
-     "BSCI 1511L",
-     "BSCI 1512L",
-     "CHEM 2211",
-     "CHEM 2221",
-     "CHEM 2212",
-     "CHEM 2222",
-     "CHEM 2221L",
-     "CHEM 2222L",
      "PHYS 1501",
      "PHYS 1601",
      "PHYS 2051",
@@ -9101,10 +9419,10 @@
      "PHYS 1602L"
     ],
     "level_or_range": null,
-    "notes": "Biological Sciences: BSCI 1510, 1511, 1510L, and either 1511L or 1512L. Chemistry: CHEM 2211 or 2221; CHEM 2212 or 2222; and CHEM 2221L and 2222L. Physics: PHYS 1501, 1601 or 2051; PHYS 1502, 1602 or 2053; PHYS 1501L, 1601L or 2052; and PHYS 1502L, 1602L, or 2054."
+    "notes": null
    },
    {
-    "name": "Neuroscience Courses",
+    "name": "Neuroscience Courses: Introduction to Neuroscience",
     "type": "core",
     "rule": "Take all",
     "hours": "3",
@@ -9112,12 +9430,12 @@
      "NSC 1400"
     ],
     "level_or_range": null,
-    "notes": "Introduction to Neuroscience"
+    "notes": "NSC 1400 was formerly NSC 2201"
    },
    {
-    "name": "Neuroscience Courses",
+    "name": "Neuroscience Courses: Cellular and Molecular Neuroscience",
     "type": "depth_elective",
-    "rule": "Choose courses totaling 6 credit hours",
+    "rule": "Choose 2",
     "hours": "6",
     "courses": [
      "BSCI 3252",
@@ -9132,12 +9450,12 @@
      "NSC 3891"
     ],
     "level_or_range": null,
-    "notes": "Cellular and Molecular Neuroscience"
+    "notes": "NSC 2235 was formerly NSC 3235, NSC 2260 was formerly NSC 3260, NSC 2269 was formerly NSC 3269"
    },
    {
-    "name": "Neuroscience Courses",
+    "name": "Neuroscience Courses: Systems, Integrative, and Cognitive Neuroscience",
     "type": "depth_elective",
-    "rule": "Choose courses totaling 6 credit hours",
+    "rule": "Choose 2",
     "hours": "6",
     "courses": [
      "BSCI 3230",
@@ -9165,7 +9483,7 @@
      "PSY-PC 3190"
     ],
     "level_or_range": null,
-    "notes": "Systems, Integrative, and Cognitive Neuroscience"
+    "notes": null
    },
    {
     "name": "Neuroscience Laboratory",
@@ -9222,7 +9540,7 @@
      "NSC 4999"
     ],
     "level_or_range": null,
-    "notes": "NSC 3863 or NSC 4999 may be used to count for one elective course."
+    "notes": "NSC 3863 or NSC 4999 may be used to count for one elective course"
    },
    {
     "name": "Related Course Electives",
@@ -9260,25 +9578,25 @@
      "PSY 3810"
     ],
     "level_or_range": null,
-    "notes": "One course not used to satisfy the Required Math and Science course requirement above."
+    "notes": "One course not used to satisfy the Required Math and Science course requirement above"
    },
    {
     "name": "Honors Program",
     "type": "honors",
     "rule": "Optional",
-    "hours": "6",
+    "hours": null,
     "courses": [
      "NSC 3863",
      "NSC 3864",
      "NSC 4999"
     ],
     "level_or_range": null,
-    "notes": "Requires a cumulative GPA of 3.3 and a GPA of 3.3 in courses counting toward the neuroscience major. Honors candidates must complete at least 6 hours of advanced research course work. Three of these research-credit hours may count toward neuroscience elective course work. Includes writing an honors thesis, presenting it, and passing an oral examination."
+    "notes": "Requires a cumulative GPA of 3.3 and a GPA of 3.3 in courses counting toward the neuroscience major. Honors candidates must complete at least 6 hours of advanced research course work. Three of these research-credit hours may count toward neuroscience elective course work. An honors thesis and oral examination are required."
    }
   ],
   "other_rules": [
    "Students seeking a second major within the College of Arts and Science may count a maximum of 6 credit hours of 2000-or-higher-level course work to meet the requirements of both majors.",
-   "Excluding research credit (3861, 3862, 3863, 3864, and 4999), the neuroscience and related courses must be drawn from at least two departments or programs."
+   "Excluding research credit (NSC 3861, 3862, 3863, 3864, and 4999), the neuroscience and related courses must be drawn from at least two departments or programs."
   ],
   "has_requirements": true,
   "subject": "neuroscience",
@@ -9291,13 +9609,13 @@
  },
  {
   "program": "Neuroscience minor",
-  "total_hours": 18,
+  "total_hours": "18",
   "summary": "This program provides a foundation of knowledge in neuroscience with courses from at least 3 different departments or programs.",
   "groups": [
    {
     "name": "Prerequisites",
     "type": "science",
-    "rule": "Complete all",
+    "rule": "Take all",
     "hours": null,
     "courses": [
      "CHEM 1601",
@@ -9309,7 +9627,7 @@
      "BSCI 1512L"
     ],
     "level_or_range": null,
-    "notes": "Students must complete either BSCI 1511L or BSCI 1512L."
+    "notes": "Students must complete these prerequisites before starting the minor."
    },
    {
     "name": "Core Course",
@@ -9320,13 +9638,13 @@
      "NSC 1400"
     ],
     "level_or_range": null,
-    "notes": "NSC 1400 was formerly NSC 2201."
+    "notes": "NSC 1400 was formerly known as NSC 2201."
    },
    {
     "name": "Statistics/Computer Science",
     "type": "elective",
     "rule": "Choose 1",
-    "hours": 3,
+    "hours": "3",
     "courses": [
      "BSCI 3270",
      "PSY 2100",
@@ -9342,7 +9660,7 @@
     "name": "Cellular and Molecular Neuroscience",
     "type": "depth_elective",
     "rule": "Choose courses totaling 6 credit hours",
-    "hours": 6,
+    "hours": "6",
     "courses": [],
     "level_or_range": null,
     "notes": "Courses must be chosen from the list designated as 'Cellular and Molecular Neuroscience'."
@@ -9351,7 +9669,7 @@
     "name": "Systems, Integrative and Cognitive Neuroscience",
     "type": "depth_elective",
     "rule": "Choose courses totaling 6 credit hours",
-    "hours": 6,
+    "hours": "6",
     "courses": [],
     "level_or_range": null,
     "notes": "Courses must be chosen from the list designated as 'Systems, Integrative and Cognitive Neuroscience'."
@@ -9699,12 +10017,12 @@
  {
   "program": "Physics (department overview)",
   "total_hours": null,
-  "summary": "The program includes core courses, laboratory work, electives, a capstone project, and options for honors and teaching licensure.",
+  "summary": "The Physics program includes core courses, laboratory work, electives, and a capstone project, with options for honors and teacher licensure.",
   "groups": [
    {
     "name": "Core courses covering the major subdisciplines of physics",
     "type": "core",
-    "rule": "Students must complete six of the following",
+    "rule": "Choose 6",
     "hours": "18",
     "courses": [
      "PHYS 2255",
@@ -9720,8 +10038,8 @@
    {
     "name": "Laboratory work",
     "type": "core",
-    "rule": "Complete one of the sequences",
-    "hours": "3\u20134",
+    "rule": "Choose a or b",
+    "hours": "3-4",
     "courses": [
      "PHYS 1912L",
      "PHYS 2255L",
@@ -9732,7 +10050,7 @@
      "PHYS 1602L"
     ],
     "level_or_range": null,
-    "notes": "AP credit cannot be used to satisfy this requirement."
+    "notes": "Students may not use AP credit to satisfy any portion of the laboratory sequence requirement."
    },
    {
     "name": "Electives",
@@ -9741,12 +10059,12 @@
     "hours": "9",
     "courses": [],
     "level_or_range": "2000-level or higher PHYS or ASTR courses",
-    "notes": "Research hours (3850, 3851, 4998) do not count. Other relevant courses may count with approval."
+    "notes": "Research hours (3850, 3851, 4998) do not count. Other relevant courses may count as electives with approval."
    },
    {
     "name": "Capstone",
     "type": "project_capstone",
-    "rule": "Complete all",
+    "rule": "10 credit hours",
     "hours": "10",
     "courses": [
      "PHYS 3790",
@@ -9755,7 +10073,7 @@
      "PHYS 4998"
     ],
     "level_or_range": null,
-    "notes": "6 credit hours of research required, can be across two or more semesters. Research in other departments is allowed with approval."
+    "notes": "6 credit hours of research taken across two or more semesters. Physics-related research in other departments is permitted with approval."
    },
    {
     "name": "Honors Program",
@@ -9770,11 +10088,11 @@
      "PHYS 4998"
     ],
     "level_or_range": null,
-    "notes": "Requires a two-page research proposal, minimum GPA, 6 credit hours in research, a senior thesis, and an oral examination."
+    "notes": "Requires a two-page research proposal, minimum GPA, 6 credit hours in research classes, a senior thesis, and an oral honors examination."
    }
   ],
   "other_rules": [
-   "Candidates for teacher licensure must take the basic physics major with requisite education courses.",
+   "Candidates for teacher licensure in physics at the secondary level may qualify by taking the basic physics major together with requisite education courses.",
    "To graduate with honors, a student must have at least a 3.000 cumulative GPA and a 3.300 GPA in courses that count toward the major."
   ],
   "has_requirements": true,
@@ -10394,22 +10712,32 @@
  },
  {
   "program": "Psychology major",
-  "total_hours": "36 for General Program, 42 for Honors Program",
-  "summary": "The Psychology major at Vanderbilt requires core courses, distribution courses, electives, and a comprehensive exam, with an optional Honors Program for research and thesis work.",
+  "total_hours": "36",
+  "summary": "The Psychology major requires core courses, distribution courses, and electives, with an optional honors program for qualified students.",
   "groups": [
    {
-    "name": "General Program",
+    "name": "General Program Core",
     "type": "core",
     "rule": "Take all",
-    "hours": "36",
+    "hours": null,
     "courses": [
      "PSY 1200",
-     "PSY 2100",
-     "PSY-PC 2110",
      "PSY 2150"
     ],
     "level_or_range": null,
-    "notes": "PSY 2100 or PSY-PC 2110 (Peabody)"
+    "notes": null
+   },
+   {
+    "name": "General Program Core: Statistics",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "PSY 2100",
+     "PSY-PC 2110"
+    ],
+    "level_or_range": null,
+    "notes": "PSY-PC 2110 is a Peabody course"
    },
    {
     "name": "Distribution Courses",
@@ -10425,7 +10753,7 @@
      "PSY-PC 1250"
     ],
     "level_or_range": null,
-    "notes": "Courses provide grounding in core content areas of psychological science."
+    "notes": "Courses provide grounding in core content areas of psychological science"
    },
    {
     "name": "Psychology Electives",
@@ -10434,41 +10762,61 @@
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Any course in the Department of Psychology (A&S) or the Department of Psychology and Human Development (Peabody) not used to meet another requirement."
+    "notes": "Any course in the Department of Psychology (A&S) or the Department of Psychology and Human Development (Peabody) that is not being used to meet another psychology requirement"
    },
    {
-    "name": "Honors Program",
+    "name": "Honors Program Core",
     "type": "honors",
     "rule": "Take all",
-    "hours": "42",
+    "hours": null,
     "courses": [
      "PSY 1200",
-     "PSY 2100",
-     "PSY-PC 2110",
      "PSY 2150",
-     "PSY 3980",
-     "PSY 3981",
-     "PSY 4998",
      "PSY 4999"
     ],
     "level_or_range": null,
-    "notes": "PSY 2100 or PSY-PC 2110 (Peabody); 2 or all 3 of PSY 3980, 3981, and 4998; additional elective if only two semesters of PSY 3980, 3981, and 4998 are taken."
+    "notes": "PSY 4999 is mandatory for honors"
    },
    {
-    "name": "Honors Program Electives",
-    "type": "elective",
+    "name": "Honors Program Core: Statistics",
+    "type": "honors",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "PSY 2100",
+     "PSY-PC 2110"
+    ],
+    "level_or_range": null,
+    "notes": "PSY-PC 2110 is a Peabody course"
+   },
+   {
+    "name": "Honors Research",
+    "type": "honors",
+    "rule": "Choose 2 or all 3",
+    "hours": null,
+    "courses": [
+     "PSY 3980",
+     "PSY 3981",
+     "PSY 4998"
+    ],
+    "level_or_range": null,
+    "notes": "Students who only take two semesters will need an additional elective to fulfill 42 credit hours"
+   },
+   {
+    "name": "Honors Psychology Electives",
+    "type": "honors",
     "rule": "Choose 3",
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Additional elective required if only two semesters of PSY 3980, 3981, and 4998 are taken."
+    "notes": "Any course in the Department of Psychology (A&S) or the Department of Psychology and Human Development (Peabody) that is not being used to meet another psychology requirement"
    }
   ],
   "other_rules": [
-   "Comprehensive exam required during senior year.",
-   "Honors Program applicants need a cumulative GPA of at least 3.3 overall and in psychology courses.",
-   "Honors Program requires a faculty mentor and application at the end of sophomore year.",
-   "Successful completion of Honors Program with a GPA of 3.3 or higher results in honors or highest honors."
+   "Students must take a comprehensive exam during their senior year.",
+   "Applicants to the Honors Program must have a cumulative GPA of at least 3.3 overall and in all courses that count toward the psychology major.",
+   "Students must find a faculty mentor to sponsor them in the Honors Program.",
+   "Students who complete the Honors Program successfully and have a final cumulative and major GPA of 3.3 or higher will receive honors or highest honors in psychology."
   ],
   "has_requirements": true,
   "subject": "psychology",
@@ -10489,12 +10837,22 @@
     "hours": null,
     "courses": [
      "PSY 1200",
-     "PSY 2100",
-     "PSY-PC 2110",
      "PSY 2150"
     ],
     "level_or_range": null,
-    "notes": "PSY 2100 or PSY-PC 2110 (Peabody) can be taken."
+    "notes": "PSY 1200 (or 1111, sections 1, 2, and 3) is prerequisite for all other psychology courses except 1111."
+   },
+   {
+    "name": "Statistics Requirement",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "PSY 2100",
+     "PSY-PC 2110"
+    ],
+    "level_or_range": null,
+    "notes": null
    },
    {
     "name": "Distribution Courses",
@@ -10503,7 +10861,7 @@
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Courses must be from the list of Distribution Courses specified for the major."
+    "notes": null
    },
    {
     "name": "Psychology Elective",
@@ -10516,7 +10874,6 @@
    }
   ],
   "other_rules": [
-   "PSY 1200 (or 1111, sections 1, 2, and 3) is prerequisite for all other psychology courses except 1111.",
    "Credit cannot be earned for both PSY 1200 and PSY 1111 \u2013 01, 02, or 03.",
    "PSY 1111 \u2013 sections 4 and higher \u2013 do not replace PSY 1200 as a prerequisite for all 2000-level courses in psychology and may be taken in conjunction with PSY 1200."
   ],
@@ -10859,7 +11216,7 @@
  {
   "program": "Russian Studies minor",
   "total_hours": "17",
-  "summary": "The Russian Studies minor requires 17 credit hours, including core courses, an English-language course, and electives.",
+  "summary": "The Russian Studies minor requires a minimum of 17 credit hours, including core courses, an English-language course, and elective courses with options for study abroad or courses from other institutions.",
   "groups": [
    {
     "name": "Core Courses",
@@ -10871,7 +11228,7 @@
      "RUSS 1102"
     ],
     "level_or_range": null,
-    "notes": "Placement exams are offered for RUSS 1101 and/or 1102."
+    "notes": "Placement exams will be offered for RUSS 1101 and/or 1102."
    },
    {
     "name": "English-language Course",
@@ -10900,10 +11257,10 @@
      "RUSS 4999"
     ],
     "level_or_range": null,
-    "notes": "Must be an English-language course with the RUSS subject code."
+    "notes": "One English-language course with the RUSS subject code is required."
    },
    {
-    "name": "Electives",
+    "name": "Elective Courses",
     "type": "elective",
     "rule": "Choose courses to fulfill remaining 6 credit hours",
     "hours": "6",
@@ -10964,10 +11321,69 @@
     "notes": "CS 2201 or ECE 2201 may be substituted for CS 2204 or ECE 2204 with the approval of a program director."
    },
    {
-    "name": "Elective Courses",
+    "name": "Elective Courses: Mathematical, Quantitative, and Data Science Methods",
     "type": "elective",
-    "rule": "Three hours must come from course list A; three hours must come from course list B; and three hours can come from either course list A or B, or from independent study (SC 3850/3851) with a faculty member affiliated with the SC minor.",
-    "hours": "9",
+    "rule": "Choose 1",
+    "hours": "3",
+    "courses": [
+     "SC 3250",
+     "ANTH 3261",
+     "BMIF 6310",
+     "BMIF 7380",
+     "BSCI 3272",
+     "BME 2400",
+     "CE 4320",
+     "ECON 3032",
+     "ECON 3035",
+     "ECON 3750",
+     "ECE 6358",
+     "HOD 3200",
+     "MATH 3620",
+     "MATH 3670",
+     "MATH 4600",
+     "MATH 4620",
+     "MATH 4630"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Elective Courses: Computational, Simulation, and Modeling Methods",
+    "type": "elective",
+    "rule": "Choose 1",
+    "hours": "3",
+    "courses": [
+     "SC 3260",
+     "ASTR 3600",
+     "ASTR 3700",
+     "ASTR 3800",
+     "BME 7310",
+     "BME 7410",
+     "CHBE 4830",
+     "CHEM 5410",
+     "CHEM 5420",
+     "CS 3274",
+     "ECE 3274",
+     "EES 4760",
+     "MATH 3630",
+     "MATH 3660",
+     "ME 4263",
+     "ME 4275",
+     "NSC 3270",
+     "PHYS 3200",
+     "PHYS 3790",
+     "PSY 4218",
+     "PSY 4219",
+     "PSY 4775"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Additional Elective",
+    "type": "elective",
+    "rule": "Choose 1",
+    "hours": "3",
     "courses": [
      "SC 3250",
      "ANTH 3261",
@@ -11007,10 +11423,12 @@
      "PHYS 3790",
      "PSY 4218",
      "PSY 4219",
-     "PSY 4775"
+     "PSY 4775",
+     "SC 3850",
+     "SC 3851"
     ],
     "level_or_range": null,
-    "notes": null
+    "notes": "Three hours can come from either course list A or B, or from independent study (SC 3850/3851) with a faculty member affiliated with the SC minor."
    }
   ],
   "other_rules": [],
@@ -11278,16 +11696,26 @@
    {
     "name": "Foundation Courses",
     "type": "core",
-    "rule": "Take all",
-    "hours": "9",
+    "rule": "Choose 1",
+    "hours": "3",
     "courses": [
      "SPAN 3301W",
-     "SPAN 3310W",
+     "SPAN 3310W"
+    ],
+    "level_or_range": null,
+    "notes": "A more advanced composition course may be substituted."
+   },
+   {
+    "name": "Foundation Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "6",
+    "courses": [
      "SPAN 3302",
      "SPAN 3303"
     ],
     "level_or_range": null,
-    "notes": "A more advanced composition course may be substituted for SPAN 3301W or 3310W. A more advanced conversation course may be substituted for SPAN 3302. The foundation courses 3301W or 3310W, and 3303 must be taken on the Vanderbilt campus."
+    "notes": "A more advanced conversation course may be substituted."
    },
    {
     "name": "Advanced Spanish Literature",
@@ -11301,7 +11729,7 @@
    {
     "name": "Electives",
     "type": "elective",
-    "rule": "Choose 6 credit hours",
+    "rule": "Choose 2",
     "hours": "6",
     "courses": [],
     "level_or_range": "SPAN 3320\u20133835, 3891\u20134980",
@@ -11310,6 +11738,7 @@
   ],
   "other_rules": [
    "All courses that count toward the minor must be taken in Spanish and taken for a letter grade.",
+   "The foundation courses 3301W or 3310W, and 3303 must be taken on the Vanderbilt campus.",
    "Students must take Spanish 3301W or 3310W, 3302, and 3303 in order to participate in most study abroad programs.",
    "Students may count toward the minor up to 6 credit hours of pre-approved course work from Vanderbilt study abroad programs in Spain or Latin America.",
    "A Maymester abroad course taught by a professor with an appointment in the Department of Spanish and Portuguese does not count against this limit.",
@@ -11346,40 +11775,66 @@
   "summary": "This major focuses on the two dominant languages (Spanish and Portuguese) of the Iberian Peninsula and Latin America and their literatures and cultures, requiring a minimum of 33 credit hours in Spanish and Portuguese.",
   "groups": [
    {
-    "name": "Foundation courses",
+    "name": "Foundation courses in Spanish",
     "type": "core",
     "rule": "Take all",
     "hours": null,
-    "courses": [],
+    "courses": [
+     "SPAN 3301W",
+     "SPAN 3310W",
+     "SPAN 3302",
+     "SPAN 3303"
+    ],
     "level_or_range": null,
-    "notes": "Choose between Spanish 3301W or 3310W, and between Portuguese 3301 or 3302."
-   },
-   {
-    "name": "Spanish courses",
-    "type": "depth_elective",
-    "rule": "At least two courses",
-    "hours": null,
-    "courses": [],
-    "level_or_range": "Spanish 3320-3330, 3355-3385, 4400-4980",
     "notes": null
    },
    {
-    "name": "Portuguese courses",
+    "name": "Foundation courses in Portuguese",
+    "type": "core",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
+     "PORT 2203",
+     "PORT 3301",
+     "PORT 3302",
+     "PORT 3303"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Spanish advanced courses",
     "type": "depth_elective",
     "rule": "At least two courses",
     "hours": null,
     "courses": [],
+    "level_or_range": "SPAN 3320-3330, SPAN 3355-3385, SPAN 4400-4980, SPAN 3835, SPAN 3891, SPAN 3893",
+    "notes": null
+   },
+   {
+    "name": "Portuguese advanced courses",
+    "type": "depth_elective",
+    "rule": "At least two courses",
+    "hours": null,
+    "courses": [
+     "PORT 2205",
+     "PORT 2995",
+     "PORT 3892",
+     "PORT 4350",
+     "PORT 4420",
+     "PORT 4425"
+    ],
     "level_or_range": null,
     "notes": null
    },
    {
     "name": "Additional elective",
     "type": "elective",
-    "rule": "Choose one additional elective",
+    "rule": "One additional elective",
     "hours": null,
     "courses": [],
     "level_or_range": null,
-    "notes": "Choose from courses listed under Spanish courses or Portuguese courses."
+    "notes": "Choose from courses listed under Spanish advanced courses or Portuguese advanced courses"
    }
   ],
   "other_rules": [
@@ -11390,7 +11845,11 @@
   "kind": "major",
   "start_page": 442,
   "end_page": 442,
-  "removed_codes": []
+  "removed_codes": [
+   "PORT 7070",
+   "PORT 7071",
+   "PORT 9520"
+  ]
  },
  {
   "program": "Special Education major",
@@ -11429,8 +11888,8 @@
     "notes": null
    },
    {
-    "name": "Specialization in Severe Disabilities",
-    "type": "concentration",
+    "name": "Specialization Core Courses",
+    "type": "core",
     "rule": "Take all",
     "hours": null,
     "courses": [
@@ -11438,6 +11897,17 @@
      "SPED 2317",
      "SPED 4950",
      "SPED 4954",
+     "SPED 4951"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Severe Disabilities Program/Comprehensive Core",
+    "type": "concentration",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
      "SPEDS 2120",
      "SPEDS 2430",
      "SPEDS 2450",
@@ -11454,15 +11924,11 @@
     "notes": "Students in the Severe Incidence track will need 22 hours of elective credit or a second major to fulfill this requirement."
    },
    {
-    "name": "Specialization in High-Incidence Disabilities",
+    "name": "High-Incidence Program/Interventionist Core",
     "type": "concentration",
     "rule": "Take all",
     "hours": null,
     "courses": [
-     "SPED 1175",
-     "SPED 2317",
-     "SPED 4950",
-     "SPED 4951",
      "SPED 2160",
      "SPEDH 3308",
      "SPEDH 3318",
@@ -11490,7 +11956,8 @@
   ],
   "other_rules": [
    "Vanderbilt students seeking teacher licensure must apply through the Office of Teacher Licensure at Vanderbilt and must meet licensure requirements in effect at the time of their graduation.",
-   "Students must consult the current Vanderbilt Undergraduate Catalog, the Undergraduate Guide to Teacher Licensure, and the Undergraduate Handbook each year."
+   "Students must consult the current Vanderbilt Undergraduate Catalog, the Undergraduate Guide to Teacher Licensure, and the Undergraduate Handbook each year.",
+   "Disability studies is an alternative major available only to special education majors who cannot complete required SPED pre-student teaching and/or student teaching capstone."
   ],
   "has_requirements": true,
   "subject": "special education",
@@ -11574,19 +12041,39 @@
     "rule": "Take all",
     "hours": "9",
     "courses": [
-     "EDUC 3030",
+     "EDUC 3030"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Required Courses: Mathematics or Science Literacies",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
      "MTED 3320",
-     "SCED 3320",
+     "SCED 3320"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Required Courses: Mathematical Visualizations or Science Modeling",
+    "type": "core",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
      "MTED 3360",
      "SCED 3400"
     ],
     "level_or_range": null,
-    "notes": "Choose either MTED 3320 or SCED 3320; choose either MTED 3360 or SCED 3400."
+    "notes": null
    },
    {
     "name": "Additional Courses",
     "type": "elective",
-    "rule": "Choose courses totaling 6 credit hours",
+    "rule": "Choose 6 credit hours",
     "hours": "6",
     "courses": [
      "EDUC 3280",
@@ -11605,7 +12092,7 @@
      "CSET 2100"
     ],
     "level_or_range": null,
-    "notes": "Courses marked with an asterisk (*) do not double count, but if a student takes both courses, one will count in this section."
+    "notes": "Courses marked with * do not double count, but if a student takes both courses, one will count in this section."
    }
   ],
   "other_rules": [],

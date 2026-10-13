@@ -294,9 +294,13 @@ def compact_codes(codes: list, titles: dict) -> str:
     return "; ".join(f"{key} {', '.join(nums)}" for key, nums in runs)
 
 
+# catalog sections that are not degree programs, so never call them "X major"
+NOT_DEGREE = {"honors", "immersion vanderbilt", "naval science", "peabody college", "literature"}
+
+
 def _display_title(program: dict) -> str:
     title = program["name"].replace(" (department overview)", "")
-    if program["kind"] == "overview" and not any(
+    if program["kind"] == "overview" and program["subject"] not in NOT_DEGREE and not any(
             p["subject"] == program["subject"] and p["kind"] == "major" for p in load_programs()):
         title += " major"
     return title
@@ -313,7 +317,7 @@ def _chosen_structured(program_name: str):
     return (chosen, structured[chosen["name"]]) if chosen else (None, None)
 
 
-def requirements_html(program_name: str):
+def requirements_html(program_name: str, note: str = None):
     """Short, scannable HTML list of every requirement group for the chat widget, or None."""
     chosen, d = _chosen_structured(program_name)
     if not chosen:
@@ -322,15 +326,15 @@ def requirements_html(program_name: str):
     esc = html.escape
 
     hours = f" · {esc(str(d['total_hours']))} credit hours" if d.get("total_hours") else ""
-    lines = [f"<b>{esc(_display_title(chosen))}</b>{hours}"]
+    lines = ([esc(note)] if note else []) + [f"<b>{esc(_display_title(chosen))}</b>{hours}"]
     for g in d.get("groups") or []:
         name = esc(str(g.get("name") or "Requirement"))
         label = f"<b>{name}</b>" + (f" ({esc(str(g['hours']))} hrs)" if g.get("hours") else "")
         rule = str(g.get("rule") or "").strip()
         if rule.lower() in ("take all", "complete all", "complete all requirements", "required"):
             rule = "required"
-        if len(rule) > 90:
-            rule = rule[:87].rstrip() + "..."
+        if len(rule) > 140:
+            rule = rule[:140].rsplit(" ", 1)[0].rstrip(",;") + "..."
         detail = "; ".join(x for x in [esc(rule) if rule else "", esc(str(g.get("level_or_range") or ""))] if x)
         codes = compact_codes(g.get("courses") or [], titles)
         line = "• " + label
@@ -353,6 +357,38 @@ def requirements_brief(program_name: str):
     hours = f" ({d['total_hours']} credit hours)" if d.get("total_hours") else ""
     return f"{_display_title(chosen)}{hours}. Requirement groups: {groups}."
 
+
+STOPWORDS = {"and", "of", "the", "in", "studies", "science", "sciences"}
+
+def effective_kind(program: dict) -> str:
+    """major / minor / overview; a department section that holds a major's requirements counts as the major."""
+    if program["kind"] == "overview":
+        return "major" if _display_title(program).endswith(" major") else "overview"
+    return program["kind"]
+
+
+def kind_note(program_name: str, wanted: str):
+    """If they asked for a major but only a minor exists (or the reverse), say so above the list."""
+    if wanted not in ("major", "minor"):
+        return None
+    program = get_program(program_name)
+    if not program:
+        return None
+    chosen, _ = _chosen_structured(program_name)
+    have = effective_kind(chosen or program)
+    if have == wanted or have == "overview":
+        return None
+    base = re.sub(r" (major|minor)$", "", _display_title(chosen or program))
+    if wanted == "major":
+        return (f"Vanderbilt doesn't offer a {base} major (2025–26 catalog), but it does offer a {base} minor. "
+                f"Here are its requirements:")
+    words = set(program["subject"].split()) - STOPWORDS
+    related = [p["name"] for p in load_programs()
+               if p["kind"] == "minor" and p["subject"] != program["subject"]
+               and words & (set(p["subject"].split()) - STOPWORDS)][:3]
+    also = f" Related minors: {', '.join(related)}." if related else ""
+    return (f"Vanderbilt doesn't offer a {base} minor (2025–26 catalog), but it does offer a {base} major.{also} "
+            f"Here are the major requirements:")
 
 if __name__ == "__main__":
     q = sys.argv[1] if len(sys.argv) > 1 else "what classes do cs majors need to take"

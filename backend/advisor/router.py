@@ -15,6 +15,7 @@ Usage:
 
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -32,7 +33,7 @@ from club_matcher import match_clubs
 from career_coach import resume_feedback, interview_prep, explore_industry_path
 from city_explorer import explore_cities
 from clarifying_questions import CLARIFICATION_CONFIG
-from requirements import find_program, program_requirements, requirements_outline, requirements_html, requirements_brief
+from requirements import find_program, program_requirements, requirements_outline, requirements_html, requirements_brief, kind_note
 from student_profile import get_student_profile
 
 load_dotenv(base / ".env")
@@ -197,10 +198,13 @@ def _route(message: str, user_hash: str = None) -> dict:
         if not official and feature == "course_planner":
             major = _profile_major(user_hash)
             official = find_program(major) if major else None
+        ask = f"{program or ''} {message}"
+        wanted = "minor" if re.search(r"(?i)\bminor\b", ask) else ("major" if re.search(r"(?i)\bmajor\b", ask) else None)
+        note = kind_note(official, wanted) if official else None
         if official:
             result = done(requirements_outline(official) or program_requirements(message, official),
                           "program_requirements")
-            view = requirements_html(official)
+            view = requirements_html(official, note)
             if view:
                 result["display_html"] = view
                 result["brief"] = requirements_brief(official)
