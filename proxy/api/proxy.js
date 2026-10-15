@@ -56,7 +56,7 @@ function scrub(text, profileName) {
   return t;
 }
 
-async function logTurn(sessionId, page, role, content, profileName) {
+async function logTurn(sessionId, page, role, content, profileName, logExtra) {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) return { error: 'missing env' };
   try {
     const r = await fetch(process.env.SUPABASE_URL + '/rest/v1/conversation_logs', {
@@ -67,15 +67,18 @@ async function logTurn(sessionId, page, role, content, profileName) {
         'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
         'Prefer': 'return=minimal'
       },
-      body: JSON.stringify({
+      body: JSON.stringify(Object.assign({
         session_id: sessionId,
         page: page || null,
         role: role,
         content: scrub(content, profileName)
-      })
+      }, logExtra || {}))
     });
     if (!r.ok) {
       const errText = await r.text();
+      if (logExtra && /column/i.test(errText)) {
+        return logTurn(sessionId, page, role, content, profileName, null);
+      }
       return { error: 'supabase ' + r.status + ': ' + errText };
     }
     return { ok: true };
@@ -459,7 +462,8 @@ export default async function handler(req, res) {
 
           data.choices[0].message.content;
         if (assistantContent) {
-          const r2 = await logTurn(sessionId, page, 'assistant', assistantContent, profileName);
+          const r2 = await logTurn(sessionId, page, 'assistant', assistantContent, profileName,
+            advisor ? { feature: advisor.feature || null, category: advisor.category || null } : null);
           if (r2 && r2.error) logResult = r2;
         }
       }
