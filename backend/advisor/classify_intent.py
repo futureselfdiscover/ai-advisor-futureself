@@ -62,7 +62,7 @@ post_grad - life after graduation: full-time job search, which cities to
   grad school, fellowships, law/med school as a post-grad path
 
 out_of_scope - nothing to do with school, careers, or life after college
-  (weather, small talk, jokes, sports scores, recipes, general trivia,
+  (weather, jokes, sports scores, recipes, general trivia,
   doing homework or writing essays for the student, personal shopping,
   medical, legal, or investment advice)
 
@@ -71,6 +71,7 @@ clarification_needed - the message IS relevant to advising but is too
   want to do with my life", "can you help me?", "I'm lost")
 
 Rules:
+- Greetings, thanks, and "what can you do?" are clarification_needed, never out_of_scope.
 - Any question about jobs, careers, pay, salaries, or where to live or
   work for a career is NEVER out_of_scope.
 - Asking for help understanding course requirements is academic_planning,
