@@ -307,6 +307,19 @@ function cleanHistory(messages) {
   });
 }
 
+// saved chats from before the clean-up can still hold broken JSON; clean them when the
+// widget reloads a student's history so old messages display cleanly too
+function cleanStoredHistory(memory) {
+  if (!memory || !Array.isArray(memory.conversation_history)) return memory;
+  const history = memory.conversation_history.map(function(t) {
+    if (!t || typeof t !== 'object') return t;
+    if (typeof t.assistant === 'string') return Object.assign({}, t, { assistant: normalizeReply(t.assistant) });
+    if (t.role === 'assistant' && typeof t.content === 'string') return Object.assign({}, t, { content: normalizeReply(t.content) });
+    return t;
+  });
+  return Object.assign({}, memory, { conversation_history: history });
+}
+
 // ---- system prompt assembly ----
 // builds the full system prompt server-side from the three behavior files
 // plus per-request context (profile, memory, page). editing personality,
@@ -507,7 +520,7 @@ export default async function handler(req, res) {
     if (type === 'get_memory') {
       if (!userId) return res.status(400).json({ error: 'userId required' });
       const memory = await getMemory(userId);
-      return res.status(200).json({ memory });
+      return res.status(200).json({ memory: cleanStoredHistory(memory) });
     }
 
     // ---- memory: save per-user memory ----
