@@ -224,6 +224,86 @@ function attachRequirements(content, listHtml) {
   return listHtml + (tail ? '\n' + tail : '');
 }
 
+// ---- reply clean-up ----
+// The model is told to end with {"suggestions":[...]} and {"memory":{...}} on their own lines,
+// but sometimes merges them, drops a brace, reorders them, or wraps them in ```json fences.
+// The widget then shows raw JSON to the student. This rebuilds every reply into exactly:
+//   <text>\n{"suggestions":[...]}\n{"memory":{...}}
+// and never lets raw JSON reach the student, even if it can't be parsed.
+const MEMORY_KEYS = ['knowledge', 'current_term', 'direction', 'focus', 'summary', 'topics', 'profile_suggestion'];
+
+function scanObjects(s) {
+  // [{start, end}] for each balanced top-level {...}, ignoring braces inside strings
+  const out = [];
+  let depth = 0, start = -1, inStr = false, esc = false;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (ch === '\\') esc = true;
+      else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') { inStr = true; continue; }
+    if (ch === '{') { if (depth === 0) start = i; depth++; }
+    else if (ch === '}' && depth > 0) { depth--; if (depth === 0) out.push({ start: start, end: i + 1 }); }
+  }
+  return out;
+}
+
+function tryParse(text) {
+  try { return JSON.parse(text); } catch (e) {}
+  try { return JSON.parse('{' + text + '}'); } catch (e) {}
+  try { return JSON.parse(text + '}'); } catch (e) {}
+  return null;
+}
+
+function normalizeReply(content) {
+  const raw = String(content || '');
+  const keyRe = /\{?\s*"(suggestions|memory|knowledge|focus|summary|topics|profile_suggestion|current_term|direction)"\s*:/;
+  const m = raw.match(keyRe);
+  if (!m) return raw.trim();
+
+  const text = raw.slice(0, m.index).replace(/```(json)?\s*$/i, '').trim();
+  const rest = raw.slice(m.index).replace(/```(json)?/gi, '');
+
+  let suggestions = null, memory = null;
+  function absorb(obj) {
+    if (!obj || typeof obj !== 'object') return;
+    if (Array.isArray(obj.suggestions)) suggestions = obj.suggestions;
+    if (obj.memory && typeof obj.memory === 'object') memory = Object.assign(memory || {}, obj.memory);
+    const loose = {};
+    MEMORY_KEYS.forEach(function(k) { if (k in obj) loose[k] = obj[k]; });
+    if (Object.keys(loose).length) memory = Object.assign(memory || {}, loose);
+  }
+
+  const blocks = scanObjects(rest);
+  blocks.forEach(function(b) { absorb(tryParse(rest.slice(b.start, b.end))); });
+  let cursor = 0;
+  blocks.concat([{ start: rest.length, end: rest.length }]).forEach(function(b) {
+    const piece = rest.slice(cursor, b.start).replace(/^[\s,]+|[\s,]+$/g, '');
+    if (/^"(suggestions|memory)"\s*:/.test(piece + rest.slice(b.start, b.end))) {
+      absorb(tryParse(piece + rest.slice(b.start, b.end)));
+    }
+    cursor = b.end;
+  });
+
+  const lines = [text];
+  if (suggestions) lines.push(JSON.stringify({ suggestions: suggestions.slice(0, 3) }));
+  if (memory) lines.push(JSON.stringify({ memory: memory }));
+  return lines.filter(Boolean).join('\n');
+}
+
+// earlier assistant turns sent back by the widget can contain the same broken JSON;
+// clean them so the model doesn't copy the broken pattern
+function cleanHistory(messages) {
+  if (!Array.isArray(messages)) return messages;
+  return messages.map(function(m) {
+    return (m && m.role === 'assistant' && typeof m.content === 'string')
+      ? Object.assign({}, m, { content: normalizeReply(m.content) }) : m;
+  });
+}
+
 // ---- system prompt assembly ----
 // builds the full system prompt server-side from the three behavior files
 // plus per-request context (profile, memory, page). editing personality,
@@ -318,10 +398,10 @@ export default async function handler(req, res) {
       // prepends it from the behavior files + context sent by the widget.
       // backward compatible: if messages already has a system message
       // (older widget), use it as-is instead of building a new one.
-      let fullMessages = messages;
+      let fullMessages = cleanHistory(messages);
       const hasSystem = messages && messages.length > 0 && messages[0].role === 'system';
       if (!hasSystem && context) {
-        fullMessages = [{ role: 'system', content: buildSystemPrompt(context) }].concat(messages || []);
+        fullMessages = [{ role: 'system', content: buildSystemPrompt(context) }].concat(cleanHistory(messages) || []);
       }
 
       // add verified school data from the advisor backend, if available
@@ -355,6 +435,10 @@ export default async function handler(req, res) {
         body: JSON.stringify({ model: 'gpt-4o', messages: fullMessages })
       });
       const data = await response.json();
+      if (data.choices && data.choices[0] && data.choices[0].message &&
+          typeof data.choices[0].message.content === 'string') {
+        data.choices[0].message.content = normalizeReply(data.choices[0].message.content);
+      }
       if (advisor && advisor.display_html && data.choices && data.choices[0] && data.choices[0].message &&
           typeof data.choices[0].message.content === 'string') {
         data.choices[0].message.content = attachRequirements(data.choices[0].message.content, advisor.display_html);
