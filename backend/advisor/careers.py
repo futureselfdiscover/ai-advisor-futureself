@@ -244,3 +244,31 @@ def explorer_brief(picks: list) -> str:
 if __name__ == "__main__":
     for item in careers_links(sys.argv[1:] or ["Asurion"]):
         print(f"{item['name']}: {item['url'] or 'NOT FOUND'}  ({item['source']})")
+
+
+# --- Clean suggested company lists: employers only, current names, no duplicates ---
+import re as _re
+_NOT_EMPLOYER = _re.compile(r"\b(school of|college of)\b", _re.I)
+_CURRENT_NAME = {
+    "saint thomas health": "Ascension Saint Thomas",
+    "st. thomas health": "Ascension Saint Thomas",
+    "st thomas health": "Ascension Saint Thomas",
+}
+_suggest_raw = suggest_companies
+
+
+def suggest_companies(*args, **kwargs):
+    items = _suggest_raw(*args, **kwargs)
+    if not isinstance(items, list):
+        return items
+    out, seen = [], set()
+    for it in items:
+        name = (it.get("name") if isinstance(it, dict) else str(it)) or ""
+        if not name or _NOT_EMPLOYER.search(name):
+            continue
+        fixed = _CURRENT_NAME.get(name.strip().lower(), name)
+        if fixed.lower() in seen:
+            continue
+        seen.add(fixed.lower())
+        out.append({**it, "name": fixed} if isinstance(it, dict) else fixed)
+    return out

@@ -170,5 +170,17 @@
   {
     "message": "which consulting firms should I look at",
     "feature": "company_explorer"
+  },
+  {
+    "message": "take me to the careers page for Ryman",
+    "feature": "company_careers"
+  },
+  {
+    "message": "where do I apply to work at Nissan",
+    "feature": "company_careers"
+  },
+  {
+    "message": "link me to Tesla jobs",
+    "feature": "company_careers"
   }
 ]
