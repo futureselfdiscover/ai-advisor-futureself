@@ -154,5 +154,21 @@
   {
     "message": "what's the cost of living in Chicago for a new grad accountant",
     "feature": "city_explorer"
+  },
+  {
+    "message": "take me to the careers page for Asurion",
+    "feature": "company_careers"
+  },
+  {
+    "message": "can you give me links to Deloitte and EY careers pages",
+    "feature": "company_careers"
+  },
+  {
+    "message": "what companies in Nashville hire healthcare majors",
+    "feature": "company_explorer"
+  },
+  {
+    "message": "which consulting firms should I look at",
+    "feature": "company_explorer"
   }
 ]
