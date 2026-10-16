@@ -133,3 +133,20 @@ if __name__ == "__main__":
     for q in test_queries:
         result = classify_intent(q)
         print(f"{result['category']:<25} | {q}")
+
+
+# --- Requests about careers pages, jobs, or employers are always in scope ---
+import re as _re
+_CAREER_ASK = _re.compile(
+    r"\b(careers?|jobs?|hiring|hires?|employers?|internships?|recruit\w*|work (at|for)|apply (to|at|for))\b", _re.I)
+_classify_model = classify_intent
+
+
+def classify_intent(message, *args, **kwargs):
+    result = _classify_model(message, *args, **kwargs)
+    if _CAREER_ASK.search(message or ""):
+        if isinstance(result, dict) and result.get("category") == "out_of_scope":
+            result = {**result, "category": "career_coaching"}
+        elif result == "out_of_scope":
+            result = "career_coaching"
+    return result
