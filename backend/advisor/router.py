@@ -35,6 +35,7 @@ from city_explorer import explore_cities
 from clarifying_questions import CLARIFICATION_CONFIG
 from requirements import find_program, program_requirements, requirements_outline, requirements_html, requirements_brief, kind_note
 from student_profile import get_student_profile
+from careers import careers_links, careers_html, careers_brief, suggest_companies, explorer_html, explorer_brief
 
 load_dotenv(base / ".env")
 
@@ -51,6 +52,7 @@ def _get_client():
 FEATURES = {
     "program_requirements", "course_planner", "club_matcher", "city_explorer",
     "industry_path", "interview_prep", "resume_feedback", "general",
+    "company_explorer", "company_careers",
 }
 
 PICKER_PROMPT = """You route a Vanderbilt student's message to ONE advisor feature.
@@ -67,6 +69,10 @@ industry_path - how to break into or build a career in a field, what the path lo
   skills or experience needed for a kind of job
 interview_prep - preparing for interviews, practice interview questions
 resume_feedback - resume or CV review, formatting, or writing help
+company_explorer - which companies or employers to look at, apply to, or research for a field,
+  industry, or city ("what companies hire nurses in Nashville", "consulting firms I should look at")
+company_careers - the student wants the careers page, jobs site, or link for specific companies
+  ("take me to Asurion's careers page", "links to Deloitte and EY careers", "show their careers pages")
 general - anything else about school, careers, or life after college, including finding
   internships or jobs (where to look, how to apply, recruiting timelines), policies,
   deadlines, declaring a major, campus resources, and the career center
@@ -77,7 +83,12 @@ program - the major, minor, or program they mean, as they wrote it (e.g. "comp s
 field - the job, role, or industry they mean, singular, using standard job titles where
   possible (e.g. "software developer", "financial analyst", "consulting"), or null
 
-Respond with JSON only: {"feature": "...", "program": "..." or null, "field": "..." or null}"""
+companies - list of company names the student mentions or refers to (resolve "their"/"these" from the
+  message itself), or []
+location - city or region they mention (e.g. "Nashville"), or null
+
+Respond with JSON only: {"feature": "...", "program": "..." or null, "field": "..." or null,
+  "companies": [...], "location": "..." or null}"""
 
 
 def pick_feature(message: str) -> dict:
@@ -87,7 +98,7 @@ def pick_feature(message: str) -> dict:
             model="gpt-4o-mini",
             response_format={"type": "json_object"},
             temperature=0,
-            max_tokens=80,
+            max_tokens=200,
             messages=[
                 {"role": "system", "content": PICKER_PROMPT},
                 {"role": "user", "content": message},
@@ -104,13 +115,17 @@ def pick_feature(message: str) -> dict:
         v = (v or "").strip() if isinstance(v, str) else ""
         return v if v and v.lower() not in ("null", "none") else None
 
-    return {"feature": feature, "program": clean(data.get("program")), "field": clean(data.get("field"))}
+    companies = [str(x).strip() for x in (data.get("companies") or []) if isinstance(x, str) and x.strip()][:8]
+    return {"feature": feature, "program": clean(data.get("program")), "field": clean(data.get("field")),
+            "companies": companies, "location": clean(data.get("location"))}
 
 
 def clean_turn(content) -> str:
     """Drops the suggestions/memory JSON lines the widget appends to replies."""
+    text = re.sub(r"<br\s*/?>", "\n", str(content))
+    text = re.sub(r"<[^>]+>", " ", text).replace("&nbsp;", " ").replace("&amp;", "&")
     lines = [
-        line for line in str(content).splitlines()
+        line for line in text.splitlines()
         if not line.strip().startswith(('{"suggestions"', '{"memory"'))
     ]
     return "\n".join(lines).strip()
@@ -125,7 +140,7 @@ def condense_question(message: str, history: list) -> str:
     if not turns:
         return message
 
-    convo = "\n".join(f"{t['role']}: {clean_turn(t['content'])[:600]}" for t in turns)
+    convo = "\n".join(f"{t['role']}: {clean_turn(t['content'])[:1500]}" for t in turns)
     try:
         response = _get_client().chat.completions.create(
             model="gpt-4o-mini",
@@ -223,6 +238,26 @@ def _route(message: str, user_hash: str = None) -> dict:
             "from the Vanderbilt catalog.",
             "clarifying_question",
         )
+
+    if feature == "company_careers":
+        names = pick.get("companies") or []
+        if not names:
+            return done("Which companies would you like careers pages for?", "clarifying_question")
+        links = careers_links(names)
+        result = done(careers_brief(links), "company_careers")
+        result["display_html"] = careers_html(links)
+        result["brief"] = careers_brief(links)
+        return result
+
+    if feature == "company_explorer":
+        picks = suggest_companies(field=field, location=pick.get("location"), message=message)
+        if not picks:
+            return done("What field or kind of company are you interested in? I'll suggest a few to explore.",
+                        "clarifying_question")
+        result = done(explorer_brief(picks), "company_explorer")
+        result["display_html"] = explorer_html(picks, field, pick.get("location"))
+        result["brief"] = explorer_brief(picks)
+        return result
 
     if feature == "club_matcher":
         return done(format_clubs(match_clubs(interests_text=message)), "club_matcher")

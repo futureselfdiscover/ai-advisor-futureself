@@ -147,3 +147,11 @@ changed programs (usually cents to a few dollars).
 - Requirements come from the 2025/26 catalog only; students should confirm with their advisor.
 - Internship finder (Handshake) is not built yet.
 - Course titles come from `course_catalog.json`; some newer courses are missing titles.
+
+## Company explorer and careers pages
+
+- "Take me to the careers page for Asurion" -> `company_careers` feature returns the official careers page (never a job posting).
+- "What companies hire nursing grads in Nashville" -> `company_explorer` suggests a short list, then offers "Show their careers pages".
+- Links come from `backend/data/companies.json` (hand-checked list). Unknown companies are looked up live and only shown if the page loads on the company's own domain or a known job board.
+- Monthly: `python data/scrapers/verify_companies.py` re-checks every link. Sites that block automatic checks: open in a browser, then `--approve "Company Name"`.
+- To add or fix a company: edit `companies.json`, run the verify script, commit.

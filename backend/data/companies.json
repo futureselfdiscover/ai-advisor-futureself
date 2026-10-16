@@ -1,0 +1,1089 @@
+[
+ {
+  "name": "Asurion",
+  "careers_url": "https://careers.asurion.com/us/en/",
+  "industries": [
+   "technology",
+   "customer experience",
+   "insurance"
+  ],
+  "cities": [
+   "Nashville"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://careers.asurion.com/us/en/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "HCA Healthcare",
+  "careers_url": "https://careers.hcahealthcare.com/",
+  "industries": [
+   "healthcare",
+   "hospital",
+   "nursing",
+   "health administration"
+  ],
+  "cities": [
+   "Nashville"
+  ],
+  "aliases": [
+   "HCA"
+  ],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "approved by hand"
+ },
+ {
+  "name": "Vanderbilt University Medical Center",
+  "careers_url": "https://www.vumc.org/careers",
+  "industries": [
+   "healthcare",
+   "hospital",
+   "nursing",
+   "research",
+   "medicine"
+  ],
+  "cities": [
+   "Nashville"
+  ],
+  "aliases": [
+   "VUMC"
+  ],
+  "verified": true,
+  "final_url": "https://www.vumc.org/careers",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Dollar General",
+  "careers_url": "https://careers.dollargeneral.com/",
+  "industries": [
+   "retail",
+   "supply chain",
+   "business"
+  ],
+  "cities": [
+   "Nashville",
+   "Goodlettsville"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://careers.dollargeneral.com/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Tractor Supply",
+  "careers_url": "https://tractorsupply.jobs/",
+  "industries": [
+   "retail",
+   "supply chain",
+   "business"
+  ],
+  "cities": [
+   "Nashville",
+   "Brentwood"
+  ],
+  "aliases": [
+   "Tractor Supply Company"
+  ],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "could not confirm automatically"
+ },
+ {
+  "name": "AllianceBernstein",
+  "careers_url": "https://www.alliancebernstein.com/corporate/en/careers.html",
+  "industries": [
+   "finance",
+   "investment management",
+   "asset management"
+  ],
+  "cities": [
+   "Nashville",
+   "New York"
+  ],
+  "aliases": [
+   "AB"
+  ],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "could not confirm automatically"
+ },
+ {
+  "name": "Oracle",
+  "careers_url": "https://www.oracle.com/careers/",
+  "industries": [
+   "technology",
+   "software",
+   "cloud"
+  ],
+  "cities": [
+   "Nashville",
+   "Austin",
+   "Redwood City"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.oracle.com/careers/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Bridgestone Americas",
+  "careers_url": "https://www.bridgestoneamericas.com/en/careers",
+  "industries": [
+   "manufacturing",
+   "engineering",
+   "automotive"
+  ],
+  "cities": [
+   "Nashville"
+  ],
+  "aliases": [
+   "Bridgestone"
+  ],
+  "verified": true,
+  "final_url": "https://www.bridgestoneamericas.com/en/our-team",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Nissan North America",
+  "careers_url": "https://www.nissanmotor.jobs/americas/",
+  "industries": [
+   "automotive",
+   "engineering",
+   "manufacturing"
+  ],
+  "cities": [
+   "Nashville",
+   "Franklin"
+  ],
+  "aliases": [
+   "Nissan"
+  ],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "could not confirm automatically"
+ },
+ {
+  "name": "Ryman Hospitality Properties",
+  "careers_url": "https://opryentertainmentgroup.com/careers/",
+  "industries": [
+   "hospitality",
+   "entertainment",
+   "music"
+  ],
+  "cities": [
+   "Nashville"
+  ],
+  "aliases": [
+   "Ryman"
+  ],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "could not confirm automatically"
+ },
+ {
+  "name": "Community Health Systems",
+  "careers_url": "https://www.chs.net/careers/",
+  "industries": [
+   "healthcare",
+   "hospital",
+   "health administration"
+  ],
+  "cities": [
+   "Nashville",
+   "Franklin"
+  ],
+  "aliases": [
+   "CHS"
+  ],
+  "verified": true,
+  "final_url": "https://www.chs.net/careers/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Pinnacle Financial Partners",
+  "careers_url": "https://www.pinnaclefinancial.com/careers/",
+  "industries": [
+   "finance",
+   "banking"
+  ],
+  "cities": [
+   "Nashville"
+  ],
+  "aliases": [
+   "Pinnacle"
+  ],
+  "verified": true,
+  "final_url": "https://www.pinnaclefinancial.com/careers/",
+  "checked": "2026-10-15",
+  "note": "replaced by live lookup"
+ },
+ {
+  "name": "Amazon",
+  "careers_url": "https://www.amazon.jobs/",
+  "industries": [
+   "technology",
+   "software",
+   "operations",
+   "supply chain",
+   "retail"
+  ],
+  "cities": [
+   "Nashville",
+   "Seattle"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.amazon.jobs/en/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Google",
+  "careers_url": "https://www.google.com/about/careers/applications/",
+  "industries": [
+   "technology",
+   "software",
+   "data science"
+  ],
+  "cities": [
+   "Mountain View",
+   "New York",
+   "Chicago"
+  ],
+  "aliases": [
+   "Alphabet"
+  ],
+  "verified": true,
+  "final_url": "https://www.google.com/about/careers/applications/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Microsoft",
+  "careers_url": "https://careers.microsoft.com/",
+  "industries": [
+   "technology",
+   "software",
+   "cloud"
+  ],
+  "cities": [
+   "Seattle",
+   "Redmond"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://careers.microsoft.com/v2/global/en/home.html",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Apple",
+  "careers_url": "https://www.apple.com/careers/us/",
+  "industries": [
+   "technology",
+   "hardware",
+   "software",
+   "design"
+  ],
+  "cities": [
+   "Cupertino",
+   "Austin",
+   "Nashville"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.apple.com/careers/us/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Meta",
+  "careers_url": "https://www.metacareers.com/",
+  "industries": [
+   "technology",
+   "software",
+   "data science",
+   "marketing"
+  ],
+  "cities": [
+   "Menlo Park",
+   "New York"
+  ],
+  "aliases": [
+   "Facebook"
+  ],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "approved by hand"
+ },
+ {
+  "name": "Salesforce",
+  "careers_url": "https://careers.salesforce.com/",
+  "industries": [
+   "technology",
+   "software",
+   "sales"
+  ],
+  "cities": [
+   "San Francisco",
+   "Chicago"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.salesforce.com/company/careers/?bc=OTH",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "IBM",
+  "careers_url": "https://www.ibm.com/careers",
+  "industries": [
+   "technology",
+   "consulting",
+   "software"
+  ],
+  "cities": [
+   "New York"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.ibm.com/careers",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "NVIDIA",
+  "careers_url": "https://www.nvidia.com/en-us/about-nvidia/careers/",
+  "industries": [
+   "technology",
+   "hardware",
+   "ai",
+   "engineering"
+  ],
+  "cities": [
+   "Santa Clara"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.nvidia.com/en-us/about-nvidia/careers/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Deloitte",
+  "careers_url": "https://www.deloitte.com/us/en/careers.html",
+  "industries": [
+   "consulting",
+   "accounting",
+   "audit",
+   "technology consulting"
+  ],
+  "cities": [
+   "Nashville",
+   "New York",
+   "Chicago"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.deloitte.com/us/en/careers/careers.html",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "PwC",
+  "careers_url": "https://careers.pwc.com/",
+  "industries": [
+   "consulting",
+   "accounting",
+   "audit",
+   "tax"
+  ],
+  "cities": [
+   "Nashville",
+   "New York",
+   "Chicago"
+  ],
+  "aliases": [
+   "PricewaterhouseCoopers"
+  ],
+  "verified": true,
+  "final_url": "https://careers.pwc.com/",
+  "checked": "2026-10-15",
+  "note": "replaced by live lookup"
+ },
+ {
+  "name": "EY",
+  "careers_url": "https://www.ey.com/en_us/careers",
+  "industries": [
+   "consulting",
+   "accounting",
+   "audit",
+   "tax"
+  ],
+  "cities": [
+   "Nashville",
+   "New York",
+   "Chicago"
+  ],
+  "aliases": [
+   "Ernst & Young",
+   "Ernst and Young"
+  ],
+  "verified": true,
+  "final_url": "https://www.ey.com/en_us/careers",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "KPMG",
+  "careers_url": "https://kpmg.com/xx/en/careers.html",
+  "industries": [
+   "consulting",
+   "accounting",
+   "audit",
+   "tax"
+  ],
+  "cities": [
+   "Nashville",
+   "New York"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://kpmg.com/xx/en/careers.html",
+  "checked": "2026-10-15",
+  "note": "replaced by live lookup"
+ },
+ {
+  "name": "Accenture",
+  "careers_url": "https://www.accenture.com/us-en/careers",
+  "industries": [
+   "consulting",
+   "technology consulting"
+  ],
+  "cities": [
+   "Nashville",
+   "Chicago",
+   "New York"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.accenture.com/us-en/careers",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "McKinsey & Company",
+  "careers_url": "https://jobs.mckinsey.com/en_US/careers",
+  "industries": [
+   "consulting",
+   "management consulting",
+   "strategy"
+  ],
+  "cities": [
+   "Atlanta",
+   "New York",
+   "Chicago"
+  ],
+  "aliases": [
+   "McKinsey"
+  ],
+  "verified": true,
+  "final_url": "https://jobs.mckinsey.com/en_US/careers",
+  "checked": "2026-10-15",
+  "note": "replaced by live lookup"
+ },
+ {
+  "name": "Boston Consulting Group",
+  "careers_url": "https://careers.bcg.com/",
+  "industries": [
+   "consulting",
+   "management consulting",
+   "strategy"
+  ],
+  "cities": [
+   "Atlanta",
+   "Boston",
+   "New York"
+  ],
+  "aliases": [
+   "BCG"
+  ],
+  "verified": true,
+  "final_url": "https://careers.bcg.com/global/en/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Bain & Company",
+  "careers_url": "https://careers.bain.com/",
+  "industries": [
+   "consulting",
+   "management consulting",
+   "strategy"
+  ],
+  "cities": [
+   "Atlanta",
+   "Boston",
+   "New York"
+  ],
+  "aliases": [
+   "Bain"
+  ],
+  "verified": true,
+  "final_url": "https://careers.bain.com/",
+  "checked": "2026-10-15",
+  "note": "replaced by live lookup"
+ },
+ {
+  "name": "Goldman Sachs",
+  "careers_url": "https://www.goldmansachs.com/careers/",
+  "industries": [
+   "finance",
+   "investment banking",
+   "asset management"
+  ],
+  "cities": [
+   "New York",
+   "Dallas"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.goldmansachs.com/careers/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "JPMorgan Chase",
+  "careers_url": "https://careers.jpmorgan.com/",
+  "industries": [
+   "finance",
+   "investment banking",
+   "banking"
+  ],
+  "cities": [
+   "New York",
+   "Chicago",
+   "Columbus"
+  ],
+  "aliases": [
+   "JP Morgan",
+   "J.P. Morgan",
+   "Chase"
+  ],
+  "verified": true,
+  "final_url": "https://www.jpmorganchase.com/careers?redirect=careers_jpm",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Morgan Stanley",
+  "careers_url": "https://www.morganstanley.com/careers",
+  "industries": [
+   "finance",
+   "investment banking",
+   "wealth management"
+  ],
+  "cities": [
+   "New York"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.morganstanley.com/people",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Bank of America",
+  "careers_url": "https://careers.bankofamerica.com/",
+  "industries": [
+   "finance",
+   "banking",
+   "investment banking"
+  ],
+  "cities": [
+   "Charlotte",
+   "New York",
+   "Nashville"
+  ],
+  "aliases": [
+   "BofA"
+  ],
+  "verified": true,
+  "final_url": "https://careers.bankofamerica.com/en-us",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Capital One",
+  "careers_url": "https://www.capitalonecareers.com/",
+  "industries": [
+   "finance",
+   "banking",
+   "technology",
+   "data science"
+  ],
+  "cities": [
+   "McLean",
+   "Richmond",
+   "Chicago"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.capitalonecareers.com/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Fidelity Investments",
+  "careers_url": "https://jobs.fidelity.com/",
+  "industries": [
+   "finance",
+   "asset management",
+   "technology"
+  ],
+  "cities": [
+   "Boston",
+   "Dallas"
+  ],
+  "aliases": [
+   "Fidelity"
+  ],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "approved by hand"
+ },
+ {
+  "name": "BlackRock",
+  "careers_url": "https://careers.blackrock.com/",
+  "industries": [
+   "finance",
+   "asset management"
+  ],
+  "cities": [
+   "New York",
+   "Atlanta"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://careers.blackrock.com/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Allstate",
+  "careers_url": "https://www.allstate.jobs/",
+  "industries": [
+   "insurance",
+   "finance",
+   "data science"
+  ],
+  "cities": [
+   "Chicago"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.allstate.jobs/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "UnitedHealth Group",
+  "careers_url": "https://careers.unitedhealthgroup.com/",
+  "industries": [
+   "healthcare",
+   "health insurance",
+   "technology"
+  ],
+  "cities": [
+   "Nashville",
+   "Minneapolis"
+  ],
+  "aliases": [
+   "Optum",
+   "UnitedHealthcare"
+  ],
+  "verified": true,
+  "final_url": "https://careers.unitedhealthgroup.com/search-jobs",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Pfizer",
+  "careers_url": "https://www.pfizer.com/about/careers",
+  "industries": [
+   "pharmaceuticals",
+   "biotech",
+   "healthcare",
+   "research"
+  ],
+  "cities": [
+   "New York",
+   "Boston"
+  ],
+  "aliases": [],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "approved by hand"
+ },
+ {
+  "name": "Johnson & Johnson",
+  "careers_url": "https://www.jnj.com/careers",
+  "industries": [
+   "pharmaceuticals",
+   "medical devices",
+   "healthcare"
+  ],
+  "cities": [
+   "New Brunswick"
+  ],
+  "aliases": [
+   "J&J"
+  ],
+  "verified": true,
+  "final_url": "https://www.jnj.com/careers",
+  "checked": "2026-10-15",
+  "note": "replaced by live lookup"
+ },
+ {
+  "name": "Eli Lilly",
+  "careers_url": "https://careers.lilly.com/",
+  "industries": [
+   "pharmaceuticals",
+   "biotech",
+   "research"
+  ],
+  "cities": [
+   "Indianapolis"
+  ],
+  "aliases": [
+   "Lilly"
+  ],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "approved by hand"
+ },
+ {
+  "name": "Moderna",
+  "careers_url": "https://www.modernatx.com/careers",
+  "industries": [
+   "biotech",
+   "pharmaceuticals",
+   "research"
+  ],
+  "cities": [
+   "Boston",
+   "Cambridge"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.modernatx.com/careers/life-at-moderna",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Mayo Clinic",
+  "careers_url": "https://jobs.mayoclinic.org/",
+  "industries": [
+   "healthcare",
+   "hospital",
+   "research",
+   "nursing"
+  ],
+  "cities": [
+   "Rochester",
+   "Phoenix",
+   "Jacksonville"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://jobs.mayoclinic.org/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Procter & Gamble",
+  "careers_url": "https://www.pgcareers.com/",
+  "industries": [
+   "consumer goods",
+   "marketing",
+   "brand management",
+   "supply chain"
+  ],
+  "cities": [
+   "Cincinnati"
+  ],
+  "aliases": [
+   "P&G"
+  ],
+  "verified": true,
+  "final_url": "https://www.pgcareers.com/us/en",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "PepsiCo",
+  "careers_url": "https://www.pepsicojobs.com/",
+  "industries": [
+   "consumer goods",
+   "marketing",
+   "supply chain"
+  ],
+  "cities": [
+   "Purchase",
+   "Chicago",
+   "Plano"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.pepsicojobs.com/main/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "The Coca-Cola Company",
+  "careers_url": "https://careers.coca-colacompany.com/",
+  "industries": [
+   "consumer goods",
+   "marketing"
+  ],
+  "cities": [
+   "Atlanta"
+  ],
+  "aliases": [
+   "Coca-Cola",
+   "Coke"
+  ],
+  "verified": true,
+  "final_url": "https://coke.wd1.myworkdayjobs.com/coca-cola-careers",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Nike",
+  "careers_url": "https://careers.nike.com/",
+  "industries": [
+   "consumer goods",
+   "marketing",
+   "retail",
+   "design"
+  ],
+  "cities": [
+   "Beaverton"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://careers.nike.com/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "The Walt Disney Company",
+  "careers_url": "https://jobs.disneycareers.com/",
+  "industries": [
+   "entertainment",
+   "media",
+   "marketing"
+  ],
+  "cities": [
+   "Burbank",
+   "Orlando",
+   "New York"
+  ],
+  "aliases": [
+   "Disney"
+  ],
+  "verified": true,
+  "final_url": "https://www.disneycareers.com/en",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Universal Music Group",
+  "careers_url": "https://www.universalmusic.com/careers/",
+  "industries": [
+   "music",
+   "entertainment",
+   "media"
+  ],
+  "cities": [
+   "Nashville",
+   "Los Angeles",
+   "New York"
+  ],
+  "aliases": [
+   "UMG"
+  ],
+  "verified": true,
+  "final_url": "https://www.universalmusic.com/careers/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "iHeartMedia",
+  "careers_url": "https://www.iheartmedia.com/careers",
+  "industries": [
+   "media",
+   "music",
+   "marketing"
+  ],
+  "cities": [
+   "Nashville",
+   "New York",
+   "San Antonio"
+  ],
+  "aliases": [
+   "iHeart"
+  ],
+  "verified": true,
+  "final_url": "https://www.iheartmedia.com/careers",
+  "checked": "2026-10-15",
+  "note": "replaced by live lookup"
+ },
+ {
+  "name": "Spotify",
+  "careers_url": "https://www.lifeatspotify.com/",
+  "industries": [
+   "music",
+   "technology",
+   "media"
+  ],
+  "cities": [
+   "New York"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.lifeatspotify.com/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Boeing",
+  "careers_url": "https://jobs.boeing.com/",
+  "industries": [
+   "aerospace",
+   "engineering",
+   "manufacturing"
+  ],
+  "cities": [
+   "Arlington",
+   "Seattle",
+   "St. Louis"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://jobs.boeing.com/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Lockheed Martin",
+  "careers_url": "https://www.lockheedmartinjobs.com/",
+  "industries": [
+   "aerospace",
+   "defense",
+   "engineering"
+  ],
+  "cities": [
+   "Bethesda",
+   "Orlando",
+   "Dallas"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.lockheedmartinjobs.com/cgi-bin/ext_redir.pl",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Tesla",
+  "careers_url": "https://www.tesla.com/careers",
+  "industries": [
+   "automotive",
+   "energy",
+   "engineering"
+  ],
+  "cities": [
+   "Austin",
+   "Palo Alto"
+  ],
+  "aliases": [],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "approved by hand"
+ },
+ {
+  "name": "Walmart",
+  "careers_url": "https://careers.walmart.com/",
+  "industries": [
+   "retail",
+   "supply chain",
+   "technology"
+  ],
+  "cities": [
+   "Bentonville"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://careers.walmart.com/us/en/home",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Target",
+  "careers_url": "https://corporate.target.com/careers",
+  "industries": [
+   "retail",
+   "marketing",
+   "supply chain"
+  ],
+  "cities": [
+   "Minneapolis"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://corporate.target.com/careers",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "AT&T",
+  "careers_url": "https://www.att.jobs/",
+  "industries": [
+   "telecommunications",
+   "technology"
+  ],
+  "cities": [
+   "Dallas",
+   "Nashville"
+  ],
+  "aliases": [],
+  "verified": true,
+  "final_url": "https://www.att.jobs/",
+  "checked": "2026-10-15",
+  "note": "ok"
+ },
+ {
+  "name": "Verizon",
+  "careers_url": "https://www.verizon.com/about/careers",
+  "industries": [
+   "telecommunications",
+   "technology"
+  ],
+  "cities": [
+   "New York",
+   "Basking Ridge"
+  ],
+  "aliases": [],
+  "verified": true,
+  "checked": "2026-10-15",
+  "note": "approved by hand"
+ }
+]
