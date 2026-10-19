@@ -261,7 +261,7 @@ function tryParse(text) {
   return null;
 }
 
-function normalizeReply(content) {
+function normalizeReplyCore(content) {
   const raw = String(content || '');
   const keyRe = /\{?\s*"(suggestions|memory|knowledge|focus|summary|topics|profile_suggestion|current_term|direction)"\s*:/;
   const m = raw.match(keyRe);
@@ -294,6 +294,35 @@ function normalizeReply(content) {
   const lines = [text];
   if (suggestions) lines.push(JSON.stringify({ suggestions: suggestions.slice(0, 3) }));
   if (memory) lines.push(JSON.stringify({ memory: memory }));
+  return lines.filter(Boolean).join('\n');
+}
+
+function splitReply(out) {
+  const lines = String(out || '').split('\n');
+  const isJsonLine = function(l) { return /^\s*\{\s*"(suggestions|memory)"/.test(l); };
+  const firstJson = lines.findIndex(isJsonLine);
+  const textLines = firstJson === -1 ? lines : lines.slice(0, firstJson);
+  const result = { text: textLines.join('\n'), suggestions: null, memory: null };
+  if (firstJson === -1) return result;
+  lines.slice(firstJson).filter(isJsonLine).forEach(function(l) {
+    try {
+      const o = JSON.parse(l);
+      if (Array.isArray(o.suggestions)) result.suggestions = o.suggestions;
+      if (o.memory && typeof o.memory === 'object') result.memory = o.memory;
+    } catch (e) {}
+  });
+  return result;
+}
+
+function normalizeReply(content) {
+  const parts = splitReply(normalizeReplyCore(content));
+  let text = parts.text;
+  const cut = text.search(/\s*\{\s*"[A-Za-z_]+"\s*:/);
+  if (cut > -1) text = text.slice(0, cut);
+  text = text.replace(/[\s,{}]+$/, '').trim();
+  const lines = [text];
+  if (parts.suggestions) lines.push(JSON.stringify({ suggestions: parts.suggestions }));
+  if (parts.memory) lines.push(JSON.stringify({ memory: parts.memory }));
   return lines.filter(Boolean).join('\n');
 }
 
