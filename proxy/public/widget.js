@@ -948,6 +948,11 @@
     }
     var q = $('cmp-nav-q');
     if (q) q.addEventListener('input', function () { renderNav(q.value); });
+    var ask = $('cmp-nav-ask');
+    if (ask) ask.addEventListener('click', function () {
+      var typed = q && q.value.trim();
+      prefill(typed ? "I'm looking for help with " + typed : "I'm looking for help with ");
+    });
   })();
 
   // ---- profile data shared by Profile and For you ----
@@ -996,12 +1001,7 @@
       if (rows) out += '<div class="cmp-group-label">' + esc(grp.g) + '</div>' + rows;
     }
     if (!out) out = '<div class="cmp-empty">No pages match "' + esc(query) + '".</div>';
-    out += '<div class="cmp-actions" style="justify-content:center;margin:18px 0 6px">' +
-      '<button class="cmp-ghost" type="button" data-cmp-prefill="nav">' + (ICONS.chat ? '<span style="width:16px;height:16px">' + ICONS.chat + '</span>' : '') +
-      'Not sure where to go? Ask Compass</button></div>';
     host.innerHTML = out;
-    var btn = host.querySelector('[data-cmp-prefill]');
-    if (btn) btn.onclick = function () { prefill("I'm looking for help with "); };
   }
 
   // ---- Profile ----
