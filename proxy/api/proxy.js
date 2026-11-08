@@ -670,6 +670,11 @@ export default async function handler(req, res) {
       }
 
       // ---- token exchange ----
+      // prefer the dedicated Admin API app (ADMIN_API_*); fall back to the
+      // original community app (HIVEBRITE_*) only if the admin pair is unset.
+      const useAdminApp = !!(process.env.ADMIN_API_CLIENT_ID && process.env.ADMIN_API_CLIENT_SECRET);
+      const CLIENT_ID = useAdminApp ? process.env.ADMIN_API_CLIENT_ID : process.env.HIVEBRITE_CLIENT_ID;
+      const CLIENT_SECRET = useAdminApp ? process.env.ADMIN_API_CLIENT_SECRET : process.env.HIVEBRITE_CLIENT_SECRET;
       const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL || 'https://futureselfdiscover.com/api/oauth/token';
       // allow forcing the auth style for diagnostics: req.body.clientAuth
       //   'body'  -> client_id/secret in the form body (default)
@@ -687,12 +692,12 @@ export default async function handler(req, res) {
       const tokenHeaders = { 'Content-Type': 'application/x-www-form-urlencoded' };
       if (clientAuthStyle === 'basic') {
         const basic = Buffer.from(
-          process.env.HIVEBRITE_CLIENT_ID + ':' + process.env.HIVEBRITE_CLIENT_SECRET
+          CLIENT_ID + ':' + CLIENT_SECRET
         ).toString('base64');
         tokenHeaders['Authorization'] = 'Basic ' + basic;
       } else {
-        grantParams.client_id = process.env.HIVEBRITE_CLIENT_ID;
-        grantParams.client_secret = process.env.HIVEBRITE_CLIENT_SECRET;
+        grantParams.client_id = CLIENT_ID;
+        grantParams.client_secret = CLIENT_SECRET;
       }
 
       const tokenRes = await fetch(tokenUrl, {
@@ -714,7 +719,7 @@ export default async function handler(req, res) {
         // shows the last 4 chars of the client_id actually being sent and
         // the length of the refresh token, so you can verify they match the
         // app you generated the token from.
-        var cid = process.env.HIVEBRITE_CLIENT_ID || '';
+        var cid = CLIENT_ID || '';
         var rt = process.env.HIVEBRITE_REFRESH_TOKEN || '';
         return res.status(200).json({
           step: 'token_exchange', error: tokenData,
@@ -725,7 +730,8 @@ export default async function handler(req, res) {
             client_id_length: cid.length,
             refresh_token_last4: rt ? rt.slice(-4) : '(unset)',
             refresh_token_length: rt.length,
-            client_secret_set: !!process.env.HIVEBRITE_CLIENT_SECRET,
+            client_secret_set: !!CLIENT_SECRET,
+            client_source: useAdminApp ? 'ADMIN_API_CLIENT_ID' : 'HIVEBRITE_CLIENT_ID',
             admin_email_set: !!process.env.HIVEBRITE_ADMIN_EMAIL,
             admin_email_length: (process.env.HIVEBRITE_ADMIN_EMAIL || '').length,
             admin_password_set: !!process.env.HIVEBRITE_ADMIN_PASSWORD,
@@ -758,6 +764,7 @@ export default async function handler(req, res) {
         const out = {
           step: 'authenticated',
           grant_used: hasRefresh ? 'refresh_token' : 'password',
+          client_source: useAdminApp ? 'ADMIN_API_CLIENT_ID' : 'HIVEBRITE_CLIENT_ID',
           token_type: tokenData.token_type || null,
           expires_in: tokenData.expires_in || null,
           // true means the server rotated the refresh token, so the env var
