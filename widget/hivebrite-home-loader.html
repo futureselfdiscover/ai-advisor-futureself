@@ -1,0 +1,15 @@
+<!--
+  Compass home-page block (paste into the Hivebrite HTML block on the home page).
+  Everything else (styles, markup, banner, behavior) loads from Vercel, so future
+  UI changes only need a push to GitHub. Do not add async/await or fetch here.
+-->
+<div id="fs-banner-slot"></div>
+<script>
+(function () {
+  if (document.getElementById('fs-overlay-loader')) return;
+  var s = document.createElement('script');
+  s.id = 'fs-overlay-loader';
+  s.src = 'https://ai-advisor-futureself.vercel.app/widget-overlay.js?v=' + Date.now();
+  document.head.appendChild(s);
+})();
+</script>
