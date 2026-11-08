@@ -13,3 +13,8 @@ backend/data/scrapers/catalog_text.txt
 backend/data/scrapers/catalog_pages.json
 backend/data/scrapers/toc_text.txt
 backend/data/scrapers/chunks.json
+
+# local secrets, anywhere in the repo
+.env
+.env.*
+!.env.example
