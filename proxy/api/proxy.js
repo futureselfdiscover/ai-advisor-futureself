@@ -517,6 +517,8 @@ export default async function handler(req, res) {
 
     // ---- user_context: get Hivebrite profile via OAuth ----
     if (type === 'user_context') {
+      // admin-only: returns a member's full Hivebrite record. no client calls this.
+      if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
       const tokenRes = await fetch('https://futureselfdiscover.hivebrite.com/oauth/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -652,6 +654,9 @@ export default async function handler(req, res) {
     // a community member login. a member email will fail here.
 
     if (type === 'debug_hivebrite_get_user' || type === 'push_profile') {
+      // admin-only: these read full member records and write to live profiles
+      // with Back Office credentials. never callable from the public widget.
+      if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
       const HB_BASE = process.env.HIVEBRITE_BASE_URL ||
         'https://futureselfdiscover.hivebrite.com/api';
 
