@@ -60,6 +60,8 @@
     font-family: var(--cmp-font); letter-spacing: normal; text-transform: none;
     margin: 0; min-height: 0; min-width: 0; line-height: normal; outline: none;
   }
+  #cmp-widget-root .cmp-ask-row { margin: 8px 16px 0; }
+  #cmp-widget-root .cmp-send { margin-bottom: 2px; }
   #cmp-widget-root button:focus:not(:focus-visible), #cmp-banner button:focus:not(:focus-visible) { outline: none; box-shadow: none; }
   /* message text: host paragraph/list rules can't resize or recolor it */
   #cmp-widget-root .cmp-msg p, #cmp-widget-root .cmp-msg ul, #cmp-widget-root .cmp-msg ol,
@@ -191,6 +193,12 @@
     background: linear-gradient(160deg, #2F4356 0%, var(--cmp-navy) 55%, #2A3C4D 100%);
     padding: 14px 16px; display: flex; align-items: center; justify-content: space-between;
   }
+  .cmp-hdr::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 100%; pointer-events: none;
+    background:
+      linear-gradient(90deg, transparent 35%, rgba(255,255,255,0.22) 100%) top / 100% 1px no-repeat,
+      linear-gradient(200deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 45%);
+  }
   .cmp-hdr::after {
     content: ""; position: absolute; right: -60px; top: -80px; width: 220px; height: 220px;
     background: radial-gradient(closest-side, rgba(150,180,215,0.16), transparent);
@@ -215,13 +223,10 @@
   .cmp-icon-btn {
     width: 32px; height: 32px; padding: 7px; border: none; border-radius: 9px; cursor: pointer;
     background: transparent; color: rgba(255,255,255,0.72);
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background 0.2s ease, color 0.2s ease;
   }
-  .cmp-icon-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
-  .cmp-reset .cmp-i { transition: transform 0.45s var(--cmp-ease); }
-  .cmp-reset:hover .cmp-i { transform: rotate(-200deg); }
-  .cmp-x .cmp-i { transition: transform 0.25s var(--cmp-ease); }
-  .cmp-x:hover .cmp-i { transform: rotate(90deg); }
+  .cmp-icon-btn:hover { background: rgba(255,255,255,0.10); color: #fff; }
+  .cmp-icon-btn:active { background: rgba(255,255,255,0.16); }
 
   /* tabs */
   .cmp-tabs {
@@ -520,6 +525,18 @@
   }
   .cmp-search:focus-within { border-color: var(--cmp-blue); background: #fff; box-shadow: 0 0 0 4px rgba(42,103,216,0.10); }
   .cmp-search .cmp-i { width: 16px; height: 16px; color: #8A96AD; flex-shrink: 0; }
+  .cmp-ask-row {
+    display: flex; align-items: center; gap: 10px; width: calc(100% - 32px); margin: 8px 16px 0;
+    padding: 9px 12px; border-radius: 12px; border: 1px dashed #C9D6EA; background: #fff; cursor: pointer;
+    font: 500 12.5px var(--cmp-font); color: var(--cmp-muted); text-align: left;
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .cmp-ask-row b { font-weight: 700; color: var(--cmp-blue); }
+  .cmp-ask-row:hover { border-style: solid; border-color: #BCD0F0; background: var(--cmp-tint-2); color: var(--cmp-ink); }
+  .cmp-ask-i { width: 16px; height: 16px; color: var(--cmp-blue); flex-shrink: 0; }
+  .cmp-ask-t { flex: 1; min-width: 0; }
+  .cmp-ask-go { width: 14px; height: 14px; color: #A8B3C7; transition: transform 0.2s var(--cmp-ease), color 0.15s ease; }
+  .cmp-ask-row:hover .cmp-ask-go { transform: translateX(2px); color: var(--cmp-blue); }
   #cmp-nav-q {
     flex: 1; border: none; background: transparent; outline: none; padding: 11px 0;
     font: 13.5px var(--cmp-font); color: var(--cmp-ink);
@@ -720,6 +737,9 @@
         '<section class="cmp-view" data-view="navigate">' +
           '<label class="cmp-search"><svg viewBox="0 0 24 24" class="cmp-i"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>' +
           '<input id="cmp-nav-q" type="text" placeholder="Search FutureSelf pages" autocomplete="off"></label>' +
+          '<button class="cmp-ask-row" id="cmp-nav-ask" type="button">' +
+            '<span class="cmp-ask-i">' + I.chat + '</span><span class="cmp-ask-t">Not sure where to go? <b>Ask Compass</b></span>' +
+            '<span class="cmp-ask-go">' + I.arrow + '</span></button>' +
           '<div id="cmp-nav-list" class="cmp-scroll"></div>' +
         '</section>' +
         '<section class="cmp-view active" data-view="chat">' +
