@@ -768,7 +768,8 @@
       ['Internship Database', '/page/internship-database', 'Browse open internships'],
       ['Entry-Level Job Database', '/page/entryleveljobs', 'Full-time roles for new grads'],
       ['Explore Job Boards', '/page/find-a-job-30edfa1d-c8cf-4c88-b66a-804ccfacea21', 'Where to search, by field'],
-      ['Explore Companies', '/page/explore-companies', 'Research employers you like']
+      ['Explore Companies', '/page/explore-companies', 'Research employers you like'],
+      ['Career Center', '/page/explore-career-center', 'Advising, events and resources']
     ]},
     { g: 'Applications & networking', i: 'apply', items: [
       ['Applications & Interviews', '/page/apps&interviews', 'From application to offer'],
