@@ -672,10 +672,21 @@ export default async function handler(req, res) {
       // ---- token exchange ----
       // prefer the dedicated Admin API app (ADMIN_API_*); fall back to the
       // original community app (HIVEBRITE_*) only if the admin pair is unset.
-      const useAdminApp = !!(process.env.ADMIN_API_CLIENT_ID && process.env.ADMIN_API_CLIENT_SECRET);
+      // diagnostics (admin-only): req.body.clientChoice 'admin' | 'community'
+      // forces which app's credentials are sent.
+      const haveAdminApp = !!(process.env.ADMIN_API_CLIENT_ID && process.env.ADMIN_API_CLIENT_SECRET);
+      const useAdminApp = req.body.clientChoice === 'community' ? false
+        : req.body.clientChoice === 'admin' ? haveAdminApp : haveAdminApp;
       const CLIENT_ID = useAdminApp ? process.env.ADMIN_API_CLIENT_ID : process.env.HIVEBRITE_CLIENT_ID;
       const CLIENT_SECRET = useAdminApp ? process.env.ADMIN_API_CLIENT_SECRET : process.env.HIVEBRITE_CLIENT_SECRET;
-      const tokenUrl = process.env.HIVEBRITE_ADMIN_TOKEN_URL || 'https://futureselfdiscover.com/api/oauth/token';
+      // diagnostics (admin-only): req.body.tokenHost picks one of two fixed
+      // token endpoints. arbitrary URLs are never accepted.
+      const TOKEN_HOSTS = {
+        custom: 'https://futureselfdiscover.com/api/oauth/token',
+        hivebrite: 'https://futureselfdiscover.hivebrite.com/api/oauth/token'
+      };
+      const tokenUrl = TOKEN_HOSTS[req.body.tokenHost] ||
+        process.env.HIVEBRITE_ADMIN_TOKEN_URL || TOKEN_HOSTS.custom;
       // allow forcing the auth style for diagnostics: req.body.clientAuth
       //   'body'  -> client_id/secret in the form body (default)
       //   'basic' -> client_id/secret as HTTP Basic auth header
