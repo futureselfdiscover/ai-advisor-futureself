@@ -653,6 +653,85 @@ export default async function handler(req, res) {
     // BOTH require a real BACK OFFICE ADMIN account, which is separate from
     // a community member login. a member email will fail here.
 
+    // ---- Hivebrite Partner API (Service App) -------------------------------
+    // Current Hivebrite admin API: OAuth2 client_credentials with
+    // audience=partner, on the zone host api.<zone>.hivebrite.com, paths
+    // /admin/v3.1/... and /admin/v4/... Credentials: ADMIN_API_CLIENT_ID /
+    // ADMIN_API_CLIENT_SECRET (Back Office > Integrations > External Integrations).
+    // The token endpoint is found via OIDC discovery and must stay on a
+    // *.hivebrite.com host before any secret is sent to it.
+    if (type === 'debug_partner_api') {
+      if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
+      const CID = process.env.ADMIN_API_CLIENT_ID, CSEC = process.env.ADMIN_API_CLIENT_SECRET;
+      if (!CID || !CSEC) return res.status(200).json({ step: 'preflight', error: 'ADMIN_API_CLIENT_ID / ADMIN_API_CLIENT_SECRET not set' });
+      const ZONES = { us: 'api.us.hivebrite.com', eu: 'api.eu.hivebrite.com', apac: 'api.apac.hivebrite.com', ch: 'api.ch.hivebrite.com' };
+      const zones = ZONES[req.body.zone] ? [req.body.zone] : ['us', 'eu'];
+      const safeHost = function (u) { return /^https:\/\/[a-z0-9.-]+\.hivebrite\.com\//i.test(String(u || '')); };
+      const short = async function (r) { const t = await r.text(); try { return JSON.parse(t); } catch (e) { return { raw: t.slice(0, 300) }; } };
+      const attempts = [];
+
+      for (const z of zones) {
+        const host = 'https://' + ZONES[z];
+        const tries = { zone: z };
+        // 1. discovery
+        let tokenEndpoint = host + '/oauth/token';
+        try {
+          const d = await fetch(host + '/.well-known/openid-configuration', { headers: { accept: 'application/json' } });
+          tries.discovery_status = d.status;
+          if (d.ok) {
+            const dj = await d.json();
+            if (safeHost(dj.token_endpoint)) { tokenEndpoint = dj.token_endpoint; tries.discovered = true; }
+          }
+        } catch (e) { tries.discovery_error = e.message; }
+        tries.token_endpoint = tokenEndpoint;
+
+        // 2. token: credentials in the body, then HTTP Basic
+        let token = null;
+        for (const style of ['body', 'basic']) {
+          const params = { grant_type: 'client_credentials', audience: 'partner' };
+          const headers = { 'Content-Type': 'application/x-www-form-urlencoded', accept: 'application/json' };
+          if (style === 'body') { params.client_id = CID; params.client_secret = CSEC; }
+          else headers.Authorization = 'Basic ' + Buffer.from(CID + ':' + CSEC).toString('base64');
+          try {
+            const t = await fetch(tokenEndpoint, { method: 'POST', headers: headers, body: new URLSearchParams(params).toString() });
+            const tj = await short(t);
+            tries['token_' + style] = { status: t.status, error: tj.error || null, error_description: tj.error_description || null };
+            if (tj.access_token) { token = tj.access_token; tries.token_style = style; tries.expires_in = tj.expires_in || null; break; }
+          } catch (e) { tries['token_' + style] = { error: e.message }; }
+        }
+        attempts.push(tries);
+        if (!token) continue;
+
+        // 3. authenticated smoke tests (names and statuses only, no values)
+        const api = function (path) {
+          return fetch(host + path, { headers: { Authorization: 'Bearer ' + token, accept: 'application/json', 'Accept-Encoding': 'gzip, br' } });
+        };
+        const out = { step: 'authenticated', zone: z, token_endpoint: tokenEndpoint, token_style: tries.token_style, attempts: attempts };
+        const list = await api('/admin/v3.1/users?page=1&per_page=1');
+        out.users_list_status = list.status; out.request_id = list.headers.get('x-request-id');
+        if (!list.ok) out.users_list_error = (await short(list)).error || null;
+        const attrs = await api('/admin/v3.1/settings/customizable_attributes');
+        out.attrs_status = attrs.status;
+        const aj = await short(attrs);
+        if (attrs.ok) {
+          const arr = Array.isArray(aj) ? aj : (aj.customizable_attributes || aj.data || []);
+          out.custom_attributes = (Array.isArray(arr) ? arr : []).map(function (a) { return { name: a.name, type: a.type || a.field_type || null }; });
+        } else out.attrs_error = aj.error || aj;
+        if (userId) {
+          const u = await api('/admin/v3.1/users/' + encodeURIComponent(userId));
+          out.user_status = u.status;
+          const uj = await short(u);
+          const rec = uj.user || uj;
+          if (u.ok) {
+            out.user_fields = Object.keys(rec || {});
+            out.user_custom_attribute_names = Array.isArray(rec.custom_attributes) ? rec.custom_attributes.map(function (c) { return c.name; }) : null;
+          } else out.user_error = uj.error || null;
+        }
+        return res.status(200).json(out);
+      }
+      return res.status(200).json({ step: 'token_exchange', error: 'no zone issued a token', attempts: attempts });
+    }
+
     if (type === 'debug_hivebrite_get_user' || type === 'push_profile') {
       // admin-only: these read full member records and write to live profiles
       // with Back Office credentials. never callable from the public widget.
