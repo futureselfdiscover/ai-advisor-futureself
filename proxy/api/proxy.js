@@ -662,7 +662,15 @@ export default async function handler(req, res) {
     // *.hivebrite.com host before any secret is sent to it.
     if (type === 'debug_partner_api') {
       if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
-      const CID = process.env.ADMIN_API_CLIENT_ID, CSEC = process.env.ADMIN_API_CLIENT_SECRET;
+      const RAW_CID = process.env.ADMIN_API_CLIENT_ID || '', RAW_SEC = process.env.ADMIN_API_CLIENT_SECRET || '';
+      const CID = RAW_CID.trim(), CSEC = RAW_SEC.trim();
+      // non-secret hints about the stored values (never the values themselves)
+      const credHints = {
+        client_id_length: CID.length, client_id_last4: CID.slice(-4),
+        client_id_had_whitespace: RAW_CID !== CID,
+        secret_length: CSEC.length, secret_had_whitespace: RAW_SEC !== CSEC,
+        secret_has_url_special_chars: /[^A-Za-z0-9\-._]/.test(CSEC)
+      };
       if (!CID || !CSEC) return res.status(200).json({ step: 'preflight', error: 'ADMIN_API_CLIENT_ID / ADMIN_API_CLIENT_SECRET not set' });
       // tokens come from the authorization host, API calls go to the API host
       const ZONES = { us: 'api.us.hivebrite.com', eu: 'api.eu.hivebrite.com', apac: 'api.apac.hivebrite.com', ch: 'api.ch.hivebrite.com' };
@@ -690,11 +698,15 @@ export default async function handler(req, res) {
 
         // 2. token: credentials in the body, then HTTP Basic
         let token = null;
-        for (const style of ['basic', 'body']) {  // docs use HTTP Basic
+        // Hydra wants Basic credentials URL-encoded first (RFC 6749 2.3.1)
+        for (const style of ['basic_urlencoded', 'basic', 'body']) {
           const params = { grant_type: 'client_credentials', audience: 'partner' };
           const headers = { 'Content-Type': 'application/x-www-form-urlencoded', accept: 'application/json' };
           if (style === 'body') { params.client_id = CID; params.client_secret = CSEC; }
-          else headers.Authorization = 'Basic ' + Buffer.from(CID + ':' + CSEC).toString('base64');
+          else if (style === 'basic') headers.Authorization = 'Basic ' + Buffer.from(CID + ':' + CSEC).toString('base64');
+          else headers.Authorization = 'Basic ' + Buffer.from(
+            encodeURIComponent(CID).replace(/%20/g, '+') + ':' + encodeURIComponent(CSEC).replace(/%20/g, '+')
+          ).toString('base64');
           try {
             const t = await fetch(tokenEndpoint, { method: 'POST', headers: headers, body: new URLSearchParams(params).toString() });
             const tj = await short(t);
@@ -732,7 +744,7 @@ export default async function handler(req, res) {
         }
         return res.status(200).json(out);
       }
-      return res.status(200).json({ step: 'token_exchange', error: 'no zone issued a token', attempts: attempts });
+      return res.status(200).json({ step: 'token_exchange', error: 'no zone issued a token', credential_hints: credHints, attempts: attempts });
     }
 
     if (type === 'debug_hivebrite_get_user' || type === 'push_profile') {
