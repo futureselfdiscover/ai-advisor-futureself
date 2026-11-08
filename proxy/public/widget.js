@@ -138,7 +138,7 @@
         list.items.push('<li>' + inline(ul ? ul[1] : ol[2]) + '</li>');
       } else if (h) {
         flushPara(); flushList();
-        out.push('<p class="fs-h">' + inline(h[1]) + '</p>');
+        out.push('<p class="cmp-h">' + inline(h[1]) + '</p>');
       } else if (/^\s*$/.test(line)) {
         flushPara(); flushList();
       } else {
@@ -157,23 +157,23 @@
   // render a consent prompt for a profile suggestion with Yes/No choices
   function showProfileConsent(sug) {
     pendingProfileSuggestion = sug;
-    var body = document.getElementById('fs-body');
+    var body = document.getElementById('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
-    div.className = 'fs-row fs-row-ai';
-    div.id = 'fs-profile-consent';
-    div.innerHTML = '<div class="fs-av">' + icon + '</div>' +
-      '<div class="fs-msg fs-ai"><p>Want me to add <strong>' + esc(sug.label || sug.value) + '</strong> to your FutureSelf profile?</p>' +
+    div.className = 'cmp-row cmp-row-ai';
+    div.id = 'cmp-profile-consent';
+    div.innerHTML = '<div class="cmp-av">' + icon + '</div>' +
+      '<div class="cmp-msg cmp-ai"><p>Want me to add <strong>' + esc(sug.label || sug.value) + '</strong> to your FutureSelf profile?</p>' +
       '<div style="margin-top:8px;display:flex;gap:6px;">' +
-      '<span class="fs-pill" onclick="fsProfileYes()">Yes, add it</span>' +
-      '<span class="fs-pill" onclick="fsProfileNo()">No thanks</span>' +
+      '<span class="cmp-pill" onclick="fsProfileYes()">Yes, add it</span>' +
+      '<span class="cmp-pill" onclick="fsProfileNo()">No thanks</span>' +
       '</div></div>';
     body.appendChild(div);
     body.scrollTop = body.scrollHeight;
   }
 
   function removeProfileConsent() {
-    var el = document.getElementById('fs-profile-consent');
+    var el = document.getElementById('cmp-profile-consent');
     if (el && el.parentNode) el.parentNode.removeChild(el);
   }
 
@@ -346,7 +346,7 @@
   }
 
   function renderHistory() {
-    var body = document.getElementById('fs-body');
+    var body = document.getElementById('cmp-body');
     if (!body) return;
     body.innerHTML = '';
     for (var i = 0; i < history.length; i++) {
@@ -360,9 +360,9 @@
   function setConsent() { try { localStorage.setItem('fs_consent', '1'); } catch(e) {} }
 
   function clearBody() {
-    var body = document.getElementById('fs-body');
-    var qr = document.getElementById('fs-qr');
-    var bar = document.querySelector('.fs-bar');
+    var body = document.getElementById('cmp-body');
+    var qr = document.getElementById('cmp-qr');
+    var bar = document.querySelector('.cmp-bar');
     if (body) body.innerHTML = '';
     if (qr) qr.innerHTML = '';
     if (bar) bar.style.display = 'none';
@@ -370,49 +370,49 @@
 
   function showLoading() {
     clearBody();
-    var body = document.getElementById('fs-body');
+    var body = document.getElementById('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
-    div.className = 'fs-center-screen';
-    div.innerHTML = '<div class="fs-center-text">Loading your advisor...</div>';
+    div.className = 'cmp-center-screen';
+    div.innerHTML = '<div class="cmp-center-text">Loading your advisor...</div>';
     body.appendChild(div);
   }
 
   function showGate(r) {
     clearBody();
-    var body = document.getElementById('fs-body');
+    var body = document.getElementById('cmp-body');
     if (!body) return;
     var checklistHTML = '';
     for (var i = 0; i < r.items.length; i++) {
       var it = r.items[i];
-      checklistHTML += '<div class="fs-check-item ' + (it.done ? 'done' : 'todo') + '">' +
-        '<span class="fs-check-mark">' + (it.done ? '&#10003;' : '') + '</span>' +
+      checklistHTML += '<div class="cmp-check-item ' + (it.done ? 'done' : 'todo') + '">' +
+        '<span class="cmp-check-mark">' + (it.done ? '&#10003;' : '') + '</span>' +
         '<span>' + esc(it.label) + '</span></div>';
     }
     var editURL = 'https://futureselfdiscover.com/account';
     if (profile && profile.id) editURL = 'https://futureselfdiscover.com/users/' + profile.id;
     var div = document.createElement('div');
-    div.className = 'fs-center-screen';
+    div.className = 'cmp-center-screen';
     div.innerHTML =
-      '<div class="fs-center-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>' +
-      '<div class="fs-center-title">Complete your profile to unlock</div>' +
-      '<div class="fs-center-text">Your AI Advisor uses your profile to give real, personalized advice. Finish all of these to get started:</div>' +
-      '<div class="fs-checklist">' + checklistHTML + '</div>' +
-      '<a href="' + editURL + '" target="_top" class="fs-center-btn">Complete my profile</a>';
+      '<div class="cmp-center-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>' +
+      '<div class="cmp-center-title">Complete your profile to unlock</div>' +
+      '<div class="cmp-center-text">Your AI Advisor uses your profile to give real, personalized advice. Finish all of these to get started:</div>' +
+      '<div class="cmp-checklist">' + checklistHTML + '</div>' +
+      '<a href="' + editURL + '" target="_top" class="cmp-center-btn">Complete my profile</a>';
     body.appendChild(div);
   }
 
   function showConsent() {
     clearBody();
-    var body = document.getElementById('fs-body');
+    var body = document.getElementById('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
-    div.className = 'fs-center-screen';
+    div.className = 'cmp-center-screen';
     div.innerHTML =
-      '<div class="fs-center-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>' +
-      '<div class="fs-center-title">Before we get started</div>' +
-      '<div class="fs-center-text">This conversation may be reviewed to improve the advisor. Don\'t share sensitive personal info like passwords or SSNs.</div>' +
-      '<button class="fs-center-btn" onclick="fsConsent()">I understand.</button>';
+      '<div class="cmp-center-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>' +
+      '<div class="cmp-center-title">Before we get started</div>' +
+      '<div class="cmp-center-text">This conversation may be reviewed to improve the advisor. Don\'t share sensitive personal info like passwords or SSNs.</div>' +
+      '<button class="cmp-center-btn" onclick="fsConsent()">I understand.</button>';
     body.appendChild(div);
   }
 
@@ -428,7 +428,7 @@
       if (!hasConsented()) { showConsent(); return; }
       clearBody();
       routed = true;
-      var bar = document.querySelector('.fs-bar');
+      var bar = document.querySelector('.cmp-bar');
       if (bar) bar.style.display = '';
       fetchMemory(function(m) {
         memory = m;
@@ -473,8 +473,8 @@
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4) {
-            var textEl = document.getElementById('fs-banner-text');
-            var ctaEl = document.getElementById('fs-banner-cta-label');
+            var textEl = document.getElementById('cmp-banner-text');
+            var ctaEl = document.getElementById('cmp-banner-cta-label');
             if (textEl) textEl.innerText = 'Hi, I\'m Compass, your FutureSelf advisor. I help students like you figure out what\'s next. Want to get started?';
             if (ctaEl) ctaEl.innerText = 'Get started';
             verifyAndRoute();
@@ -489,7 +489,7 @@
 
   window.fsDismiss = function (e) {
     e.stopPropagation();
-    var b = document.getElementById('fs-banner');
+    var b = document.getElementById('cmp-banner');
     if (b) b.className = b.className + ' hidden';
   };
 
@@ -503,13 +503,13 @@
 
   window.fsSend = function () {
     if (!routed) return;
-    var input = document.getElementById('fs-input');
+    var input = document.getElementById('cmp-input');
     if (!input) return;
     var text = input.value.trim();
     if (!text) return;
     input.value = '';
     autoGrow(input);            // collapse back to one line after sending
-    document.getElementById('fs-qr').innerHTML = '';
+    document.getElementById('cmp-qr').innerHTML = '';
     addUser(text, true);
     history.push({ role: 'user', content: text, timestamp: new Date().toISOString() });
     callAPI();
@@ -517,7 +517,7 @@
 
   window.fsPill = function (text) {
     if (!routed) return;
-    document.getElementById('fs-qr').innerHTML = '';
+    document.getElementById('cmp-qr').innerHTML = '';
     addUser(text, true);
     history.push({ role: 'user', content: text, timestamp: new Date().toISOString() });
     callAPI();
@@ -659,19 +659,27 @@
   // for every reply (profile + memory context, verified data lookup, the model
   // call); the timing is approximate, the steps are not made up.
   var THINK_LABELS = ['Reading your profile and past chats', 'Checking verified sources', 'Curating your answer', 'Polishing the details'];
+  function thinkLabels() {
+    var asked = 0;
+    for (var i = 0; i < history.length; i++) if (history[i].role === 'user') asked++;
+    var hasPast = asked > 1 || !!(memory && (memory.summary || memory.focus));
+    var l = THINK_LABELS.slice();
+    if (!hasPast) l[0] = 'Reading your profile';
+    return l;
+  }
   var thinkTimer = null;
 
   function showTyping() {
-    var body = document.getElementById('fs-body');
+    var body = document.getElementById('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
-    div.className = 'fs-row fs-row-ai';
-    div.id = 'fs-typing';
-    div.innerHTML = '<div class="fs-av">' + icon + '</div>' +
-      '<div class="fs-msg fs-ai">' +
-        '<div class="fs-think">' +
-          '<div class="fs-route"><span class="fs-route-fill"></span><span class="fs-wp"></span><span class="fs-wp"></span><span class="fs-wp"></span></div>' +
-          '<span class="fs-think-label" id="fs-think-label">' + THINK_LABELS[0] + '</span>' +
+    div.className = 'cmp-row cmp-row-ai';
+    div.id = 'cmp-typing';
+    div.innerHTML = '<div class="cmp-av">' + icon + '</div>' +
+      '<div class="cmp-msg cmp-ai">' +
+        '<div class="cmp-think">' +
+          '<div class="cmp-route"><span class="cmp-route-fill"></span><span class="cmp-wp"></span><span class="cmp-wp"></span><span class="cmp-wp"></span></div>' +
+          '<span class="cmp-think-label" id="cmp-think-label">' + thinkLabels()[0] + '</span>' +
         '</div>' +
       '</div>';
     body.appendChild(div);
@@ -681,30 +689,31 @@
     var idx = 0;
     thinkTimer = setInterval(function () {
       idx++;
-      if (idx >= THINK_LABELS.length) { clearInterval(thinkTimer); thinkTimer = null; return; }
-      var el = document.getElementById('fs-think-label');
+      var labels = thinkLabels();
+      if (idx >= labels.length) { clearInterval(thinkTimer); thinkTimer = null; return; }
+      var el = document.getElementById('cmp-think-label');
       if (el) {
-        el.innerText = THINK_LABELS[idx];
-        el.classList.remove('fs-think-swap');
+        el.innerText = labels[idx];
+        el.classList.remove('cmp-think-swap');
         void el.offsetWidth;          // force reflow so the class re-triggers
-        el.classList.add('fs-think-swap');
+        el.classList.add('cmp-think-swap');
       }
     }, 2400);
   }
 
   function hideTyping() {
     if (thinkTimer) { clearInterval(thinkTimer); thinkTimer = null; }
-    var t = document.getElementById('fs-typing');
+    var t = document.getElementById('cmp-typing');
     if (t && t.parentNode) t.parentNode.removeChild(t);
   }
 
   function setPills(arr) {
-    var c = document.getElementById('fs-qr');
+    var c = document.getElementById('cmp-qr');
     if (!c) return;
     c.innerHTML = '';
     for (var i = 0; i < arr.length; i++) {
       var p = document.createElement('div');
-      p.className = 'fs-pill';
+      p.className = 'cmp-pill';
       p.innerText = arr[i];
       p.onclick = (function (t) { return function () { fsPill(t); }; })(arr[i]);
       c.appendChild(p);
@@ -712,29 +721,29 @@
   }
 
   function addAI(text, scroll) {
-    var body = document.getElementById('fs-body');
+    var body = document.getElementById('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
-    div.className = 'fs-row fs-row-ai';
-    div.innerHTML = '<div class="fs-av">' + icon + '</div><div class="fs-msg fs-ai">' + renderMarkdown(text) + '</div>';
+    div.className = 'cmp-row cmp-row-ai';
+    div.innerHTML = '<div class="cmp-av">' + icon + '</div><div class="cmp-msg cmp-ai">' + renderMarkdown(text) + '</div>';
     body.appendChild(div);
     if (scroll) body.scrollTop = body.scrollHeight;
   }
 
   function addUser(text, scroll, idx) {
-    var body = document.getElementById('fs-body');
+    var body = document.getElementById('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
-    div.className = 'fs-row fs-row-usr';
+    div.className = 'cmp-row cmp-row-usr';
     div.setAttribute('data-hi', idx == null ? history.length : idx);
-    div.innerHTML = '<div class="fs-msg fs-usr">' + esc(text) + '</div>';
+    div.innerHTML = '<div class="cmp-msg cmp-usr">' + esc(text) + '</div>';
     body.appendChild(div);
     if (scroll) body.scrollTop = body.scrollHeight;
   }
 
   // auto-growing textarea: expands with content up to the CSS max-height,
   // then scrolls. Enter sends; Shift+Enter inserts a newline.
-  var inp = document.getElementById('fs-input');
+  var inp = document.getElementById('cmp-input');
   if (inp) {
     inp.onkeydown = function (e) {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -754,11 +763,46 @@
   var VIEW_INDEX = { navigate: 0, chat: 1, profile: 2, foryou: 3 };
   var ICONS = window.__FS_ICONS__ || {};
   var G = {
-    careers: '<svg viewBox="0 0 24 24" class="fs-i"><rect x="3.5" y="7" width="17" height="12" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3.5 12.5h17"/></svg>',
-    apply: '<svg viewBox="0 0 24 24" class="fs-i"><path d="M14 3.5H7.5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8Z"/><path d="M14 3.5V8h4.5M9 13h6M9 16.5h4"/></svg>',
-    grow: '<svg viewBox="0 0 24 24" class="fs-i"><path d="M4 19.5h16"/><path d="m5 15 4.5-4.5 3.5 3.5L19.5 7"/><path d="M15 7h4.5v4.5"/></svg>',
-    life: '<svg viewBox="0 0 24 24" class="fs-i"><path d="M12 19.5s-7.5-4.4-7.5-10A4.2 4.2 0 0 1 12 7a4.2 4.2 0 0 1 7.5 2.5c0 5.6-7.5 10-7.5 10Z"/></svg>',
-    go: '<svg viewBox="0 0 24 24" class="fs-i fs-link-go"><path d="m9 6 6 6-6 6"/></svg>'
+    careers: '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="3.5" y="7" width="17" height="12" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3.5 12.5h17"/></svg>',
+    apply: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M14 3.5H7.5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8Z"/><path d="M14 3.5V8h4.5M9 13h6M9 16.5h4"/></svg>',
+    grow: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M4 19.5h16"/><path d="m5 15 4.5-4.5 3.5 3.5L19.5 7"/><path d="M15 7h4.5v4.5"/></svg>',
+    life: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M12 19.5s-7.5-4.4-7.5-10A4.2 4.2 0 0 1 12 7a4.2 4.2 0 0 1 7.5 2.5c0 5.6-7.5 10-7.5 10Z"/></svg>',
+    go: '<svg viewBox="0 0 24 24" class="cmp-i cmp-link-go"><path d="m9 6 6 6-6 6"/></svg>'
+  };
+
+  var PAGE_ICONS = {
+    '/page/careersinternships': '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path d="M9 7.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v1.5M3.5 12.5h17"/></svg>',
+    '/page/internship-database': '<svg viewBox="0 0 24 24" class="cmp-i"><ellipse cx="12" cy="6" rx="7" ry="2.5"/><path d="M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></svg>',
+    '/page/entryleveljobs': '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><circle cx="9" cy="11" r="2"/><path d="M6 15.5c.5-1.4 1.6-2 3-2s2.5.6 3 2M14.5 10h3M14.5 13h3"/></svg>',
+    '/page/find-a-job-30edfa1d-c8cf-4c88-b66a-804ccfacea21': '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9.5 3.5h5v2.5h-5zM9 11h6M9 14.5h6M9 18h3.5"/></svg>',
+    '/page/explore-companies': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M4 20.5h16M6 20.5V6.5l7-3v17M13 9.5h5v11"/><path d="M9 9h1.5M9 12.5h1.5M9 16h1.5M15.5 13h.5M15.5 16.5h.5"/></svg>',
+    '/page/explore-career-center': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M3 9.5 12 5l9 4.5-9 4.5Z"/><path d="M7 11.5v4.5c1.3 1.3 3 2 5 2s3.7-.7 5-2v-4.5M21 9.5v5"/></svg>',
+    '/page/apps&interviews': '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4M9 15l2 2 4-4"/></svg>',
+    '/page/application-necessities': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M14 3.5H7.5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8Z"/><path d="M14 3.5V8h4.5M9 13h6M9 16.5h4"/></svg>',
+    '/page/network-leadership': '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="5.5" r="2.25"/><circle cx="5.5" cy="17.5" r="2.25"/><circle cx="18.5" cy="17.5" r="2.25"/><path d="M11 7.5 6.5 15.5M13 7.5l4.5 8M7.75 17.5h8.5"/></svg>',
+    '/page/coffee-chats-and-cold-calls': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M5 9.5h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5Z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16M8.5 3.5v2.5M12 3.5v2.5"/></svg>',
+    '/page/leveraging-linkedin-dfb39de3-e1dd-4c61-ae1d-86e2c08e7e2d': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
+    '/page/mentorship-program': '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="8.5" cy="7.5" r="3"/><circle cx="17" cy="9.5" r="2.25"/><path d="M3 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M14.5 15c.8-.6 1.6-.9 2.5-.9 2 0 3.5 1.4 4 3.9"/></svg>',
+    '/page/explore-yourself': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M9 17.5h6M10 20.5h4"/><path d="M12 3.5a6 6 0 0 0-3.5 10.9c.4.3.5.8.5 1.3v1.8h6v-1.8c0-.5.2-1 .5-1.3A6 6 0 0 0 12 3.5Z"/></svg>',
+    '/page/build-your-plan-': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M3.5 6.5 9 4l6 2.5L20.5 4v13.5L15 20l-6-2.5-5.5 2.5Z"/><path d="M9 4v13.5M15 6.5V20"/></svg>',
+    '/page/skills-business-basics-11508ae5-15d3-41dd-a447-113db421c698': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M14.5 6.5a4 4 0 0 0-5 5L4 17a2.1 2.1 0 0 0 3 3l5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5Z"/></svg>',
+    '/page/get-smart-on-ai': '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="6.5" y="6.5" width="11" height="11" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9.5 3.5v3M14.5 3.5v3M9.5 17.5v3M14.5 17.5v3M3.5 9.5h3M3.5 14.5h3M17.5 9.5h3M17.5 14.5h3"/></svg>',
+    '/page/explore-certifications': '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="9" r="5.5"/><path d="M9 13.8 8 20.5l4-2 4 2-1-6.7M12 6.5l.8 1.6 1.7.2-1.2 1.2.3 1.7-1.6-.8-1.6.8.3-1.7-1.2-1.2 1.7-.2Z"/></svg>',
+    '/page/exploring-cities': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M12 20.5s-6.5-5.6-6.5-10.5a6.5 6.5 0 0 1 13 0c0 4.9-6.5 10.5-6.5 10.5Z"/><circle cx="12" cy="10" r="2.25"/></svg>',
+    '/news': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M5.5 4.5h11a1 1 0 0 1 1 1v13a2 2 0 0 0 2 2h-13a2 2 0 0 1-2-2v-13a1 1 0 0 1 1-1Z"/><path d="M17.5 9h2v9.5a2 2 0 0 1-2 2M8.5 8.5h6M8.5 12h6M8.5 15.5h4"/></svg>',
+    '/page/life%20&%20wellbeing': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M19.5 4.5c-8.5 0-14 4.5-14 11a5 5 0 0 0 5 5c6.5 0 9-7 9-16Z"/><path d="M5 20c2.5-4 6-7 10-9"/></svg>',
+    '/page/healthandwellness': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M12 19.5s-7.5-4.4-7.5-10A4.2 4.2 0 0 1 12 7a4.2 4.2 0 0 1 7.5 2.5c0 5.6-7.5 10-7.5 10Z"/><path d="M7 12h2.5l1.5-2.5 2 4.5 1.5-2H17"/></svg>',
+    '/page/profbalance': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M12 4.5v16M7.5 20.5h9M5 7.5h14M12 4.5l-7 3M12 4.5l7 3"/><path d="M5 7.5 2.5 13a2.5 2.5 0 0 0 5 0ZM19 7.5 16.5 13a2.5 2.5 0 0 0 5 0Z"/></svg>',
+    '/page/academic-assistance': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M12 6.5c-2-1.5-4.5-2-8-2v13c3.5 0 6 .5 8 2 2-1.5 4.5-2 8-2v-13c-3.5 0-6 .5-8 2Z"/><path d="M12 6.5v13"/></svg>',
+    '/page/time-management': '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="12.5" r="8"/><path d="M12 8.5v4l2.5 2.5M9.5 2.5h5"/></svg>',
+    '/page/clubsandorganizations': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M6 20.5V4"/><path d="M6 4.5l12 4-12 4"/></svg>',
+    '/companies': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M3.5 9 12 4l8.5 5M5 9.5v8M9.5 9.5v8M14.5 9.5v8M19 9.5v8M3.5 20.5h17M4 17.5h16"/></svg>',
+    '/page/international-students': '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.5 5.2 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.2-3.5-8.5s1.2-6.1 3.5-8.5Z"/></svg>',
+    '/page/student-athletes': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M8 4.5h8v5a4 4 0 0 1-8 0Z"/><path d="M8 6H5.5v1.5A3 3 0 0 0 8 10.4M16 6h2.5v1.5a3 3 0 0 1-2.5 2.9M12 13.5v3M8.5 20.5h7M9.5 20.5l.5-4h4l.5 4"/></svg>',
+    '/topics': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M9.5 4.5 8 19.5M16 4.5l-1.5 15M5 9h15M4 15h15"/></svg>',
+    '/forum': '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M14.5 13.5H8l-3.5 3v-10a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2Z"/><path d="M16.5 9h1a2 2 0 0 1 2 2v9l-3-2.5h-5a2 2 0 0 1-2-2"/></svg>',
+    '/people': '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="9" cy="8.5" r="2.5"/><circle cx="16.5" cy="13.5" r="2"/><path d="M9 11c-2.5 0-4.5 1.5-5 4.5M14.5 18.5c.4-1.7 1.4-2.7 2-2.7s1.6 1 2 2.7M3.5 20.5h17"/></svg>',
+    '/feed': '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/><path d="M7.5 7h5M7.5 17h5"/></svg>'
   };
 
   // site map for the Navigate tab (keep in sync with pageMap above)
@@ -806,13 +850,13 @@
   ];
 
   function $(id) { return document.getElementById(id); }
-  function chatEl() { return $('fs-chat'); }
-  function launcherEl() { return $('fs-launcher'); }
+  function chatEl() { return $('cmp-chat'); }
+  function launcherEl() { return $('cmp-launcher'); }
   function isOpen() { var w = chatEl(); return !!(w && w.classList.contains('open')); }
   var canHover = !(window.matchMedia && window.matchMedia('(hover: none)').matches);
 
   function setOpen(open) {
-    var w = chatEl(), L = launcherEl(), b = $('fs-bubble');
+    var w = chatEl(), L = launcherEl(), b = $('cmp-bubble');
     if (w) w.classList.toggle('open', open);
     if (L) { L.classList.toggle('chat-open', open); L.classList.remove('dial'); }
     if (b) b.setAttribute('aria-label', open ? 'Close Compass' : 'Open Compass');
@@ -822,14 +866,14 @@
     if (!VIEW_INDEX.hasOwnProperty(v)) v = 'chat';
     currentView = v;
     var w = chatEl(); if (!w) return;
-    var tabs = w.querySelectorAll('.fs-tab'), views = w.querySelectorAll('.fs-view');
+    var tabs = w.querySelectorAll('.cmp-tab'), views = w.querySelectorAll('.cmp-view');
     for (var i = 0; i < tabs.length; i++) {
       var on = tabs[i].getAttribute('data-view') === v;
       tabs[i].classList.toggle('active', on);
       tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
     }
     for (var j = 0; j < views.length; j++) views[j].classList.toggle('active', views[j].getAttribute('data-view') === v);
-    var ink = w.querySelector('.fs-tab-ink');
+    var ink = w.querySelector('.cmp-tab-ink');
     if (ink) ink.style.setProperty('--t', VIEW_INDEX[v]);
     if (v === 'navigate') renderNav('');
     if (v === 'profile') withProfile(renderProfile);
@@ -842,7 +886,6 @@
     setOpen(true);
     showView(v);
     if (v === 'chat' && (!was || !routed)) verifyAndRoute();
-    if (v === 'navigate') setTimeout(function () { var q = $('fs-nav-q'); if (q && canHover) q.focus(); }, 60);
   }
 
   window.fsOpenView = openTo;
@@ -860,13 +903,13 @@
 
   function prefill(text) {
     openTo('chat');
-    var inp2 = $('fs-input');
+    var inp2 = $('cmp-input');
     if (inp2) { inp2.value = text; autoGrow(inp2); setTimeout(function () { inp2.focus(); }, 80); }
   }
 
   // ---- launcher: hover (or tap on touch screens) fans out the four actions ----
   (function wireLauncher() {
-    var L = launcherEl(), b = $('fs-bubble');
+    var L = launcherEl(), b = $('cmp-bubble');
     if (!L || !b) return;
     var t = null, lastPointer = 'mouse';
     function dial(on) { if (isOpen()) on = false; L.classList.toggle('dial', on); }
@@ -884,7 +927,7 @@
       if (lastPointer !== 'mouse' && !L.classList.contains('dial')) { dial(true); return; }  // touch: first tap shows actions
       openTo('chat');
     });
-    var sats = L.querySelectorAll('.fs-sat');
+    var sats = L.querySelectorAll('.cmp-sat');
     for (var i = 0; i < sats.length; i++) {
       sats[i].addEventListener('click', function (e) {
         e.stopPropagation();
@@ -895,7 +938,7 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') { if (isOpen()) setOpen(false); dial(false); }
     });
-    var tabs = chatEl() ? chatEl().querySelectorAll('.fs-tab') : [];
+    var tabs = chatEl() ? chatEl().querySelectorAll('.cmp-tab') : [];
     for (var k = 0; k < tabs.length; k++) {
       tabs[k].addEventListener('click', function () {
         var v = this.getAttribute('data-view');
@@ -903,15 +946,15 @@
         if (v === 'chat' && !routed) verifyAndRoute();
       });
     }
-    var q = $('fs-nav-q');
+    var q = $('cmp-nav-q');
     if (q) q.addEventListener('input', function () { renderNav(q.value); });
   })();
 
   // ---- profile data shared by Profile and For you ----
   function withProfile(render) {
     if (profile) { render(profile); return; }
-    var host = $(currentView === 'profile' ? 'fs-profile' : 'fs-foryou');
-    if (host) host.innerHTML = '<div class="fs-empty">Loading your profile...</div>';
+    var host = $(currentView === 'profile' ? 'cmp-profile' : 'cmp-foryou');
+    if (host) host.innerHTML = '<div class="cmp-empty">Loading your profile...</div>';
     fetchProfile(function (p) {
       profile = p;
       if (p && p.name && !userName) userName = p.firstname || p.name.split(' ')[0];
@@ -935,7 +978,7 @@
 
   // ---- Navigate ----
   function renderNav(query) {
-    var host = $('fs-nav-list'); if (!host) return;
+    var host = $('cmp-nav-list'); if (!host) return;
     var q = String(query || '').toLowerCase().trim();
     var out = '', n = 0;
     for (var gi = 0; gi < NAV.length; gi++) {
@@ -944,28 +987,28 @@
         var it = grp.items[ii];
         if (q && (it[0] + ' ' + it[2] + ' ' + grp.g).toLowerCase().indexOf(q) === -1) continue;
         var here = it[1] === path;
-        rows += '<a class="fs-link' + (here ? ' here' : '') + '" href="' + esc(it[1]) + '" target="_top" style="animation-delay:' + (n * 18) + 'ms">' +
-          '<span class="fs-link-i">' + G[grp.i] + '</span>' +
-          '<span class="fs-link-t">' + esc(it[0]) + '<span class="fs-link-sub">' + (here ? 'You are here' : esc(it[2])) + '</span></span>' +
+        rows += '<a class="cmp-link' + (here ? ' here' : '') + '" href="' + esc(it[1]) + '" target="_top" style="animation-delay:' + (n * 18) + 'ms">' +
+          '<span class="cmp-link-i">' + (PAGE_ICONS[it[1]] || G[grp.i]) + '</span>' +
+          '<span class="cmp-link-t">' + esc(it[0]) + '<span class="cmp-link-sub">' + (here ? 'You are here' : esc(it[2])) + '</span></span>' +
           G.go + '</a>';
         n++;
       }
-      if (rows) out += '<div class="fs-group-label">' + esc(grp.g) + '</div>' + rows;
+      if (rows) out += '<div class="cmp-group-label">' + esc(grp.g) + '</div>' + rows;
     }
-    if (!out) out = '<div class="fs-empty">No pages match "' + esc(query) + '".</div>';
-    out += '<div class="fs-actions" style="justify-content:center;margin:18px 0 6px">' +
-      '<button class="fs-ghost" type="button" data-fs-prefill="nav">' + (ICONS.chat ? '<span style="width:16px;height:16px">' + ICONS.chat + '</span>' : '') +
+    if (!out) out = '<div class="cmp-empty">No pages match "' + esc(query) + '".</div>';
+    out += '<div class="cmp-actions" style="justify-content:center;margin:18px 0 6px">' +
+      '<button class="cmp-ghost" type="button" data-cmp-prefill="nav">' + (ICONS.chat ? '<span style="width:16px;height:16px">' + ICONS.chat + '</span>' : '') +
       'Not sure where to go? Ask Compass</button></div>';
     host.innerHTML = out;
-    var btn = host.querySelector('[data-fs-prefill]');
+    var btn = host.querySelector('[data-cmp-prefill]');
     if (btn) btn.onclick = function () { prefill("I'm looking for help with "); };
   }
 
   // ---- Profile ----
   function renderProfile(p) {
-    var host = $('fs-profile'); if (!host) return;
+    var host = $('cmp-profile'); if (!host) return;
     if (!p) {
-      host.innerHTML = '<div class="fs-empty">Sign in to FutureSelf to see your profile here.</div>';
+      host.innerHTML = '<div class="cmp-empty">Sign in to FutureSelf to see your profile here.</div>';
       return;
     }
     var r = readiness(p), done = 0;
@@ -978,46 +1021,46 @@
     if (p.locations && p.locations.length && p.locations[0].address) meta.push(p.locations[0].address);
     var first = (p.firstname || (p.name || '?')).charAt(0).toUpperCase();
 
-    var h = '<div class="fs-card"><div class="fs-id">' +
-      '<div class="fs-ring"><svg viewBox="0 0 64 64"><circle class="fs-ring-bg" cx="32" cy="32" r="27"/>' +
-      '<circle class="fs-ring-fg" cx="32" cy="32" r="27" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + C.toFixed(1) + '" data-target="' + (C * (1 - pct / 100)).toFixed(1) + '"/></svg>' +
-      '<div class="fs-ring-in">' + esc(first) + '</div></div>' +
-      '<div><div class="fs-id-name">' + esc(p.name || 'Your profile') + '</div>' +
-      (meta.length ? '<div class="fs-id-meta">' + esc(meta.join(' \u00b7 ')) + '</div>' : '') +
-      (p.headline ? '<div class="fs-id-meta">' + esc(p.headline) + '</div>' : '') +
-      '<div class="fs-id-pct">Profile ' + pct + '% complete</div></div></div></div>';
+    var h = '<div class="cmp-card"><div class="cmp-id">' +
+      '<div class="cmp-ring"><svg viewBox="0 0 64 64"><circle class="cmp-ring-bg" cx="32" cy="32" r="27"/>' +
+      '<circle class="cmp-ring-fg" cx="32" cy="32" r="27" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + C.toFixed(1) + '" data-target="' + (C * (1 - pct / 100)).toFixed(1) + '"/></svg>' +
+      '<div class="cmp-ring-in">' + esc(first) + '</div></div>' +
+      '<div><div class="cmp-id-name">' + esc(p.name || 'Your profile') + '</div>' +
+      (meta.length ? '<div class="cmp-id-meta">' + esc(meta.join(' \u00b7 ')) + '</div>' : '') +
+      (p.headline ? '<div class="cmp-id-meta">' + esc(p.headline) + '</div>' : '') +
+      '<div class="cmp-id-pct">Profile ' + pct + '% complete</div></div></div></div>';
 
     if (!r.ready) {
       var list = '';
       for (var k = 0; k < r.items.length; k++) {
         var it = r.items[k];
-        list += '<div class="fs-check-item ' + (it.done ? 'done' : 'todo') + '"><span class="fs-check-mark">' + (it.done ? '&#10003;' : '') + '</span><span>' + esc(it.label) + '</span></div>';
+        list += '<div class="cmp-check-item ' + (it.done ? 'done' : 'todo') + '"><span class="cmp-check-mark">' + (it.done ? '&#10003;' : '') + '</span><span>' + esc(it.label) + '</span></div>';
       }
-      h += '<div class="fs-card"><div class="fs-card-title">Unlock Compass</div><div class="fs-checklist" style="max-width:none">' + list + '</div></div>';
+      h += '<div class="cmp-card"><div class="cmp-card-title">Unlock Compass</div><div class="cmp-checklist" style="max-width:none">' + list + '</div></div>';
     }
 
     var sk = names(p.skills), ind = names(p.industries);
     if (sk.length || ind.length) {
-      h += '<div class="fs-card">';
-      if (ind.length) h += '<div class="fs-card-title">Industries you\'re exploring</div><div class="fs-chips">' + chips(ind) + '</div>';
-      if (sk.length) h += '<div class="fs-card-title"' + (ind.length ? ' style="margin-top:14px"' : '') + '>Skills</div><div class="fs-chips">' + chips(sk) + '</div>';
+      h += '<div class="cmp-card">';
+      if (ind.length) h += '<div class="cmp-card-title">Industries you\'re exploring</div><div class="cmp-chips">' + chips(ind) + '</div>';
+      if (sk.length) h += '<div class="cmp-card-title"' + (ind.length ? ' style="margin-top:14px"' : '') + '>Skills</div><div class="cmp-chips">' + chips(sk) + '</div>';
       h += '</div>';
     }
 
     if (memory && (memory.focus || memory.summary)) {
-      h += '<div class="fs-card"><div class="fs-card-title">What Compass remembers</div>' +
-        (memory.focus ? '<div class="fs-rec-t" style="margin-bottom:4px">' + esc(typeof memory.focus === 'string' ? memory.focus : '') + '</div>' : '') +
-        (memory.summary ? '<div class="fs-muted">' + esc(typeof memory.summary === 'string' ? memory.summary : '') + '</div>' : '') +
-        '<div class="fs-muted" style="margin-top:8px;font-size:11.5px">You can clear this anytime with the reset button above.</div></div>';
+      h += '<div class="cmp-card"><div class="cmp-card-title">What Compass remembers</div>' +
+        (memory.focus ? '<div class="cmp-rec-t" style="margin-bottom:4px">' + esc(typeof memory.focus === 'string' ? memory.focus : '') + '</div>' : '') +
+        (memory.summary ? '<div class="cmp-muted">' + esc(typeof memory.summary === 'string' ? memory.summary : '') + '</div>' : '') +
+        '<div class="cmp-muted" style="margin-top:8px;font-size:11.5px">You can clear this anytime with the reset button above.</div></div>';
     }
 
-    h += '<div class="fs-actions"><a class="fs-cta" href="' + esc(editURL()) + '" target="_top">Edit profile</a>' +
-      '<button class="fs-ghost" type="button" data-fs-ask="profile">Get feedback from Compass</button></div>';
+    h += '<div class="cmp-actions"><a class="cmp-cta" href="' + esc(editURL()) + '" target="_top">Edit profile</a>' +
+      '<button class="cmp-ghost" type="button" data-cmp-ask="profile">Get feedback from Compass</button></div>';
     host.innerHTML = h;
 
-    var ring = host.querySelector('.fs-ring-fg');
+    var ring = host.querySelector('.cmp-ring-fg');
     if (ring) setTimeout(function () { ring.style.strokeDashoffset = ring.getAttribute('data-target'); }, 60);
-    var ask = host.querySelector('[data-fs-ask]');
+    var ask = host.querySelector('[data-cmp-ask]');
     if (ask) ask.onclick = function () {
       askCompass('Look at my FutureSelf profile and tell me the one change that would strengthen it most for the roles I want.');
     };
@@ -1025,7 +1068,7 @@
 
   function chips(arr) {
     var out = '';
-    for (var i = 0; i < arr.length && i < 12; i++) out += '<span class="fs-chip">' + esc(arr[i]) + '</span>';
+    for (var i = 0; i < arr.length && i < 12; i++) out += '<span class="cmp-chip">' + esc(arr[i]) + '</span>';
     return out;
   }
 
@@ -1071,24 +1114,25 @@
   }
 
   function renderForYou(p) {
-    var host = $('fs-foryou'); if (!host) return;
+    var host = $('cmp-foryou'); if (!host) return;
     var hi = userName ? 'Your next moves, ' + esc(userName) : 'Your next moves';
-    var h = '<div class="fs-hero"><div class="fs-hero-t">' + hi + '</div>' +
-      '<div class="fs-hero-s">Compass reads your profile and goals and builds a short plan for this week.</div>' +
-      '<button class="fs-cta" type="button" data-fs-ask="plan">' + (ICONS.spark ? '<span style="width:16px;height:16px">' + ICONS.spark + '</span>' : '') + 'Build my plan</button></div>';
+    var h = '<div class="cmp-plan"><span class="cmp-plan-i">' + (ICONS.spark || '') + '</span><div>' +
+      '<div class="cmp-plan-t">' + hi + '</div>' +
+      '<div class="cmp-plan-s">Compass reads your profile and goals and builds a short plan for this week.</div>' +
+      '<button class="cmp-cta" type="button" data-cmp-ask="plan">Build my plan</button></div></div>';
     var recs = pickRecs(p);
     if (recs.length) {
-      h += '<div class="fs-card-title" style="margin:18px 2px 0">Picked from your profile</div>';
+      h += '<div class="cmp-card-title" style="margin:18px 2px 0">Picked from your profile</div>';
       for (var i = 0; i < recs.length; i++) {
         var r = recs[i];
-        h += '<a class="fs-rec" href="' + esc(r.h) + '" target="_top">' +
-          '<span class="fs-link-i">' + G[r.i] + '</span>' +
-          '<span class="fs-link-t"><span class="fs-rec-t">' + esc(r.t) + '</span><span class="fs-rec-why" style="display:block">' + esc(r.w) + '</span></span>' +
+        h += '<a class="cmp-rec" href="' + esc(r.h) + '" target="_top">' +
+          '<span class="cmp-link-i">' + (PAGE_ICONS[r.h] || G[r.i]) + '</span>' +
+          '<span class="cmp-link-t"><span class="cmp-rec-t">' + esc(r.t) + '</span><span class="cmp-rec-why" style="display:block">' + esc(r.w) + '</span></span>' +
           G.go + '</a>';
       }
     }
     host.innerHTML = h;
-    var btn = host.querySelector('[data-fs-ask]');
+    var btn = host.querySelector('[data-cmp-ask]');
     if (btn) btn.onclick = function () {
       askCompass('Based on my profile and goals, what are the three most useful things I should do this week? Point me to the right FutureSelf pages.');
     };
@@ -1096,12 +1140,12 @@
 
   // ---- the compass mark stays on the newest reply only ----
   function markLatest() {
-    var body = $('fs-body'); if (!body) return;
-    var rows = body.querySelectorAll('.fs-row-ai');
-    for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('fs-latest', i === rows.length - 1);
+    var body = $('cmp-body'); if (!body) return;
+    var rows = body.querySelectorAll('.cmp-row-ai');
+    for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('cmp-latest', i === rows.length - 1);
     refreshWaypointBtn();
   }
-  if ($('fs-body') && window.MutationObserver) new MutationObserver(markLatest).observe($('fs-body'), { childList: true });
+  if ($('cmp-body') && window.MutationObserver) new MutationObserver(markLatest).observe($('cmp-body'), { childList: true });
 
   // ===========================================================================
   // Waypoints: every question is a stop. Jump back to it, or resume the
@@ -1137,16 +1181,16 @@
   }
 
   function refreshWaypointBtn() {
-    var btn = $('fs-wp-btn'), cnt = $('fs-wp-count'); if (!btn) return;
+    var btn = $('cmp-wp-btn'), cnt = $('cmp-wp-count'); if (!btn) return;
     var n = routed ? stops().length : 0;
     btn.hidden = n < 1;
-    if (btn.parentNode) btn.parentNode.classList.toggle('fs-has-wp', n >= 1);
+    if (btn.parentNode) btn.parentNode.classList.toggle('cmp-has-wp', n >= 1);
     if (cnt) cnt.textContent = n;
     if (n < 1) toggleWaypoints(false);
   }
 
   function toggleWaypoints(open) {
-    var panel = $('fs-wp-panel'), btn = $('fs-wp-btn'); if (!panel || !btn) return;
+    var panel = $('cmp-wp-panel'), btn = $('cmp-wp-btn'); if (!panel || !btn) return;
     if (open === undefined) open = panel.hidden;
     if (open) renderWaypoints();
     panel.hidden = !open;
@@ -1154,19 +1198,19 @@
   }
 
   function renderWaypoints() {
-    var host = $('fs-wp-list'); if (!host) return;
+    var host = $('cmp-wp-list'); if (!host) return;
     var list = stops(), h = '';
     for (var k = 0; k < list.length; k++) {
       var s = list[k], last = k === list.length - 1;
       var preview = plain(s.a);
       if (preview.length > 70) preview = preview.slice(0, 68) + '...';
       var meta = [timeLabel(s.ts), preview].filter(Boolean).join(' \u00b7 ');
-      h += '<div class="fs-wp-item' + (last ? ' current' : '') + '" style="animation-delay:' + (k * 30) + 'ms">' +
-        '<div class="fs-wp-rail"><span class="fs-wp-dot"></span></div>' +
-        '<div class="fs-wp-main"><div class="fs-wp-q">' + esc(s.q) + '</div>' +
-        (meta ? '<div class="fs-wp-meta">' + esc(meta) + '</div>' : '') +
-        '<div class="fs-wp-acts"><button class="fs-wp-act" type="button" data-jump="' + s.i + '">Jump to</button>' +
-        (last ? '' : '<button class="fs-wp-act primary" type="button" data-resume="' + s.i + '">Resume from here</button>') +
+      h += '<div class="cmp-wp-item' + (last ? ' current' : '') + '" style="animation-delay:' + (k * 30) + 'ms">' +
+        '<div class="cmp-wp-rail"><span class="cmp-wp-dot"></span></div>' +
+        '<div class="cmp-wp-main"><div class="cmp-wp-q">' + esc(s.q) + '</div>' +
+        (meta ? '<div class="cmp-wp-meta">' + esc(meta) + '</div>' : '') +
+        '<div class="cmp-wp-acts"><button class="cmp-wp-act" type="button" data-jump="' + s.i + '">Jump to</button>' +
+        (last ? '' : '<button class="cmp-wp-act primary" type="button" data-resume="' + s.i + '">Resume from here</button>') +
         '</div></div></div>';
     }
     host.innerHTML = h;
@@ -1175,12 +1219,12 @@
 
   function jumpTo(i) {
     toggleWaypoints(false);
-    var body = $('fs-body'); if (!body) return;
-    var row = body.querySelector('.fs-row-usr[data-hi="' + i + '"]'); if (!row) return;
+    var body = $('cmp-body'); if (!body) return;
+    var row = body.querySelector('.cmp-row-usr[data-hi="' + i + '"]'); if (!row) return;
     var top = row.offsetTop - 14;
     try { body.scrollTo({ top: top, behavior: 'smooth' }); } catch (e) { body.scrollTop = top; }
-    row.classList.remove('fs-flash'); void row.offsetWidth; row.classList.add('fs-flash');
-    setTimeout(function () { row.classList.remove('fs-flash'); }, 1700);
+    row.classList.remove('cmp-flash'); void row.offsetWidth; row.classList.add('cmp-flash');
+    setTimeout(function () { row.classList.remove('cmp-flash'); }, 1700);
   }
 
   function resumeFrom(i) {
@@ -1189,10 +1233,10 @@
     if (!branchBackup) branchBackup = history.slice();
     history = history.slice(0, end);
     renderHistory();
-    var body = $('fs-body'); if (!body) return;
+    var body = $('cmp-body'); if (!body) return;
     var div = document.createElement('div');
-    div.className = 'fs-branch'; div.id = 'fs-branch';
-    div.innerHTML = '<span class="fs-branch-i">' + (ICONS.flag || '') + '</span><span>Picked up from this waypoint</span>' +
+    div.className = 'cmp-branch'; div.id = 'cmp-branch';
+    div.innerHTML = '<span class="cmp-branch-i">' + (ICONS.flag || '') + '</span><span>Picked up from this waypoint</span>' +
       '<button type="button">Undo</button>';
     div.querySelector('button').onclick = function () {
       if (!branchBackup) return;
@@ -1201,22 +1245,22 @@
     };
     body.appendChild(div);
     body.scrollTop = body.scrollHeight;
-    var qr = $('fs-qr'); if (qr) qr.innerHTML = '';
-    var inp3 = $('fs-input'); if (inp3 && canHover) inp3.focus();
+    var qr = $('cmp-qr'); if (qr) qr.innerHTML = '';
+    var inp3 = $('cmp-input'); if (inp3 && canHover) inp3.focus();
   }
 
   // once a new message is sent on the resumed path, that path becomes the conversation
   function commitBranch() {
     if (!branchBackup) return;
     branchBackup = null;
-    var d = $('fs-branch'); if (d) { var b2 = d.querySelector('button'); if (b2) b2.parentNode.removeChild(b2); d.removeAttribute('id'); }
+    var d = $('cmp-branch'); if (d) { var b2 = d.querySelector('button'); if (b2) b2.parentNode.removeChild(b2); d.removeAttribute('id'); }
   }
   var _fsSend = window.fsSend, _fsPill = window.fsPill;
   window.fsSend = function () { commitBranch(); return _fsSend.apply(this, arguments); };
   window.fsPill = function () { commitBranch(); return _fsPill.apply(this, arguments); };
 
   (function wireWaypoints() {
-    var btn = $('fs-wp-btn'), panel = $('fs-wp-panel'), list = $('fs-wp-list');
+    var btn = $('cmp-wp-btn'), panel = $('cmp-wp-panel'), list = $('cmp-wp-list');
     if (!btn || !panel || !list) return;
     btn.addEventListener('click', function (e) { e.stopPropagation(); toggleWaypoints(); });
     list.addEventListener('click', function (e) {
