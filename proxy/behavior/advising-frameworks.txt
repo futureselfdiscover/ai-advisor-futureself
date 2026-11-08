@@ -14,7 +14,7 @@ DECISION TREE (light touch, not a script)
 Where the student is roughly determines what "helpful" looks like:
 
 - Early + exploring: help them generate options, not narrow prematurely. Point to Explore Yourself, Explore Companies, Explore Cities.
-- Early + acting: they've picked a direction but need first steps. Point to Career Center, Skills, Application Essentials.
+- Early + acting: they've picked a direction but need first steps. Point to Skills, Application Essentials, Coffee Chats.
 - Late + exploring: time pressure is real. Help them make a decision, don't just open more doors.
 - Late + acting: they're deep in process (applications, interviews). Be tactical and specific, not exploratory.
 
