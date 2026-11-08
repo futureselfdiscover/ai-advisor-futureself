@@ -664,7 +664,9 @@ export default async function handler(req, res) {
       if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
       const CID = process.env.ADMIN_API_CLIENT_ID, CSEC = process.env.ADMIN_API_CLIENT_SECRET;
       if (!CID || !CSEC) return res.status(200).json({ step: 'preflight', error: 'ADMIN_API_CLIENT_ID / ADMIN_API_CLIENT_SECRET not set' });
+      // tokens come from the authorization host, API calls go to the API host
       const ZONES = { us: 'api.us.hivebrite.com', eu: 'api.eu.hivebrite.com', apac: 'api.apac.hivebrite.com', ch: 'api.ch.hivebrite.com' };
+      const AUTH_HOSTS = { us: 'auth.us.hivebrite.com', eu: 'auth.eu.hivebrite.com', apac: 'auth.apac.hivebrite.com', ch: 'auth.ch.hivebrite.com' };
       const zones = ZONES[req.body.zone] ? [req.body.zone] : ['us', 'eu'];
       const safeHost = function (u) { return /^https:\/\/[a-z0-9.-]+\.hivebrite\.com\//i.test(String(u || '')); };
       const short = async function (r) { const t = await r.text(); try { return JSON.parse(t); } catch (e) { return { raw: t.slice(0, 300) }; } };
@@ -672,11 +674,12 @@ export default async function handler(req, res) {
 
       for (const z of zones) {
         const host = 'https://' + ZONES[z];
+        const authHost = 'https://' + AUTH_HOSTS[z];
         const tries = { zone: z };
-        // 1. discovery
-        let tokenEndpoint = host + '/oauth/token';
+        // 1. discovery on the authorization host
+        let tokenEndpoint = authHost + '/oauth2/token';
         try {
-          const d = await fetch(host + '/.well-known/openid-configuration', { headers: { accept: 'application/json' } });
+          const d = await fetch(authHost + '/.well-known/openid-configuration', { headers: { accept: 'application/json' } });
           tries.discovery_status = d.status;
           if (d.ok) {
             const dj = await d.json();
@@ -687,7 +690,7 @@ export default async function handler(req, res) {
 
         // 2. token: credentials in the body, then HTTP Basic
         let token = null;
-        for (const style of ['body', 'basic']) {
+        for (const style of ['basic', 'body']) {  // docs use HTTP Basic
           const params = { grant_type: 'client_credentials', audience: 'partner' };
           const headers = { 'Content-Type': 'application/x-www-form-urlencoded', accept: 'application/json' };
           if (style === 'body') { params.client_id = CID; params.client_secret = CSEC; }
