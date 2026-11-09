@@ -1,0 +1,6 @@
+# COMPANY AND COMMUNITY PAGES
+# One page per line:   Name | URL | company or community
+# Compass links these by exact name, and the widget turns any exact mention of a
+# name in a reply into a link to its page. Only futureselfdiscover.com URLs are used.
+# Lines starting with # are ignored. Example (remove the # to use):
+# Asurion | https://futureselfdiscover.com/page/asurion | company
