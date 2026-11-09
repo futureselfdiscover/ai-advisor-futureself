@@ -11,6 +11,10 @@
   // random per-page-load session ID for ANONYMOUS conversation_logs grouping.
   // not derived from user identity, never shown to the user, not linkable to user_hash.
   var sessionId = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  try {
+    var __snap = JSON.parse(sessionStorage.getItem('cmp_ui_v1') || 'null');
+    if (__snap && Date.now() - __snap.at < 1800000) { var __r = document.getElementById('cmp-widget-root'); if (__r) __r.classList.add('cmp-instant'); }
+  } catch (e) {}
 
   // grow the textarea with its content up to a max, then scroll.
   // NOTE: never CSS-transition `height` on this element - doing so makes
@@ -61,6 +65,7 @@
 
   var path = window.location.pathname;
   var pageDesc = pageMap[path] || 'a FutureSelf page';
+  var ICONS = window.__FS_ICONS__ || {};
   var icon = (window.__FS_ICONS__ && window.__FS_ICONS__.compass) || '<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
   var history = [];
   var memory = null; // loaded from Supabase via get_memory on open
@@ -93,6 +98,14 @@
     }
 
     var t = String(raw == null ? '' : raw);
+    // 0. [[Name]] marks a company/community Compass mentioned; style the first mention only
+    var ents = [], seenEnt = {};
+    t = t.replace(/\[\[([^\[\]\n]{2,60})\]\]/g, function (m, name) {
+      name = name.trim(); var k = name.toLowerCase();
+      if (seenEnt[k]) return name;
+      seenEnt[k] = 1; ents.push(name);
+      return '\u0002' + (ents.length - 1) + '\u0002';
+    });
     // 1. pull out links before escaping: <a href="..">..</a> (what the
     //    behavior file asks for) and markdown [text](url)
     t = t.replace(/<a\s[^>]*href\s*=\s*["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi,
@@ -151,57 +164,191 @@
     return out.join('').replace(/\u0001(\d+)\u0001/g, function (m, n) {
       var l = links[+n];
       return '<a href="' + esc(l.href) + '" target="_top" rel="noopener">' + esc(l.text) + '</a>';
+    }).replace(/\u0002(\d+)\u0002/g, function (m, n) {
+      return '<span class="cmp-entity" title="No FutureSelf page yet">' + esc(ents[+n]) + '</span>';
     });
   }
 
-  // render a consent prompt for a profile suggestion with Yes/No choices
-  function showProfileConsent(sug) {
-    pendingProfileSuggestion = sug;
-    var body = document.getElementById('cmp-body');
-    if (!body) return;
+  // ---- gentle suggestions (profile + notepad) --------------------------------
+  // Compass writes its own wording ("ask"); the widget only paces them so
+  // they never crowd the conversation.
+  var sugState = { profileAsks: 0, lastProfileTurn: -99, noteAsks: 0, accepted: [] };
+  var pendingNoteSuggestion = null;
+
+  function userTurns() {
+    var n = 0; for (var i = 0; i < history.length; i++) if (history[i].role === 'user') n++; return n;
+  }
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function cleanAsk(t) {
+    t = String(t || '').replace(/[\r\n]+/g, ' ').trim();
+    return t.length > 220 ? t.slice(0, 217) + '...' : t;
+  }
+  function profileAskFallback(label) {
+    var x = '<strong>' + esc(label) + '</strong>';
+    return pick([
+      x + ' keeps coming up. Should it go on your profile so others can see it?',
+      'Sounds like ' + x + ' is a real thread for you. Add it to your profile? It sharpens what I suggest next.',
+      'Worth putting ' + x + ' on your profile? It helps people find you, and helps me tailor advice.'
+    ]);
+  }
+  function noteAskFallback(kind, text) {
+    var x = '<strong>' + esc(text) + '</strong>';
+    return kind === 'note'
+      ? pick(['Should I jot ' + x + ' in your notes?', 'Keep ' + x + ' in your notes for later?'])
+      : pick(['Should I put ' + x + ' on your to-do list?', 'Want to keep ' + x + ' in your tasks so it doesn\'t slip?', 'Add ' + x + ' to your tasks?']);
+  }
+
+  var SUG_ICON = {
+    profile: '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="8.5" r="3.75"/><path d="M4.75 19.5c.9-3.6 3.8-5.6 7.25-5.6s6.35 2 7.25 5.6"/></svg>',
+    task: '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>',
+    note: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M6.5 3.5h8l3 3v14h-11Z"/><path d="M9 10h6M9 13.5h6M9 17h3.5"/></svg>'
+  };
+
+  function sugCard(id, kind, html, yesLabel, onYes, onNo) {
+    var body = document.getElementById('cmp-body'); if (!body) return;
+    var old = document.getElementById(id); if (old && old.parentNode) old.parentNode.removeChild(old);
     var div = document.createElement('div');
-    div.className = 'cmp-row cmp-row-ai';
-    div.id = 'cmp-profile-consent';
-    div.innerHTML = '<div class="cmp-av">' + icon + '</div>' +
-      '<div class="cmp-msg cmp-ai"><p>Want me to add <strong>' + esc(sug.label || sug.value) + '</strong> to your FutureSelf profile?</p>' +
-      '<div style="margin-top:8px;display:flex;gap:6px;">' +
-      '<span class="cmp-pill" onclick="fsProfileYes()">Yes, add it</span>' +
-      '<span class="cmp-pill" onclick="fsProfileNo()">No thanks</span>' +
-      '</div></div>';
+    div.className = 'cmp-sug'; div.id = id;
+    div.innerHTML = '<span class="cmp-sug-i">' + SUG_ICON[kind] + '</span>' +
+      '<div class="cmp-sug-main"><div class="cmp-sug-q">' + html + '</div>' +
+      '<div class="cmp-sug-acts"><button type="button" class="cmp-sug-yes">' + esc(yesLabel) + '</button>' +
+      '<button type="button" class="cmp-sug-no">Not now</button></div></div>';
+    div.querySelector('.cmp-sug-yes').onclick = function () { onYes(div); };
+    div.querySelector('.cmp-sug-no').onclick = function () { if (onNo) onNo(); fadeOut(div); };
     body.appendChild(div);
     body.scrollTop = body.scrollHeight;
   }
-
-  function removeProfileConsent() {
-    var el = document.getElementById('cmp-profile-consent');
-    if (el && el.parentNode) el.parentNode.removeChild(el);
+  function fadeOut(el) { el.classList.add('cmp-sug-out'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 260); }
+  function resolveCard(el, html) {
+    el.classList.add('cmp-sug-done');
+    var m = el.querySelector('.cmp-sug-main');
+    if (m) m.innerHTML = '<div class="cmp-sug-ok">' + html + '</div>';
   }
 
-  window.fsProfileYes = function () {
-    if (!pendingProfileSuggestion || !hbUserId) { removeProfileConsent(); return; }
-    var sug = pendingProfileSuggestion;
+  function maybeProfileSuggestion(sug) {
+    var allowed = ['skills','industries_of_interest','hobbies_interests','clubs_and_organizations','languages','awards_honors','currently_exploring','target_cities_regions','career_priorities','bio'];
+    if (!sug || !sug.field || !sug.value || allowed.indexOf(sug.field) === -1) return false;
+    var v = String(sug.value);
+    if (declinedSuggestions.indexOf(v) > -1 || sugState.accepted.indexOf(v) > -1) return false;
+    var turns = userTurns();
+    // patience: never in the first exchange, at least 3 turns apart, 2 per session
+    if (turns < 2 || turns - sugState.lastProfileTurn < 3 || sugState.profileAsks >= 2) return false;
+    sugState.profileAsks++; sugState.lastProfileTurn = turns;
+    pendingProfileSuggestion = sug;
+    var label = sug.label || v;
+    var ask = sug.ask ? esc(cleanAsk(sug.ask)) : profileAskFallback(label);
+    sugCard('cmp-sug-profile', 'profile', ask, 'Add to profile', function (el) {
+      saveProfile(sug, el);
+    }, function () { declinedSuggestions.push(v); pendingProfileSuggestion = null; });
+    return true;
+  }
+
+  function saveProfile(sug, el) {
     pendingProfileSuggestion = null;
-    removeProfileConsent();
+    if (!hbUserId) { resolveCard(el, 'Sign in to save this to your profile.'); return; }
     try {
       var xhr = new XMLHttpRequest();
       xhr.open('POST', PROXY_URL, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-          var ok = false;
-          try { ok = JSON.parse(xhr.responseText).ok === true; } catch(e) {}
-          addAI(ok ? "Noted, I'll get that added to your profile." : 'Hmm, that did not save. I will try again next time it comes up.', true);
-        }
+        if (xhr.readyState !== 4) return;
+        var r = {}; try { r = JSON.parse(xhr.responseText) || {}; } catch (e) {}
+        if (r.ok === true) {
+          sugState.accepted.push(String(sug.value));
+          var line = r.pushed
+            ? pick(['Added to your profile.', 'Done, it\'s on your profile now.', 'Your profile has it now.'])
+            : pick(['Saved. It\'ll show on your profile soon.', 'Got it, it\'s queued for your profile.', 'Done. Your profile will pick that up shortly.']);
+          var link = r.pushed ? ' <a href="' + esc(editURL()) + '" target="_top">View profile</a>' : '';
+          resolveCard(el, '<span class="cmp-sug-tick">' + SUG_ICON.task + '</span>' + line + link);
+        } else resolveCard(el, 'That didn\'t save. I\'ll offer again another time.');
       };
       xhr.send(JSON.stringify({ type: 'save_profile', userId: hbUserId, field: sug.field, value: sug.value }));
-    } catch(e) {}
+    } catch (e) {}
+  }
+
+  function lastAssistantTs() {
+    for (var i = history.length - 1; i >= 0; i--) if (history[i].role === 'assistant') return history[i].timestamp || null;
+    return null;
+  }
+
+  // Compass proposed changes to the to-do list; the student picks what to keep
+  function maybeTodoActions(ta) {
+    if (!ta || !window.cmpNotepad) return false;
+    var items = Array.isArray(ta) ? ta : (Array.isArray(ta.items) ? ta.items : []);
+    var valid = [];
+    items.slice(0, 12).forEach(function (it) {
+      if (!it || !it.op) return;
+      if (it.op === 'add' && it.text) valid.push(it);
+      else if (['complete', 'rename', 'steps'].indexOf(it.op) > -1 && it.id) {
+        var t = window.cmpNotepad.find(it.id);
+        if (!t || t.done) return;
+        if (it.op === 'rename' && !it.text) return;
+        if (it.op === 'steps' && !(Array.isArray(it.steps) && it.steps.length)) return;
+        it._title = t.text; valid.push(it);
+      }
+    });
+    if (!valid.length) return false;
+    var srcTs = lastAssistantTs();
+    var label = { add: 'New', complete: 'Done', rename: 'Clarify', steps: 'Steps' };
+    var html = esc(cleanAsk(ta.ask || (valid.length === 1 ? 'Save this change to your to-do list?' : 'Save these changes to your to-do list?'))) + '<ul class="cmp-sug-list">';
+    valid.forEach(function (it, i) {
+      var main = it.op === 'add' ? esc(String(it.text).replace(/\[\[|\]\]/g, '')) : esc(it._title);
+      var sub = it.op === 'rename' ? 'becomes: ' + esc(it.text)
+        : it.op === 'steps' ? it.steps.slice(0, 6).map(function (x, k) { return (k + 1) + '. ' + esc(String(x).replace(/\[\[|\]\]/g, '')); }).join('<br>') : '';
+      html += '<li><input type="checkbox" checked data-i="' + i + '" aria-label="Include this change"><span><span class="cmp-sug-op">' + label[it.op] + '</span>' + main +
+        (sub ? '<span class="cmp-sug-sub">' + sub + '</span>' : '') + '</span></li>';
+    });
+    html += '</ul>';
+    sugCard('cmp-sug-todo', 'task', html, valid.length === 1 ? 'Save change' : 'Save changes', function (el) {
+      var picked = [];
+      [].forEach.call(el.querySelectorAll('.cmp-sug-list input'), function (cb) { if (cb.checked) picked.push(valid[+cb.getAttribute('data-i')]); });
+      if (!picked.length) { fadeOut(el); return; }
+      var changed = window.cmpNotepad.apply(picked, srcTs);
+      resolveCard(el, '<span class="cmp-sug-tick">' + SUG_ICON.task + '</span>Updated ' + changed.length + ' item' + (changed.length === 1 ? '' : 's') + '. <button type="button" class="cmp-sug-open">Open to-do list</button>');
+      var b = el.querySelector('.cmp-sug-open');
+      if (b) b.onclick = function () { window.cmpNotepad.open('todo', changed[0]); };
+    });
+    return true;
+  }
+
+  // a Compass-saved task can jump back to the conversation it came from
+  window.cmpCanJumpTo = function (ts) {
+    for (var i = 0; i < history.length; i++) if (history[i].timestamp === ts) return true;
+    return false;
+  };
+  window.cmpJumpToTs = function (ts) {
+    var idx = -1;
+    for (var i = 0; i < history.length; i++) if (history[i].timestamp === ts) { idx = i; break; }
+    if (idx < 0) return;
+    var u = idx; while (u >= 0 && history[u].role !== 'user') u--;
+    if (window.fsOpenView) window.fsOpenView('chat');
+    setTimeout(function () { if (u >= 0) jumpTo(u); }, 120);
   };
 
-  window.fsProfileNo = function () {
-    if (pendingProfileSuggestion) declinedSuggestions.push(pendingProfileSuggestion.value);
-    pendingProfileSuggestion = null;
-    removeProfileConsent();
-  };
+  function maybeNoteSuggestion(ns) {
+    if (!ns || !ns.text || !window.cmpNotepad) return false;
+    var kind = ns.kind === 'note' ? 'note' : 'task';
+    var text = String(ns.text).replace(/\[\[|\]\]/g, '').replace(/[\r\n]+/g, ' ').trim().slice(0, 120);
+    if (!text) return false;
+    var lastUser = ''; for (var i = history.length - 1; i >= 0; i--) if (history[i].role === 'user') { lastUser = String(history[i].content || ''); break; }
+    var asked = /\b(remind|reminder|to-?do|task|note|remember|jot|save (this|that|it)|keep track|list)\b/i.test(lastUser);
+    var open = window.cmpNotepad.openCount();
+    // a helper, not a nag: one unprompted offer per session, none if the list is already full
+    if (!asked && (sugState.noteAsks >= 1 || open >= 5)) return false;
+    if (window.cmpNotepad.has(text)) return false;
+    sugState.noteAsks++;
+    var ask = ns.ask ? esc(cleanAsk(ns.ask)) : noteAskFallback(kind, text);
+    if (ns.ask) ask += '<span class="cmp-sug-item">' + esc(text) + '</span>';
+    sugCard('cmp-sug-note', kind, ask, kind === 'note' ? 'Add to notes' : 'Add to tasks', function (el) {
+      var id = window.cmpNotepad.add(kind, text, 'compass', { srcTs: lastAssistantTs() });
+      resolveCard(el, '<span class="cmp-sug-tick">' + SUG_ICON.task + '</span>' +
+        (kind === 'note' ? 'Added to your notes.' : 'Added to your tasks.') +
+        ' <button type="button" class="cmp-sug-open">Open notepad</button>');
+      var b = el.querySelector('.cmp-sug-open');
+      if (b) b.onclick = function () { window.cmpNotepad.open(kind === 'note' ? 'notes' : 'todo', id); };
+    });
+    return true;
+  }
 
   function buildMemoryContext() {
     if (!memory) return 'No prior memory for this student yet.';
@@ -305,12 +452,15 @@
       profile: profile ? { id: profile.id } : null,
       pageDesc: pageDesc,
       profileContext: buildProfileContext(),
-      memoryContext: buildMemoryContext()
+      memoryContext: buildMemoryContext(),
+      notepadContext: (window.cmpNotepad && window.cmpNotepad.summary) ? window.cmpNotepad.summary() : ''
     };
   }
 
   // fetch memory (including conversation_history) from Supabase via the proxy
-  function fetchMemory(cb) {
+  function fetchMemory(done) {
+    var called = false;
+    function cb(v) { if (called) return; called = true; done(v); }   // error + readyState 4 both fire on failure
     if (!hbUserId) { cb(null); return; }
     try {
       var xhr = new XMLHttpRequest();
@@ -350,7 +500,10 @@
     if (!body) return;
     body.innerHTML = '';
     for (var i = 0; i < history.length; i++) {
-      if (history[i].role === 'assistant') { var p = parseReply(history[i].content); addAI(p.reply, false); }
+      if (history[i].role === 'assistant') {
+        var p = parseReply(history[i].content);
+        addAI(p.reply, false, { ts: history[i].timestamp, ai: i, actions: i > 0 && history[i - 1].role === 'user', recal: history[i].recalAt || null });
+      }
       else if (history[i].role === 'user') { addUser(history[i].content, false, i); }
     }
     body.scrollTop = body.scrollHeight;
@@ -450,7 +603,8 @@
           if (t && t.assistant) history.push({ role: 'assistant', content: t.assistant, timestamp: t.timestamp });
         }
         if (history.length > MAX_HISTORY) history = history.slice(-MAX_HISTORY);
-        if (history.length > 0) renderHistory();
+        applyRecals();
+        if (history.length > 0) { renderHistory(); sinceLastTimePills(); }
         else startChat();
         if (pendingAsk) { var q = pendingAsk; pendingAsk = null; window.fsPill(q); }
       });
@@ -502,7 +656,7 @@
   }
 
   window.fsSend = function () {
-    if (!routed) return;
+    if (!routed || busy) return;
     var input = document.getElementById('cmp-input');
     if (!input) return;
     var text = input.value.trim();
@@ -516,7 +670,8 @@
   };
 
   window.fsPill = function (text) {
-    if (!routed) return;
+    if (!routed || busy) return;
+    if (text === SINCE_LABEL) text = SINCE_PROMPT;
     document.getElementById('cmp-qr').innerHTML = '';
     addUser(text, true);
     history.push({ role: 'user', content: text, timestamp: new Date().toISOString() });
@@ -568,7 +723,9 @@
           focus: pb.focus || null,
           summary: pb.summary || null,
           topics: pb.topics || null,
-          profile_suggestion: pb.profile_suggestion || null
+          profile_suggestion: pb.profile_suggestion || null,
+          notepad_suggestion: pb.notepad_suggestion || null,
+          todo_actions: pb.todo_actions || null
         };
       }
       reply = memRes.cleaned;
@@ -582,6 +739,19 @@
         salvagedSuggestion = psRes.obj.profile_suggestion;
       }
       reply = psRes.cleaned;
+    }
+
+    var taRes = extractBlob(reply, /\{\s*"todo_actions"/);
+    var salvagedTodo = null;
+    if (taRes) {
+      if (taRes.obj && taRes.obj.todo_actions) salvagedTodo = taRes.obj.todo_actions;
+      reply = taRes.cleaned;
+    }
+    var npRes = extractBlob(reply, /\{\s*"notepad_suggestion"/);
+    var salvagedNote = null;
+    if (npRes) {
+      if (npRes.obj && npRes.obj.notepad_suggestion) salvagedNote = npRes.obj.notepad_suggestion;
+      reply = npRes.cleaned;
     }
 
     // 4. final cleanup: remove orphaned leading/trailing commas, stray
@@ -600,59 +770,157 @@
       memoryUpdate = { profile_suggestion: salvagedSuggestion };
     }
 
+    if (salvagedTodo) {
+      memoryUpdate = memoryUpdate || {};
+      if (!memoryUpdate.todo_actions) memoryUpdate.todo_actions = salvagedTodo;
+    }
+    if (salvagedNote) {
+      memoryUpdate = memoryUpdate || {};
+      if (!memoryUpdate.notepad_suggestion) memoryUpdate.notepad_suggestion = salvagedNote;
+    }
     return { reply: reply, suggestions: suggestions, memoryUpdate: memoryUpdate };
   }
 
-  function callAPI() {
-    showTyping();
-    var xhr = new XMLHttpRequest();
+  // ---- talking to Compass: streamed replies ----
+  // The proxy sends newline-delimited JSON: {"d":"..."} pieces while the model
+  // writes, then {"done":true,"content":"..."} with the cleaned reply. Older
+  // proxies (or errors) answer with plain JSON, which is handled the same way.
+  var busy = false;
+
+  function wire(msgs) {
+    return msgs.map(function (m) { return { role: m.role, content: m.content, timestamp: m.timestamp }; });
+  }
+
+  function requestChat(msgs, onPiece, onDone) {
+    var xhr = new XMLHttpRequest(), seen = 0, got = '', final = null, ended = false;
     xhr.open('POST', PROXY_URL, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
+    function drain() {
+      var txt = xhr.responseText || '', nl;
+      while ((nl = txt.indexOf('\n', seen)) > -1) {
+        var line = txt.slice(seen, nl); seen = nl + 1;
+        if (!line) continue;
+        var o = null; try { o = JSON.parse(line); } catch (e) {}
+        if (!o) continue;
+        if (typeof o.d === 'string') { got += o.d; onPiece(got); }
+        else if (o.done && typeof o.content === 'string') final = o.content;
+      }
+    }
+    xhr.onprogress = drain;
     xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        hideTyping();
+      if (xhr.readyState !== 4 || ended) return;
+      ended = true;
+      try { drain(); } catch (e) {}
+      var raw = final;
+      if (raw == null) {
         try {
           var data = JSON.parse(xhr.responseText);
-          var raw = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-          if (!raw) raw = "I'm having trouble connecting right now. Try again in a moment.";
-          var parsed = parseReply(raw);
-          addAI(parsed.reply, true);
-          history.push({ role: 'assistant', content: raw, timestamp: new Date().toISOString() });
-          if (parsed.suggestions.length > 0) setPills(parsed.suggestions);
-
-          var lastUser = history.length > 1 ? history[history.length - 2] : null;
-          var mu = parsed.memoryUpdate || {};
-          pushMemory({
-            knowledge: mu.knowledge || [],
-            currentTerm: (mu.current_term && Object.keys(mu.current_term).length) ? mu.current_term : undefined,
-            direction: (mu.direction && Object.keys(mu.direction).length) ? mu.direction : undefined,
-            focus: mu.focus || undefined,
-            summary: mu.summary || undefined,
-            topics: (mu.topics && mu.topics.length) ? mu.topics : undefined,
-            conversationTurn: lastUser ? { user: lastUser.content, assistant: parsed.reply, timestamp: new Date().toISOString() } : undefined
-          });
-
-          // consent-gated profile suggestion: show prompt only for allowed
-          // fields and values not already declined this session
-          var sug = mu.profile_suggestion;
-          var allowedFields = ['skills','industries_of_interest','hobbies_interests','clubs_and_organizations','languages','awards_honors','currently_exploring','target_cities_regions','career_priorities','bio'];
-          if (sug && sug.field && sug.value && allowedFields.indexOf(sug.field) > -1 && declinedSuggestions.indexOf(sug.value) === -1) {
-            showProfileConsent(sug);
-          }
-        } catch (e) {
-          addAI("Something went wrong on my end. Please try again.", true);
-        }
+          raw = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+          if (!raw && data && (data.choices || data.error)) raw = "I'm having trouble connecting right now. Try again in a moment.";
+        } catch (e) {}
       }
+      if (raw == null && got) raw = got;
+      onDone(raw || null);
     };
-    xhr.onerror = function () { hideTyping(); addAI("Something went wrong on my end. Please try again.", true); };
     xhr.send(JSON.stringify({
-      type: 'chat',
-      sessionId: sessionId,
-      page: path,
+      type: 'chat', stream: true,
+      sessionId: sessionId, page: path,
       profileName: (profile && profile.name) || null,
       context: buildContext(),
-      messages: history
+      messages: wire(msgs)
     }));
+  }
+
+  // what's safe to show of a reply that is still arriving: nothing from the
+  // JSON tail, and no half-written link, entity or bold run
+  function streamVisible(t) {
+    var m = t.search(/\{\s*"|```/);
+    if (m > -1) t = t.slice(0, m);
+    return t.replace(/\{\s*$/, '');
+  }
+  function safePartial(t) {
+    var lt = t.lastIndexOf('<'); if (lt > t.lastIndexOf('>')) t = t.slice(0, lt);
+    var low = t.toLowerCase(), oa = low.lastIndexOf('<a ');
+    if (oa > -1 && low.indexOf('</a>', oa) === -1) t = t.slice(0, oa);
+    var en = t.lastIndexOf('[['); if (en > -1 && t.indexOf(']]', en) === -1) t = t.slice(0, en);
+    var br = t.lastIndexOf('[');
+    if (br > -1) { var tail = t.slice(br); if (/^\[[^\]]*$/.test(tail) || /^\[[^\]]*\]\([^)]*$/.test(tail)) t = t.slice(0, br); }
+    if ((t.match(/\*\*/g) || []).length % 2) t = t.slice(0, t.lastIndexOf('**'));
+    return t;
+  }
+  var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  // reveals text into `host` a few words at a time; speeds up when it falls behind
+  function revealer(host, onTick) {
+    var src = '', finalText = null, cur = '', timer = null, onEnd = null;
+    function target() { return finalText != null ? finalText : streamVisible(src); }
+    function paint() { host.innerHTML = renderMarkdown(finalText != null && cur === finalText ? cur : safePartial(cur)); onTick && onTick(cur); }
+    function tick() {
+      var t = target();
+      if (t.indexOf(cur) !== 0) { var k = 0; while (k < cur.length && k < t.length && cur[k] === t[k]) k++; cur = t.slice(0, k); }
+      if (cur.length < t.length) {
+        if (reduceMotion || document.hidden || (finalText != null && /<(ul|ol|table|div|h\d)\b/i.test(finalText))) cur = t;
+        else {
+          var back = t.length - cur.length;
+          var next = cur.length + Math.max(4, Math.ceil(back * (finalText != null ? 0.11 : 0.05)));
+          var ws = t.slice(next).search(/\s/);
+          cur = t.slice(0, ws === -1 ? t.length : next + ws);
+        }
+        paint();
+      } else if (finalText != null) {
+        clearInterval(timer); timer = null;
+        var f = onEnd; onEnd = null; if (f) f();
+      }
+    }
+    function run() { if (!timer) timer = setInterval(tick, 34); }
+    return {
+      feed: function (s) { src = s; run(); },
+      end: function (text, cb) { finalText = String(text || ''); onEnd = cb; run(); },
+      shown: function () { return cur.length > 0; }
+    };
+  }
+
+  function nearBottom(body) { return body.scrollHeight - body.scrollTop - body.clientHeight < 80; }
+
+  function callAPI() {
+    busy = true;
+    var t = showTyping();
+    var body = $('cmp-body');
+    var rv = revealer(t.out, function () {
+      t.writing();
+      if (body && t.stick()) body.scrollTop = body.scrollHeight;
+    });
+    requestChat(history, function (soFar) { rv.feed(soFar); }, function (raw) {
+      if (!raw) {
+        t.remove(); busy = false;
+        addAI("Something went wrong on my end. Please try again.", true);
+        return;
+      }
+      var parsed = parseReply(raw);
+      // save right away so the turn survives a page change mid-reveal
+      var turnTs = new Date().toISOString();   // one timestamp for chat + memory, so jump-backs survive reloads
+      history.push({ role: 'assistant', content: raw, timestamp: turnTs });
+      var aiIndex = history.length - 1;
+      var lastUser = history.length > 1 ? history[history.length - 2] : null;
+      var mu = parsed.memoryUpdate || {};
+      pushMemory({
+        knowledge: mu.knowledge || [],
+        currentTerm: (mu.current_term && Object.keys(mu.current_term).length) ? mu.current_term : undefined,
+        direction: (mu.direction && Object.keys(mu.direction).length) ? mu.direction : undefined,
+        focus: mu.focus || undefined,
+        summary: mu.summary || undefined,
+        topics: (mu.topics && mu.topics.length) ? mu.topics : undefined,
+        conversationTurn: lastUser ? { user: lastUser.content, assistant: parsed.reply, timestamp: turnTs } : undefined
+      });
+      rv.end(parsed.reply, function () {
+        t.finish(parsed.reply, { ts: turnTs, ai: aiIndex, actions: true });
+        busy = false;
+        if (parsed.suggestions.length > 0) setPills(parsed.suggestions);
+        // at most one gentle offer per reply; Compass writes the wording,
+        // the widget paces it (see maybeProfileSuggestion / maybeNoteSuggestion)
+        if (!maybeTodoActions(mu.todo_actions) && !maybeNoteSuggestion(mu.notepad_suggestion)) maybeProfileSuggestion(mu.profile_suggestion);
+      });
+    });
   }
 
   // "plotting a route" labels. Each one names a step the proxy really performs
@@ -667,44 +935,82 @@
     if (!hasPast) l[0] = 'Reading your profile';
     return l;
   }
-  var thinkTimer = null;
+  var LOADER = '<span class="cmp-orbit" aria-hidden="true">' +
+    '<span style="--a:90deg;--d:0s"><i></i></span><span style="--a:210deg;--d:-.35s"><i></i></span><span style="--a:330deg;--d:-.7s"><i></i></span></span>';
+
+  // the progress row: dots + a label that steps through the work. It stays
+  // under the text while the reply streams in and leaves once it's complete.
+  function progress(label) {
+    var el = document.createElement('div');
+    el.className = 'cmp-think';
+    el.setAttribute('role', 'status');
+    el.innerHTML = LOADER + '<span class="cmp-think-label">' + esc(label) + '</span>';
+    var idx = 0, labels = thinkLabels(), lab = el.querySelector('.cmp-think-label');
+    function set(i) {
+      idx = i; lab.textContent = labels[i];
+      lab.classList.remove('cmp-think-swap'); void lab.offsetWidth; lab.classList.add('cmp-think-swap');
+    }
+    var timer = setInterval(function () { if (idx < labels.length - 1) set(idx + 1); else { clearInterval(timer); timer = null; } }, 2400);
+    return {
+      el: el,
+      writing: function () { if (!el.classList.contains('cmp-think-tail')) { el.classList.add('cmp-think-tail'); if (idx < 2) set(2); } },
+      stop: function (cb) {
+        if (timer) { clearInterval(timer); timer = null; }
+        el.classList.add('cmp-think-out');
+        setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); if (cb) cb(); }, 260);
+      }
+    };
+  }
 
   function showTyping() {
-    var body = document.getElementById('cmp-body');
-    if (!body) return;
+    var body = $('cmp-body');
     var div = document.createElement('div');
     div.className = 'cmp-row cmp-row-ai';
     div.id = 'cmp-typing';
-    div.innerHTML = '<div class="cmp-av">' + icon + '</div>' +
-      '<div class="cmp-msg cmp-ai">' +
-        '<div class="cmp-think">' +
-          '<div class="cmp-route"><span class="cmp-route-fill"></span><span class="cmp-wp"></span><span class="cmp-wp"></span><span class="cmp-wp"></span></div>' +
-          '<span class="cmp-think-label" id="cmp-think-label">' + thinkLabels()[0] + '</span>' +
-        '</div>' +
-      '</div>';
-    body.appendChild(div);
-    body.scrollTop = body.scrollHeight;
-
-    // advance the label every few seconds so a slow reply still feels alive
-    var idx = 0;
-    thinkTimer = setInterval(function () {
-      idx++;
-      var labels = thinkLabels();
-      if (idx >= labels.length) { clearInterval(thinkTimer); thinkTimer = null; return; }
-      var el = document.getElementById('cmp-think-label');
-      if (el) {
-        el.innerText = labels[idx];
-        el.classList.remove('cmp-think-swap');
-        void el.offsetWidth;          // force reflow so the class re-triggers
-        el.classList.add('cmp-think-swap');
+    div.innerHTML = '<div class="cmp-av">' + icon + '</div><div class="cmp-msg cmp-ai"><div class="cmp-out"></div></div>';
+    var msg = div.querySelector('.cmp-ai'), out = div.querySelector('.cmp-out');
+    var pr = progress(thinkLabels()[0]);
+    msg.appendChild(pr.el);
+    var stick = true;
+    if (body) {
+      body.appendChild(div);
+      body.scrollTop = body.scrollHeight;
+      var onScroll = function () { stick = nearBottom(body); };
+      body.addEventListener('scroll', onScroll);
+    }
+    return {
+      out: out,
+      writing: pr.writing,
+      stick: function () { return stick; },
+      remove: function () { pr.stop(); if (div.parentNode) div.parentNode.removeChild(div); if (body) body.removeEventListener('scroll', onScroll); },
+      finish: function (text, opts) {
+        if (body) body.removeEventListener('scroll', onScroll);
+        div.removeAttribute('id');
+        out.innerHTML = renderMarkdown(text);
+        linkDirectory(out);
+        pr.stop(function () { decorateAI(div, opts); if (body && stick) body.scrollTop = body.scrollHeight; });
       }
-    }, 2400);
+    };
   }
 
   function hideTyping() {
-    if (thinkTimer) { clearInterval(thinkTimer); thinkTimer = null; }
-    var t = document.getElementById('cmp-typing');
+    var t = $('cmp-typing');
     if (t && t.parentNode) t.parentNode.removeChild(t);
+  }
+
+  // first pill on a fresh visit when there's enough history to catch up on
+  var SINCE_LABEL = 'Since last time';
+  var SINCE_PROMPT = 'Since last time: where did we leave off, and what should I focus on next?';
+  var SINCE_ICON = '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4v4.5H8"/><path d="M12 8v4.5l3 2"/></svg>';
+
+  function sinceLastTimePills() {
+    var asked = 0;
+    for (var i = 0; i < history.length; i++) if (history[i].role === 'user') asked++;
+    if (asked < 3) return;
+    var last = null;
+    for (var j = history.length - 1; j >= 0; j--) if (history[j].role === 'assistant') { last = history[j]; break; }
+    var more = last ? parseReply(last.content).suggestions.slice(0, 2) : [];
+    setPills([SINCE_LABEL].concat(more.filter(function (x) { return x !== SINCE_LABEL; })));
   }
 
   function setPills(arr) {
@@ -714,20 +1020,108 @@
     for (var i = 0; i < arr.length; i++) {
       var p = document.createElement('div');
       p.className = 'cmp-pill';
-      p.innerText = arr[i];
+      if (arr[i] === SINCE_LABEL) { p.className += ' cmp-pill-since'; p.innerHTML = SINCE_ICON + '<span>' + SINCE_LABEL + '</span>'; }
+      else p.innerText = arr[i];
       p.onclick = (function (t) { return function () { fsPill(t); }; })(arr[i]);
       c.appendChild(p);
     }
   }
 
-  function addAI(text, scroll) {
+  // ---- company / community directory: exact name mentions become links ----
+  var DIRECTORY = null;
+  (function loadDirectory() {
+    try { var c = JSON.parse(sessionStorage.getItem('cmp_dir_v1') || 'null'); if (c && Date.now() - c.at < 1800000) { DIRECTORY = c.entries; return; } } catch (e) {}
+    try {
+      var x = new XMLHttpRequest();
+      x.open('POST', PROXY_URL, true);
+      x.setRequestHeader('Content-Type', 'application/json');
+      x.onreadystatechange = function () {
+        if (x.readyState !== 4) return;
+        try { DIRECTORY = (JSON.parse(x.responseText).entries || []); sessionStorage.setItem('cmp_dir_v1', JSON.stringify({ at: Date.now(), entries: DIRECTORY })); } catch (e) { DIRECTORY = DIRECTORY || []; }
+      };
+      x.send(JSON.stringify({ type: 'directory' }));
+    } catch (e) {}
+  })();
+
+  function linkDirectory(root) {
+    if (!root) return;
+    var ents = (DIRECTORY || []).filter(function (e) { return e && e.name && /^https:\/\/(www\.)?futureselfdiscover\.com\//.test(e.url); })
+      .sort(function (a, b) { return b.name.length - a.name.length; });
+    var byName = {}; ents.forEach(function (e) { byName[e.name.toLowerCase()] = e; });
+    var done = {};
+    function mkLink(e, text) {
+      var a = document.createElement('a');
+      a.href = e.url; a.target = '_top'; a.rel = 'noopener'; a.className = 'cmp-dir-link';
+      a.title = 'View ' + (e.kind === 'community' ? 'community' : 'company') + ' page';
+      a.textContent = text; return a;
+    }
+    // names Compass marked: link if a page exists, otherwise they stay as quiet gray mentions
+    [].forEach.call(root.querySelectorAll('.cmp-entity'), function (sp) {
+      var e = byName[sp.textContent.trim().toLowerCase()];
+      done[sp.textContent.trim().toLowerCase()] = true;
+      if (e) { sp.parentNode.replaceChild(mkLink(e, sp.textContent), sp); done[e.url] = true; }
+    });
+    // plain mentions of names that have a page: first occurrence only
+    ents.forEach(function (e) {
+      if (done[e.url] || done[e.name.toLowerCase()]) return;
+      var rx = new RegExp('(^|[^A-Za-z0-9])(' + e.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?![A-Za-z0-9])');
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false), n;
+      while ((n = walker.nextNode())) {
+        if (n.parentNode.closest && n.parentNode.closest('a, .cmp-entity')) continue;
+        var m = rx.exec(n.nodeValue); if (!m) continue;
+        var after = n.splitText(m.index + m[1].length); after.nodeValue = after.nodeValue.slice(m[2].length);
+        after.parentNode.insertBefore(mkLink(e, m[2]), after);
+        done[e.url] = true; break;
+      }
+    });
+  }
+
+  // opts: ts (reply timestamp), ai (index in history), actions (show quick actions), recal (recalibrated)
+  function addAI(text, scroll, opts) {
     var body = document.getElementById('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
     div.className = 'cmp-row cmp-row-ai';
-    div.innerHTML = '<div class="cmp-av">' + icon + '</div><div class="cmp-msg cmp-ai">' + renderMarkdown(text) + '</div>';
+    div.innerHTML = '<div class="cmp-av">' + icon + '</div><div class="cmp-msg cmp-ai"><div class="cmp-out">' + renderMarkdown(text) + '</div></div>';
+    linkDirectory(div.querySelector('.cmp-out'));
+    decorateAI(div, opts);
     body.appendChild(div);
     if (scroll) body.scrollTop = body.scrollHeight;
+    return div;
+  }
+
+  function decorateAI(div, opts) {
+    opts = opts || {};
+    if (opts.ts) div.setAttribute('data-ts', opts.ts);
+    if (opts.ai != null) div.setAttribute('data-ai', opts.ai);
+    var msg = div.querySelector('.cmp-ai'); if (!msg) return;
+    var old = msg.querySelector('.cmp-recal-tag'); if (old) old.parentNode.removeChild(old);
+    if (opts.recal) {
+      var tag = document.createElement('div');
+      tag.className = 'cmp-recal-tag';
+      tag.innerHTML = (ICONS.recal || '') + '<span>Recalibrated ' + esc(timeAgo(opts.recal)) + '</span><button type="button" data-unrecal="1">Undo</button>';
+      msg.appendChild(tag);
+    }
+    if (opts.actions && !msg.querySelector('.cmp-acts')) {
+      var acts = document.createElement('div');
+      acts.className = 'cmp-acts';
+      acts.setAttribute('role', 'toolbar');
+      acts.setAttribute('aria-label', 'Reply actions');
+      acts.innerHTML =
+        '<button class="cmp-act" type="button" data-act="note" title="Save to notes" aria-label="Save to notes">' + (ICONS.notepad || '') + '</button>' +
+        '<button class="cmp-act" type="button" data-act="task" title="Make a task" aria-label="Make a task">' + (ICONS.task || '') + '</button>' +
+        '<button class="cmp-act" type="button" data-act="copy" title="Copy" aria-label="Copy">' + (ICONS.copy || '') + '</button>';
+      msg.appendChild(acts);
+    }
+  }
+
+  function timeAgo(ts) {
+    var d = new Date(ts); if (isNaN(d)) return '';
+    var m = Math.round((Date.now() - d.getTime()) / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return m + ' min ago';
+    var h = Math.round(m / 60); if (h < 24) return h + 'h ago';
+    return timeLabel(ts);
   }
 
   function addUser(text, scroll, idx) {
@@ -761,7 +1155,6 @@
   var pendingAsk = null;          // question to send once the chat is ready
   var currentView = 'chat';
   var VIEW_INDEX = { navigate: 0, chat: 1, profile: 2, foryou: 3 };
-  var ICONS = window.__FS_ICONS__ || {};
   var G = {
     careers: '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="3.5" y="7" width="17" height="12" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3.5 12.5h17"/></svg>',
     apply: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M14 3.5H7.5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8Z"/><path d="M14 3.5V8h4.5M9 13h6M9 16.5h4"/></svg>',
@@ -885,7 +1278,7 @@
     var was = isOpen();
     setOpen(true);
     showView(v);
-    if (v === 'chat' && (!was || !routed)) verifyAndRoute();
+    if (v === 'chat' && !routed) verifyAndRoute();
   }
 
   window.fsOpenView = openTo;
@@ -1166,7 +1559,7 @@
 
   function plain(md) {
     var t = parseReply(String(md || '')).reply;
-    return t.replace(/<[^>]*>/g, '').replace(/[*_`#>]/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\s+/g, ' ').trim();
+    return t.replace(/\[\[|\]\]/g, '').replace(/<[^>]*>/g, '').replace(/[*_`#>]/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\s+/g, ' ').trim();
   }
 
   function timeLabel(ts) {
@@ -1197,24 +1590,134 @@
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
+  // ---- pins + recalibrations live on this device, keyed by the question's timestamp ----
+  function userKey(name) { return name + '_' + String(hbUserId || (window.__HB_USER__ && window.__HB_USER__.id) || 'anon'); }
+  function readJSON(k, d) { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } }
+  function writeJSON(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function stopKey(s) { return s.ts || ('q:' + s.q.slice(0, 80)); }
+  function pins() { return readJSON(userKey('cmp_pins_v1'), {}); }
+  function togglePin(k) { var p = pins(); if (p[k]) delete p[k]; else p[k] = Date.now(); writeJSON(userKey('cmp_pins_v1'), p); }
+
+  // put saved recalibrations back over the stored answers after a reload
+  function applyRecals() {
+    var r = readJSON(userKey('cmp_recal_v1'), {});
+    for (var i = 0; i < history.length - 1; i++) {
+      var u = history[i], a = history[i + 1];
+      if (u.role !== 'user' || a.role !== 'assistant' || !u.timestamp || !r[u.timestamp] || a.recalAt) continue;
+      a.orig = a.content; a.content = r[u.timestamp].content; a.recalAt = r[u.timestamp].at;
+    }
+  }
+
+  function wpItem(s, k, list, pinned) {
+    var last = k === list.length - 1, key = stopKey(s), isPinned = !!pinned[key];
+    var preview = plain(s.a);
+    if (preview.length > 70) preview = preview.slice(0, 68) + '...';
+    var ans = history[s.i + 1];
+    var meta = [timeLabel(s.ts), ans && ans.recalAt ? 'Recalibrated' : '', preview].filter(Boolean).join(' \u00b7 ');
+    return '<div class="cmp-wp-item' + (last ? ' current' : '') + (isPinned ? ' pinned' : '') + '" style="animation-delay:' + (k * 30) + 'ms">' +
+      '<div class="cmp-wp-rail"><span class="cmp-wp-dot"></span></div>' +
+      '<div class="cmp-wp-main"><div class="cmp-wp-q-row"><div class="cmp-wp-q">' + esc(s.q) + '</div>' +
+      '<button class="cmp-wp-pin" type="button" data-pin="' + esc(key) + '" aria-pressed="' + isPinned + '" aria-label="' + (isPinned ? 'Unpin' : 'Pin') + ' this waypoint" title="' + (isPinned ? 'Unpin' : 'Pin') + '">' + (ICONS.pin || '') + '</button>' +
+      '<button class="cmp-wp-more" type="button" data-more="1" aria-label="Show details"><svg viewBox="0 0 24 24" class="cmp-i"><path d="m6 9 6 6 6-6"/></svg></button></div>' +
+      (meta ? '<div class="cmp-wp-meta">' + esc(meta) + '</div>' : '') +
+      wpDetail(s, k, list) +
+      '<div class="cmp-wp-acts"><button class="cmp-wp-act" type="button" data-jump="' + s.i + '">Jump to</button>' +
+      (last || !s.a ? '' : '<button class="cmp-wp-act" type="button" data-recal="' + s.i + '" title="Answer this again with what Compass knows now">Recalibrate</button>') +
+      (last ? '' : '<button class="cmp-wp-act primary" type="button" data-resume="' + s.i + '" title="Continue the conversation from this point">Resume</button>') +
+      '</div></div></div>';
+  }
+
   function renderWaypoints() {
     var host = $('cmp-wp-list'); if (!host) return;
-    var list = stops(), h = '';
+    var list = stops(), pinned = pins(), h = '', top = '';
     for (var k = 0; k < list.length; k++) {
-      var s = list[k], last = k === list.length - 1;
-      var preview = plain(s.a);
-      if (preview.length > 70) preview = preview.slice(0, 68) + '...';
-      var meta = [timeLabel(s.ts), preview].filter(Boolean).join(' \u00b7 ');
-      h += '<div class="cmp-wp-item' + (last ? ' current' : '') + '" style="animation-delay:' + (k * 30) + 'ms">' +
-        '<div class="cmp-wp-rail"><span class="cmp-wp-dot"></span></div>' +
-        '<div class="cmp-wp-main"><div class="cmp-wp-q">' + esc(s.q) + '</div>' +
-        (meta ? '<div class="cmp-wp-meta">' + esc(meta) + '</div>' : '') +
-        '<div class="cmp-wp-acts"><button class="cmp-wp-act" type="button" data-jump="' + s.i + '">Jump to</button>' +
-        (last ? '' : '<button class="cmp-wp-act primary" type="button" data-resume="' + s.i + '">Resume from here</button>') +
-        '</div></div></div>';
+      h += wpItem(list[k], k, list, pinned);
+      if (pinned[stopKey(list[k])]) top += wpItem(list[k], k, list, pinned);
     }
-    host.innerHTML = h;
-    host.scrollTop = host.scrollHeight;
+    host.innerHTML = top
+      ? '<div class="cmp-wp-sec">Pinned</div><div class="cmp-wp-pinned">' + top + '</div><div class="cmp-wp-sec">All</div>' + h
+      : h;
+    host.scrollTop = top ? 0 : host.scrollHeight;
+  }
+
+  // Recalibrate: answer an earlier question again, now that Compass knows more.
+  // The new answer replaces the old one in place, with Undo to switch back.
+  function recalibrate(i) {
+    var q = history[i], ans = history[i + 1];
+    if (busy || !q || !ans || q.role !== 'user' || ans.role !== 'assistant') return;
+    toggleWaypoints(false);
+    var body = $('cmp-body');
+    var row = body && body.querySelector('.cmp-row-ai[data-ai="' + (i + 1) + '"]');
+    if (!row) return;
+    busy = true;
+    var top = row.offsetTop - 40;
+    try { body.scrollTo({ top: top, behavior: 'smooth' }); } catch (e) { body.scrollTop = top; }
+    var msg = row.querySelector('.cmp-ai'), out = row.querySelector('.cmp-out');
+    msg.classList.add('cmp-recal-busy');
+    [].forEach.call(msg.querySelectorAll('.cmp-acts,.cmp-recal-tag,.cmp-pick'), function (n) { n.parentNode.removeChild(n); });
+    var pr = progress('Recalibrating with what I know now');
+    msg.appendChild(pr.el);
+    var fresh = null;
+    var started = false;
+    var rv = revealer(out, function () {
+      if (!started) { started = true; msg.classList.remove('cmp-recal-busy'); pr.writing(); }
+    });
+    var ask = 'Recalibrate my earlier question: "' + String(q.content).slice(0, 400) + '". Answer it again for where I am now, using everything you have learned about me since then (the rest of this chat, my profile, my to-do list). ' +
+      'Open with one short sentence on what changed since your first answer, and keep it about as long as before.';
+    requestChat(history.concat([{ role: 'user', content: ask, timestamp: new Date().toISOString() }]), function (soFar) { rv.feed(soFar); }, function (raw) {
+      if (!raw) {
+        busy = false; msg.classList.remove('cmp-recal-busy');
+        pr.stop(); out.innerHTML = renderMarkdown(parseReply(ans.content).reply); linkDirectory(out);
+        decorateAI(row, { actions: true, recal: ans.recalAt || null });
+        return;
+      }
+      fresh = parseReply(raw);
+      var at = new Date().toISOString();
+      if (ans.orig == null) ans.orig = ans.content;
+      ans.content = raw; ans.recalAt = at;
+      var r = readJSON(userKey('cmp_recal_v1'), {});
+      if (q.timestamp) { r[q.timestamp] = { content: raw, at: at }; writeJSON(userKey('cmp_recal_v1'), r); }
+      rv.end(fresh.reply, function () {
+        busy = false;
+        msg.classList.remove('cmp-recal-busy');
+        out.innerHTML = renderMarkdown(fresh.reply); linkDirectory(out);
+        pr.stop(function () { decorateAI(row, { actions: true, recal: at }); });
+      });
+    });
+  }
+
+  function undoRecal(row) {
+    var i = +row.getAttribute('data-ai'), ans = history[i], q = history[i - 1];
+    if (!ans || ans.orig == null) return;
+    ans.content = ans.orig; delete ans.orig; delete ans.recalAt;
+    var r = readJSON(userKey('cmp_recal_v1'), {});
+    if (q && q.timestamp && r[q.timestamp]) { delete r[q.timestamp]; writeJSON(userKey('cmp_recal_v1'), r); }
+    var out = row.querySelector('.cmp-out');
+    out.innerHTML = renderMarkdown(parseReply(ans.content).reply); linkDirectory(out);
+    decorateAI(row, { actions: true });
+  }
+
+  // tucked-away details for one waypoint: when, what it was about, what followed
+  function wpDetail(s, k, list) {
+    var rows = [];
+    if (s.ts) {
+      var d = new Date(s.ts);
+      if (!isNaN(d)) { try { rows.push(['When', d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }) + ', ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })]); } catch (e) {} }
+    }
+    var topics = (memory && Array.isArray(memory.topics)) ? memory.topics : [], hits = [];
+    var q = (s.q + ' ' + plain(s.a)).toLowerCase();
+    topics.forEach(function (t) {
+      var words = String(t).toLowerCase().split(/\s+/).filter(function (w) { return w.length > 3; });
+      if (words.some(function (w) { return q.indexOf(w) > -1; }) && hits.length < 2) hits.push(t);
+    });
+    if (hits.length) rows.push(['Topic', hits.map(function (t) { return '<span class="cmp-wp-tag">' + esc(t) + '</span>'; }).join('')]);
+    var after = list.length - 1 - k;
+    rows.push(['After', after === 0 ? 'Latest question' : after + ' more question' + (after === 1 ? '' : 's')]);
+    var ctx = plain(s.a);
+    if (ctx) rows.push(['Answer', esc(ctx.length > 150 ? ctx.slice(0, 148) + '...' : ctx)]);
+    var h = '<div class="cmp-wp-detail"><div><dl class="cmp-wp-dl">';
+    rows.forEach(function (r) { h += '<dt>' + r[0] + '</dt><dd>' + (r[0] === 'Topic' || r[0] === 'Answer' ? r[1] : esc(r[1])) + '</dd>'; });
+    return h + '</dl></div></div>';
   }
 
   function jumpTo(i) {
@@ -1228,6 +1731,7 @@
   }
 
   function resumeFrom(i) {
+    if (busy) return;
     toggleWaypoints(false);
     var end = (history[i + 1] && history[i + 1].role === 'assistant') ? i + 2 : i + 1;
     if (!branchBackup) branchBackup = history.slice();
@@ -1264,15 +1768,791 @@
     if (!btn || !panel || !list) return;
     btn.addEventListener('click', function (e) { e.stopPropagation(); toggleWaypoints(); });
     list.addEventListener('click', function (e) {
-      var t = e.target.closest ? e.target.closest('[data-jump],[data-resume]') : null;
+      var more = e.target.closest ? e.target.closest('[data-more]') : null;
+      if (more) {
+        var item = more.closest('.cmp-wp-item');
+        if (item) { item.classList.toggle('open'); more.setAttribute('aria-label', item.classList.contains('open') ? 'Hide details' : 'Show details'); }
+        return;
+      }
+      var pin = e.target.closest ? e.target.closest('[data-pin]') : null;
+      if (pin) { e.stopPropagation(); togglePin(pin.getAttribute('data-pin')); var st = list.scrollTop; renderWaypoints(); list.scrollTop = st; return; }
+      var t = e.target.closest ? e.target.closest('[data-jump],[data-resume],[data-recal]') : null;
       if (!t) return;
       if (t.hasAttribute('data-jump')) jumpTo(+t.getAttribute('data-jump'));
+      else if (t.hasAttribute('data-recal')) recalibrate(+t.getAttribute('data-recal'));
       else resumeFrom(+t.getAttribute('data-resume'));
     });
     document.addEventListener('click', function (e) {
       if (!panel.hidden && !panel.contains(e.target) && e.target !== btn) toggleWaypoints(false);
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') toggleWaypoints(false); });
+  })();
+
+  // ===========================================================================
+  // Quick actions under each reply: save to notes, make a task, copy.
+  // A text selection inside the reply wins over the whole reply.
+  // ===========================================================================
+  (function replyActions() {
+    var body = $('cmp-body'); if (!body) return;
+    function selectionIn(el) {
+      try {
+        var sel = window.getSelection(); if (!sel || sel.isCollapsed) return '';
+        var r = sel.getRangeAt(0);
+        return el.contains(r.commonAncestorContainer) ? String(sel).replace(/\s+/g, ' ').trim() : '';
+      } catch (e) { return ''; }
+    }
+    function textOf(out) {
+      var c = out.cloneNode(true);
+      [].forEach.call(c.querySelectorAll('li'), function (li) { li.insertBefore(document.createTextNode('- '), li.firstChild); });
+      return (c.innerText || c.textContent || '').replace(/\n{3,}/g, '\n\n').trim();
+    }
+    function flash(btn, note, undo) {
+      var acts = btn.parentNode;
+      btn.classList.add('cmp-act-ok');
+      var keep = btn.innerHTML; btn.innerHTML = ICONS.check || '';
+      acts.classList.add('cmp-acts-busy');
+      var old = acts.querySelector('.cmp-act-note'); if (old) old.parentNode.removeChild(old);
+      var n = document.createElement('span'); n.className = 'cmp-act-note'; n.textContent = note;
+      if (undo) { var u = document.createElement('button'); u.type = 'button'; u.textContent = 'Open'; u.onclick = undo; n.appendChild(u); }
+      acts.appendChild(n);
+      setTimeout(function () {
+        btn.classList.remove('cmp-act-ok'); btn.innerHTML = keep; acts.classList.remove('cmp-acts-busy');
+        if (n.parentNode) n.parentNode.removeChild(n);
+      }, 2600);
+    }
+    function picker(msg, items, ts, btn) {
+      var old = msg.querySelector('.cmp-pick'); if (old) { old.parentNode.removeChild(old); return; }
+      var box = document.createElement('div'); box.className = 'cmp-pick';
+      var h = '<div class="cmp-pick-t">Add to your to-do list</div>';
+      items.forEach(function (t, k) { h += '<label><input type="checkbox" data-k="' + k + '"' + (k < 3 ? ' checked' : '') + '><span>' + esc(t) + '</span></label>'; });
+      box.innerHTML = h + '<div class="cmp-pick-a"><button type="button" data-x="1">Cancel</button><button type="button" class="go">Add</button></div>';
+      msg.insertBefore(box, msg.querySelector('.cmp-acts'));
+      function count() { var n = box.querySelectorAll('input:checked').length; box.querySelector('.go').textContent = n ? 'Add ' + n : 'Add'; box.querySelector('.go').disabled = !n; }
+      box.addEventListener('change', count); count();
+      try { box.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' }); } catch (x) {}
+      box.querySelector('[data-x]').onclick = function () { box.parentNode.removeChild(box); };
+      box.querySelector('.go').onclick = function () {
+        var picked = [].map.call(box.querySelectorAll('input:checked'), function (c) { return items[+c.getAttribute('data-k')]; });
+        var ids = window.cmpNotepad.apply(picked.map(function (t) { return { op: 'add', text: t }; }), ts);
+        box.parentNode.removeChild(box);
+        flash(btn, picked.length === 1 ? 'Added to to-do' : 'Added ' + picked.length + ' tasks', function () { window.cmpNotepad.open('todo', ids[0]); });
+      };
+    }
+    body.addEventListener('click', function (e) {
+      var un = e.target.closest ? e.target.closest('[data-unrecal]') : null;
+      if (un) { var rr = un.closest('.cmp-row-ai'); if (rr) undoRecal(rr); return; }
+      var btn = e.target.closest ? e.target.closest('.cmp-act') : null; if (!btn) return;
+      var row = btn.closest('.cmp-row-ai'), msg = row.querySelector('.cmp-ai'), out = row.querySelector('.cmp-out');
+      var ts = row.getAttribute('data-ts') || null, picked = selectionIn(out), kind = btn.getAttribute('data-act');
+      if (kind === 'copy') {
+        var txt = picked || textOf(out);
+        var done = function () { flash(btn, 'Copied'); };
+        try { navigator.clipboard.writeText(txt).then(done, function () { legacyCopy(txt); done(); }); } catch (x) { legacyCopy(txt); done(); }
+        return;
+      }
+      if (!window.cmpNotepad) return;
+      if (kind === 'note') {
+        var when = ''; try { when = new Date(ts || Date.now()).toLocaleDateString([], { month: 'short', day: 'numeric' }); } catch (x) {}
+        var note = picked || textOf(out);
+        if (note.length > 1200) note = note.slice(0, 1200).replace(/\s+\S*$/, '') + '...';
+        window.cmpNotepad.add('note', 'From Compass' + (when ? ', ' + when : '') + ':\n' + note, 'compass', { srcTs: ts });
+        flash(btn, 'Saved to notes', function () { window.cmpNotepad.open('notes'); });
+        return;
+      }
+      if (kind === 'task') {
+        if (picked) {
+          var id = window.cmpNotepad.apply([{ op: 'add', text: picked.slice(0, 140) }], ts)[0];
+          flash(btn, 'Added to to-do', function () { window.cmpNotepad.open('todo', id); });
+          return;
+        }
+        var lis = [].map.call(out.querySelectorAll('li'), function (li) { return (li.innerText || li.textContent || '').replace(/\s+/g, ' ').trim(); })
+          .filter(function (t) { return t && !window.cmpNotepad.has(t); }).slice(0, 6)
+          .map(function (t) { return t.length > 140 ? t.slice(0, 137) + '...' : t; });
+        if (lis.length) { picker(msg, lis, ts, btn); return; }
+        // no list to pick from: open the to-do list with a draft the student can edit
+        var first = ((textOf(out).match(/^[^.!?\n]+[.!?]?/) || [''])[0]).trim();
+        window.cmpNotepad.open('todo');
+        var ni = $('cmp-np-input');
+        if (ni) { ni.value = first.slice(0, 140); ni.focus(); try { ni.select(); } catch (x) {} }
+      }
+    });
+    function legacyCopy(t) {
+      var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+      document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (x) {} document.body.removeChild(ta);
+    }
+  })();
+
+  // ===========================================================================
+  // Notepad: the student's own notes + to-do list. Floats, drags by its top
+  // bar, stays open when the chat closes, and follows them across pages.
+  // Stored in this browser only (localStorage, per signed-in member).
+  // Compass sees open task titles only, never note text.
+  // ===========================================================================
+  (function notepad() {
+    var np = $('cmp-notepad'); if (!np) return;
+    var hdr = $('cmp-np-hdr'), notesEl = $('cmp-np-notes'), list = $('cmp-np-list'),
+        form = $('cmp-np-add'), input = $('cmp-np-input'), countEl = $('cmp-np-count'),
+        savedEl = $('cmp-np-saved'), dot = $('cmp-np-dot'), btn = $('cmp-np-btn');
+    var ICONS2 = window.__FS_ICONS__ || {};
+    var CHECK = ICONS2.check || '', XI = ICONS2.close || '', SPARK = ICONS2.spark || '';
+    var CHEV = '<svg viewBox="0 0 24 24" class="cmp-i"><path d="m6 9 6 6 6-6"/></svg>';
+    var showDone = false, cacheKey = null, data = null;
+
+    function key() {
+      var id = hbUserId || (window.__HB_USER__ && window.__HB_USER__.id) || 'anon';
+      return 'cmp_np_v1_' + id;
+    }
+    function load() {
+      var k = key();
+      if (data && cacheKey === k) return data;
+      var d = null;
+      try { d = JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) {}
+      data = d && typeof d === 'object' ? d : {};
+      data.notes = typeof data.notes === 'string' ? data.notes : '';
+      data.todos = Array.isArray(data.todos) ? data.todos : [];
+      data.tab = data.tab === 'notes' ? 'notes' : 'todo';
+      cacheKey = k;
+      return data;
+    }
+    function save() { try { localStorage.setItem(key(), JSON.stringify(load())); } catch (e) {} }
+    function uid() { return 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+    function openTodos() { return load().todos.filter(function (t) { return !t.done; }); }
+
+    // ---- position: draggable by the header, clamped to the viewport ----
+    function clampPos(x, y) {
+      var w = np.offsetWidth || 320, h = np.offsetHeight || 520;
+      return { x: Math.max(8, Math.min(x, window.innerWidth - w - 8)), y: Math.max(8, Math.min(y, window.innerHeight - h - 8)) };
+    }
+    function place() {
+      var d = load(), p = d.pos;
+      if (!p) {
+        var chat = $('cmp-chat'), r = chat && chat.classList.contains('open') ? chat.getBoundingClientRect() : null;
+        var w = np.offsetWidth || 320;
+        if (window.innerWidth <= 480) p = { x: 12, y: 64 };
+        else if (r && r.left - w - 16 > 8) p = { x: r.left - w - 16, y: r.top + 40 };
+        else p = { x: window.innerWidth - w - 28, y: Math.max(8, window.innerHeight - (np.offsetHeight || 520) - 110) };
+      }
+      p = clampPos(p.x, p.y);
+      np.style.left = p.x + 'px'; np.style.top = p.y + 'px';
+    }
+    (function drag() {
+      var sx, sy, ox, oy, on = false;
+      hdr.addEventListener('pointerdown', function (e) {
+        if (e.target.closest && e.target.closest('button')) return;
+        on = true; sx = e.clientX; sy = e.clientY;
+        var r = np.getBoundingClientRect(); ox = r.left; oy = r.top;
+        np.classList.add('cmp-np-dragging');
+        try { hdr.setPointerCapture(e.pointerId); } catch (x) {}
+        e.preventDefault();
+      });
+      hdr.addEventListener('pointermove', function (e) {
+        if (!on) return;
+        var p = clampPos(ox + e.clientX - sx, oy + e.clientY - sy);
+        np.style.left = p.x + 'px'; np.style.top = p.y + 'px';
+      });
+      function end() {
+        if (!on) return; on = false; np.classList.remove('cmp-np-dragging');
+        var r = np.getBoundingClientRect(); load().pos = { x: Math.round(r.left), y: Math.round(r.top) }; save();
+      }
+      hdr.addEventListener('pointerup', end); hdr.addEventListener('pointercancel', end);
+      window.addEventListener('resize', function () { if (!np.hidden) { var r = np.getBoundingClientRect(); var p = clampPos(r.left, r.top); np.style.left = p.x + 'px'; np.style.top = p.y + 'px'; } });
+    })();
+
+    // ---- tabs ----
+    function showTab(t) {
+      var d = load(); d.tab = t === 'notes' ? 'notes' : 'todo'; save();
+      var tabs = np.querySelectorAll('.cmp-np-tab'), views = np.querySelectorAll('.cmp-np-view');
+      for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i].getAttribute('data-np') === d.tab);
+      for (var j = 0; j < views.length; j++) views[j].classList.toggle('active', views[j].getAttribute('data-np') === d.tab);
+      var ink = np.querySelector('.cmp-np-ink'); if (ink) ink.style.setProperty('--t', d.tab === 'todo' ? 1 : 0);
+      if (window.__cmpNpUpdateUndo) window.__cmpNpUpdateUndo();
+      var cf = $('cmp-np-confirm'); if (cf) cf.hidden = true;
+    }
+    var tabBtns = np.querySelectorAll('.cmp-np-tab');
+    for (var ti = 0; ti < tabBtns.length; ti++) tabBtns[ti].addEventListener('click', function () { showTab(this.getAttribute('data-np')); });
+
+    // ---- notes: autosave ----
+    var saveTimer = null;
+    notesEl.addEventListener('input', function () {
+      if (typeof load().notesPrev === 'string') { load().notesPrev = null; save(); if (window.__cmpNpUpdateUndo) window.__cmpNpUpdateUndo(); }
+      savedEl.parentNode.classList.add('saving'); savedEl.textContent = 'Saving...';
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () {
+        load().notes = notesEl.value; save();
+        savedEl.parentNode.classList.remove('saving'); savedEl.textContent = 'Saved on this device';
+      }, 400);
+    });
+
+    // ---- to-dos ----
+    function renderTodos(flashId) {
+      var d = load(), open = [], done = [];
+      d.todos.forEach(function (t) { (t.done ? done : open).push(t); });
+      countEl.textContent = open.length ? String(open.length) : '';
+      var h = '';
+      if (!open.length && !done.length) h = '<div class="cmp-np-empty">Nothing here yet.<br>Add a task above, or Compass can save one when you plan a next step.</div>';
+      var grouped = open.some(function (t) { return t.group; }), lastGroup = null;
+      open.forEach(function (t) {
+        var g = grouped ? (t.group || 'Other') : null;
+        if (grouped && g !== lastGroup) { h += '<div class="cmp-np-group">' + esc(g) + '</div>'; lastGroup = g; }
+        h += row(t);
+      });
+      if (open.length) h += '<button class="cmp-np-review" type="button">' + (ICONS2.chat || '') + 'Review my list with Compass</button>';
+      if (done.length) {
+        h += '<button class="cmp-np-done-h" type="button" aria-expanded="' + showDone + '">' + CHEV + 'Done (' + done.length + ')</button>';
+        if (showDone) done.slice().reverse().forEach(function (t) { h += row(t); });
+      }
+      list.innerHTML = h;
+      if (flashId) {
+        var el = list.querySelector('[data-id="' + flashId + '"]');
+        if (el) { el.classList.add('cmp-flash-np'); try { el.scrollIntoView({ block: 'nearest' }); } catch (e) {} }
+      }
+    }
+    function row(t) {
+      var steps = Array.isArray(t.steps) ? t.steps : [], sd = steps.filter(function (x) { return x.done; }).length;
+      var tag = '';
+      if (t.from === 'compass' || t.srcTs) {   // Compass made it, or added its steps
+        tag = t.srcTs && window.cmpCanJumpTo && window.cmpCanJumpTo(t.srcTs)
+          ? '<button type="button" class="cmp-todo-from" data-src="' + esc(t.srcTs) + '" title="Jump to the conversation this came from">' + SPARK + 'Compass</button>'
+          : '<span class="cmp-todo-from" title="Saved from a Compass chat">' + SPARK + 'Compass</span>';
+      }
+      var sh = '';
+      if (steps.length && !t.done) {
+        sh = '<div class="cmp-steps">';
+        steps.forEach(function (st, i) {
+          sh += '<div class="cmp-step' + (st.done ? ' done' : '') + '" data-step="' + i + '"><button type="button" class="cmp-step-chk" aria-label="Toggle step">' + CHECK + '</button><span>' + esc(st.text) + '</span></div>';
+        });
+        sh += '</div>';
+      }
+      return '<div class="cmp-todo' + (t.done ? ' done' : '') + '" data-id="' + esc(t.id) + '">' +
+        '<button class="cmp-chk" type="button" aria-label="' + (t.done ? 'Mark not done' : 'Mark done') + '">' + CHECK + '</button>' +
+        '<div class="cmp-todo-body"><span class="cmp-todo-t">' + esc(t.text) + tag +
+          (steps.length && !t.done ? '<span class="cmp-step-prog">' + sd + '/' + steps.length + '</span>' : '') + '</span>' + sh + '</div>' +
+        '<button class="cmp-todo-del" type="button" aria-label="Delete task">' + XI + '</button></div>';
+    }
+    function find(id) { var d = load(); for (var i = 0; i < d.todos.length; i++) if (d.todos[i].id === id) return d.todos[i]; return null; }
+
+    list.addEventListener('click', function (e) {
+      var tgt = e.target.closest ? e.target : null; if (!tgt) return;
+      if (tgt.closest('.cmp-np-done-h')) { showDone = !showDone; renderTodos(); return; }
+      if (tgt.closest('.cmp-np-review')) { if (window.fsAsk) window.fsAsk('Can you review my to-do list and walk me through the steps for each?'); return; }
+      var src = tgt.closest('[data-src]');
+      if (src) { if (window.cmpJumpToTs) window.cmpJumpToTs(src.getAttribute('data-src')); return; }
+      var rowEl = tgt.closest('.cmp-todo'); if (!rowEl) return;
+      var t = find(rowEl.getAttribute('data-id')); if (!t) return;
+      var stepEl = tgt.closest('.cmp-step');
+      if (stepEl && Array.isArray(t.steps)) {
+        var st = t.steps[+stepEl.getAttribute('data-step')]; if (!st) return;
+        st.done = !st.done; save(); touchTodos(); renderTodos(); return;
+      }
+      touchTodos();
+      if (tgt.closest('.cmp-todo-del')) {
+        rowEl.classList.add('leaving');
+        load().todos = load().todos.filter(function (x) { return x.id !== t.id; }); save();
+        setTimeout(function () { renderTodos(); }, 380);
+        return;
+      }
+      if (tgt.closest('.cmp-chk')) {
+        if (t.done) { t.done = false; t.doneAt = null; save(); renderTodos(t.id); return; }
+        // the satisfying part: pop, check draws in, strike sweeps across, a small burst, then it tucks away
+        t.done = true; t.doneAt = new Date().toISOString(); save();
+        rowEl.classList.add('done', 'popping');
+        var burst = document.createElement('span'); burst.className = 'cmp-burst';
+        for (var k = 0; k < 8; k++) { var dotEl = document.createElement('i'); dotEl.style.setProperty('--a', (k * 45) + 'deg'); burst.appendChild(dotEl); }
+        rowEl.appendChild(burst);
+        countEl.textContent = openTodos().length ? String(openTodos().length) : '';
+        setTimeout(function () { rowEl.classList.add('leaving'); }, 850);
+        setTimeout(function () { renderTodos(); }, 1250);
+        if (t.from === 'compass' && load().celebrate !== false) setTimeout(function () { celebrate(t.text); }, 420);
+      }
+    });
+
+    // ---- a small, earned moment when a Compass-suggested task gets done ----
+    var toastTimer = null;
+    function celebrate(text) {
+      var old = np.querySelector('.cmp-np-toast'); if (old) old.parentNode.removeChild(old);
+      var lines = ['Nice follow-through.', 'One step closer.', 'That one counts.', 'Done and dusted.', 'Momentum looks good on you.'];
+      var el = document.createElement('div');
+      el.className = 'cmp-np-toast'; el.setAttribute('role', 'status');
+      el.innerHTML = '<span class="cmp-np-toast-i">' + CHECK + '<i></i><i></i><i></i></span>' +
+        '<div class="cmp-np-toast-m"><div class="cmp-np-toast-t">' + esc(lines[Math.floor(Math.random() * lines.length)]) + '</div>' +
+        '<div class="cmp-np-toast-s">' + esc(text.length > 46 ? text.slice(0, 44) + '...' : text) + '</div>' +
+        '<label class="cmp-np-toast-c"><input type="checkbox"> Don\'t show this again</label></div>' +
+        '<button type="button" class="cmp-np-toast-x">Dismiss</button>';
+      np.appendChild(el);
+      var cb = el.querySelector('input');
+      function hide() { clearTimeout(toastTimer); el.classList.add('out'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 260); }
+      cb.addEventListener('change', function () { load().celebrate = !cb.checked; save(); syncSettings(); clearTimeout(toastTimer); if (cb.checked) toastTimer = setTimeout(hide, 900); });
+      el.querySelector('.cmp-np-toast-x').addEventListener('click', hide);
+      el.addEventListener('mouseenter', function () { clearTimeout(toastTimer); });
+      el.addEventListener('mouseleave', function () { if (!cb.checked) toastTimer = setTimeout(hide, 2500); });
+      toastTimer = setTimeout(hide, 6000);
+    }
+
+    // ---- notepad settings ----
+    var setBtn = $('cmp-np-set'), setPanel = $('cmp-np-settings'), celebrateCb = $('cmp-np-celebrate'),
+        spellCb = $('cmp-np-spell'), modeSeg = $('cmp-np-mode'), modeHelp = $('cmp-np-mode-help');
+    var MODE_HELP = {
+      group: 'Sorts your notes under headings. Your wording stays exactly as written.',
+      rewrite: 'Keeps the order, cleans up wording and spelling. Every fact stays.',
+      both: 'Groups your notes and cleans up the wording. Every fact stays.'
+    };
+    function orientMode() { var m = load().orientMode; return MODE_HELP[m] ? m : 'group'; }
+    function applySpell() {
+      var on = load().spell !== false;
+      [notesEl, input].forEach(function (el) {
+        if (!el) return;
+        el.setAttribute('spellcheck', on ? 'true' : 'false');
+        el.setAttribute('autocorrect', on ? 'on' : 'off');
+        el.setAttribute('autocapitalize', on ? 'sentences' : 'off');
+      });
+    }
+    function syncSettings() {
+      if (celebrateCb) celebrateCb.checked = load().celebrate !== false;
+      if (spellCb) spellCb.checked = load().spell !== false;
+      if (modeSeg) { var m = orientMode(); [].forEach.call(modeSeg.querySelectorAll('button'), function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-mode') === m)); }); }
+      if (modeHelp) modeHelp.textContent = MODE_HELP[orientMode()];
+    }
+    if (spellCb) spellCb.addEventListener('change', function () { load().spell = spellCb.checked; save(); applySpell(); });
+    if (modeSeg) modeSeg.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-mode]') : null; if (!b) return;
+      load().orientMode = b.getAttribute('data-mode'); save(); syncSettings();
+    });
+    applySpell();
+
+    // ---- Orient: tidy the current tab, only after the student confirms ----
+    var orientBtn = $('cmp-np-orient'), confirmEl = $('cmp-np-confirm'), confirmS = $('cmp-np-confirm-s'), undoBtn = $('cmp-np-undo');
+    var CONFIRM_TEXT = {
+      notes: {
+        group: 'Compass will sort your notes under headings. Your words stay exactly as written, and nothing is removed.',
+        rewrite: 'Compass will clean up the wording and spelling, keeping every fact, name, and link. Nothing is removed.',
+        both: 'Compass will group your notes and clean up the wording, keeping every fact, name, and link. Nothing is removed.'
+      },
+      todo: {
+        group: 'Compass will sort your open tasks into groups and put them in a sensible order. Task wording stays the same.',
+        rewrite: 'Compass will make each open task short and concrete, keeping every name and date. Nothing is removed.',
+        both: 'Compass will group and order your open tasks and make each one short and concrete. Nothing is removed.'
+      }
+    };
+    function status(msg, ms) { savedEl.textContent = msg; if (ms) setTimeout(function () { savedEl.textContent = 'Saved on this device'; }, ms); }
+    function hideConfirm() { if (confirmEl) confirmEl.hidden = true; }
+    function curTab() { return load().tab === 'notes' ? 'notes' : 'todo'; }
+    function updateUndo() {
+      if (!undoBtn) return;
+      var d = load();
+      undoBtn.hidden = !(curTab() === 'notes' ? typeof d.notesPrev === 'string' : Array.isArray(d.todosPrev));
+    }
+    function touchTodos() { var d = load(); if (d.todosPrev) { d.todosPrev = null; save(); updateUndo(); } }
+    window.__cmpNpUpdateUndo = updateUndo;
+
+    if (orientBtn && confirmEl) {
+      orientBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var tab = curTab();
+        if (tab === 'notes' && !notesEl.value.trim()) { status('Write a few notes first', 1800); return; }
+        if (tab === 'todo' && openTodos().length < 2) { status('Add a couple of tasks first', 1800); return; }
+        confirmEl.querySelector('.cmp-np-confirm-t').textContent = tab === 'notes' ? 'Orient your notes?' : 'Orient your to-do list?';
+        confirmS.textContent = CONFIRM_TEXT[tab][orientMode()] + ' You can undo it.';
+        confirmEl.hidden = !confirmEl.hidden;
+      });
+      confirmEl.querySelector('.cmp-np-c-no').addEventListener('click', hideConfirm);
+      np.addEventListener('click', function (e) { if (!confirmEl.hidden && !confirmEl.contains(e.target) && !orientBtn.contains(e.target)) hideConfirm(); });
+      confirmEl.querySelector('.cmp-np-c-yes').addEventListener('click', function () {
+        hideConfirm();
+        var tab = curTab(), mode = orientMode();
+        var beforeNotes = notesEl.value;
+        var beforeTodos = JSON.stringify(load().todos);
+        orientBtn.disabled = true; orientBtn.classList.add('working'); orientBtn.querySelector('span').textContent = 'Orienting';
+        function finish(msg) {
+          orientBtn.disabled = false; orientBtn.classList.remove('working'); orientBtn.querySelector('span').textContent = 'Orient';
+          if (msg) status(msg, 2600);
+        }
+        var fail = 'Couldn\'t orient right now. Nothing changed.';
+        var body = tab === 'notes'
+          ? { type: 'organize_notes', notes: beforeNotes, mode: mode }
+          : { type: 'organize_todos', mode: mode, tasks: openTodos().map(function (t) { return { id: t.id, text: t.text }; }) };
+        try {
+          var x = new XMLHttpRequest();
+          x.open('POST', PROXY_URL, true);
+          x.setRequestHeader('Content-Type', 'application/json');
+          x.onreadystatechange = function () {
+            if (x.readyState !== 4) return;
+            var r = null; try { r = JSON.parse(x.responseText); } catch (e) {}
+            var d = load();
+            if (tab === 'notes') {
+              if (!r || !r.ok || !r.notes) { finish(fail); return; }
+              if (notesEl.value !== beforeNotes) { finish('You kept typing, so I left your notes as they are.'); return; }
+              d.notesPrev = beforeNotes; d.notes = r.notes; save();
+              notesEl.value = r.notes; notesEl.scrollTop = 0;
+              notesEl.classList.remove('cmp-np-fresh'); void notesEl.offsetWidth; notesEl.classList.add('cmp-np-fresh');
+            } else {
+              if (!r || !r.ok || !Array.isArray(r.tasks)) { finish(fail); return; }
+              if (JSON.stringify(d.todos) !== beforeTodos) { finish('Your list changed meanwhile, so I left it as it is.'); return; }
+              var byId = {}; d.todos.forEach(function (t) { byId[t.id] = t; });
+              var ordered = [];
+              r.tasks.forEach(function (rt) {
+                var t = byId[rt.id]; if (!t || t.done || ordered.indexOf(t) > -1) return;
+                if (mode !== 'group' && rt.text) t.text = String(rt.text).slice(0, 140);
+                if (mode !== 'rewrite') t.group = rt.group || '';
+                ordered.push(t);
+              });
+              d.todos.forEach(function (t) { if (!t.done && ordered.indexOf(t) === -1) ordered.push(t); });   // never lose one
+              var prev = JSON.parse(beforeTodos);
+              d.todos = ordered.concat(d.todos.filter(function (t) { return t.done; }));
+              save(); d.todosPrev = prev; save();
+              renderTodos();
+            }
+            updateUndo();
+            finish(r.restored ? 'Oriented. Kept ' + r.restored + ' item' + (r.restored === 1 ? '' : 's') + ' safe.' : 'Oriented.');
+          };
+          x.onerror = function () { finish(fail); };
+          x.send(JSON.stringify(body));
+        } catch (e) { finish(fail); }
+      });
+    }
+    if (undoBtn) undoBtn.addEventListener('click', function () {
+      var d = load();
+      if (curTab() === 'notes' && typeof d.notesPrev === 'string') {
+        d.notes = d.notesPrev; d.notesPrev = null; save(); notesEl.value = d.notes;
+        status('Restored your previous notes', 2200);
+      } else if (curTab() === 'todo' && Array.isArray(d.todosPrev)) {
+        d.todos = d.todosPrev; d.todosPrev = null; save(); renderTodos();
+        status('Restored your previous list', 2200);
+      }
+      updateUndo();
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = input.value.replace(/\s+/g, ' ').trim(); if (!v) return;
+      addItem('task', v, 'me'); input.value = ''; input.focus();
+    });
+
+    function addItem(kind, text, from, meta) {
+      var d = load();
+      if (kind === 'note') {
+        d.notes = (d.notes ? d.notes.replace(/\s+$/, '') + '\n' : '') + '\u2022 ' + text; save();
+        if (!np.hidden) notesEl.value = d.notes;
+        return null;
+      }
+      var t = { id: uid(), text: text, done: false, from: from || 'me', created: new Date().toISOString() };
+      if (meta && meta.srcTs) t.srcTs = meta.srcTs;
+      d.todos.push(t); save(); touchTodos();
+      if (!np.hidden) renderTodos(t.id); else countEl.textContent = String(openTodos().length);
+      if (from === 'compass' && np.hidden && dot) dot.hidden = false;
+      return t.id;
+    }
+
+    // ---- open / close ----
+    function open(tab, flashId) {
+      var d = load();
+      notesEl.value = d.notes;
+      np.hidden = false; d.open = true; save();
+      if (dot) dot.hidden = true;
+      showTab(tab || d.tab);
+      renderTodos(flashId);
+      place();
+    }
+    function close() { np.hidden = true; load().open = false; save(); }
+    $('cmp-np-x').addEventListener('click', close);
+    if (btn) btn.addEventListener('click', function () { if (np.hidden) open(); else close(); });
+
+    // apply changes Compass proposed and the student confirmed
+    function applyActions(items, srcTs) {
+      var d = load(), changed = [];
+      (items || []).forEach(function (it) {
+        if (!it || !it.op) return;
+        var t = it.id ? find(String(it.id)) : null;
+        if (it.op === 'add' && it.text) {
+          var nt = { id: uid(), text: String(it.text).replace(/\[\[|\]\]/g, '').slice(0, 140), done: false, from: 'compass', created: new Date().toISOString() };
+          if (srcTs) nt.srcTs = srcTs;
+          d.todos.push(nt); changed.push(nt.id);
+        } else if (t && it.op === 'complete') { t.done = true; t.doneAt = new Date().toISOString(); changed.push(t.id); }
+        else if (t && it.op === 'rename' && it.text) { t.text = String(it.text).slice(0, 140); changed.push(t.id); }
+        else if (t && it.op === 'steps' && Array.isArray(it.steps)) {
+          t.steps = it.steps.slice(0, 6).map(function (x) { return { text: String(x).replace(/\[\[|\]\]/g, '').slice(0, 90), done: false }; });
+          if (!t.srcTs && srcTs) t.srcTs = srcTs;
+          changed.push(t.id);
+        }
+      });
+      save(); touchTodos();
+      if (!np.hidden) renderTodos(changed[0]); else { countEl.textContent = openTodos().length ? String(openTodos().length) : ''; if (changed.length && dot) dot.hidden = false; }
+      return changed;
+    }
+
+    window.cmpNotepad = {
+      open: open, close: close,
+      add: addItem,
+      apply: applyActions,
+      find: function (id) { var t = find(String(id)); return t ? { id: t.id, text: t.text, done: !!t.done } : null; },
+      openCount: function () { return openTodos().length; },
+      has: function (text) { var l = String(text).toLowerCase(); return load().todos.some(function (t) { return !t.done && t.text.toLowerCase() === l; }); },
+      // what Compass may see: open task titles and a count. Never note text.
+      summary: function () {
+        var o = openTodos(), now = Date.now();
+        var lines = o.slice(0, 15).map(function (t) {
+          var age = t.created ? Math.max(0, Math.round((now - new Date(t.created).getTime()) / 86400000)) : null;
+          var bits = [t.from === 'compass' ? 'saved from a Compass chat' : 'added by the student'];
+          if (age !== null) bits.push(age === 0 ? 'added today' : 'added ' + age + ' day' + (age === 1 ? '' : 's') + ' ago');
+          if (t.group) bits.push('group: ' + t.group);
+          if (Array.isArray(t.steps) && t.steps.length) bits.push('steps: ' + t.steps.map(function (x) { return (x.done ? '[done] ' : '') + x.text; }).join(' | '));
+          return '- [' + t.id + '] ' + t.text + ' (' + bits.join('; ') + ')';
+        });
+        var recent = load().todos.filter(function (t) { return t.done; }).sort(function (a, b) { return String(b.doneAt).localeCompare(String(a.doneAt)); }).slice(0, 3);
+        var out = o.length ? o.length + ' open task' + (o.length === 1 ? '' : 's') + ':\n' + lines.join('\n') : 'No open tasks.';
+        if (recent.length) out += '\nRecently completed: ' + recent.map(function (t) { return t.text; }).join('; ') + '.';
+        return out;
+      }
+    };
+    countEl.textContent = openTodos().length ? String(openTodos().length) : '';
+    if (load().open) open();   // it follows the student across pages
+  })();
+
+  // ===========================================================================
+  // Keyboard: Ctrl/Cmd+K opens Navigate; Ctrl/Cmd+F opens Find on this page.
+  // Pressing Ctrl/Cmd+F again inside Find hands over to the browser's own find.
+  // ===========================================================================
+  var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || '');
+  (function shortcuts() {
+    var hint = $('cmp-nav-kbd');
+    if (hint && canHover) { hint.textContent = isMac ? '\u2318K' : 'Ctrl K'; hint.hidden = false; }
+    document.addEventListener('keydown', function (e) {
+      if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return;
+      var k = String(e.key || '').toLowerCase();
+      if (k === 'k') {
+        e.preventDefault();
+        if (isOpen() && currentView === 'navigate' && document.activeElement === $('cmp-nav-q')) { setOpen(false); return; }
+        openTo('navigate');
+        var q = $('cmp-nav-q'); if (q) setTimeout(function () { q.focus(); q.select(); }, 40);
+      } else if (k === 'f') {
+        var f = $('cmp-find');
+        if (f && !f.hidden && document.activeElement === $('cmp-find-q')) { closeFind(); return; }  // browser find takes over
+        e.preventDefault();
+        openFind();
+      }
+    }, true);
+  })();
+
+  // ---- Find on this page ----
+  // Highlights use the CSS Custom Highlight API, so the page's own HTML is never touched.
+  var findState = { hits: [], cur: -1, q: '' };
+  var HL = (window.CSS && CSS.highlights && window.Highlight) ? CSS.highlights : null;
+  function skipEl(el) {
+    return !el || el.closest('#cmp-widget-root, #cmp-banner, script, style, noscript, template, textarea, select, [aria-hidden="true"]');
+  }
+  function textNodes() {
+    var out = [], w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        if (!n.nodeValue || !/\S/.test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+        var el = n.parentElement;
+        if (skipEl(el)) return NodeFilter.FILTER_REJECT;
+        if (!el.getClientRects().length) return NodeFilter.FILTER_REJECT;
+        var cs = getComputedStyle(el); if (cs.visibility === 'hidden' || cs.opacity === '0') return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    }), n;
+    while ((n = w.nextNode())) out.push(n);
+    return out;
+  }
+  function findRanges(nodes, needle) {
+    var res = [], low = needle.toLowerCase();
+    for (var i = 0; i < nodes.length && res.length < 500; i++) {
+      var v = nodes[i].nodeValue.toLowerCase(), at = 0;
+      while ((at = v.indexOf(low, at)) > -1 && res.length < 500) {
+        var r = document.createRange(); r.setStart(nodes[i], at); r.setEnd(nodes[i], at + low.length);
+        res.push(r); at += low.length;
+      }
+    }
+    return res;
+  }
+  function headingFor(node) {
+    var el = node.parentElement, seen = 0;
+    while (el && el !== document.body && seen < 12) {
+      var p = el.previousElementSibling;
+      while (p) {
+        if (/^H[1-4]$/.test(p.tagName)) return p.textContent.trim().slice(0, 60);
+        var h = p.querySelector && p.querySelector('h1,h2,h3,h4');
+        if (h && !skipEl(h)) { var all = p.querySelectorAll('h1,h2,h3,h4'); return all[all.length - 1].textContent.trim().slice(0, 60); }
+        p = p.previousElementSibling;
+      }
+      el = el.parentElement; seen++;
+    }
+    return '';
+  }
+  function snippet(r) {
+    var v = r.startContainer.nodeValue, a = r.startOffset, b = r.endOffset;
+    var s0 = Math.max(0, a - 42), e0 = Math.min(v.length, b + 60);
+    var pre = (s0 > 0 ? '...' : '') + v.slice(s0, a), post = v.slice(b, e0) + (e0 < v.length ? '...' : '');
+    return esc(pre.replace(/\s+/g, ' ')) + '<b>' + esc(v.slice(a, b)) + '</b>' + esc(post.replace(/\s+/g, ' '));
+  }
+  function paintHits() {
+    if (!HL) return;
+    HL.delete('cmp-find'); HL.delete('cmp-find-cur');
+    if (!findState.hits.length) return;
+    HL.set('cmp-find', new Highlight(...findState.hits));
+    if (findState.cur > -1) HL.set('cmp-find-cur', new Highlight(findState.hits[findState.cur]));
+  }
+  function goHit(i) {
+    var n = findState.hits.length; if (!n) return;
+    findState.cur = (i + n) % n;
+    var r = findState.hits[findState.cur], el = r.startContainer.parentElement;
+    paintHits();
+    if (!HL) { try { var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); } catch (e) {} }
+    try { el.scrollIntoView({ block: 'center', behavior: 'auto' }); } catch (e) { el.scrollIntoView(); }
+    // keep the match clear of the find panel when they line up
+    // keep the match clear of the find panel: scroll past it, or fold the panel to just the bar
+    var fp = $('cmp-find');
+    fp.classList.remove('cmp-find-compact');
+    function under() {
+      var b = fp.getBoundingClientRect(), m = r.getBoundingClientRect();
+      return m.right > b.left - 8 && m.left < b.right + 8 && m.bottom > b.top - 8 && m.top < b.bottom + 8;
+    }
+    if (under()) window.scrollBy(0, r.getBoundingClientRect().top - (fp.getBoundingClientRect().bottom + 32));
+    if (under()) fp.classList.add('cmp-find-compact');
+    $('cmp-find-n').textContent = (findState.cur + 1) + ' of ' + n + (n >= 500 ? '+' : '');
+    [].forEach.call(document.querySelectorAll('#cmp-find-more [data-hit]'), function (b) { b.classList.toggle('cur', +b.getAttribute('data-hit') === findState.cur); });
+  }
+  // every word of the query (by its first 5 letters, so "company" finds "Companies") must appear
+  function wordsMatch(q, hay) {
+    hay = hay.toLowerCase();
+    return q.toLowerCase().split(/\s+/).filter(Boolean).every(function (w) { return hay.indexOf(w.length > 5 ? w.slice(0, 5) : w) > -1; });
+  }
+  function elsewhere(q) {
+    var out = [];
+    NAV.forEach(function (g) { g.items.forEach(function (it) {
+      if (it[1] !== path && wordsMatch(q, it[0] + ' ' + it[2] + ' ' + g.g)) out.push({ t: it[0], s: it[2], h: it[1], i: PAGE_ICONS[it[1]] || G[g.i] });
+    }); });
+    (DIRECTORY || []).forEach(function (d) {
+      if (d && d.name && wordsMatch(q, d.name) && /^https:\/\/(www\.)?futureselfdiscover\.com\//.test(d.url))
+        out.push({ t: d.name, s: d.kind === 'community' ? 'Community page' : 'Company page', h: d.url, i: G.careers });
+    });
+    return out.slice(0, 4);
+  }
+  var findTimer = null;
+  function runFind() {
+    var q = $('cmp-find-q').value.replace(/\s+/g, ' ').trim(), more = $('cmp-find-more');
+    findState.q = q; findState.hits = []; findState.cur = -1;
+    var count = $('cmp-find-n'), prev = $('cmp-find-prev'), next = $('cmp-find-next');
+    if (!q) { paintHits(); count.textContent = ''; more.innerHTML = ''; prev.disabled = next.disabled = true; return; }
+    var nodes = textNodes(), hits = findRanges(nodes, q), loose = '';
+    // nothing exact: fall back to the longest word in the query that does appear
+    if (!hits.length && q.indexOf(' ') > -1) {
+      var words = q.split(' ').filter(function (w) { return w.length > 2; }).sort(function (a, b) { return b.length - a.length; });
+      for (var k = 0; k < words.length && !hits.length; k++) { hits = findRanges(nodes, words[k]); if (hits.length) loose = words[k]; }
+    }
+    findState.hits = hits;
+    prev.disabled = next.disabled = !hits.length;
+    count.textContent = hits.length ? '' : 'No matches';
+    var h = '';
+    if (loose) h += '<div class="cmp-find-note">No exact match. Showing "' + esc(loose) + '".</div>';
+    if (hits.length) {
+      h += '<div class="cmp-find-sec">On this page</div>';
+      var lastHead = null;
+      hits.slice(0, 6).forEach(function (r, i) {
+        var head = headingFor(r.startContainer);
+        h += '<button class="cmp-find-hit" type="button" data-hit="' + i + '">' + (head && head !== lastHead ? '<small>' + esc(head) + '</small>' : '') + snippet(r) + '</button>';
+        lastHead = head;
+      });
+    }
+    var other = elsewhere(q);
+    if (other.length) {
+      h += '<div class="cmp-find-sec">Elsewhere on FutureSelf</div>';
+      other.forEach(function (o) {
+        h += '<a class="cmp-find-hit" href="' + esc(o.h) + '" target="_top"><span class="cmp-link-i">' + o.i + '</span><span>' + esc(o.t) + '<small>' + esc(o.s) + '</small></span></a>';
+      });
+    }
+    h += '<button class="cmp-find-hit cmp-find-ask" type="button" data-ask="1">' + (ICONS.chat || '') + '<span>Ask Compass about "' + esc(q.length > 40 ? q.slice(0, 38) + '...' : q) + '"</span></button>';
+    more.innerHTML = h;
+    if (hits.length) goHit(0); else paintHits();
+  }
+  function openFind() {
+    var f = $('cmp-find'), q = $('cmp-find-q'); if (!f || !q) return;
+    var sel = ''; try { sel = String(window.getSelection() || '').replace(/\s+/g, ' ').trim(); } catch (e) {}
+    f.hidden = false;
+    $('cmp-find-foot').textContent = 'Press ' + (isMac ? '\u2318F' : 'Ctrl+F') + ' again for your browser\'s find';
+    if (sel && sel.length < 80) q.value = sel;
+    q.focus(); q.select();
+    if (q.value) runFind();
+  }
+  function closeFind() {
+    var f = $('cmp-find'); if (!f || f.hidden) return;
+    f.hidden = true;
+    if (HL) { HL.delete('cmp-find'); HL.delete('cmp-find-cur'); }
+  }
+  window.fsFind = openFind;
+  (function wireFind() {
+    var q = $('cmp-find-q'); if (!q) return;
+    q.addEventListener('input', function () { clearTimeout(findTimer); findTimer = setTimeout(runFind, 140); });
+    $('cmp-find').addEventListener('pointerenter', function () { this.classList.remove('cmp-find-compact'); });
+    q.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); clearTimeout(findTimer); if (findState.q !== q.value.replace(/\s+/g, ' ').trim()) runFind(); else goHit(findState.cur + (e.shiftKey ? -1 : 1)); }
+      else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeFind(); }
+    });
+    $('cmp-find-next').addEventListener('click', function () { goHit(findState.cur + 1); });
+    $('cmp-find-prev').addEventListener('click', function () { goHit(findState.cur - 1); });
+    $('cmp-find-x').addEventListener('click', closeFind);
+    $('cmp-find-more').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-hit],[data-ask]') : null; if (!b) return;
+      if (b.hasAttribute('data-ask')) { var t = findState.q; closeFind(); askCompass('I\'m trying to find ' + t + ' on FutureSelf. Where should I look?'); return; }
+      goHit(+b.getAttribute('data-hit'));
+    });
+  })();
+
+  // ===========================================================================
+  // Seamless page changes. Hivebrite reloads the whole page on navigation, so
+  // the overlay snapshots itself (open/closed, tab, scroll, draft, recent chat)
+  // into this tab's sessionStorage right before leaving, and the next page
+  // restores it instantly with animations off. Only the page behind changes.
+  // ===========================================================================
+  (function seamless() {
+    var KEY = 'cmp_ui_v1';
+    function uidNow() { return String(hbUserId || (window.__HB_USER__ && window.__HB_USER__.id) || 'anon'); }
+    function snapshot() {
+      try {
+        var body = $('cmp-body'), inp = $('cmp-input'), nq = $('cmp-nav-q');
+        var pills = [].map.call(document.querySelectorAll('#cmp-qr .cmp-pill'), function (p) { return p.innerText; });
+        sessionStorage.setItem(KEY, JSON.stringify({
+          at: Date.now(), uid: uidNow(), open: isOpen(), view: currentView,
+          scroll: body ? body.scrollTop : 0,
+          atBottom: body ? (body.scrollHeight - body.scrollTop - body.clientHeight < 40) : true,
+          draft: inp ? inp.value : '', navQ: nq ? nq.value : '',
+          routed: routed, history: routed ? history.slice(-MAX_HISTORY) : null, pills: pills
+        }));
+      } catch (e) {}
+    }
+    window.addEventListener('pagehide', snapshot);
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') snapshot(); });
+
+    var root = $('cmp-widget-root');
+    function animationsBack() {
+      requestAnimationFrame(function () { requestAnimationFrame(function () { setTimeout(function () { if (root) root.classList.remove('cmp-instant'); }, 60); }); });
+    }
+    var snap = null;
+    try { snap = JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch (e) {}
+    if (!snap || Date.now() - snap.at > 1800000 || snap.uid !== uidNow()) { animationsBack(); return; }
+
+    if (snap.routed && Array.isArray(snap.history) && snap.history.length) {
+      history = snap.history; routed = true;
+      var bar = document.querySelector('.cmp-bar'); if (bar) bar.style.display = '';
+      renderHistory();
+      if (snap.pills && snap.pills.length) setPills(snap.pills);
+      // refresh profile + memory quietly; the visible chat stays exactly as it was
+      fetchProfile(function (p) {
+        if (p) { profile = p; if (p.name) userName = p.firstname || p.name.split(' ')[0]; }
+        fetchMemory(function (m) {
+          if (m) {
+            memory = m;
+            var fp = m.frequent_pages || []; fp.push(path); if (fp.length > 50) fp = fp.slice(-50);
+            pushMemory({ frequentPages: fp });
+          }
+        });
+      });
+    }
+    if (snap.open) { setOpen(true); showView(snap.view || 'chat'); if ((snap.view || 'chat') === 'chat' && !routed) verifyAndRoute(); }
+    var body = $('cmp-body'), inp = $('cmp-input'), nq = $('cmp-nav-q');
+    if (inp && snap.draft) { inp.value = snap.draft; autoGrow(inp); }
+    if (nq && snap.navQ) { nq.value = snap.navQ; if (snap.view === 'navigate') renderNav(snap.navQ); }
+    if (body) body.scrollTop = snap.atBottom ? body.scrollHeight : (snap.scroll || 0);
+    animationsBack();
   })();
   }
 
