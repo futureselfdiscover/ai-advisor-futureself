@@ -31,6 +31,18 @@ const ADVISOR_BEHAVIOR = loadBehaviorFile('advisor-behavior.txt');
 const ADVISING_FRAMEWORKS = loadBehaviorFile('advising-frameworks.txt');
 const FUTURESELF_RESOURCES = loadBehaviorFile('futureself-resources.txt');
 
+// company and community pages: "Name | URL | kind" per line (# = comment).
+// only futureselfdiscover.com URLs are accepted.
+const DIRECTORY = loadBehaviorFile('company-pages.txt').split(/\r?\n/)
+  .map(function (l) { return l.trim(); })
+  .filter(function (l) { return l && l.charAt(0) !== '#'; })
+  .map(function (l) {
+    const p = l.split('|').map(function (x) { return x.trim(); });
+    return { name: p[0], url: p[1], kind: (p[2] || 'company').toLowerCase() === 'community' ? 'community' : 'company' };
+  })
+  .filter(function (e) { return e.name && e.name.length >= 2 && /^https:\/\/(www\.)?futureselfdiscover\.com\//.test(e.url || ''); })
+  .slice(0, 400);
+
 // ---- Supabase helpers ----
 
 function hashUserId(userId) {
@@ -233,7 +245,7 @@ function attachRequirements(content, listHtml) {
 // The widget then shows raw JSON to the student. This rebuilds every reply into exactly:
 //   <text>\n{"suggestions":[...]}\n{"memory":{...}}
 // and never lets raw JSON reach the student, even if it can't be parsed.
-const MEMORY_KEYS = ['knowledge', 'current_term', 'direction', 'focus', 'summary', 'topics', 'profile_suggestion'];
+const MEMORY_KEYS = ['knowledge', 'current_term', 'direction', 'focus', 'summary', 'topics', 'profile_suggestion', 'notepad_suggestion', 'todo_actions'];
 
 function scanObjects(s) {
   // [{start, end}] for each balanced top-level {...}, ignoring braces inside strings
@@ -263,7 +275,7 @@ function tryParse(text) {
 
 function normalizeReplyCore(content) {
   const raw = String(content || '');
-  const keyRe = /\{?\s*"(suggestions|memory|knowledge|focus|summary|topics|profile_suggestion|current_term|direction)"\s*:/;
+  const keyRe = /\{?\s*"(suggestions|memory|knowledge|focus|summary|topics|profile_suggestion|notepad_suggestion|todo_actions|current_term|direction)"\s*:/;
   const m = raw.match(keyRe);
   if (!m) return raw.trim();
 
@@ -378,10 +390,25 @@ function buildSystemPrompt(ctx) {
     '- "focus": the sharpest single-sentence read of this student: the best interpolation of who they are (summary) and where they are headed (direction). One well-said line. Update it whenever your understanding improves.',
     '- "summary": a SURFACE-LEVEL 1-2 sentence portrait of the student. No course numbers, professor names, or program specifics; those belong in knowledge. Think: "Jerald is a current senior planning to recruit and serve as a TA for engineering classes." Rewrite fully each turn as your picture improves.',
     '- "topics": a short array of recurring theme tags for this student, e.g. ["recruiting", "undergraduate engineering", "studying for PE exam"]. 2-5 words each, lowercase. Return the FULL updated list each turn (existing themes plus any new ones), not just new additions. Merge and dedupe; drop themes that no longer apply.',
-    '- "profile_suggestion": OPTIONAL. Include ONLY when the student just shared something concrete that belongs on their FutureSelf profile. Shape: {' + q + 'field' + q + ':' + q + 'skills' + q + ',' + q + 'value' + q + ':' + q + 'Python' + q + ',' + q + 'label' + q + ':' + q + 'Python as a skill' + q + '}. Allowed field values ONLY: skills, industries_of_interest, hobbies_interests, clubs_and_organizations, languages, awards_honors, currently_exploring, target_cities_regions, career_priorities, bio. At most ONE suggestion per response, and never re-suggest something already declined this session. Omit the key entirely when nothing fits.',
+    '- "profile_suggestion": OPTIONAL and RARE. Shape: {' + q + 'field' + q + ':' + q + 'skills' + q + ',' + q + 'value' + q + ':' + q + 'Python' + q + ',' + q + 'label' + q + ':' + q + 'Python' + q + ',' + q + 'ask' + q + ':' + q + '...' + q + '}. Allowed field values ONLY: skills, industries_of_interest, hobbies_interests, clubs_and_organizations, languages, awards_honors, currently_exploring, target_cities_regions, career_priorities, bio.',
+    '  WHEN: only once the student has shown SUSTAINED interest in the same thing: it has come up across several of their messages, or they keep asking follow-up questions about it. A single passing mention is NOT enough; in that case explore it instead (what draws them to it, related projects, companies, roles, or FutureSelf pages) and do not suggest anything yet.',
+    '  The visible reply must stay about the substance of what they asked. Never make the profile question the point of the reply, and never write the profile question in the reply text itself: it goes ONLY in "ask".',
+    '  "ask": one short, natural question in your own voice that ties to what they are exploring right now and says briefly why it helps (others can see the interest, and it sharpens future advice). Vary the wording every time; never reuse a phrasing from earlier in the conversation and never start with "Want me to add". Do not use quotation marks inside it.',
+    '  At most ONE per response, never more than one every few exchanges, never re-suggest something already declined, never suggest what is already on their profile. Omit the key entirely when nothing fits.',
+    '- "notepad_suggestion": OPTIONAL and EVEN RARER. Shape: {' + q + 'kind' + q + ':' + q + 'task' + q + ',' + q + 'text' + q + ':' + q + '...' + q + ',' + q + 'ask' + q + ':' + q + '...' + q + '}. kind is "task" (a concrete next step) or "note" (something worth remembering).',
+    '  WHEN: only when the student commits to a specific, doable next step (e.g. reaching out to a named person, an application deadline), or explicitly asks you to remind them or note something. Never suggest generic busywork. A full list overwhelms students, so if they already have several open tasks (see NOTEPAD below), hold back unless they ask. At most one per conversation unless the student asks for more.',
+    '  "text": the task or note itself, under 12 words, starting with a verb for tasks. "ask": one short, varied, low-pressure question offering to save it, in your own voice. Omit the key entirely otherwise.',
+    '- "todo_actions": OPTIONAL. Use ONLY when the student asks you to review, plan, update, or clean up their to-do list, or tells you they finished or changed something on it. Shape: {' + q + 'ask' + q + ':' + q + '...' + q + ',' + q + 'items' + q + ':[...]}. Each item is one of:',
+    '  {"op":"steps","id":"<task id>","steps":["...","..."]} to break a task into 2-5 short, concrete steps (verbs first, under 10 words each);',
+    '  {"op":"complete","id":"<task id>"} when they said it is done; {"op":"rename","id":"<task id>","text":"..."} to make a vague task concrete;',
+    '  {"op":"add","text":"..."} only for a next step they agreed to. Use only task ids from the TO-DO LIST below. Never delete tasks.',
+    '  Your visible reply should still walk them through it in plain words (e.g. why that order, what to do first); "ask" is one short question offering to save the changes. The student confirms before anything changes.',
     'If nothing memory-worthy happened this turn, still include the memory JSON with empty/omitted fields. Never skip this line.',
     '',
     FUTURESELF_RESOURCES,
+    'COMPANIES AND COMMUNITIES: when you name a specific company, employer, club, or organization that is NOT in the COMPANY AND COMMUNITY PAGES list, wrap the FIRST mention of it in double square brackets, like [[Zoox]]. Do not wrap later mentions, FutureSelf pages, or generic terms.',
+    DIRECTORY.length ? '\nCOMPANY AND COMMUNITY PAGES ON FUTURESELF\nWhenever you mention one of these companies or communities, link its name to its page (same link format as above). Never invent a page for anything not on this list.\n' +
+      DIRECTORY.map(function (e) { return e.name + ' (' + e.kind + '): ' + e.url; }).join('\n') : '',
     '',
     'CURRENT PAGE THE STUDENT IS ON: ' + (ctx.pageDesc || 'a FutureSelf page'),
     '',
@@ -389,8 +416,142 @@ function buildSystemPrompt(ctx) {
     ctx.profileContext || 'No profile data available.',
     '',
     'WHAT YOU ALREADY REMEMBER ABOUT THIS STUDENT (from past conversations):',
-    ctx.memoryContext || 'No prior memory for this student yet.'
+    ctx.memoryContext || 'No prior memory for this student yet.',
+    '',
+    'TO-DO LIST (the student\'s own list in the widget; you never see their private notes):',
+    (typeof ctx.notepadContext === 'string' && ctx.notepadContext) ? ctx.notepadContext.slice(0, 2500) : 'Empty.'
   ].join('\n');
+}
+
+// ---- Hivebrite Partner API (Service App) helpers ----
+// token: client_credentials + audience=partner at auth.us.hivebrite.com,
+// client credentials URL-encoded into HTTP Basic (Ory Hydra, RFC 6749 2.3.1).
+const PARTNER_AUTH = 'https://auth.us.hivebrite.com/oauth2/token';
+const PARTNER_API = 'https://api.us.hivebrite.com';
+async function partnerToken() {
+  const id = (process.env.ADMIN_API_CLIENT_ID || '').trim();
+  const sec = (process.env.ADMIN_API_CLIENT_SECRET || '').trim();
+  if (!id || !sec) return { error: 'ADMIN_API_CLIENT_ID / ADMIN_API_CLIENT_SECRET not set' };
+  const enc = function (v) { return encodeURIComponent(v).replace(/%20/g, '+'); };
+  const r = await fetch(PARTNER_AUTH, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded', accept: 'application/json',
+      Authorization: 'Basic ' + Buffer.from(enc(id) + ':' + enc(sec)).toString('base64')
+    },
+    body: new URLSearchParams({ grant_type: 'client_credentials', audience: 'partner' }).toString()
+  });
+  const t = await r.text(); let j = {}; try { j = JSON.parse(t); } catch (e) {}
+  return j.access_token ? { token: j.access_token } : { error: j.error || ('token ' + r.status), status: r.status };
+}
+async function partnerCall(token, path, opts) {
+  const o = opts || {};
+  const r = await fetch(PARTNER_API + path, {
+    method: o.method || 'GET',
+    headers: Object.assign({ Authorization: 'Bearer ' + token, accept: 'application/json', 'Accept-Encoding': 'gzip, br' },
+      o.body ? { 'Content-Type': 'application/json' } : {}),
+    body: o.body ? JSON.stringify(o.body) : undefined
+  });
+  const t = await r.text(); let j; try { j = JSON.parse(t); } catch (e) { j = { raw: t.slice(0, 300) }; }
+  return { status: r.status, ok: r.ok, body: j, requestId: r.headers.get('x-request-id') };
+}
+
+// staging field -> Hivebrite custom attribute (names from customizable_attributes)
+// text: appended to what is already there; select: must match an existing option
+const PARTNER_ATTR_MAP = {
+  hobbies_interests:       { name: '_a3f78cc3_Hobbies_Interests', kind: 'text' },
+  clubs_and_organizations: { name: '_0392026c_Clubs_and_Organizations_', kind: 'text' },
+  awards_honors:           { name: '_150eb392_Awards', kind: 'text' },
+  target_cities_regions:   { name: '_a3d0b3e5_Which_cities_or_regions_are_you_most_interested_in_living_or_working_in_after_college_', kind: 'text' },
+  bio:                     { name: '_afbad3b6_My_Story', kind: 'text' },
+  currently_exploring:     { name: '_defe795c_Which_of_the_following_are_you_currently_exploring_', kind: 'select' },
+  career_priorities:       { name: '_7e8364eb_What_s_most_important_to_you_in_your_future_career_', kind: 'select' }
+  // skills, industries_of_interest, languages: pending (native fields / DoubleSelect)
+};
+
+function appendText(existing, add) {
+  const cur = String(existing || '').trim();
+  const parts = cur ? cur.split(/\s*[;,\n]\s*/) : [];
+  const lower = parts.map(function (p) { return p.toLowerCase(); });
+  add.forEach(function (v) { v = String(v).trim(); if (v && lower.indexOf(v.toLowerCase()) === -1) { parts.push(v); lower.push(v.toLowerCase()); } });
+  return parts.join(', ');
+}
+
+// ---- push a member's confirmed profile adds to Hivebrite (Partner API) ----
+// opts.dryRun: build the update without writing.
+// opts.auto: called right after a student confirmed in chat. Only list-style
+//   text fields push automatically (each value appended, never replacing what
+//   the member wrote), capped per day. Everything else stays staged for review.
+// Until Hivebrite Connected Apps exist, the widget's userId can't be verified,
+// so auto-push is append-only, short values only, rate-limited and logged.
+// Set PROFILE_AUTO_PUSH=off in Vercel to stop it without a deploy.
+const AUTO_PUSH_FIELDS = ['hobbies_interests', 'clubs_and_organizations', 'awards_honors', 'target_cities_regions'];
+const AUTO_PUSH_PER_DAY = 6;
+function cleanProfileValue(v) {
+  return String(v == null ? '' : v).replace(/<[^>]*>/g, '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+async function pushProfileUpdates(userId, opts) {
+  const o = opts || {};
+  const sb = { apikey: process.env.SUPABASE_SERVICE_KEY, Authorization: 'Bearer ' + process.env.SUPABASE_SERVICE_KEY };
+  const hash = hashUserId(userId);
+  const stRes = await fetch(process.env.SUPABASE_URL + '/rest/v1/fsd_profile?user_hash=eq.' + hash + '&select=*', { headers: sb });
+  const staged = (stRes.ok ? await stRes.json() : [])[0];
+  if (!staged) return { step: 'push', error: 'no staging row for this user' };
+  const pushLog = staged.push_log || [];
+  let pending = pushLog.filter(function (e) { return !e.pushed; });
+  if (o.auto) {
+    const dayAgo = Date.now() - 86400000;
+    const recent = pushLog.filter(function (e) { return e.pushed && e.auto && new Date(e.pushed_at).getTime() > dayAgo; }).length;
+    if (recent >= AUTO_PUSH_PER_DAY) return { step: 'push', held: 'daily limit' };
+    pending = pending.filter(function (e) { return AUTO_PUSH_FIELDS.indexOf(e.field) > -1; }).slice(0, AUTO_PUSH_PER_DAY - recent);
+  }
+  if (!pending.length) return { step: 'push', ok: true, note: 'nothing pending' };
+
+  const tok = await partnerToken();
+  if (!tok.token) return { step: 'token', error: tok.error, status: tok.status || null };
+  const cur = await partnerCall(tok.token, '/admin/v3.1/users/' + encodeURIComponent(userId));
+  if (!cur.ok) return { step: 'read_user', status: cur.status, error: cur.body.error || cur.body, request_id: cur.requestId };
+  const user = cur.body.user || cur.body;
+  const currentAttrs = {};
+  (Array.isArray(user.custom_attributes) ? user.custom_attributes : []).forEach(function (c) { if (c && c.name) currentAttrs[c.name] = c.value; });
+
+  const byAttr = {}, unmapped = [];
+  pending.forEach(function (e) {
+    const m = PARTNER_ATTR_MAP[e.field];
+    if (!m) { unmapped.push(e.field); return; }
+    (byAttr[m.name] = byAttr[m.name] || { kind: m.kind, values: [] }).values.push(e.value);
+  });
+  const custom_attributes = [], preview = [];
+  Object.keys(byAttr).forEach(function (name) {
+    const a = byAttr[name];
+    const next = a.kind === 'text' ? appendText(currentAttrs[name], a.values) : a.values[a.values.length - 1];
+    custom_attributes.push({ name: name, value: next });
+    preview.push({ attribute: name, kind: a.kind, current: currentAttrs[name] == null ? null : currentAttrs[name], proposed: next });
+  });
+  if (!custom_attributes.length) return { step: 'push', note: 'pending items have no mapped attribute yet', unmapped_fields: unmapped };
+  const payload = { user: { custom_attributes: custom_attributes } };
+
+  if (o.dryRun) {
+    return {
+      step: 'push_dry_run', note: 'nothing was written. pass dryRun:false to write.',
+      pending_count: pending.length, unmapped_fields: unmapped,
+      current_attribute_shape: Array.isArray(user.custom_attributes) && user.custom_attributes[0] ? Object.keys(user.custom_attributes[0]) : null,
+      would_PUT: PARTNER_API + '/admin/v3.1/users/' + userId, preview: preview, payload: payload
+    };
+  }
+
+  const put = await partnerCall(tok.token, '/admin/v3.1/users/' + encodeURIComponent(userId), { method: 'PUT', body: payload });
+  if (!put.ok) return { step: 'push_failed', status: put.status, response: put.body, request_id: put.requestId, payload: payload };
+  const nowIso = new Date().toISOString();
+  const sent = new Set(pending);
+  const updatedLog = pushLog.map(function (e) {
+    return (sent.has(e) && PARTNER_ATTR_MAP[e.field]) ? Object.assign({}, e, { pushed: true, pushed_at: nowIso, auto: !!o.auto }) : e;
+  });
+  await fetch(process.env.SUPABASE_URL + '/rest/v1/fsd_profile?user_hash=eq.' + hash, {
+    method: 'PATCH', headers: Object.assign({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }, sb),
+    body: JSON.stringify({ push_log: updatedLog, updated_at: nowIso })
+  });
+  return { step: 'pushed', status: put.status, written: preview, unmapped_fields: unmapped, request_id: put.requestId };
 }
 
 // ---- admin check for debug endpoints ----
@@ -471,6 +632,79 @@ export default async function handler(req, res) {
         });
       }
 
+      // log the last user message and the assistant response anonymously.
+      // the result rides along as _log so silent failures (grants, schema)
+      // are visible in the Network tab during debugging.
+      async function logChat(assistantContent) {
+        let logResult = { skipped: 'no sessionId' };
+        if (!sessionId || !messages || !messages.length) return logResult;
+        const lastUser = [...messages].reverse().find(m => m.role === 'user');
+        if (lastUser) logResult = await logTurn(sessionId, page, 'user', lastUser.content, profileName);
+        if (assistantContent) {
+          const r2 = await logTurn(sessionId, page, 'assistant', assistantContent, profileName,
+            advisor ? { feature: advisor.feature || null, category: advisor.category || null } : null);
+          if (r2 && r2.error) logResult = r2;
+        }
+        return logResult;
+      }
+
+      // ---- streamed reply: newline-delimited JSON ----
+      //   {"d":"text"}            a piece of the reply as the model writes it
+      //   {"done":true,"content"} the cleaned, final reply (same shape as the JSON path)
+      // The widget shows the pieces as they land and swaps in the final content at the end.
+      if (req.body.stream === true) {
+        const upstream = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY
+          },
+          body: JSON.stringify({ model: 'gpt-4o', messages: fullMessages, stream: true })
+        });
+        if (!upstream.ok || !upstream.body) {
+          return res.status(200).json({
+            choices: [{ message: { content: "I'm having trouble connecting right now. Try again in a moment." } }],
+            _upstream_status: upstream.status
+          });
+        }
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/x-ndjson; charset=utf-8');
+        res.setHeader('Cache-Control', 'no-cache, no-transform');
+        res.setHeader('X-Accel-Buffering', 'no');
+        if (typeof res.flushHeaders === 'function') res.flushHeaders();
+        const send = function(o) { res.write(JSON.stringify(o) + '\n'); };
+
+        // a requirements list replaces the model's text, so don't stream text that gets swapped out
+        const showPieces = !(advisor && advisor.display_html);
+        const reader = upstream.body.getReader();
+        const decoder = new TextDecoder();
+        let full = '', buf = '';
+        for (;;) {
+          const chunk = await reader.read();
+          if (chunk.done) break;
+          buf += decoder.decode(chunk.value, { stream: true });
+          let nl;
+          while ((nl = buf.indexOf('\n')) > -1) {
+            const line = buf.slice(0, nl).trim();
+            buf = buf.slice(nl + 1);
+            if (line.indexOf('data:') !== 0) continue;
+            const payload = line.slice(5).trim();
+            if (!payload || payload === '[DONE]') continue;
+            try {
+              const j = JSON.parse(payload);
+              const d = j.choices && j.choices[0] && j.choices[0].delta && j.choices[0].delta.content;
+              if (d) { full += d; if (showPieces) send({ d: d }); }
+            } catch (e) {}
+          }
+        }
+        let content = normalizeReply(full || "I'm having trouble connecting right now. Try again in a moment.");
+        if (advisor && advisor.display_html) content = attachRequirements(content, advisor.display_html);
+        const logResult = await logChat(content);
+        send({ done: true, content: content, _log: logResult,
+               _advisor: advisor ? { feature: advisor.feature, category: advisor.category } : null });
+        return res.end();
+      }
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -489,27 +723,7 @@ export default async function handler(req, res) {
         data.choices[0].message.content = attachRequirements(data.choices[0].message.content, advisor.display_html);
       }
 
-      // log the last user message and the assistant response anonymously.
-      // results are attached to the response as _log so silent failures
-      // (grants, schema) are visible in the Network tab during debugging.
-      let logResult = { skipped: 'no sessionId' };
-      if (sessionId && messages && messages.length > 0) {
-        const lastUser = [...messages].reverse().find(m => m.role === 'user');
-        if (lastUser) {
-          logResult = await logTurn(sessionId, page, 'user', lastUser.content, profileName);
-        }
-        const assistantContent = data.choices &&
-          data.choices[0] &&
-          data.choices[0].message &&
-
-          data.choices[0].message.content;
-        if (assistantContent) {
-          const r2 = await logTurn(sessionId, page, 'assistant', assistantContent, profileName,
-            advisor ? { feature: advisor.feature || null, category: advisor.category || null } : null);
-          if (r2 && r2.error) logResult = r2;
-        }
-      }
-      data._log = logResult;
+      data._log = await logChat(data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content);
       data._advisor = advisor ? { feature: advisor.feature, category: advisor.category } : null;
 
       return res.status(200).json(data);
@@ -545,6 +759,102 @@ export default async function handler(req, res) {
       const groupsData = await groupsRes.json();
 
       return res.status(200).json({ user: userData, groups: groupsData });
+    }
+
+    // ---- organize_notes: "Orient" in the notepad. Only runs when the student
+    // confirms. Groups and/or rewrites their notes; a check afterwards puts back
+    // anything the model dropped, so nothing is ever lost.
+    if (type === 'organize_notes') {
+      const notes = String(req.body.notes || '').slice(0, 8000);
+      const mode = ['group', 'rewrite', 'both'].indexOf(req.body.mode) > -1 ? req.body.mode : 'group';
+      if (!notes.trim()) return res.status(200).json({ error: 'empty' });
+      const how = {
+        group: 'Group related lines under short headings. Keep every line\'s wording EXACTLY as written (you may only move lines and drop leading bullet symbols). Do not rephrase, merge, or shorten anything.',
+        rewrite: 'Keep the original order. Rewrite each line to be clear and concise, fixing spelling and grammar, but keep every fact, name, number, date, link, and email. Do not merge separate items or drop any.',
+        both: 'Group related items under short headings, and rewrite each item to be clear and concise, fixing spelling and grammar. Keep every fact, name, number, date, link, and email. Do not drop any item.'
+      }[mode];
+      const sys = [
+        'You organize a college student\'s personal notes. ' + how,
+        'Output plain text only: headings on their own line ending with a colon, items as lines starting with "- ". No markdown symbols like # or **, no commentary before or after.',
+        'Never add information that is not in the notes. Never remove information. If something does not fit a group, put it under "Other:".'
+      ].join('\n');
+      try {
+        const r = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + process.env.OPENAI_API_KEY },
+          body: JSON.stringify({ model: 'gpt-4o', temperature: 0.2, messages: [{ role: 'system', content: sys }, { role: 'user', content: notes }] })
+        });
+        const j = await r.json();
+        let out = String((j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '').replace(/```[a-z]*\n?/gi, '').trim();
+        if (!out) return res.status(200).json({ error: 'no output' });
+
+        // safety net: nothing may go missing
+        const norm = function (t) { return String(t).toLowerCase().replace(/^[\s\-*\u2022\d.)]+/, '').replace(/\s+/g, ' ').trim(); };
+        const outNorm = out.toLowerCase().replace(/\s+/g, ' ');
+        const missing = [];
+        if (mode === 'group') {
+          notes.split(/\r?\n/).forEach(function (l) { const n = norm(l); if (n && outNorm.indexOf(n) === -1) missing.push(l.replace(/^[\s\-*\u2022]+/, '').trim()); });
+        } else {
+          // names, numbers, links, emails, and dates must all survive a rewrite
+          const keyRe = /(https?:\/\/\S+|[\w.+-]+@[\w-]+\.[\w.]+|\b\d[\d/:.,-]*\b|\b[A-Z][a-zA-Z]{2,}\b)/g;
+          notes.split(/\r?\n/).forEach(function (l) {
+            const toks = (l.match(keyRe) || []).filter(function (t) { return !/^(The|This|That|And|But|For|With|Ask|Email|Call|Meet|Look|Check|Send|Get|Find|Apply|Update|Research|Talk|Follow|Remember|Need|Make|Read|Write)$/.test(t); });
+            if (toks.some(function (t) { return outNorm.indexOf(t.toLowerCase()) === -1; })) missing.push(l.replace(/^[\s\-*\u2022]+/, '').trim());
+          });
+        }
+        if (missing.length) out += '\n\nKept from your original notes:\n' + missing.map(function (m) { return '- ' + m; }).join('\n');
+        return res.status(200).json({ ok: true, notes: out, mode: mode, restored: missing.length });
+      } catch (e) { return res.status(200).json({ error: e.message }); }
+    }
+
+    // ---- organize_todos: Orient for the to-do list. Every task comes back
+    // exactly once (by id); in group mode the wording is never changed.
+    if (type === 'organize_todos') {
+      const tasks = (Array.isArray(req.body.tasks) ? req.body.tasks : []).slice(0, 60)
+        .filter(function (t) { return t && typeof t.id === 'string' && typeof t.text === 'string'; })
+        .map(function (t) { return { id: t.id.slice(0, 40), text: t.text.slice(0, 200) }; });
+      const mode = ['group', 'rewrite', 'both'].indexOf(req.body.mode) > -1 ? req.body.mode : 'group';
+      if (!tasks.length) return res.status(200).json({ error: 'empty' });
+      const how = {
+        group: 'Sort the tasks into 2-5 short groups (1-3 word labels) and order them sensibly within each group (deadlines and prerequisites first). Do NOT change any task text.',
+        rewrite: 'Keep the order. Rewrite each task to be short, concrete, and start with a verb, keeping every name, date, number, and link. Use the group "" for all.',
+        both: 'Sort into 2-5 short groups (1-3 word labels), order sensibly, and rewrite each task to be short and concrete starting with a verb, keeping every name, date, number, and link.'
+      }[mode];
+      try {
+        const r = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + process.env.OPENAI_API_KEY },
+          body: JSON.stringify({ model: 'gpt-4o', temperature: 0.2, response_format: { type: 'json_object' }, messages: [
+            { role: 'system', content: 'You organize a college student\'s to-do list. ' + how + ' Return JSON: {"tasks":[{"id":"...","text":"...","group":"..."}]} containing EVERY input task exactly once, by its id. Never invent or drop tasks.' },
+            { role: 'user', content: JSON.stringify(tasks) }
+          ] })
+        });
+        const j = await r.json();
+        let out = []; try { out = JSON.parse(j.choices[0].message.content).tasks || []; } catch (e) {}
+        const byId = {}; tasks.forEach(function (t) { byId[t.id] = t; });
+        const seen = {}, result = [];
+        out.forEach(function (t) {
+          if (!t || !byId[t.id] || seen[t.id]) return;
+          seen[t.id] = true;
+          const orig = byId[t.id].text;
+          let text = mode === 'group' ? orig : String(t.text || '').trim().slice(0, 200) || orig;
+          if (mode !== 'group') {   // names, numbers, links, emails must survive a rewrite
+            const keyRe = /(https?:\/\/\S+|[\w.+-]+@[\w-]+\.[\w.]+|\b\d[\d/:.,-]*\b|\b[A-Z][a-zA-Z]{2,}\b)/g;
+            const toks = (orig.match(keyRe) || []).filter(function (k) { return !/^(The|This|That|And|But|For|With|Ask|Email|Call|Meet|Look|Check|Send|Get|Find|Apply|Update|Research|Talk|Follow|Remember|Need|Make|Read|Write|Schedule|Finish|Review|Prepare|Draft|Submit|Book|Practice)$/.test(k); });
+            if (toks.some(function (k) { return text.toLowerCase().indexOf(k.toLowerCase()) === -1; })) text = orig;
+          }
+          result.push({ id: t.id, text: text, group: mode === 'rewrite' ? '' : String(t.group || '').trim().slice(0, 30) });
+        });
+        let restored = 0;
+        tasks.forEach(function (t) { if (!seen[t.id]) { result.push({ id: t.id, text: t.text, group: mode === 'rewrite' ? '' : 'Other' }); restored++; } });
+        return res.status(200).json({ ok: true, tasks: result, mode: mode, restored: restored });
+      } catch (e) { return res.status(200).json({ error: e.message }); }
+    }
+
+    // ---- directory: public list of company/community pages for auto-linking ----
+    if (type === 'directory') {
+      res.setHeader('Cache-Control', 'public, max-age=300');
+      return res.status(200).json({ entries: DIRECTORY });
     }
 
     // ---- memory: get per-user memory (identified, server-side only) ----
@@ -584,8 +894,11 @@ export default async function handler(req, res) {
 
     // ---- profile: consent-confirmed write to fsd_profile staging ----
     if (type === 'save_profile') {
-      const { field, value } = req.body;
+      const field = req.body.field;
+      const value = cleanProfileValue(req.body.value);
       if (!userId) return res.status(400).json({ error: 'userId required' });
+      if (!/^\d{1,12}$/.test(String(userId))) return res.status(400).json({ error: 'invalid userId' });
+      if (!value || value.length > (field === 'bio' ? 600 : 80)) return res.status(400).json({ error: 'invalid value' });
       const ARRAY_FIELDS = ['skills','industries_of_interest','hobbies_interests','clubs_and_organizations','languages','awards_honors','target_cities_regions'];
       const TEXT_FIELDS = ['currently_exploring','career_priorities','bio'];
       if (!field || value === undefined || (ARRAY_FIELDS.indexOf(field) === -1 && TEXT_FIELDS.indexOf(field) === -1)) {
@@ -633,7 +946,15 @@ export default async function handler(req, res) {
           const errText = await up.text();
           return res.status(200).json({ error: 'supabase ' + up.status + ': ' + errText });
         }
-        return res.status(200).json({ ok: true });
+        // the student confirmed it, so it goes on their profile now (see pushProfileUpdates)
+        let pushed = false, push = null;
+        if (process.env.ADMIN_API_CLIENT_ID && process.env.PROFILE_AUTO_PUSH !== 'off' && AUTO_PUSH_FIELDS.indexOf(field) > -1) {
+          try {
+            push = await pushProfileUpdates(userId, { auto: true });
+            pushed = push.step === 'pushed';
+          } catch (e) { push = { error: e.message }; }
+        }
+        return res.status(200).json({ ok: true, pushed: pushed, push_step: push ? (push.step || null) : 'staged', held: push && push.held ? push.held : undefined });
       } catch(e) { return res.status(200).json({ error: e.message }); }
     }
 
@@ -652,6 +973,15 @@ export default async function handler(req, res) {
     //   HIVEBRITE_ADMIN_EMAIL + HIVEBRITE_ADMIN_PASSWORD (fallback)
     // BOTH require a real BACK OFFICE ADMIN account, which is separate from
     // a community member login. a member email will fail here.
+
+    // ---- push_profile on the Partner API (admin-only, dry run by default) ----
+    // reads the staging row, reads the member's current profile, builds the
+    // update. Nothing is written unless dryRun:false is passed explicitly.
+    if (type === 'push_profile' && process.env.ADMIN_API_CLIENT_ID) {
+      if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
+      if (!userId) return res.status(400).json({ error: 'userId required' });
+      return res.status(200).json(await pushProfileUpdates(userId, { dryRun: req.body.dryRun !== false }));
+    }
 
     // ---- Hivebrite Partner API (Service App) -------------------------------
     // Current Hivebrite admin API: OAuth2 client_credentials with
