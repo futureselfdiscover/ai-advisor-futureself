@@ -16,7 +16,20 @@
     reset: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4v4.5H8"/></svg>',
     send: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg>',
     arrow: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
-    flag: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M5.5 20.5V4"/><path d="M5.5 4.5h11.5l-2.3 4.25 2.3 4.25H5.5"/></svg>'
+    flag: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M5.5 20.5V4"/><path d="M5.5 4.5h11.5l-2.3 4.25 2.3 4.25H5.5"/></svg>',
+    notepad: '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 2.5v3M15 2.5v3M8.5 10.5h7M8.5 14h7M8.5 17.5h4"/></svg>',
+    grip: '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="9" cy="7" r="1.1"/><circle cx="15" cy="7" r="1.1"/><circle cx="9" cy="12" r="1.1"/><circle cx="15" cy="12" r="1.1"/><circle cx="9" cy="17" r="1.1"/><circle cx="15" cy="17" r="1.1"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M12 5v14M5 12h14"/></svg>',
+    check: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="m5.5 12.5 4 4 9-9.5"/></svg>',
+    orient: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M4 6h10M4 12h7M4 18h12"/><path d="M18 4.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7Z"/></svg>',
+    pin: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M9.5 3.5h5l-.8 5.2 3.3 3.3v1.5H7v-1.5l3.3-3.3Z"/><path d="M12 13.5v7"/></svg>',
+    copy: '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2"/></svg>',
+    task: '<svg viewBox="0 0 24 24" class="cmp-i"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></svg>',
+    recal: '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="12" r="7.5"/><path d="M14.6 9.4 13 13l-3.6 1.6L11 11Z"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2"/></svg>',
+    find: '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>',
+    up: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="m6 15 6-6 6 6"/></svg>',
+    down: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="m6 9 6 6 6-6"/></svg>',
+    gear: '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>'
   };
 
   var BANNER_HTML =
@@ -61,6 +74,7 @@
     margin: 0; min-height: 0; min-width: 0; line-height: normal; outline: none;
   }
   #cmp-widget-root .cmp-ask-row { margin: 8px 16px 0; }
+  #cmp-widget-root #cmp-input { line-height: 1.5; }
   #cmp-widget-root .cmp-send { margin-bottom: 2px; }
   #cmp-widget-root button:focus:not(:focus-visible), #cmp-banner button:focus:not(:focus-visible) { outline: none; box-shadow: none; }
   /* message text: host paragraph/list rules can't resize or recolor it */
@@ -293,44 +307,38 @@
     font-size: 12px; background: var(--cmp-tint); border-radius: 5px; padding: 1px 5px;
   }
   .cmp-ai a {
-    color: var(--cmp-blue); font-weight: 600; text-decoration: none;
-    background-image: linear-gradient(currentColor, currentColor);
-    background-size: 0% 1.5px; background-repeat: no-repeat; background-position: 0 100%;
-    transition: background-size 0.25s ease;
+    color: #1D3A63; font-weight: 650; text-decoration: none;
+    background: #EDF1F6; border-radius: 5px; padding: 0 4px; margin: 0 -1px;
+    box-decoration-break: clone; -webkit-box-decoration-break: clone;
+    transition: background 0.18s ease, color 0.18s ease;
   }
-  .cmp-ai a:hover { background-size: 100% 1.5px; }
+  .cmp-ai a:hover { background: #DFE7F2; color: #14305A; }
   .cmp-usr {
     background: var(--cmp-tint); color: var(--cmp-navy);
     border-radius: 16px; border-bottom-right-radius: 5px;
     padding: 9px 14px; max-width: 80%; margin-left: auto; white-space: pre-wrap;
   }
 
-  .cmp-think { display: flex; flex-direction: column; gap: 7px; padding-top: 6px; }
-  /* a quiet route: hairline track, three stops, a line that draws itself between them */
-  .cmp-route { position: relative; width: 84px; height: 7px; }
-  .cmp-route::before {
-    content: ""; position: absolute; left: 3px; right: 3px; top: 3px; height: 1px; background: #E1E7EF;
+  .cmp-think { display: flex; align-items: center; gap: 10px; padding-top: 4px; }
+  .cmp-think-tail { padding-top: 10px; transition: opacity 0.26s ease, transform 0.26s ease; }
+  .cmp-think-out { opacity: 0; transform: translateY(-3px); }
+  /* three soft dots on a small ring; each crosses through the center to the far side
+     and back, a beat behind the one before, so they weave past each other */
+  .cmp-orbit { position: relative; width: 22px; height: 22px; flex-shrink: 0; animation: cmpOrbitTurn 7.2s linear infinite; }
+  .cmp-orbit > span { position: absolute; inset: 0; transform: rotate(var(--a)); }
+  .cmp-orbit i {
+    position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px;
+    border-radius: 50%; background: #B3C2D6;
+    animation: cmpCross 1.05s cubic-bezier(0.62, 0, 0.38, 1) var(--d) infinite alternate both;
   }
-  .cmp-route-fill {
-    position: absolute; left: 3px; top: 3px; height: 1px; width: 0; background: var(--cmp-blue);
-    animation: cmpRouteFill 3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  .cmp-orbit > span:nth-child(2) i { background: #C3D0E0; }
+  .cmp-orbit > span:nth-child(3) i { background: #A6B7CD; }
+  @keyframes cmpCross {
+    0%   { transform: translateX(8px) scale(1); }
+    50%  { transform: translateX(0) scale(0.62); }
+    100% { transform: translateX(-8px) scale(1); }
   }
-  @keyframes cmpRouteFill {
-    0% { width: 0; opacity: 1; }
-    70%, 86% { width: calc(100% - 6px); opacity: 1; }
-    100% { width: calc(100% - 6px); opacity: 0; }
-  }
-  .cmp-wp {
-    position: absolute; top: 1px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%;
-    background: #fff; box-shadow: inset 0 0 0 1.25px #C8D2DE;
-    animation: cmpStop 3s ease infinite;
-  }
-  .cmp-wp:nth-of-type(1) { left: 3px; }
-  .cmp-wp:nth-of-type(2) { left: 50%; animation-name: cmpStop2; }
-  .cmp-wp:nth-of-type(3) { left: calc(100% - 3px); animation-name: cmpStop3; }
-  @keyframes cmpStop  { 0%, 92% { background: var(--cmp-blue); box-shadow: inset 0 0 0 1.25px var(--cmp-blue); } 100% { background: #fff; box-shadow: inset 0 0 0 1.25px #C8D2DE; } }
-  @keyframes cmpStop2 { 0%, 33% { background: #fff; box-shadow: inset 0 0 0 1.25px #C8D2DE; } 37%, 92% { background: var(--cmp-blue); box-shadow: inset 0 0 0 1.25px var(--cmp-blue); } 100% { background: #fff; box-shadow: inset 0 0 0 1.25px #C8D2DE; } }
-  @keyframes cmpStop3 { 0%, 68% { background: #fff; box-shadow: inset 0 0 0 1.25px #C8D2DE; } 72%, 92% { background: var(--cmp-blue); box-shadow: inset 0 0 0 1.25px var(--cmp-blue); } 100% { background: #fff; box-shadow: inset 0 0 0 1.25px #C8D2DE; } }
+  @keyframes cmpOrbitTurn { to { transform: rotate(360deg); } }
   .cmp-think-label {
     font-size: 12px; font-weight: 500; display: inline-block; letter-spacing: 0.1px;
     background: linear-gradient(90deg, #8693A5 30%, #3A4E62 50%, #8693A5 70%);
@@ -475,6 +483,341 @@
     border: none; background: none; padding: 0; cursor: pointer; font: 700 11.5px var(--cmp-font); color: var(--cmp-blue);
   }
   .cmp-branch button:hover { text-decoration: underline; }
+
+
+  /* ================= notepad: floating, draggable, notes + to-do ================= */
+  .cmp-np-btn { position: relative; }
+  .cmp-np-dot {
+    position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%;
+    background: #7FB2FF; box-shadow: 0 0 0 2px var(--cmp-navy);
+  }
+  .cmp-np-dot[hidden] { display: none; }
+  #cmp-notepad {
+    position: fixed; left: 40px; top: 120px; width: 320px; height: 520px; max-height: calc(100vh - 32px);
+    z-index: 2147483646; display: flex; flex-direction: column; overflow: hidden;
+    background: #fff; border: 1px solid var(--cmp-line); border-radius: 18px;
+    box-shadow: 0 22px 54px rgba(43,62,80,0.18), 0 3px 10px rgba(43,62,80,0.06);
+    font-family: var(--cmp-font); color: var(--cmp-ink);
+    animation: cmpNpIn 0.32s var(--cmp-ease);
+  }
+  #cmp-notepad[hidden] { display: none; }
+  #cmp-notepad.cmp-np-dragging { box-shadow: 0 30px 70px rgba(43,62,80,0.26); transition: none; user-select: none; }
+  @keyframes cmpNpIn { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
+  .cmp-np-hdr {
+    display: flex; align-items: center; gap: 8px; padding: 10px 10px 10px 12px; cursor: grab; touch-action: none;
+    background: var(--cmp-tint-2); border-bottom: 1px solid var(--cmp-line); flex-shrink: 0;
+  }
+  .cmp-np-dragging .cmp-np-hdr { cursor: grabbing; }
+  .cmp-np-grip { width: 16px; height: 16px; color: #A8B3C7; }
+  .cmp-np-grip .cmp-i { fill: currentColor; stroke: none; }
+  .cmp-np-title { flex: 1; font-size: 13.5px; font-weight: 700; color: var(--cmp-navy); }
+  #cmp-widget-root .cmp-np-x {
+    width: 28px; height: 28px; padding: 6px; border: none; border-radius: 8px; cursor: pointer;
+    background: transparent; color: var(--cmp-muted); transition: background 0.2s ease, color 0.2s ease;
+  }
+  #cmp-widget-root .cmp-np-x:hover { background: #E9EEF6; color: var(--cmp-navy); }
+  .cmp-np-tabs { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 0 10px; border-bottom: 1px solid var(--cmp-line); flex-shrink: 0; }
+  #cmp-widget-root .cmp-np-tab {
+    background: none; border: none; cursor: pointer; padding: 10px 4px 9px;
+    font: 600 12.5px var(--cmp-font); color: var(--cmp-muted); transition: color 0.15s ease;
+  }
+  #cmp-widget-root .cmp-np-tab.active { color: var(--cmp-blue); }
+  .cmp-np-count {
+    display: inline-flex; min-width: 17px; height: 17px; padding: 0 5px; margin-left: 3px; border-radius: 999px;
+    align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700;
+    background: var(--cmp-tint); color: var(--cmp-blue); vertical-align: 1px;
+  }
+  .cmp-np-count:empty { display: none; }
+  .cmp-np-ink {
+    position: absolute; bottom: -1px; left: 10px; width: calc((100% - 20px) / 2); height: 2.5px; border-radius: 2px;
+    background: var(--cmp-blue); transform: translateX(calc(var(--t, 0) * 100%)); transition: transform 0.35s var(--cmp-ease);
+  }
+  .cmp-np-view { display: none; flex: 1; min-height: 0; flex-direction: column; }
+  .cmp-np-view.active { display: flex; animation: cmpViewIn 0.28s var(--cmp-ease); }
+  #cmp-widget-root #cmp-np-notes {
+    flex: 1; resize: none; border: none; outline: none; padding: 14px 16px; margin: 0;
+    font: 13.5px var(--cmp-font); line-height: 22px; color: var(--cmp-ink);
+    background-color: #fff;
+    background-image: repeating-linear-gradient(transparent 0 21px, #EEF2F8 21px 22px);
+    background-position: 0 14px; background-size: 100% 22px; background-attachment: local;
+  }
+  .cmp-np-foot { padding: 6px 14px 9px; font-size: 10.5px; color: #98A3B8; flex-shrink: 0; transition: color 0.3s ease; }
+  .cmp-np-foot.saving { color: var(--cmp-blue); }
+  .cmp-np-add { display: flex; gap: 8px; padding: 12px 12px 6px; flex-shrink: 0; margin: 0; }
+  #cmp-np-input {
+    flex: 1; min-width: 0; border: 1px solid var(--cmp-line); border-radius: 11px; background: var(--cmp-tint-2);
+    padding: 9px 12px; font: 13px var(--cmp-font); color: var(--cmp-ink); outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  #cmp-np-input:focus { border-color: var(--cmp-blue); background: #fff; box-shadow: 0 0 0 4px rgba(42,103,216,0.10); }
+  #cmp-widget-root .cmp-np-add button {
+    width: 36px; height: 36px; flex-shrink: 0; padding: 9px; border: none; border-radius: 11px; cursor: pointer;
+    background: var(--cmp-blue); color: #fff; transition: background 0.15s, transform 0.15s var(--cmp-spring);
+  }
+  #cmp-widget-root .cmp-np-add button:hover { background: var(--cmp-blue-dk); }
+  #cmp-widget-root .cmp-np-add button:active { transform: scale(0.92); }
+  .cmp-np-list { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 4px 8px 12px; }
+  .cmp-np-empty { text-align: center; color: #98A3B8; font-size: 12.5px; padding: 34px 18px; line-height: 1.55; }
+  .cmp-todo {
+    position: relative; display: flex; align-items: flex-start; gap: 10px; padding: 8px 8px; border-radius: 10px;
+    transition: background 0.15s ease, opacity 0.35s ease, max-height 0.4s var(--cmp-ease), padding 0.4s var(--cmp-ease);
+    max-height: 120px; animation: cmpPillIn 0.28s var(--cmp-ease);
+  }
+  .cmp-todo:hover { background: var(--cmp-tint-2); }
+  .cmp-todo.cmp-flash-np { animation: cmpTodoFlash 1.6s ease; }
+  @keyframes cmpTodoFlash { 0%, 100% { background: transparent; } 20%, 60% { background: rgba(42,103,216,0.10); } }
+  .cmp-todo.leaving { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; }
+  #cmp-widget-root .cmp-chk {
+    position: relative; width: 19px; height: 19px; flex-shrink: 0; margin-top: 1px; padding: 0; cursor: pointer;
+    border-radius: 50%; border: 1.75px solid #B6C3D6; background: #fff; color: #fff;
+    transition: border-color 0.15s ease, background 0.2s ease, transform 0.2s var(--cmp-spring);
+  }
+  #cmp-widget-root .cmp-chk:hover { border-color: var(--cmp-blue); }
+  .cmp-chk .cmp-i { position: absolute; inset: 2px; width: 13px; height: 13px; stroke-width: 2.4; stroke-dasharray: 22; stroke-dashoffset: 22; transition: stroke-dashoffset 0.3s ease 0.08s; }
+  .cmp-todo.done .cmp-chk, #cmp-widget-root .cmp-todo.done .cmp-chk { background: var(--cmp-blue); border-color: var(--cmp-blue); }
+  .cmp-todo.done .cmp-chk .cmp-i { stroke-dashoffset: 0; }
+  .cmp-todo.popping .cmp-chk { animation: cmpChkPop 0.45s var(--cmp-spring); }
+  @keyframes cmpChkPop { 0% { transform: scale(1); } 40% { transform: scale(1.28); } 100% { transform: scale(1); } }
+  .cmp-burst { position: absolute; left: 17px; top: 17px; width: 0; height: 0; pointer-events: none; }
+  .cmp-burst i {
+    position: absolute; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: var(--cmp-blue);
+    animation: cmpBurst 0.6s ease-out forwards;
+  }
+  .cmp-burst i:nth-child(even) { background: #7FB2FF; width: 4px; height: 4px; }
+  @keyframes cmpBurst { 0% { opacity: 1; transform: rotate(var(--a)) translateY(0) scale(1); } 100% { opacity: 0; transform: rotate(var(--a)) translateY(-17px) scale(0.4); } }
+  .cmp-todo-t { position: relative; flex: 1; min-width: 0; font-size: 13px; line-height: 1.45; color: var(--cmp-ink); overflow-wrap: anywhere; transition: color 0.3s ease; }
+  .cmp-todo-t::after {
+    content: ""; position: absolute; left: 0; top: 0.72em; height: 1.5px; width: 0; background: #98A3B8;
+    transition: width 0.35s ease;
+  }
+  .cmp-todo.done .cmp-todo-t { color: #98A3B8; }
+  .cmp-todo.done .cmp-todo-t::after { width: 100%; }
+  .cmp-todo-from { display: inline-flex; align-items: center; gap: 3px; margin-left: 6px; font-size: 10.5px; font-weight: 600; color: var(--cmp-blue); vertical-align: 1px; }
+  .cmp-todo-from .cmp-i { width: 11px; height: 11px; }
+  #cmp-widget-root .cmp-todo-del {
+    width: 22px; height: 22px; padding: 4px; border: none; border-radius: 6px; cursor: pointer; flex-shrink: 0;
+    background: transparent; color: #A8B3C7; opacity: 0; transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+  .cmp-todo:hover .cmp-todo-del, #cmp-widget-root .cmp-todo-del:focus-visible { opacity: 1; }
+  #cmp-widget-root .cmp-todo-del:hover { color: #C2410C; background: #FFF1EA; }
+  @media (hover: none) { #cmp-widget-root .cmp-todo-del { opacity: 1; } }
+  #cmp-widget-root .cmp-np-done-h {
+    display: flex; align-items: center; gap: 6px; width: 100%; margin: 12px 0 2px; padding: 4px 8px; border: none; background: none; cursor: pointer;
+    font: 700 11px var(--cmp-font); color: #8A96AD; letter-spacing: 0.6px; text-transform: uppercase; text-align: left;
+  }
+  .cmp-np-done-h .cmp-i { width: 12px; height: 12px; transition: transform 0.2s ease; }
+  .cmp-np-done-h[aria-expanded="false"] .cmp-i { transform: rotate(-90deg); }
+
+
+  /* restoring after a page change: no entrance animations, it should look like it never left */
+  #cmp-widget-root.cmp-instant, #cmp-widget-root.cmp-instant * { animation: none !important; transition: none !important; }
+
+  /* company / community mentions that have a FutureSelf page */
+  #cmp-widget-root .cmp-ai a, #cmp-widget-root .cmp-ai a:visited { color: #1D3A63; text-decoration: none; }
+  #cmp-widget-root .cmp-ai a:hover { color: #14305A; text-decoration: none; }
+  /* companies and communities: quiet gray until they have a page, then a grayish-blue link (no chip) */
+  .cmp-ai .cmp-entity { color: #6E7B8C; font-weight: 600; }
+  #cmp-widget-root .cmp-ai a.cmp-dir-link, #cmp-widget-root .cmp-ai a.cmp-dir-link:visited {
+    background: none; padding: 0; margin: 0; color: #4C6C93; font-weight: 650; border-radius: 0;
+  }
+  #cmp-widget-root .cmp-ai a.cmp-dir-link:hover { background: none; color: #2F5583; }
+
+  /* notepad settings */
+  .cmp-np-settings {
+    position: absolute; top: 46px; right: 10px; z-index: 3; width: 248px; padding: 12px;
+    background: #fff; border: 1px solid var(--cmp-line); border-radius: 14px;
+    box-shadow: 0 16px 36px rgba(43,62,80,0.16); animation: cmpPanelIn 0.24s var(--cmp-ease);
+  }
+  .cmp-np-settings[hidden] { display: none; }
+  .cmp-np-settings-t { font-size: 11px; font-weight: 700; color: #8A96AD; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 8px; }
+  .cmp-np-opt { display: flex; gap: 9px; align-items: flex-start; cursor: pointer; padding: 6px 4px; border-radius: 9px; }
+  .cmp-np-opt:hover { background: var(--cmp-tint-2); }
+  .cmp-np-opt input { margin: 2px 0 0; accent-color: var(--cmp-blue); width: 15px; height: 15px; flex-shrink: 0; }
+  .cmp-np-opt b { display: block; font-size: 12.5px; font-weight: 650; color: var(--cmp-ink); }
+  .cmp-np-opt small { display: block; font-size: 11.5px; color: var(--cmp-muted); line-height: 1.4; margin-top: 2px; }
+  #cmp-widget-root .cmp-np-opt-btn {
+    width: 100%; margin-top: 6px; padding: 7px 10px; border-radius: 9px; border: 1px solid var(--cmp-line); background: #fff;
+    font: 600 12px var(--cmp-font); color: var(--cmp-navy); cursor: pointer; text-align: left;
+  }
+  #cmp-widget-root .cmp-np-opt-btn:hover { border-color: #BCD0F0; background: var(--cmp-tint-2); }
+  .cmp-np-settings-f { font-size: 10.5px; color: #98A3B8; margin-top: 9px; }
+
+
+  /* settings extras */
+  .cmp-np-settings { width: 262px; }
+  .cmp-np-opt-h { font-size: 11px; font-weight: 700; color: #8A96AD; letter-spacing: 0.6px; text-transform: uppercase; margin: 10px 4px 6px; }
+  .cmp-np-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 3px; border-radius: 10px; background: #EEF2F7; margin: 0 2px; }
+  #cmp-widget-root .cmp-np-seg button {
+    border: none; border-radius: 8px; padding: 6px 4px; cursor: pointer; background: transparent;
+    font: 600 11.5px var(--cmp-font); color: var(--cmp-muted); transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+  }
+  #cmp-widget-root .cmp-np-seg button[aria-checked="true"] { background: #fff; color: var(--cmp-navy); box-shadow: 0 1px 3px rgba(43,62,80,0.14); }
+  .cmp-np-seg-help { font-size: 11px; color: var(--cmp-muted); line-height: 1.4; margin: 6px 4px 2px; min-height: 30px; }
+
+  /* notes footer: Orient + Undo */
+  .cmp-np-foot { display: flex; align-items: center; gap: 8px; }
+  .cmp-np-foot #cmp-np-saved { flex: 1; }
+  #cmp-widget-root .cmp-np-orient {
+    display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px 6px 9px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--cmp-line); background: #fff; color: var(--cmp-navy); font: 600 12px var(--cmp-font);
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  #cmp-widget-root .cmp-np-orient .cmp-i { width: 15px; height: 15px; transition: transform 0.35s var(--cmp-spring); }
+  #cmp-widget-root .cmp-np-orient:hover { border-color: #BCD0F0; background: var(--cmp-tint-2); color: var(--cmp-blue); }
+  #cmp-widget-root .cmp-np-orient:hover .cmp-i { transform: rotate(-8deg) scale(1.08); }
+  #cmp-widget-root .cmp-np-orient[disabled] { opacity: 0.5; cursor: default; }
+  #cmp-widget-root .cmp-np-orient.working span { background: linear-gradient(90deg, #8693A5 30%, var(--cmp-navy) 50%, #8693A5 70%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: cmpShimmer 1.6s linear infinite; }
+  #cmp-widget-root .cmp-np-undo {
+    border: none; background: none; padding: 4px 6px; cursor: pointer; font: 700 11.5px var(--cmp-font); color: var(--cmp-blue);
+  }
+  #cmp-widget-root .cmp-np-undo:hover { text-decoration: underline; }
+  #cmp-widget-root .cmp-np-undo[hidden] { display: none; }
+  .cmp-np-confirm {
+    position: absolute; right: 12px; bottom: 48px; z-index: 4; width: 250px; padding: 13px;
+    background: #fff; border: 1px solid var(--cmp-line); border-radius: 14px;
+    box-shadow: 0 16px 36px rgba(43,62,80,0.18); animation: cmpPanelIn 0.24s var(--cmp-ease); transform-origin: bottom right;
+  }
+  .cmp-np-confirm[hidden] { display: none; }
+  .cmp-np-confirm-t { font-size: 13px; font-weight: 700; color: var(--cmp-navy); }
+  .cmp-np-confirm-s { font-size: 12px; color: var(--cmp-muted); line-height: 1.5; margin-top: 4px; }
+  .cmp-np-confirm-a { display: flex; justify-content: flex-end; gap: 6px; margin-top: 11px; }
+  #cmp-widget-root .cmp-np-confirm-a button {
+    padding: 6px 12px; border-radius: 9px; cursor: pointer; font: 600 12px var(--cmp-font);
+    border: 1px solid var(--cmp-line); background: #fff; color: var(--cmp-muted);
+  }
+  #cmp-widget-root .cmp-np-confirm-a .cmp-np-c-yes { background: var(--cmp-blue); border-color: var(--cmp-blue); color: #fff; }
+  #cmp-widget-root .cmp-np-confirm-a .cmp-np-c-yes:hover { background: var(--cmp-blue-dk); }
+  #cmp-np-notes.cmp-np-fresh { animation: cmpNotesFresh 0.9s ease; }
+  @keyframes cmpNotesFresh { 0% { background-color: rgba(42,103,216,0.06); } 100% { background-color: transparent; } }
+
+  /* the reward: small, quick, then out of the way */
+  .cmp-np-toast {
+    position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 4;
+    display: flex; align-items: flex-start; gap: 11px; padding: 12px 12px 11px;
+    background: #F3F5F8; color: var(--cmp-ink); border: 1px solid #E2E7EE; border-radius: 14px;
+    box-shadow: 0 14px 30px rgba(43,62,80,0.14);
+    animation: cmpToastIn 0.42s var(--cmp-spring);
+    transition: opacity 0.24s ease, transform 0.24s ease;
+  }
+  .cmp-np-toast.out { opacity: 0; transform: translateY(8px); }
+  @keyframes cmpToastIn { from { opacity: 0; transform: translateY(14px) scale(0.96); } to { opacity: 1; transform: none; } }
+  .cmp-np-toast-i {
+    position: relative; width: 28px; height: 28px; padding: 6px; border-radius: 50%; flex-shrink: 0;
+    background: var(--cmp-blue); color: #fff; animation: cmpChkPop 0.5s var(--cmp-spring) 0.1s backwards;
+  }
+  .cmp-np-toast-i .cmp-i { stroke-width: 2.6; stroke-dasharray: 22; stroke-dashoffset: 22; animation: cmpDraw 0.35s ease 0.25s forwards; }
+  @keyframes cmpDraw { to { stroke-dashoffset: 0; } }
+  .cmp-np-toast-i i {
+    position: absolute; inset: -3px; border-radius: 50%; border: 1.5px solid rgba(42,103,216,0.45);
+    animation: cmpRing 0.9s ease-out 0.15s forwards; opacity: 0;
+  }
+  .cmp-np-toast-i i:nth-of-type(2) { animation-delay: 0.32s; }
+  .cmp-np-toast-i i:nth-of-type(3) { animation-delay: 0.49s; }
+  @keyframes cmpRing { 0% { opacity: 0.9; transform: scale(0.8); } 100% { opacity: 0; transform: scale(1.9); } }
+  .cmp-np-toast-m { flex: 1; min-width: 0; }
+  .cmp-np-toast-t { font-size: 13px; font-weight: 700; color: var(--cmp-navy); }
+  .cmp-np-toast-s { font-size: 11.5px; color: var(--cmp-muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: line-through; text-decoration-color: #B6C3D6; }
+  .cmp-np-toast-c { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 11.5px; color: var(--cmp-muted); cursor: pointer; }
+  .cmp-np-toast-c input { margin: 0; accent-color: var(--cmp-blue); width: 13px; height: 13px; }
+  #cmp-widget-root .cmp-np-toast-x {
+    flex-shrink: 0; padding: 5px 9px; border-radius: 8px; border: none; cursor: pointer;
+    background: #fff; color: var(--cmp-navy); border: 1px solid #E2E7EE; font: 600 11.5px var(--cmp-font); transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  #cmp-widget-root .cmp-np-toast-x:hover { background: var(--cmp-tint); border-color: #BCD0F0; }
+
+
+  /* to-do: groups, steps, review, Compass tag that links back to its conversation */
+  .cmp-np-group { font-size: 10.5px; font-weight: 700; color: #8A96AD; letter-spacing: 0.6px; text-transform: uppercase; margin: 12px 8px 2px; }
+  .cmp-np-group:first-child { margin-top: 4px; }
+  .cmp-todo-body { flex: 1; min-width: 0; }
+  .cmp-todo-body .cmp-todo-t { display: block; }
+  #cmp-widget-root button.cmp-todo-from {
+    border: none; background: none; padding: 0; cursor: pointer; font: 600 10.5px var(--cmp-font);
+    color: var(--cmp-blue); border-radius: 5px;
+  }
+  #cmp-widget-root button.cmp-todo-from:hover { text-decoration: underline; }
+  .cmp-steps { margin: 6px 0 2px; display: flex; flex-direction: column; gap: 3px; }
+  .cmp-step { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: var(--cmp-muted); line-height: 1.4; cursor: pointer; }
+  #cmp-widget-root .cmp-step-chk {
+    width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; padding: 0; border-radius: 4px; cursor: pointer;
+    border: 1.5px solid #C2CCDA; background: #fff; color: #fff; transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  #cmp-widget-root .cmp-step-chk .cmp-i { width: 10px; height: 10px; margin: 0 auto; stroke-width: 2.6; opacity: 0; transition: opacity 0.15s ease; }
+  #cmp-widget-root .cmp-step.done .cmp-step-chk { background: #7FA4E0; border-color: #7FA4E0; }
+  #cmp-widget-root .cmp-step.done .cmp-step-chk .cmp-i { opacity: 1; }
+  .cmp-step.done span { text-decoration: line-through; text-decoration-color: #B6C3D6; color: #A3AEBE; }
+  .cmp-step-prog { font-size: 10.5px; color: #8A96AD; margin-left: 6px; font-weight: 600; }
+  #cmp-widget-root .cmp-np-review {
+    display: flex; align-items: center; justify-content: center; gap: 7px; width: calc(100% - 8px); margin: 12px 4px 4px;
+    padding: 8px 10px; border-radius: 11px; border: 1px dashed #C9D6EA; background: #fff; cursor: pointer;
+    font: 600 12px var(--cmp-font); color: var(--cmp-muted); transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  #cmp-widget-root .cmp-np-review .cmp-i { width: 14px; height: 14px; color: var(--cmp-blue); }
+  #cmp-widget-root .cmp-np-review:hover { border-style: solid; border-color: #BCD0F0; background: var(--cmp-tint-2); color: var(--cmp-ink); }
+
+  /* to-do change card in chat */
+  .cmp-sug-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+  .cmp-sug-list li { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--cmp-ink); line-height: 1.45; }
+  .cmp-sug-list input { margin: 2px 0 0; accent-color: var(--cmp-blue); width: 14px; height: 14px; flex-shrink: 0; }
+  .cmp-sug-op { font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--cmp-blue); background: #fff; border: 1px solid var(--cmp-line); border-radius: 5px; padding: 0 5px; margin-right: 5px; }
+  .cmp-sug-sub { display: block; color: var(--cmp-muted); font-size: 12px; }
+
+  /* ---- suggestion cards in chat ---- */
+  .cmp-sug {
+    display: flex; gap: 11px; align-items: flex-start; margin-left: 36px; padding: 11px 12px;
+    border: 1px solid var(--cmp-line); border-radius: 14px; background: var(--cmp-tint-2);
+    animation: cmpRise 0.34s var(--cmp-ease); transition: opacity 0.25s ease, transform 0.25s ease, background 0.3s ease;
+  }
+  .cmp-sug-out { opacity: 0; transform: translateY(4px); }
+  .cmp-sug-i { width: 28px; height: 28px; padding: 6px; border-radius: 9px; flex-shrink: 0; background: #fff; color: var(--cmp-blue); border: 1px solid var(--cmp-line); }
+  .cmp-sug-main { flex: 1; min-width: 0; }
+  .cmp-sug-q { font-size: 13px; line-height: 1.5; color: var(--cmp-ink); }
+  .cmp-sug-q strong { color: var(--cmp-navy); font-weight: 650; }
+  .cmp-sug-item { display: block; margin-top: 6px; padding: 6px 9px; border-radius: 8px; background: #fff; border: 1px dashed #C9D6EA; font-size: 12.5px; font-weight: 600; color: var(--cmp-navy); }
+  .cmp-sug-acts { display: flex; gap: 6px; margin-top: 9px; }
+  #cmp-widget-root .cmp-sug-acts button {
+    font: 600 12px var(--cmp-font); padding: 6px 12px; border-radius: 9px; cursor: pointer;
+    border: 1px solid var(--cmp-line); background: #fff; color: var(--cmp-muted); transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  #cmp-widget-root .cmp-sug-acts .cmp-sug-yes { background: var(--cmp-blue); border-color: var(--cmp-blue); color: #fff; }
+  #cmp-widget-root .cmp-sug-acts .cmp-sug-yes:hover { background: var(--cmp-blue-dk); }
+  #cmp-widget-root .cmp-sug-acts .cmp-sug-no:hover { color: var(--cmp-ink); border-color: #BCD0F0; }
+  .cmp-sug-done { background: #fff; }
+  .cmp-sug-ok { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 12.5px; color: var(--cmp-muted); min-height: 28px; animation: cmpViewIn 0.3s var(--cmp-ease); }
+  .cmp-sug-tick { width: 16px; height: 16px; color: #1E7A46; }
+  #cmp-widget-root .cmp-sug-open {
+    border: none; background: var(--cmp-tint); color: var(--cmp-blue); font: 700 12px var(--cmp-font);
+    padding: 4px 10px; border-radius: 999px; cursor: pointer; box-shadow: 0 0 0 0 rgba(42,103,216,0.35);
+    animation: cmpOpenPulse 1.8s ease 0.3s 2;
+  }
+  #cmp-widget-root .cmp-sug-open:hover { background: var(--cmp-blue); color: #fff; }
+  @keyframes cmpOpenPulse { 0% { box-shadow: 0 0 0 0 rgba(42,103,216,0.35); } 70% { box-shadow: 0 0 0 7px rgba(42,103,216,0); } 100% { box-shadow: 0 0 0 0 rgba(42,103,216,0); } }
+
+  /* ---- waypoint details: tucked away until asked for ---- */
+  .cmp-wp-q-row { display: flex; align-items: flex-start; gap: 6px; }
+  .cmp-wp-q-row .cmp-wp-q { flex: 1; min-width: 0; }
+  #cmp-widget-root .cmp-wp-more {
+    width: 20px; height: 20px; padding: 3px; margin-top: 0; border: none; border-radius: 6px; cursor: pointer; flex-shrink: 0;
+    background: transparent; color: #A8B3C7; transition: color 0.15s, background 0.15s, transform 0.25s var(--cmp-ease);
+  }
+  #cmp-widget-root .cmp-wp-more:hover { color: var(--cmp-blue); background: var(--cmp-tint); }
+  .cmp-wp-item.open .cmp-wp-more { transform: rotate(180deg); color: var(--cmp-blue); }
+  .cmp-wp-detail {
+    display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.28s var(--cmp-ease), opacity 0.2s ease, margin 0.28s ease;
+  }
+  .cmp-wp-detail > div { overflow: hidden; }
+  .cmp-wp-item.open .cmp-wp-detail { grid-template-rows: 1fr; opacity: 1; margin-top: 6px; }
+  .cmp-wp-item.open .cmp-wp-meta { display: none; }
+  .cmp-wp-dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 11px; line-height: 1.45; }
+  .cmp-wp-dl dt { color: #A8B3C7; margin: 0; }
+  .cmp-wp-dl dd { color: var(--cmp-muted); margin: 0; min-width: 0; overflow-wrap: anywhere; }
+  .cmp-wp-tag { display: inline-block; padding: 0 6px; border-radius: 999px; background: var(--cmp-tint); color: var(--cmp-blue); font-weight: 600; margin: 0 3px 2px 0; }
+
+  @media (max-width: 480px) {
+    #cmp-notepad { width: calc(100vw - 24px); height: 62vh; z-index: 2147483647; }
+    #cmp-np-input, #cmp-np-notes { font-size: 16px; }
+    .cmp-sug { margin-left: 0; }
+  }
 
   /* gate / consent screens */
   .cmp-center-screen {
@@ -686,10 +1029,117 @@
     .cmp-tab span { font-size: 11.5px; }
   }
 
+
+  /* ---- streamed replies + quick actions under each reply ---- */
+  .cmp-out { min-height: 1px; }
+  .cmp-acts { display: flex; align-items: center; gap: 2px; margin: 4px 0 0 -6px; height: 26px;
+    opacity: 0; transition: opacity 0.18s ease; }
+  .cmp-row-ai:hover .cmp-acts, .cmp-acts:focus-within, .cmp-acts.cmp-acts-busy { opacity: 1; }
+  @media (hover: none) { .cmp-row-ai.cmp-latest .cmp-acts { opacity: 0.85; } }
+  #cmp-widget-root .cmp-act {
+    width: 26px; height: 26px; padding: 5px; border: 0; border-radius: 7px; background: transparent;
+    color: #8C99AA; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  #cmp-widget-root .cmp-act:hover { background: var(--cmp-tint-2); color: var(--cmp-navy); }
+  #cmp-widget-root .cmp-act:focus-visible { outline: 2px solid #BCD0F0; outline-offset: 1px; }
+  .cmp-act svg { width: 15px !important; height: 15px !important; }
+  .cmp-act.cmp-act-ok { color: var(--cmp-blue) !important; }
+  .cmp-act.cmp-act-ok svg path { stroke-dasharray: 22; animation: cmpDraw 0.35s ease both; }
+  @keyframes cmpDraw { from { stroke-dashoffset: 22; } to { stroke-dashoffset: 0; } }
+  .cmp-act-note { font-size: 11.5px; color: #8C99AA; margin-left: 4px; animation: cmpSwap 0.25s ease; }
+  .cmp-act-note button { font: 600 11.5px var(--cmp-font); color: var(--cmp-blue); background: none; border: 0; padding: 0 0 0 4px; cursor: pointer; }
+  .cmp-pick { margin-top: 6px; padding: 9px 10px 8px; border: 1px solid var(--cmp-line); border-radius: 11px; background: var(--cmp-tint-2);
+    animation: cmpSwap 0.22s ease; }
+  .cmp-pick-t { font-size: 11.5px; font-weight: 650; color: var(--cmp-navy); margin-bottom: 4px; }
+  #cmp-widget-root .cmp-pick label { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; line-height: 1.4; color: var(--cmp-ink); padding: 4px 0; cursor: pointer; }
+  #cmp-widget-root .cmp-pick input { margin: 2px 0 0; accent-color: var(--cmp-blue); flex-shrink: 0; }
+  .cmp-pick-a { display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px; }
+  #cmp-widget-root .cmp-pick-a button { font: 600 12px var(--cmp-font); border-radius: 8px; padding: 5px 11px; cursor: pointer;
+    border: 1px solid var(--cmp-line); background: #fff; color: var(--cmp-muted); }
+  #cmp-widget-root .cmp-pick-a button.go { background: var(--cmp-blue); border-color: var(--cmp-blue); color: #fff; }
+  .cmp-recal-tag { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; font-size: 11.5px; color: #7A8899; }
+  .cmp-recal-tag svg { width: 13px !important; height: 13px !important; color: #9AAEC8; }
+  #cmp-widget-root .cmp-recal-tag button { font: 600 11.5px var(--cmp-font); color: var(--cmp-blue); background: none; border: 0; padding: 0; margin: 0 0 0 2px; cursor: pointer; }
+  .cmp-recal-busy > .cmp-out { opacity: 0.38; transition: opacity 0.25s ease; }
+
+  /* "Since last time": first pill after a fresh visit when there's history to draw on */
+  #cmp-widget-root .cmp-pill.cmp-pill-since {
+    background: linear-gradient(180deg, #F4F7FD, #EAF0FA); border-color: #C9D7EE; color: #234A86;
+    display: inline-flex; align-items: center; gap: 6px; padding-left: 10px;
+  }
+  .cmp-pill-since svg { width: 13px !important; height: 13px !important; }
+  #cmp-widget-root .cmp-pill.cmp-pill-since:hover { border-color: #A9C1E8; color: var(--cmp-blue); }
+
+  /* ---- waypoints: pins + recalibrate ---- */
+  #cmp-widget-root .cmp-wp-pin {
+    width: 24px; height: 24px; padding: 4px; border: 0; border-radius: 6px; background: transparent; color: #A3AFBE;
+    cursor: pointer; flex-shrink: 0; opacity: 0; transition: opacity 0.15s, color 0.15s, background 0.15s;
+  }
+  #cmp-widget-root .cmp-wp-item:hover .cmp-wp-pin, #cmp-widget-root .cmp-wp-pin:focus-visible, #cmp-widget-root .cmp-wp-item.pinned .cmp-wp-pin { opacity: 1; }
+  @media (hover: none) { #cmp-widget-root .cmp-wp-pin { opacity: 1; } }
+  #cmp-widget-root .cmp-wp-pin:hover { background: #fff; color: var(--cmp-navy); }
+  #cmp-widget-root .cmp-wp-item.pinned .cmp-wp-pin { color: var(--cmp-blue); }
+  .cmp-wp-item.pinned .cmp-wp-pin path:first-child { fill: currentColor; fill-opacity: 0.18; }
+  .cmp-wp-pin svg { width: 14px !important; height: 14px !important; }
+  .cmp-wp-sec { font-size: 10.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #8C99AA; padding: 8px 10px 2px; }
+  .cmp-wp-pinned .cmp-wp-rail::before { display: none; }
+  .cmp-wp-pinned { margin-bottom: 4px; }
+  .cmp-wp-pinned .cmp-wp-item .cmp-wp-dot { border-color: var(--cmp-blue); }
+  .cmp-wp-recal-i svg { width: 12px !important; height: 12px !important; vertical-align: -2px; margin-right: 3px; }
+
+  /* ---- Ctrl+K hint ---- */
+  .cmp-kbd { font: 600 10.5px var(--cmp-font); color: #8C99AA; border: 1px solid var(--cmp-line); border-bottom-width: 2px;
+    border-radius: 5px; padding: 1px 5px; background: #fff; white-space: nowrap; flex-shrink: 0; }
+
+  /* ---- Find on this page (Ctrl+F) ---- */
+  #cmp-find {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483646; width: 360px; max-width: calc(100vw - 24px);
+    background: #fff; border: 1px solid var(--cmp-line); border-radius: 16px; overflow: hidden;
+    box-shadow: 0 18px 50px -12px rgba(23,37,58,0.32), 0 2px 6px rgba(23,37,58,0.06);
+    font-family: var(--cmp-font); color: var(--cmp-ink); animation: cmpFindIn 0.24s var(--cmp-ease);
+  }
+  #cmp-find[hidden] { display: none; }
+  @keyframes cmpFindIn { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: none; } }
+  #cmp-find::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent); }
+  .cmp-find-bar { display: flex; align-items: center; gap: 4px; padding: 8px 8px 8px 12px; }
+  .cmp-find-i { width: 17px; height: 17px; color: #8C99AA; flex-shrink: 0; margin-right: 4px; }
+  #cmp-widget-root #cmp-find-q {
+    flex: 1; min-width: 0; border: 0; outline: none; background: transparent; padding: 6px 0;
+    font: 14px/1.4 var(--cmp-font); color: var(--cmp-ink);
+  }
+  #cmp-find-q::placeholder { color: #98A4B5; }
+  .cmp-find-n { font-size: 11.5px; color: #8C99AA; white-space: nowrap; padding: 0 4px; font-variant-numeric: tabular-nums; }
+  #cmp-widget-root .cmp-find-btn { width: 28px; height: 28px; padding: 5px; border: 0; border-radius: 8px; background: transparent; color: #6E7B8C; cursor: pointer; flex-shrink: 0; }
+  #cmp-widget-root .cmp-find-btn:hover { background: var(--cmp-tint-2); color: var(--cmp-navy); }
+  #cmp-widget-root .cmp-find-btn:disabled { opacity: 0.35; cursor: default; background: transparent; }
+  .cmp-find-more { border-top: 1px solid #EDF1F6; max-height: 340px; overflow-y: auto; }
+  .cmp-find-more:empty { display: none; }
+  #cmp-find.cmp-find-compact .cmp-find-more, #cmp-find.cmp-find-compact .cmp-find-foot { display: none; }
+  .cmp-find-sec { font-size: 10.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #8C99AA; padding: 10px 14px 3px; }
+  .cmp-find-note { font-size: 11.5px; color: #7A8899; padding: 8px 14px 0; }
+  #cmp-widget-root .cmp-find-hit {
+    display: block; width: 100%; text-align: left; border: 0; background: transparent; cursor: pointer;
+    padding: 7px 14px; font: 12.5px/1.45 var(--cmp-font); color: #4A586A; text-decoration: none;
+  }
+  #cmp-widget-root .cmp-find-hit:hover, #cmp-widget-root .cmp-find-hit.cur { background: var(--cmp-tint-2); }
+  .cmp-find-hit b { color: var(--cmp-navy); font-weight: 650; background: #E4ECF8; border-radius: 3px; padding: 0 1px; }
+  .cmp-find-hit small { display: block; font-size: 10.5px; color: #98A4B5; margin-bottom: 1px; }
+  #cmp-widget-root a.cmp-find-hit { display: flex; align-items: center; gap: 9px; color: var(--cmp-navy); font-weight: 600; }
+  a.cmp-find-hit .cmp-link-i { width: 26px; height: 26px; }
+  a.cmp-find-hit small { font-weight: 400; margin: 0; }
+  .cmp-find-ask { display: flex !important; align-items: center; gap: 8px; color: var(--cmp-blue) !important; font-weight: 600 !important; border-top: 1px dashed #DCE4F0 !important; margin-top: 4px; padding-top: 9px !important; padding-bottom: 9px !important; }
+  .cmp-find-ask svg { width: 15px !important; height: 15px !important; }
+  .cmp-find-foot { font-size: 11px; color: #98A4B5; padding: 7px 14px 9px; border-top: 1px solid #EDF1F6; background: var(--cmp-tint-2); }
+  ::highlight(cmp-find) { background-color: rgba(42, 103, 216, 0.16); }
+  ::highlight(cmp-find-cur) { background-color: #2A67D8; color: #fff; }
+  @media (max-width: 480px) { #cmp-find { top: 8px; right: 8px; left: 8px; width: auto; } }
+
   /* accessibility: honor users who ask the OS to reduce motion */
   @media (prefers-reduced-motion: reduce) {
     #cmp-widget-root *, #cmp-banner * { animation: none !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
     #cmp-banner { animation: none !important; }
+    #cmp-widget-root .cmp-orbit i { transform: translateX(7px) !important; }
   }
 `;
 
@@ -728,6 +1178,7 @@
           '<div class="cmp-hdr-sub">Your FutureSelf career advisor</div></div>' +
         '</div>' +
         '<div class="cmp-hdr-right">' +
+          '<button class="cmp-icon-btn cmp-np-btn" id="cmp-np-btn" type="button" title="Notepad" aria-label="Open notepad">' + I.notepad + '<span class="cmp-np-dot" id="cmp-np-dot" hidden></span></button>' +
           '<button class="cmp-icon-btn cmp-reset" type="button" onclick="fsReset()" title="Reset conversation" aria-label="Reset conversation">' + I.reset + '</button>' +
           '<button class="cmp-icon-btn cmp-x" type="button" onclick="fsToggle()" title="Close" aria-label="Close">' + I.close + '</button>' +
         '</div>' +
@@ -736,7 +1187,7 @@
       '<div class="cmp-views">' +
         '<section class="cmp-view" data-view="navigate">' +
           '<label class="cmp-search"><svg viewBox="0 0 24 24" class="cmp-i"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>' +
-          '<input id="cmp-nav-q" type="text" placeholder="Search FutureSelf pages" autocomplete="off"></label>' +
+          '<input id="cmp-nav-q" type="text" placeholder="Search FutureSelf pages" autocomplete="off"><span class="cmp-kbd" id="cmp-nav-kbd" hidden></span></label>' +
           '<button class="cmp-ask-row" id="cmp-nav-ask" type="button">' +
             '<span class="cmp-ask-i">' + I.chat + '</span><span class="cmp-ask-t">Not sure where to go? <b>Ask Compass</b></span>' +
             '<span class="cmp-ask-go">' + I.arrow + '</span></button>' +
@@ -761,6 +1212,64 @@
         '<section class="cmp-view" data-view="foryou"><div id="cmp-foryou" class="cmp-scroll"></div></section>' +
       '</div>' +
       '<div class="cmp-pwr">Powered by FutureSelf</div>' +
+    '</div>' +
+    '<div id="cmp-notepad" role="dialog" aria-label="Notepad" hidden>' +
+      '<div class="cmp-np-hdr" id="cmp-np-hdr">' +
+        '<span class="cmp-np-grip">' + I.grip + '</span>' +
+        '<span class="cmp-np-title">Notepad</span>' +
+        '<button class="cmp-np-x cmp-np-set" id="cmp-np-set" type="button" aria-label="Notepad settings" aria-expanded="false">' + I.gear + '</button>' +
+        '<button class="cmp-np-x" id="cmp-np-x" type="button" aria-label="Close notepad">' + I.close + '</button>' +
+      '</div>' +
+      '<div class="cmp-np-settings" id="cmp-np-settings" hidden>' +
+        '<div class="cmp-np-settings-t">Settings</div>' +
+        '<label class="cmp-np-opt"><input type="checkbox" id="cmp-np-celebrate"><span><b>Task wins</b><small>A quick cheer when you finish a Compass task.</small></span></label>' +
+        '<label class="cmp-np-opt"><input type="checkbox" id="cmp-np-spell"><span><b>Spelling help</b><small>Spellcheck and autocorrect while you type.</small></span></label>' +
+        '<div class="cmp-np-opt-h">Orient</div>' +
+        '<div class="cmp-np-seg" id="cmp-np-mode" role="radiogroup" aria-label="How Orient tidies notes">' +
+          '<button type="button" role="radio" data-mode="group">Group</button>' +
+          '<button type="button" role="radio" data-mode="rewrite">Rewrite</button>' +
+          '<button type="button" role="radio" data-mode="both">Both</button>' +
+        '</div>' +
+        '<div class="cmp-np-seg-help" id="cmp-np-mode-help"></div>' +
+        '<button class="cmp-np-opt-btn" id="cmp-np-clear-done" type="button">Clear completed tasks</button>' +
+        '<div class="cmp-np-settings-f">Notes and tasks are saved on this device.</div>' +
+      '</div>' +
+      '<div class="cmp-np-tabs" role="tablist">' +
+        '<button class="cmp-np-tab" type="button" data-np="notes">Notes</button>' +
+        '<button class="cmp-np-tab" type="button" data-np="todo">To-do <span class="cmp-np-count" id="cmp-np-count"></span></button>' +
+        '<span class="cmp-np-ink"></span>' +
+      '</div>' +
+      '<section class="cmp-np-view" data-np="notes">' +
+        '<textarea id="cmp-np-notes" placeholder="Reminders, names, ideas, anything worth keeping..."></textarea>' +
+
+      '</section>' +
+      '<section class="cmp-np-view" data-np="todo">' +
+        '<form class="cmp-np-add" id="cmp-np-add">' +
+          '<input id="cmp-np-input" type="text" placeholder="Add a task" autocomplete="off" maxlength="140">' +
+          '<button type="submit" aria-label="Add task">' + I.plus + '</button>' +
+        '</form>' +
+        '<div class="cmp-np-list" id="cmp-np-list"></div>' +
+      '</section>' +
+        '<div class="cmp-np-foot"><span id="cmp-np-saved">Saved on this device</span>' +
+          '<button class="cmp-np-undo" id="cmp-np-undo" type="button" hidden>Undo</button>' +
+          '<button class="cmp-np-orient" id="cmp-np-orient" type="button" title="Tidy and group this tab">' + I.orient + '<span>Orient</span></button></div>' +
+        '<div class="cmp-np-confirm" id="cmp-np-confirm" hidden>' +
+          '<div class="cmp-np-confirm-t">Orient your notes?</div>' +
+          '<div class="cmp-np-confirm-s" id="cmp-np-confirm-s"></div>' +
+          '<div class="cmp-np-confirm-a"><button type="button" class="cmp-np-c-no">Cancel</button><button type="button" class="cmp-np-c-yes">Orient</button></div>' +
+        '</div>' +
+    '</div>' +
+    '<div id="cmp-find" role="search" aria-label="Find on this page" hidden>' +
+      '<div class="cmp-find-bar">' +
+        '<span class="cmp-find-i">' + I.find + '</span>' +
+        '<input id="cmp-find-q" type="text" placeholder="Find on this page" autocomplete="off" spellcheck="false" aria-label="Find on this page">' +
+        '<span class="cmp-find-n" id="cmp-find-n" aria-live="polite"></span>' +
+        '<button class="cmp-find-btn" id="cmp-find-prev" type="button" aria-label="Previous match" disabled>' + I.up + '</button>' +
+        '<button class="cmp-find-btn" id="cmp-find-next" type="button" aria-label="Next match" disabled>' + I.down + '</button>' +
+        '<button class="cmp-find-btn" id="cmp-find-x" type="button" aria-label="Close find">' + I.close + '</button>' +
+      '</div>' +
+      '<div class="cmp-find-more" id="cmp-find-more"></div>' +
+      '<div class="cmp-find-foot" id="cmp-find-foot"></div>' +
     '</div>';
 
   window.__FS_ICONS__ = I; // widget.js reuses the same icon set
