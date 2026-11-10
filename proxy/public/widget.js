@@ -1,5 +1,9 @@
 (function () {
   function fsBoot() {
+  // each feature starts on its own, so one failing on a page can't stop the others
+  function safeStart(fn) {
+    try { fn(); } catch (err) { if (window.console) console.warn('[Compass] ' + (fn.name || 'feature') + ' did not start', err); }
+  }
   var PROXY_URL = 'https://ai-advisor-futureself.vercel.app/api/proxy';
   var PROFILE_URL = 'https://futureselfdiscover.com/session_info.json?type=user';
   var MAX_HISTORY = 20;
@@ -1029,7 +1033,7 @@
 
   // ---- company / community directory: exact name mentions become links ----
   var DIRECTORY = null;
-  (function loadDirectory() {
+  safeStart(function loadDirectory() {
     try { var c = JSON.parse(sessionStorage.getItem('cmp_dir_v1') || 'null'); if (c && Date.now() - c.at < 1800000) { DIRECTORY = c.entries; return; } } catch (e) {}
     try {
       var x = new XMLHttpRequest();
@@ -1041,7 +1045,7 @@
       };
       x.send(JSON.stringify({ type: 'directory' }));
     } catch (e) {}
-  })();
+  });
 
   function linkDirectory(root) {
     if (!root) return;
@@ -1099,7 +1103,7 @@
     if (opts.recal) {
       var tag = document.createElement('div');
       tag.className = 'cmp-recal-tag';
-      tag.innerHTML = (ICONS.recal || '') + '<span>Recalibrated ' + esc(timeAgo(opts.recal)) + '</span><button type="button" data-unrecal="1">Undo</button>';
+      tag.innerHTML = (ICONS.flag || '') + '<span>Caught up ' + esc(timeAgo(opts.recal)) + '</span><button type="button" data-unrecal="1">Undo</button>';
       msg.appendChild(tag);
     }
     if (opts.actions && !msg.querySelector('.cmp-acts')) {
@@ -1301,7 +1305,7 @@
   }
 
   // ---- launcher: hover (or tap on touch screens) fans out the four actions ----
-  (function wireLauncher() {
+  safeStart(function wireLauncher() {
     var L = launcherEl(), b = $('cmp-bubble');
     if (!L || !b) return;
     var t = null, lastPointer = 'mouse';
@@ -1346,7 +1350,7 @@
       var typed = q && q.value.trim();
       prefill(typed ? "I'm looking for help with " + typed : "I'm looking for help with ");
     });
-  })();
+  });
 
   // ---- profile data shared by Profile and For you ----
   function withProfile(render) {
@@ -1613,7 +1617,7 @@
     var preview = plain(s.a);
     if (preview.length > 70) preview = preview.slice(0, 68) + '...';
     var ans = history[s.i + 1];
-    var meta = [timeLabel(s.ts), ans && ans.recalAt ? 'Recalibrated' : '', preview].filter(Boolean).join(' \u00b7 ');
+    var meta = [timeLabel(s.ts), ans && ans.recalAt ? 'Caught up' : '', preview].filter(Boolean).join(' \u00b7 ');
     return '<div class="cmp-wp-item' + (last ? ' current' : '') + (isPinned ? ' pinned' : '') + '" style="animation-delay:' + (k * 30) + 'ms">' +
       '<div class="cmp-wp-rail"><span class="cmp-wp-dot"></span></div>' +
       '<div class="cmp-wp-main"><div class="cmp-wp-q-row"><div class="cmp-wp-q">' + esc(s.q) + '</div>' +
@@ -1622,7 +1626,6 @@
       (meta ? '<div class="cmp-wp-meta">' + esc(meta) + '</div>' : '') +
       wpDetail(s, k, list) +
       '<div class="cmp-wp-acts"><button class="cmp-wp-act" type="button" data-jump="' + s.i + '">Jump to</button>' +
-      (last || !s.a ? '' : '<button class="cmp-wp-act" type="button" data-recal="' + s.i + '" title="Answer this again with what Compass knows now">Recalibrate</button>') +
       (last ? '' : '<button class="cmp-wp-act primary" type="button" data-resume="' + s.i + '" title="Continue the conversation from this point">Resume</button>') +
       '</div></div></div>';
   }
@@ -1640,39 +1643,38 @@
     host.scrollTop = top ? 0 : host.scrollHeight;
   }
 
-  // Recalibrate: answer an earlier question again, now that Compass knows more.
-  // The new answer replaces the old one in place, with Undo to switch back.
-  function recalibrate(i) {
+  // Catch up: rewrite the answer at a waypoint using everything said after it
+  // (including turns a Resume set aside). The new answer replaces the old one
+  // in place, with Undo to switch back.
+  function catchUp(i, context, cb) {
     var q = history[i], ans = history[i + 1];
-    if (busy || !q || !ans || q.role !== 'user' || ans.role !== 'assistant') return;
-    toggleWaypoints(false);
+    if (busy || !q || !ans || q.role !== 'user' || ans.role !== 'assistant') { if (cb) cb(false); return; }
     var body = $('cmp-body');
     var row = body && body.querySelector('.cmp-row-ai[data-ai="' + (i + 1) + '"]');
-    if (!row) return;
+    if (!row) { if (cb) cb(false); return; }
     busy = true;
-    var top = row.offsetTop - 40;
-    try { body.scrollTo({ top: top, behavior: 'smooth' }); } catch (e) { body.scrollTop = top; }
     var msg = row.querySelector('.cmp-ai'), out = row.querySelector('.cmp-out');
     msg.classList.add('cmp-recal-busy');
     [].forEach.call(msg.querySelectorAll('.cmp-acts,.cmp-recal-tag,.cmp-pick'), function (n) { n.parentNode.removeChild(n); });
-    var pr = progress('Recalibrating with what I know now');
+    var pr = progress('Catching up on what you shared since');
     msg.appendChild(pr.el);
-    var fresh = null;
+    try { row.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' }); } catch (e) {}
     var started = false;
     var rv = revealer(out, function () {
       if (!started) { started = true; msg.classList.remove('cmp-recal-busy'); pr.writing(); }
     });
-    var ask = 'Recalibrate my earlier question: "' + String(q.content).slice(0, 400) + '". Answer it again for where I am now, using everything you have learned about me since then (the rest of this chat, my profile, my to-do list). ' +
+    var ask = 'Catch up my earlier question: "' + String(q.content).slice(0, 400) + '". Answer it again for where I am now, using everything you have learned about me since then (the rest of this chat, my profile, my to-do list). ' +
       'Open with one short sentence on what changed since your first answer, and keep it about as long as before.';
-    requestChat(history.concat([{ role: 'user', content: ask, timestamp: new Date().toISOString() }]), function (soFar) { rv.feed(soFar); }, function (raw) {
+    var ctx = (context || history).map(function (m) { return m; });
+    requestChat(ctx.concat([{ role: 'user', content: ask, timestamp: new Date().toISOString() }]), function (soFar) { rv.feed(soFar); }, function (raw) {
       if (!raw) {
         busy = false; msg.classList.remove('cmp-recal-busy');
         pr.stop(); out.innerHTML = renderMarkdown(parseReply(ans.content).reply); linkDirectory(out);
         decorateAI(row, { actions: true, recal: ans.recalAt || null });
+        if (cb) cb(false);
         return;
       }
-      fresh = parseReply(raw);
-      var at = new Date().toISOString();
+      var fresh = parseReply(raw), at = new Date().toISOString();
       if (ans.orig == null) ans.orig = ans.content;
       ans.content = raw; ans.recalAt = at;
       var r = readJSON(userKey('cmp_recal_v1'), {});
@@ -1681,12 +1683,28 @@
         busy = false;
         msg.classList.remove('cmp-recal-busy');
         out.innerHTML = renderMarkdown(fresh.reply); linkDirectory(out);
-        pr.stop(function () { decorateAI(row, { actions: true, recal: at }); });
+        pr.stop(function () { decorateAI(row, { actions: true, recal: at }); if (cb) cb(true, row); });
       });
     });
   }
 
+  // small confirmation that floats above the reply box
+  var toastT = null;
+  function chatToast(html, undo) {
+    var host = document.querySelector('#cmp-widget-root .cmp-view[data-view="chat"]'); if (!host) return;
+    var old = host.querySelector('.cmp-toast'); if (old) old.parentNode.removeChild(old);
+    var t = document.createElement('div');
+    t.className = 'cmp-toast'; t.setAttribute('role', 'status');
+    t.innerHTML = '<span class="cmp-toast-i">' + (ICONS.check || '') + '</span><span class="cmp-toast-t">' + html + '</span>' +
+      (undo ? '<button type="button">Undo</button>' : '');
+    if (undo) t.querySelector('button').onclick = function () { hide(); undo(); };
+    function hide() { clearTimeout(toastT); t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 220); }
+    host.appendChild(t);
+    clearTimeout(toastT); toastT = setTimeout(hide, 5200);
+  }
+
   function undoRecal(row) {
+    if (!row) return;
     var i = +row.getAttribute('data-ai'), ans = history[i], q = history[i - 1];
     if (!ans || ans.orig == null) return;
     ans.content = ans.orig; delete ans.orig; delete ans.recalAt;
@@ -1740,13 +1758,43 @@
     var body = $('cmp-body'); if (!body) return;
     var div = document.createElement('div');
     div.className = 'cmp-branch'; div.id = 'cmp-branch';
-    div.innerHTML = '<span class="cmp-branch-i">' + (ICONS.flag || '') + '</span><span>Picked up from this waypoint</span>' +
-      '<button type="button">Undo</button>';
-    div.querySelector('button').onclick = function () {
+    var later = branchBackup.length > end;
+    div.innerHTML = (later
+        ? '<button type="button" class="cmp-branch-flag" title="Catch up this answer with what you shared after it" aria-label="Catch up this answer">' + (ICONS.flag || '') + '</button>'
+        : '<span class="cmp-branch-i">' + (ICONS.flag || '') + '</span>') +
+      '<span class="cmp-branch-t">Picked up from this waypoint</span>' +
+      '<button type="button" class="cmp-branch-undo">Undo</button>';
+    var caughtTs = null, ansIdx = end - 1;
+    div.querySelector('.cmp-branch-undo').onclick = function () {
       if (!branchBackup) return;
+      // the full conversation comes back as it was, so drop a catch-up made on this path
+      if (caughtTs) {
+        var r = readJSON(userKey('cmp_recal_v1'), {}); delete r[caughtTs]; writeJSON(userKey('cmp_recal_v1'), r);
+        var a2 = history[ansIdx];   // same message object the full chat holds
+        if (a2 && a2.orig != null) { a2.content = a2.orig; delete a2.orig; delete a2.recalAt; }
+      }
       history = branchBackup; branchBackup = null;
       renderHistory();
     };
+    var flag = div.querySelector('.cmp-branch-flag');
+    if (flag) {
+      setTimeout(function () { flag.classList.add('cmp-wave-hint'); }, 650);   // one small wave so it gets noticed
+      flag.onclick = function () {
+        if (busy || flag.disabled) return;
+        flag.classList.remove('cmp-wave-hint', 'cmp-wave'); void flag.offsetWidth; flag.classList.add('cmp-wave');
+        flag.disabled = true;
+        var context = branchBackup ? branchBackup.slice() : history.slice();
+        setTimeout(function () {
+          catchUp(ansIdx - 1, context, function (ok, row) {
+            if (!ok) { flag.disabled = false; return; }
+            var qq = history[ansIdx - 1]; caughtTs = qq && qq.timestamp;
+            flag.classList.add('done'); flag.title = 'Caught up';
+            div.querySelector('.cmp-branch-t').textContent = 'Picked up and caught up';
+            chatToast('<b>Caught up.</b> This answer now uses what you shared after it.', function () { undoRecal(row); caughtTs = null; flag.classList.remove('done'); flag.disabled = false; flag.title = 'Catch up this answer with what you shared after it'; div.querySelector('.cmp-branch-t').textContent = 'Picked up from this waypoint'; });
+          });
+        }, 520);
+      };
+    }
     body.appendChild(div);
     body.scrollTop = body.scrollHeight;
     var qr = $('cmp-qr'); if (qr) qr.innerHTML = '';
@@ -1757,13 +1805,13 @@
   function commitBranch() {
     if (!branchBackup) return;
     branchBackup = null;
-    var d = $('cmp-branch'); if (d) { var b2 = d.querySelector('button'); if (b2) b2.parentNode.removeChild(b2); d.removeAttribute('id'); }
+    var d = $('cmp-branch'); if (d) { var b2 = d.querySelector('.cmp-branch-undo'); if (b2) b2.parentNode.removeChild(b2); d.removeAttribute('id'); }
   }
   var _fsSend = window.fsSend, _fsPill = window.fsPill;
   window.fsSend = function () { commitBranch(); return _fsSend.apply(this, arguments); };
   window.fsPill = function () { commitBranch(); return _fsPill.apply(this, arguments); };
 
-  (function wireWaypoints() {
+  safeStart(function wireWaypoints() {
     var btn = $('cmp-wp-btn'), panel = $('cmp-wp-panel'), list = $('cmp-wp-list');
     if (!btn || !panel || !list) return;
     btn.addEventListener('click', function (e) { e.stopPropagation(); toggleWaypoints(); });
@@ -1776,23 +1824,22 @@
       }
       var pin = e.target.closest ? e.target.closest('[data-pin]') : null;
       if (pin) { e.stopPropagation(); togglePin(pin.getAttribute('data-pin')); var st = list.scrollTop; renderWaypoints(); list.scrollTop = st; return; }
-      var t = e.target.closest ? e.target.closest('[data-jump],[data-resume],[data-recal]') : null;
+      var t = e.target.closest ? e.target.closest('[data-jump],[data-resume]') : null;
       if (!t) return;
       if (t.hasAttribute('data-jump')) jumpTo(+t.getAttribute('data-jump'));
-      else if (t.hasAttribute('data-recal')) recalibrate(+t.getAttribute('data-recal'));
       else resumeFrom(+t.getAttribute('data-resume'));
     });
     document.addEventListener('click', function (e) {
       if (!panel.hidden && !panel.contains(e.target) && e.target !== btn) toggleWaypoints(false);
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') toggleWaypoints(false); });
-  })();
+  });
 
   // ===========================================================================
   // Quick actions under each reply: save to notes, make a task, copy.
   // A text selection inside the reply wins over the whole reply.
   // ===========================================================================
-  (function replyActions() {
+  safeStart(function replyActions() {
     var body = $('cmp-body'); if (!body) return;
     function selectionIn(el) {
       try {
@@ -1880,7 +1927,7 @@
       var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
       document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (x) {} document.body.removeChild(ta);
     }
-  })();
+  });
 
   // ===========================================================================
   // Notepad: the student's own notes + to-do list. Floats, drags by its top
@@ -1888,7 +1935,7 @@
   // Stored in this browser only (localStorage, per signed-in member).
   // Compass sees open task titles only, never note text.
   // ===========================================================================
-  (function notepad() {
+  safeStart(function notepad() {
     var np = $('cmp-notepad'); if (!np) return;
     var hdr = $('cmp-np-hdr'), notesEl = $('cmp-np-notes'), list = $('cmp-np-list'),
         form = $('cmp-np-add'), input = $('cmp-np-input'), countEl = $('cmp-np-count'),
@@ -2144,6 +2191,37 @@
     function touchTodos() { var d = load(); if (d.todosPrev) { d.todosPrev = null; save(); updateUndo(); } }
     window.__cmpNpUpdateUndo = updateUndo;
 
+    // settings panel: gear opens it, a click anywhere else in the notepad (or Esc) closes it
+    function closeSettings() { if (setPanel && !setPanel.hidden) { setPanel.hidden = true; setBtn.setAttribute('aria-expanded', 'false'); } }
+    function doneCount() { return load().todos.filter(function (t) { return t.done; }).length; }
+    var clearDone = $('cmp-np-clear-done');
+    function syncClear() {
+      if (!clearDone) return;
+      var n = doneCount();
+      clearDone.disabled = !n;
+      clearDone.textContent = n ? 'Clear ' + n + ' completed task' + (n === 1 ? '' : 's') : 'No completed tasks to clear';
+    }
+    if (setBtn && setPanel) {
+      setBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        syncSettings(); syncClear();
+        setPanel.hidden = !setPanel.hidden;
+        setBtn.setAttribute('aria-expanded', String(!setPanel.hidden));
+        if (confirmEl) confirmEl.hidden = true;
+      });
+      np.addEventListener('click', function (e) { if (!setPanel.hidden && !setPanel.contains(e.target) && !setBtn.contains(e.target)) closeSettings(); });
+      np.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !setPanel.hidden) { e.stopPropagation(); closeSettings(); setBtn.focus(); } });
+    }
+    if (celebrateCb) celebrateCb.addEventListener('change', function () { load().celebrate = celebrateCb.checked; save(); });
+    // clearing is undoable: the previous list is kept like Orient keeps it
+    if (clearDone) clearDone.addEventListener('click', function () {
+      var d = load(), n = doneCount(); if (!n) return;
+      d.todosPrev = JSON.parse(JSON.stringify(d.todos));
+      d.todos = d.todos.filter(function (t) { return !t.done; });
+      save(); closeSettings(); showTab('todo'); renderTodos(); updateUndo();
+      status('Cleared ' + n + ' completed task' + (n === 1 ? '' : 's'), 4000);
+    });
+
     if (orientBtn && confirmEl) {
       orientBtn.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -2305,32 +2383,38 @@
     };
     countEl.textContent = openTodos().length ? String(openTodos().length) : '';
     if (load().open) open();   // it follows the student across pages
-  })();
+  });
 
   // ===========================================================================
   // Keyboard: Ctrl/Cmd+K opens Navigate; Ctrl/Cmd+F opens Find on this page.
   // Pressing Ctrl/Cmd+F again inside Find hands over to the browser's own find.
   // ===========================================================================
   var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || '');
-  (function shortcuts() {
+  safeStart(function shortcuts() {
     var hint = $('cmp-nav-kbd');
     if (hint && canHover) { hint.textContent = isMac ? '\u2318K' : 'Ctrl K'; hint.hidden = false; }
-    document.addEventListener('keydown', function (e) {
-      if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return;
+    // window + capture runs before the site's own key handlers. Compass only takes
+    // the key once its panel actually opened; any failure leaves the browser's own.
+    window.addEventListener('keydown', function (e) {
+      if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey || e.defaultPrevented) return;
       var k = String(e.key || '').toLowerCase();
+      if (!k && e.code) k = e.code.replace(/^Key/, '').toLowerCase();
       if (k === 'k') {
-        e.preventDefault();
-        if (isOpen() && currentView === 'navigate' && document.activeElement === $('cmp-nav-q')) { setOpen(false); return; }
-        openTo('navigate');
-        var q = $('cmp-nav-q'); if (q) setTimeout(function () { q.focus(); q.select(); }, 40);
+        try {
+          if (isOpen() && currentView === 'navigate' && document.activeElement === $('cmp-nav-q')) { e.preventDefault(); setOpen(false); return; }
+          openTo('navigate');
+          e.preventDefault();
+          var q = $('cmp-nav-q'); if (q) setTimeout(function () { q.focus(); q.select(); }, 40);
+        } catch (err) { if (window.console) console.warn('[Compass] Ctrl+K failed', err); }
       } else if (k === 'f') {
         var f = $('cmp-find');
-        if (f && !f.hidden && document.activeElement === $('cmp-find-q')) { closeFind(); return; }  // browser find takes over
-        e.preventDefault();
-        openFind();
+        if (f && !f.hidden && document.activeElement === $('cmp-find-q')) { closeFind(); return; }  // second press: browser find
+        var opened = false;
+        try { opened = openFind(); } catch (err) { if (window.console) console.warn('[Compass] Find failed, using the browser find', err); }
+        if (opened) e.preventDefault();
       }
     }, true);
-  })();
+  });
 
   // ---- Find on this page ----
   // Highlights use the CSS Custom Highlight API, so the page's own HTML is never touched.
@@ -2465,13 +2549,15 @@
     if (hits.length) goHit(0); else paintHits();
   }
   function openFind() {
-    var f = $('cmp-find'), q = $('cmp-find-q'); if (!f || !q) return;
+    var f = $('cmp-find'), q = $('cmp-find-q');
+    if (!f || !q) { if (window.console) console.warn('[Compass] Find panel missing (old widget-overlay.js cached?)'); return false; }
     var sel = ''; try { sel = String(window.getSelection() || '').replace(/\s+/g, ' ').trim(); } catch (e) {}
     f.hidden = false;
     $('cmp-find-foot').textContent = 'Press ' + (isMac ? '\u2318F' : 'Ctrl+F') + ' again for your browser\'s find';
     if (sel && sel.length < 80) q.value = sel;
     q.focus(); q.select();
     if (q.value) runFind();
+    return document.activeElement === q;
   }
   function closeFind() {
     var f = $('cmp-find'); if (!f || f.hidden) return;
@@ -2479,7 +2565,8 @@
     if (HL) { HL.delete('cmp-find'); HL.delete('cmp-find-cur'); }
   }
   window.fsFind = openFind;
-  (function wireFind() {
+  if (window.console && console.info) console.info('[Compass] widget ready: find ' + (HL ? 'with highlights' : 'with selection fallback') + ', shortcuts on');
+  safeStart(function wireFind() {
     var q = $('cmp-find-q'); if (!q) return;
     q.addEventListener('input', function () { clearTimeout(findTimer); findTimer = setTimeout(runFind, 140); });
     $('cmp-find').addEventListener('pointerenter', function () { this.classList.remove('cmp-find-compact'); });
@@ -2495,7 +2582,7 @@
       if (b.hasAttribute('data-ask')) { var t = findState.q; closeFind(); askCompass('I\'m trying to find ' + t + ' on FutureSelf. Where should I look?'); return; }
       goHit(+b.getAttribute('data-hit'));
     });
-  })();
+  });
 
   // ===========================================================================
   // Seamless page changes. Hivebrite reloads the whole page on navigation, so
@@ -2503,7 +2590,7 @@
   // into this tab's sessionStorage right before leaving, and the next page
   // restores it instantly with animations off. Only the page behind changes.
   // ===========================================================================
-  (function seamless() {
+  safeStart(function seamless() {
     var KEY = 'cmp_ui_v1';
     function uidNow() { return String(hbUserId || (window.__HB_USER__ && window.__HB_USER__.id) || 'anon'); }
     function snapshot() {
@@ -2553,7 +2640,7 @@
     if (nq && snap.navQ) { nq.value = snap.navQ; if (snap.view === 'navigate') renderNav(snap.navQ); }
     if (body) body.scrollTop = snap.atBottom ? body.scrollHeight : (snap.scroll || 0);
     animationsBack();
-  })();
+  });
   }
 
   if (document.readyState === 'loading') {
