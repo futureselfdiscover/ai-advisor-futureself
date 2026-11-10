@@ -96,6 +96,8 @@
   };
 
   var path = window.location.pathname;
+  // the site changed pages without a reload (see widget-overlay.js keepAlive)
+  window.addEventListener('cmp:navigated', function (e) { path = (e.detail && e.detail.path) || window.location.pathname; });
   var pageDesc = pageMap[path] || 'a FutureSelf page';
   var ICONS = window.__FS_ICONS__ || {};
   var icon = (window.__FS_ICONS__ && window.__FS_ICONS__.compass) || '<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
@@ -1024,6 +1026,8 @@
         if (parsed.suggestions.length > 0) setPills(parsed.suggestions);
         // at most one gentle offer per reply; Compass writes the wording,
         // the widget paces it (see maybeProfileSuggestion / maybeNoteSuggestion)
+        // a direct "add X to my profile" always gets its card, even if the model forgot to mark it
+        if (mu.profile_suggestion && lastUser && /\b(add|put|include|list|save)\b[\s\S]{0,60}\b(to|on|in)\s+(my\s+)?(fs\s+|futureself\s+)?profile\b/i.test(lastUser.content)) mu.profile_suggestion.explicit = true;
         if (!maybeTodoActions(mu.todo_actions) && !maybeNoteSuggestion(mu.notepad_suggestion)) maybeProfileSuggestion(mu.profile_suggestion);
       });
     });
@@ -1887,10 +1891,9 @@
     };
     var flag = div.querySelector('.cmp-branch-flag');
     if (flag) {
-      setTimeout(function () { flag.classList.add('cmp-wave-hint'); }, 650);   // one small wave so it gets noticed
       flag.onclick = function () {
         if (busy || flag.disabled) return;
-        flag.classList.remove('cmp-wave-hint', 'cmp-wave'); void flag.offsetWidth; flag.classList.add('cmp-wave');
+        flag.classList.remove('cmp-wave'); void flag.offsetWidth; flag.classList.add('cmp-wave');
         flag.disabled = true;
         var context = branchBackup ? branchBackup.slice() : history.slice();
         setTimeout(function () {
@@ -2533,21 +2536,6 @@
   // Pressing Ctrl/Cmd+F again inside Find hands over to the browser's own find.
   // ===========================================================================
   var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || '');
-  // X and reset: one full turn per hover (reset turns the other way, like its arrow)
-  safeStart(function headerTurns() {
-    [['.cmp-x', 1], ['.cmp-reset', -1]].forEach(function (pair) {
-      var b = document.querySelector('#cmp-widget-root ' + pair[0]), ic = b && b.querySelector('.cmp-i');
-      if (!ic) return;
-      var turn = 0, moving = false;
-      b.addEventListener('pointerenter', function (e) {
-        if (e.pointerType !== 'mouse' || reduceMotion || moving) return;
-        moving = true; turn += 360 * pair[1];
-        ic.style.setProperty('--cmp-turn', turn + 'deg');
-      });
-      ic.addEventListener('transitionend', function () { moving = false; });
-    });
-  });
-
   // ===========================================================================
   // Tour: tap the compass in the header. Bubbles point at each part in turn;
   // some ask the student to click the thing themselves, then explain it.
