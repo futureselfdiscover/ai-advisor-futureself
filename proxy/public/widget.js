@@ -10,7 +10,35 @@
   var profile = null;
   var userName = '';
   var routed = false;
-  var hbUserId = null; // window.__HB_USER__.id - used as the memory key (server hashes it)
+  var hbUserId = null; // the signed-in member's id - used as the memory key (server hashes it)
+  // The page may not set __HB_USER__, so the id also comes from Hivebrite's own
+  // session data and is kept for this tab, so a page change knows it right away.
+  try { hbUserId = (window.__HB_USER__ && window.__HB_USER__.id) || sessionStorage.getItem('cmp_member') || null; } catch (e) {}
+  function memberIdOf(p) {
+    if (!p) return null;
+    var v = p.id || p.user_id || p.member_id || (p.user && p.user.id) || null;
+    return v == null ? null : String(v);
+  }
+  // learn who is signed in; returns false if a different member is now signed in
+  function setMember(p) {
+    var id = memberIdOf(p);
+    if (!id) {
+      if (window.console && p) console.info('[Compass] no member id in session data; fields: ' + Object.keys(p).join(', '));
+      return true;
+    }
+    var before = hbUserId ? String(hbUserId) : null;
+    hbUserId = id;
+    try { sessionStorage.setItem('cmp_member', id); } catch (e) {}
+    // things saved on this device before the id was known move to this member once
+    ['cmp_np_v1_', 'cmp_pins_v1_', 'cmp_likes_v1_', 'cmp_recal_v1_'].forEach(function (k) {
+      try {
+        var anon = localStorage.getItem(k + 'anon');
+        if (anon && !localStorage.getItem(k + id)) { localStorage.setItem(k + id, anon); localStorage.removeItem(k + 'anon'); }
+      } catch (e) {}
+    });
+    if (window.cmpNotepad && window.cmpNotepad.refresh) window.cmpNotepad.refresh();
+    return !before || before === id;
+  }
   var isNewSession = true; // flips false after first save_memory call this page-load
   // random per-page-load session ID for ANONYMOUS conversation_logs grouping.
   // not derived from user identity, never shown to the user, not linkable to user_hash.
@@ -259,7 +287,14 @@
 
   function saveProfile(sug, el) {
     pendingProfileSuggestion = null;
-    if (!hbUserId) { resolveCard(el, 'Sign in to save this to your profile.'); return; }
+    if (!hbUserId) {
+      fetchProfile(function (p) {
+        if (p) setMember(p);
+        if (hbUserId) saveProfile(sug, el);
+        else resolveCard(el, 'Sign in to save this to your profile.');
+      });
+      return;
+    }
     try {
       var xhr = new XMLHttpRequest();
       xhr.open('POST', PROXY_URL, true);
@@ -589,8 +624,7 @@
     hbUserId = (window.__HB_USER__ && window.__HB_USER__.id) || hbUserId;
     fetchProfile(function(p) {
       profile = p;
-      // the signed-in member, from Hivebrite's own session data (the page may not set __HB_USER__)
-      if (!hbUserId && p && (p.id || p.user_id)) hbUserId = p.id || p.user_id;
+      setMember(p);
       if (p && p.name) userName = p.firstname || p.name.split(' ')[0];
       var r = readiness(p);
       if (!r.ready) { showGate(r); return; }
@@ -629,33 +663,66 @@
 
   window.fsConsent = function() { setConsent(); verifyAndRoute(); };
 
-  window.fsReset = function() {
-    if (!confirm('Reset your advisor? This permanently deletes your conversation history and everything the advisor remembers about you, and starts fresh.')) return;
-    try { localStorage.removeItem('fs_consent'); } catch(e) {}
-    history = [];
-    memory = null;
-    routed = false;
-    // wipe server-side memory, then re-run the full gate (profile check + consent)
-    if (hbUserId) {
+  // Reset: Compass's own confirmation (the browser's confirm() can be blocked
+  // silently, which made Reset do nothing), then a full wipe of the chat and
+  // what Compass remembers. The notepad and the FutureSelf profile stay.
+  window.fsReset = function () {
+    var panel = $('cmp-chat'); if (!panel) return;
+    var box = $('cmp-reset-confirm');
+    if (box) { box.parentNode.removeChild(box); return; }
+    box = document.createElement('div');
+    box.id = 'cmp-reset-confirm'; box.className = 'cmp-reset-confirm'; box.setAttribute('role', 'alertdialog');
+    box.setAttribute('aria-label', 'Reset Compass');
+    box.innerHTML = '<div class="cmp-rc-t">Start fresh?</div>' +
+      '<div class="cmp-rc-x">This deletes your chat history and what Compass remembers about you. Your notepad and profile stay as they are.</div>' +
+      '<div class="cmp-rc-a"><button type="button" class="cmp-rc-no">Cancel</button><button type="button" class="cmp-rc-yes">Reset</button></div>';
+    panel.appendChild(box);
+    function close() { if (box.parentNode) box.parentNode.removeChild(box); document.removeEventListener('mousedown', outside, true); document.removeEventListener('keydown', key, true); }
+    function outside(e) { if (!box.contains(e.target) && !e.target.closest('.cmp-reset')) close(); }
+    function key(e) { if (e.key === 'Escape') { e.stopPropagation(); close(); } }
+    box.querySelector('.cmp-rc-no').onclick = close;
+    box.querySelector('.cmp-rc-yes').onclick = function () { close(); doReset(); };
+    document.addEventListener('mousedown', outside, true);
+    document.addEventListener('keydown', key, true);
+    try { box.querySelector('.cmp-rc-no').focus(); } catch (e) {}
+  };
+
+  function doReset() {
+    try { localStorage.removeItem('fs_consent'); } catch (e) {}
+    try { sessionStorage.removeItem('cmp_ui_v1'); } catch (e) {}
+    ['cmp_pins_v1', 'cmp_recal_v1', 'cmp_likes_v1'].forEach(function (k) { try { localStorage.removeItem(userKey(k)); } catch (e) {} });
+    history = []; memory = null; routed = false; branchBackup = null;
+    var qr = $('cmp-qr'); if (qr) qr.innerHTML = '';
+    var body = $('cmp-body');
+    if (body) body.classList.add('cmp-resetting');
+    function finish(ok) {
+      if (body) body.classList.remove('cmp-resetting');
+      var textEl = $('cmp-banner-text'), ctaEl = $('cmp-banner-cta-label');
+      if (textEl) textEl.innerText = 'Hi, I\'m Compass, your FutureSelf advisor. I help students like you figure out what\'s next. Want to get started?';
+      if (ctaEl) ctaEl.innerText = 'Get started';
+      refreshWaypointBtn();
+      verifyAndRoute();
+      if (!ok && window.console) console.warn('[Compass] reset: saved history could not be cleared on the server');
+    }
+    function wipe() {
       try {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', PROXY_URL, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4) {
-            var textEl = document.getElementById('cmp-banner-text');
-            var ctaEl = document.getElementById('cmp-banner-cta-label');
-            if (textEl) textEl.innerText = 'Hi, I\'m Compass, your FutureSelf advisor. I help students like you figure out what\'s next. Want to get started?';
-            if (ctaEl) ctaEl.innerText = 'Get started';
-            verifyAndRoute();
-          }
+          if (xhr.readyState !== 4) return;
+          var r = {}; try { r = JSON.parse(xhr.responseText) || {}; } catch (e) {}
+          finish(r.ok === true);
         };
         xhr.send(JSON.stringify({ type: 'delete_memory', userId: hbUserId }));
-        return;
-      } catch(e) {}
+      } catch (e) { finish(false); }
     }
-    verifyAndRoute();
-  };
+    // wait for the fade, and make sure we know whose history to delete
+    setTimeout(function () {
+      if (hbUserId) wipe();
+      else fetchProfile(function (p) { if (p) setMember(p); if (hbUserId) wipe(); else finish(false); });
+    }, 220);
+  }
 
   window.fsDismiss = function (e) {
     e.stopPropagation();
@@ -1042,7 +1109,7 @@
   var SINCE_LABEL = 'Since last time';
   var TOUR_LABEL = 'Show me around';
   function tourSeen() { try { return localStorage.getItem('cmp_tour_v1') === 'done'; } catch (e) { return true; } }
-  var SINCE_PROMPT = 'Since last time: where did we leave off, and what should I focus on next?';
+  var SINCE_PROMPT = 'Since last time: where did we leave off, what is still open on my to-do list, and what should I focus on next?';
   var SINCE_ICON = '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4v4.5H8"/><path d="M12 8v4.5l3 2"/></svg>';
 
   function sinceLastTimePills() {
@@ -2022,7 +2089,19 @@
       cacheKey = k;
       return data;
     }
-    function save() { try { localStorage.setItem(key(), JSON.stringify(load())); } catch (e) {} }
+    function save() { try { localStorage.setItem(key(), JSON.stringify(load())); } catch (e) {} refreshDot(); }
+    // the notepad button carries a blue marker while tasks are open: it glows softly
+    // until the notepad has been opened this visit, then stays as a quiet dot
+    var seenThisVisit = false;
+    try { seenThisVisit = sessionStorage.getItem('cmp_np_seen') === '1'; } catch (e) {}
+    function refreshDot() {
+      if (!dot || !btn) return;
+      var n = load().todos.filter(function (t) { return !t.done; }).length;
+      dot.hidden = !n;
+      dot.classList.toggle('cmp-np-dot-glow', !!n && !seenThisVisit);
+      var label = n ? 'Notepad: ' + n + ' open task' + (n === 1 ? '' : 's') : 'Notepad';
+      btn.title = label; btn.setAttribute('aria-label', label);
+    }
     function uid() { return 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
     function openTodos() { return load().todos.filter(function (t) { return !t.done; }); }
 
@@ -2377,7 +2456,7 @@
       if (meta && meta.srcTs) t.srcTs = meta.srcTs;
       d.todos.push(t); save(); touchTodos();
       if (!np.hidden) renderTodos(t.id); else countEl.textContent = String(openTodos().length);
-      if (from === 'compass' && np.hidden && dot) dot.hidden = false;
+      if (from === 'compass' && np.hidden) { seenThisVisit = false; refreshDot(); }
       return t.id;
     }
 
@@ -2385,8 +2464,9 @@
     function open(tab, flashId) {
       var d = load();
       notesEl.value = d.notes;
+      seenThisVisit = true;
+      try { sessionStorage.setItem('cmp_np_seen', '1'); } catch (e) {}
       np.hidden = false; d.open = true; save();
-      if (dot) dot.hidden = true;
       showTab(tab || d.tab);
       renderTodos(flashId);
       place();
@@ -2414,11 +2494,13 @@
         }
       });
       save(); touchTodos();
-      if (!np.hidden) renderTodos(changed[0]); else { countEl.textContent = openTodos().length ? String(openTodos().length) : ''; if (changed.length && dot) dot.hidden = false; }
+      if (!np.hidden) renderTodos(changed[0]); else { countEl.textContent = openTodos().length ? String(openTodos().length) : ''; if (changed.length) { seenThisVisit = false; refreshDot(); } }
       return changed;
     }
 
+    refreshDot();
     window.cmpNotepad = {
+      refresh: refreshDot,
       open: open, close: close,
       add: addItem,
       apply: applyActions,
@@ -2451,12 +2533,18 @@
   // Pressing Ctrl/Cmd+F again inside Find hands over to the browser's own find.
   // ===========================================================================
   var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || '');
-  // header icons: play the motion once per hover and let it finish (see .cmp-spin)
-  safeStart(function headerMotion() {
-    [].forEach.call(document.querySelectorAll('#cmp-widget-root .cmp-x, #cmp-widget-root .cmp-reset, #cmp-widget-root .cmp-np-btn'), function (b) {
-      var ic = b.querySelector('.cmp-i'); if (!ic) return;
-      b.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && !reduceMotion && !ic.classList.contains('cmp-spin')) ic.classList.add('cmp-spin'); });
-      ic.addEventListener('animationend', function () { ic.classList.remove('cmp-spin'); });
+  // X and reset: one full turn per hover (reset turns the other way, like its arrow)
+  safeStart(function headerTurns() {
+    [['.cmp-x', 1], ['.cmp-reset', -1]].forEach(function (pair) {
+      var b = document.querySelector('#cmp-widget-root ' + pair[0]), ic = b && b.querySelector('.cmp-i');
+      if (!ic) return;
+      var turn = 0, moving = false;
+      b.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse' || reduceMotion || moving) return;
+        moving = true; turn += 360 * pair[1];
+        ic.style.setProperty('--cmp-turn', turn + 'deg');
+      });
+      ic.addEventListener('transitionend', function () { moving = false; });
     });
   });
 
@@ -2839,6 +2927,8 @@
       // refresh profile + memory quietly; the visible chat stays exactly as it was
       fetchProfile(function (p) {
         if (p) { profile = p; if (p.name) userName = p.firstname || p.name.split(' ')[0]; }
+        // someone else signed in on this tab: don't show the previous member's chat
+        if (!setMember(p)) { history = []; routed = false; clearBody(); if (isOpen()) verifyAndRoute(); return; }
         fetchMemory(function (m) {
           if (m) {
             memory = m;
