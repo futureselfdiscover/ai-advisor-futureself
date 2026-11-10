@@ -246,13 +246,16 @@
   }
   .cmp-icon-btn:hover { background: rgba(255,255,255,0.10); color: #fff; }
   .cmp-icon-btn:active { background: rgba(255,255,255,0.16); }
-  /* X and reset turn a full circle on hover. Always whole turns, never backwards, and the
-     icon keeps its own layer, so it ends exactly where it started (no half-pixel jump) */
-  .cmp-x .cmp-i, .cmp-reset .cmp-i {
-    transform-origin: 50% 50%; will-change: transform; transform: rotate(var(--cmp-turn, 0deg));
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  /* X and reset turn halfway while hovered and ease back when the mouse leaves. The icon
+     keeps its own layer, so the rest position is drawn the same way before and after */
+  .cmp-x .cmp-i, .cmp-reset .cmp-i, #cmp-np-x .cmp-i {
+    transform-origin: 50% 50%; will-change: transform; transform: rotate(0deg);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  /* header icons: each plays once on hover and doesn't reverse on leave (no back-and-forth jitter) */
+  @media (hover: hover) {
+    .cmp-x:hover .cmp-i, #cmp-np-x:hover .cmp-i { transform: rotate(180deg); }
+    .cmp-reset:hover .cmp-i { transform: rotate(-180deg); }
+  }
 
   /* tabs */
   .cmp-tabs {
@@ -417,12 +420,16 @@
   .cmp-has-wp #cmp-body { padding-top: 40px; }
   .cmp-wp-btn:hover, .cmp-wp-btn:focus-visible, .cmp-wp-btn[aria-expanded="true"] { color: var(--cmp-blue); border-color: #BCD0F0; box-shadow: 0 6px 16px rgba(43,62,80,0.12); }
   .cmp-wp-btn-i { width: 14px; height: 14px; flex-shrink: 0; }
+  /* the label opens to the LEFT of the flag, so the flag and count never move. Animating
+     a grid column from 0fr to 1fr lands exactly on the label's own width (smooth, no stall) */
   .cmp-wp-label {
-    display: inline-block; max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-right: -5px;
-    transition: max-width 0.28s var(--cmp-ease), opacity 0.2s ease, margin 0.28s var(--cmp-ease);
+    display: inline-grid; grid-template-columns: 0fr; margin-right: -5px; opacity: 0;
+    transition: grid-template-columns 0.34s cubic-bezier(0.22, 0.8, 0.24, 1) 0.06s, margin 0.34s cubic-bezier(0.22, 0.8, 0.24, 1) 0.06s, opacity 0.18s ease 0.04s;
   }
+  .cmp-wp-label > span { min-width: 0; overflow: hidden; white-space: nowrap; text-align: right; }
   .cmp-wp-btn:hover .cmp-wp-label, .cmp-wp-btn:focus-visible .cmp-wp-label, .cmp-wp-btn[aria-expanded="true"] .cmp-wp-label {
-    max-width: 80px; opacity: 1; margin-right: 0;
+    grid-template-columns: 1fr; margin-right: 0; opacity: 1;
+    transition: grid-template-columns 0.34s cubic-bezier(0.22, 0.8, 0.24, 1), margin 0.34s cubic-bezier(0.22, 0.8, 0.24, 1), opacity 0.22s ease 0.08s;
   }
   .cmp-wp-count {
     min-width: 17px; height: 17px; padding: 0 5px; border-radius: 999px;
@@ -502,14 +509,12 @@
   #cmp-widget-root .cmp-branch-flag:disabled { cursor: default; }
   .cmp-branch-flag svg { width: 14px !important; height: 14px !important; display: block; }
   .cmp-branch-flag.done svg path { fill: currentColor; fill-opacity: 0.2; }
-  .cmp-branch-flag.cmp-wave-hint { animation: cmpFlagHint 0.7s ease-in-out 1; }
   .cmp-branch-flag.cmp-wave { animation: cmpFlagWave 0.42s ease-in-out 1; }
   /* quick sideways shakes, like a flag snapping in the wind */
   @keyframes cmpFlagWave {
     0%, 100% { transform: none; } 25% { transform: translateX(-1px) rotate(-5deg); }
     55% { transform: translateX(0.75px) rotate(3deg); } 80% { transform: rotate(-1deg); }
   }
-  @keyframes cmpFlagHint { 0%, 100% { transform: none; } 45% { transform: rotate(-5deg); } }
 
   /* confirmation pop-up above the reply box */
   .cmp-view[data-view="chat"] { position: relative; }
@@ -1274,7 +1279,7 @@
     #cmp-widget-root *, #cmp-banner * { animation: none !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
     #cmp-banner { animation: none !important; }
     #cmp-widget-root .cmp-orbit i { transform: translateX(7px) !important; }
-    .cmp-x .cmp-i, .cmp-reset .cmp-i { transition: none; }
+    .cmp-x .cmp-i, .cmp-reset .cmp-i, #cmp-np-x .cmp-i { transition: none; }
   }
 `;
 
@@ -1330,7 +1335,7 @@
         '</section>' +
         '<section class="cmp-view active" data-view="chat">' +
           '<button class="cmp-wp-btn" id="cmp-wp-btn" type="button" aria-expanded="false" hidden>' +
-            '<span class="cmp-wp-btn-i">' + I.flag + '</span><span class="cmp-wp-label">Waypoints</span><span class="cmp-wp-count" id="cmp-wp-count"></span></button>' +
+            '<span class="cmp-wp-label"><span>Waypoints</span></span><span class="cmp-wp-btn-i">' + I.flag + '</span><span class="cmp-wp-count" id="cmp-wp-count"></span></button>' +
           '<div class="cmp-wp-panel" id="cmp-wp-panel" hidden>' +
             '<div class="cmp-wp-head"><div class="cmp-wp-title">Waypoints</div>' +
             '<div class="cmp-wp-sub">Jump back to any question, or pick the conversation up from there.</div></div>' +
@@ -1421,6 +1426,49 @@
 
   mountBanner();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountBanner);
+
+  // ---- keep Compass alive when the site swaps pages without a full reload ----
+  // Some sites replace <body> on navigation, or briefly show a cached copy of the
+  // previous page. Either way our live elements get dropped and a lifeless copy
+  // (which looks right but ignores clicks) can appear. Put the live ones back.
+  window.__cmpRoot = container;
+  var lastPath = location.pathname, fixing = false;
+  function keepAlive(reason) {
+    if (fixing) return;
+    fixing = true;
+    try {
+      if (!document.getElementById('cmp-widget-style')) document.head.appendChild(styleEl);
+      var copies = document.querySelectorAll('#cmp-widget-root');
+      for (var k = 0; k < copies.length; k++) if (copies[k] !== container && copies[k].parentNode) copies[k].parentNode.removeChild(copies[k]);
+      if (document.body && container.parentNode !== document.body) {
+        document.body.appendChild(container);
+        if (window.console && console.info) console.info('[Compass] page changed without a reload (' + reason + '); reattached');
+      }
+      if (location.pathname !== lastPath) {
+        lastPath = location.pathname;
+        mountBanner();
+        try { window.dispatchEvent(new CustomEvent('cmp:navigated', { detail: { path: lastPath } })); } catch (e) {}
+      }
+    } finally { fixing = false; }
+  }
+  if (window.MutationObserver) {
+    new MutationObserver(function () { if (!container.isConnected || container.parentNode !== document.body) keepAlive('page swap'); })
+      .observe(document.documentElement, { childList: true, subtree: true });
+  }
+  // page-swapping libraries: keep our live elements out of their cached copies
+  ['turbolinks:before-cache', 'turbo:before-cache'].forEach(function (ev) {
+    document.addEventListener(ev, function () { if (container.parentNode) container.parentNode.removeChild(container); });
+  });
+  ['turbolinks:load', 'turbo:load', 'turbo:render', 'popstate', 'pageshow'].forEach(function (ev) {
+    (ev === 'popstate' || ev === 'pageshow' ? window : document).addEventListener(ev, function () { setTimeout(function () { keepAlive(ev); }, 0); });
+  });
+  // history.pushState navigations (single-page apps) don't fire any event: watch for them
+  ['pushState', 'replaceState'].forEach(function (fn) {
+    var orig = history[fn];
+    if (typeof orig !== 'function' || orig.__cmp) return;
+    var wrapped = function () { var r = orig.apply(this, arguments); setTimeout(function () { keepAlive(fn); }, 0); return r; };
+    wrapped.__cmp = true; history[fn] = wrapped;
+  });
 
   var sc = document.createElement('script');
   sc.src = 'https://ai-advisor-futureself.vercel.app/widget.js?v=' + Date.now();
