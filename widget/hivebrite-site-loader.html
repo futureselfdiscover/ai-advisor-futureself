@@ -1,0 +1,18 @@
+<!--
+  Compass site-wide loader. Install once wherever Hivebrite lets you add code to
+  every page (a site-wide custom code / tracking script setting). It stays off
+  until proxy/public/rollout.js turns it on:
+    site_wide: false  -> off everywhere (pages with their own Compass block still work)
+    pages: ['/page/careers'] -> on for just these pages (gradual rollout)
+    site_wide: true   -> on for every page except exclude
+  The home page still needs its own block (hivebrite-home-loader.html) for the banner.
+-->
+<script>
+(function () {
+  if (window.__CMP_SITE__ || document.getElementById('cmp-site-loader')) return;
+  var s = document.createElement('script');
+  s.id = 'cmp-site-loader';
+  s.src = 'https://ai-advisor-futureself.vercel.app/compass-site.js?v=' + Math.floor(Date.now() / 300000);
+  (document.head || document.documentElement).appendChild(s);
+})();
+</script>
