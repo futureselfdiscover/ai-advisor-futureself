@@ -187,6 +187,11 @@
     t = String(t || '').replace(/[\r\n]+/g, ' ').trim();
     return t.length > 220 ? t.slice(0, 217) + '...' : t;
   }
+  var FIELD_NAMES = {
+    skills: 'skills', industries_of_interest: 'industries of interest', hobbies_interests: 'hobbies and interests',
+    clubs_and_organizations: 'clubs and organizations', languages: 'languages', awards_honors: 'awards',
+    currently_exploring: 'what you\'re exploring', target_cities_regions: 'target cities', career_priorities: 'career priorities', bio: 'story'
+  };
   function profileAskFallback(label) {
     var x = '<strong>' + esc(label) + '</strong>';
     return pick([
@@ -235,12 +240,17 @@
     var v = String(sug.value);
     if (declinedSuggestions.indexOf(v) > -1 || sugState.accepted.indexOf(v) > -1) return false;
     var turns = userTurns();
-    // patience: never in the first exchange, at least 3 turns apart, 2 per session
-    if (turns < 2 || turns - sugState.lastProfileTurn < 3 || sugState.profileAsks >= 2) return false;
-    sugState.profileAsks++; sugState.lastProfileTurn = turns;
+    // patience: never in the first exchange, at least 3 turns apart, 2 per session,
+    // unless the student asked for it directly ("add AI to my profile")
+    if (!sug.explicit) {
+      if (turns < 2 || turns - sugState.lastProfileTurn < 3 || sugState.profileAsks >= 2) return false;
+      sugState.profileAsks++; sugState.lastProfileTurn = turns;
+    }
     pendingProfileSuggestion = sug;
     var label = sug.label || v;
-    var ask = sug.ask ? esc(cleanAsk(sug.ask)) : profileAskFallback(label);
+    var ask = sug.explicit
+      ? 'Add <strong>' + esc(label) + '</strong> to your ' + esc(FIELD_NAMES[sug.field] || 'profile') + '?'
+      : (sug.ask ? esc(cleanAsk(sug.ask)) : profileAskFallback(label));
     sugCard('cmp-sug-profile', 'profile', ask, 'Add to profile', function (el) {
       saveProfile(sug, el);
     }, function () { declinedSuggestions.push(v); pendingProfileSuggestion = null; });
@@ -579,6 +589,8 @@
     hbUserId = (window.__HB_USER__ && window.__HB_USER__.id) || hbUserId;
     fetchProfile(function(p) {
       profile = p;
+      // the signed-in member, from Hivebrite's own session data (the page may not set __HB_USER__)
+      if (!hbUserId && p && (p.id || p.user_id)) hbUserId = p.id || p.user_id;
       if (p && p.name) userName = p.firstname || p.name.split(' ')[0];
       var r = readiness(p);
       if (!r.ready) { showGate(r); return; }
@@ -656,7 +668,7 @@
     var opening = greeting + " I'm Compass, your FutureSelf advisor. To point you in the right direction, tell me where your head's at right now.";
     addAI(opening, true);
     history.push({ role: 'assistant', content: opening, timestamp: new Date().toISOString() });
-    setPills(['Exploring options', 'Recruiting now', 'Interview prep', 'Totally unsure']);
+    setPills((tourSeen() ? [] : [TOUR_LABEL]).concat(['Exploring options', 'Recruiting now', 'Interview prep', 'Totally unsure']));
   }
 
   window.fsSend = function () {
@@ -676,6 +688,7 @@
   window.fsPill = function (text) {
     if (!routed || busy) return;
     if (text === SINCE_LABEL) text = SINCE_PROMPT;
+    if (text === TOUR_LABEL) { if (window.cmpTour) window.cmpTour.start(); return; }
     document.getElementById('cmp-qr').innerHTML = '';
     addUser(text, true);
     history.push({ role: 'user', content: text, timestamp: new Date().toISOString() });
@@ -819,13 +832,16 @@
       if (raw == null) {
         try {
           var data = JSON.parse(xhr.responseText);
+          if (data && data._limited) { onDone(null, data.choices[0].message.content, data._limited); return; }
           raw = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-          if (!raw && data && (data.choices || data.error)) raw = "I'm having trouble connecting right now. Try again in a moment.";
+          if (!raw && data && (data.choices || data.error)) raw = null;
         } catch (e) {}
       }
       if (raw == null && got) raw = got;
       onDone(raw || null);
     };
+    xhr.timeout = 90000;
+    xhr.ontimeout = function () { if (ended) return; ended = true; onDone(got || null); };
     xhr.send(JSON.stringify({
       type: 'chat', stream: true,
       sessionId: sessionId, page: path,
@@ -884,6 +900,25 @@
     };
   }
 
+  // a failed reply: say so plainly and offer one tap to try the same message again
+  function showRetry(text, noRetry) {
+    var body = $('cmp-body'); if (!body) return;
+    var old = body.querySelector('.cmp-row-err'); if (old) old.parentNode.removeChild(old);
+    var div = addAI(text, true);
+    if (!div) return;
+    div.classList.add('cmp-row-err');
+    if (noRetry) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'cmp-retry'; b.innerHTML = (ICONS.reset || '') + '<span>Try again</span>';
+    b.onclick = function () {
+      if (busy) return;
+      if (div.parentNode) div.parentNode.removeChild(div);
+      var last = history[history.length - 1];
+      if (last && last.role === 'user') callAPI();
+    };
+    div.querySelector('.cmp-ai').appendChild(b);
+  }
+
   function nearBottom(body) { return body.scrollHeight - body.scrollTop - body.clientHeight < 80; }
 
   function callAPI() {
@@ -894,10 +929,10 @@
       t.writing();
       if (body && t.stick()) body.scrollTop = body.scrollHeight;
     });
-    requestChat(history, function (soFar) { rv.feed(soFar); }, function (raw) {
+    requestChat(history, function (soFar) { rv.feed(soFar); }, function (raw, note, limited) {
       if (!raw) {
         t.remove(); busy = false;
-        addAI("Something went wrong on my end. Please try again.", true);
+        showRetry(note || "That reply didn't come through.", limited === 'too_long' || limited === 'site');
         return;
       }
       var parsed = parseReply(raw);
@@ -992,6 +1027,7 @@
         div.removeAttribute('id');
         out.innerHTML = renderMarkdown(text);
         linkDirectory(out);
+        markLatest();
         pr.stop(function () { decorateAI(div, opts); if (body && stick) body.scrollTop = body.scrollHeight; });
       }
     };
@@ -1004,6 +1040,8 @@
 
   // first pill on a fresh visit when there's enough history to catch up on
   var SINCE_LABEL = 'Since last time';
+  var TOUR_LABEL = 'Show me around';
+  function tourSeen() { try { return localStorage.getItem('cmp_tour_v1') === 'done'; } catch (e) { return true; } }
   var SINCE_PROMPT = 'Since last time: where did we leave off, and what should I focus on next?';
   var SINCE_ICON = '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4v4.5H8"/><path d="M12 8v4.5l3 2"/></svg>';
 
@@ -1025,6 +1063,7 @@
       var p = document.createElement('div');
       p.className = 'cmp-pill';
       if (arr[i] === SINCE_LABEL) { p.className += ' cmp-pill-since'; p.innerHTML = SINCE_ICON + '<span>' + SINCE_LABEL + '</span>'; }
+      else if (arr[i] === TOUR_LABEL) { p.className += ' cmp-pill-since'; p.innerHTML = (ICONS.compass || '') + '<span>' + TOUR_LABEL + '</span>'; }
       else p.innerText = arr[i];
       p.onclick = (function (t) { return function () { fsPill(t); }; })(arr[i]);
       c.appendChild(p);
@@ -1114,10 +1153,13 @@
       acts.innerHTML =
         '<button class="cmp-act" type="button" data-act="note" title="Save to notes" aria-label="Save to notes">' + (ICONS.notepad || '') + '</button>' +
         '<button class="cmp-act" type="button" data-act="task" title="Make a task" aria-label="Make a task">' + (ICONS.task || '') + '</button>' +
-        '<button class="cmp-act" type="button" data-act="copy" title="Copy" aria-label="Copy">' + (ICONS.copy || '') + '</button>';
+        '<button class="cmp-act" type="button" data-act="copy" title="Copy" aria-label="Copy">' + (ICONS.copy || '') + '</button>' +
+        '<button class="cmp-act cmp-act-up' + (liked(opts.ts) ? ' on' : '') + '" type="button" data-act="up" title="Helpful" aria-label="Mark as helpful" aria-pressed="' + liked(opts.ts) + '">' + (ICONS.thumb || '') + '</button>';
       msg.appendChild(acts);
     }
   }
+
+  function liked(ts) { return !!(ts && readJSON(userKey('cmp_likes_v1'), {})[ts]); }
 
   function timeAgo(ts) {
     var d = new Date(ts); if (isNaN(d)) return '';
@@ -1790,7 +1832,7 @@
             var qq = history[ansIdx - 1]; caughtTs = qq && qq.timestamp;
             flag.classList.add('done'); flag.title = 'Caught up';
             div.querySelector('.cmp-branch-t').textContent = 'Picked up and caught up';
-            chatToast('<b>Caught up.</b> This answer now uses what you shared after it.', function () { undoRecal(row); caughtTs = null; flag.classList.remove('done'); flag.disabled = false; flag.title = 'Catch up this answer with what you shared after it'; div.querySelector('.cmp-branch-t').textContent = 'Picked up from this waypoint'; });
+            chatToast('<b>Caught up.</b> This answer now uses what you shared after it.');
           });
         }, 520);
       };
@@ -1887,10 +1929,29 @@
     }
     body.addEventListener('click', function (e) {
       var un = e.target.closest ? e.target.closest('[data-unrecal]') : null;
-      if (un) { var rr = un.closest('.cmp-row-ai'); if (rr) undoRecal(rr); return; }
+      if (un) {
+        var rr = un.closest('.cmp-row-ai'); if (rr) undoRecal(rr);
+        var fl = document.querySelector('#cmp-branch .cmp-branch-flag.done');
+        if (fl) { fl.classList.remove('done'); fl.disabled = false; fl.title = 'Catch up this answer with what you shared after it';
+          var bt = fl.parentNode.querySelector('.cmp-branch-t'); if (bt) bt.textContent = 'Picked up from this waypoint'; }
+        return;
+      }
       var btn = e.target.closest ? e.target.closest('.cmp-act') : null; if (!btn) return;
       var row = btn.closest('.cmp-row-ai'), msg = row.querySelector('.cmp-ai'), out = row.querySelector('.cmp-out');
       var ts = row.getAttribute('data-ts') || null, picked = selectionIn(out), kind = btn.getAttribute('data-act');
+      if (kind === 'up') {
+        var likes = readJSON(userKey('cmp_likes_v1'), {}), on = !btn.classList.contains('on');
+        btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', String(on));
+        if (ts) { if (on) likes[ts] = 1; else delete likes[ts]; writeJSON(userKey('cmp_likes_v1'), likes); }
+        if (on) {
+          btn.classList.remove('cmp-pop'); void btn.offsetWidth; btn.classList.add('cmp-pop');
+          try {
+            var fx = new XMLHttpRequest(); fx.open('POST', PROXY_URL, true); fx.setRequestHeader('Content-Type', 'application/json');
+            fx.send(JSON.stringify({ type: 'feedback', rating: 'up', sessionId: sessionId, page: path, profileName: (profile && profile.name) || null, reply: textOf(out) }));
+          } catch (x) {}
+        }
+        return;
+      }
       if (kind === 'copy') {
         var txt = picked || textOf(out);
         var done = function () { flash(btn, 'Copied'); };
@@ -2390,6 +2451,159 @@
   // Pressing Ctrl/Cmd+F again inside Find hands over to the browser's own find.
   // ===========================================================================
   var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || '');
+  // header icons: play the motion once per hover and let it finish (see .cmp-spin)
+  safeStart(function headerMotion() {
+    [].forEach.call(document.querySelectorAll('#cmp-widget-root .cmp-x, #cmp-widget-root .cmp-reset, #cmp-widget-root .cmp-np-btn'), function (b) {
+      var ic = b.querySelector('.cmp-i'); if (!ic) return;
+      b.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && !reduceMotion && !ic.classList.contains('cmp-spin')) ic.classList.add('cmp-spin'); });
+      ic.addEventListener('animationend', function () { ic.classList.remove('cmp-spin'); });
+    });
+  });
+
+  // ===========================================================================
+  // Tour: tap the compass in the header. Bubbles point at each part in turn;
+  // some ask the student to click the thing themselves, then explain it.
+  // "Skip tour", the X, or Esc ends it anywhere.
+  // ===========================================================================
+  safeStart(function tour() {
+    var root = $('cmp-widget-root'), logo = document.querySelector('#cmp-widget-root .cmp-hdr-icon');
+    if (!root || !logo) return;
+    var isMacT = /Mac|iPhone|iPad/.test(navigator.platform || '');
+    function tabSel(v) { return '#cmp-widget-root .cmp-tab[data-view="' + v + '"]'; }
+    var STEPS = [
+      { sel: '#cmp-widget-root .cmp-hdr-icon', title: 'Welcome to Compass', text: 'Your FutureSelf career advisor. This quick tour shows you where everything is. It takes about a minute.' },
+      { sel: tabSel('navigate'), click: true, title: 'Find any page', text: 'Click <b>Navigate</b>.' },
+      { sel: '#cmp-nav-q', title: 'Search FutureSelf', text: 'Type what you need and jump straight to the right page. Press <b>' + (isMacT ? '\u2318K' : 'Ctrl+K') + '</b> anytime to open this.' },
+      { sel: tabSel('chat'), click: true, title: 'Talk it through', text: 'Click <b>Chat</b>.' },
+      { sel: '#cmp-input', title: 'Ask anything', text: 'Careers, classes, recruiting, what to do next. Compass remembers what you share, so its advice gets sharper over time. Under each reply you can save it to notes, make a task, copy it, or give it a thumbs up.' },
+      { sel: '#cmp-wp-btn', optional: true, title: 'Waypoints', text: 'Every question you ask becomes a waypoint. Jump back to one, pin it, or resume from there. After you resume, tap the flag to catch that answer up with what you have shared since.' },
+      { sel: '#cmp-np-btn', click: true, title: 'Your notepad', text: 'Click the <b>notepad</b>.' },
+      { sel: '#cmp-notepad', title: 'Notes and to-dos', text: 'It stays open while you browse, and you can drag it anywhere. Compass can add tasks and walk you through the steps. <b>Orient</b> tidies everything up.' },
+      { sel: tabSel('profile'), click: true, title: 'Your profile', text: 'Click <b>Profile</b>.' },
+      { sel: '#cmp-profile', title: 'Profile at a glance', text: 'When Compass suggests adding something, or you ask it to, one tap puts it on your FutureSelf profile.' },
+      { sel: tabSel('foryou'), click: true, title: 'Picked for you', text: 'Click <b>For you</b>.' },
+      { sel: '#cmp-widget-root .cmp-hdr-icon', title: 'You\u2019re set', text: 'One more: press <b>' + (isMacT ? '\u2318F' : 'Ctrl+F') + '</b> on any page to search it with Compass. Tap this compass anytime to see the tour again.', last: true }
+    ];
+    var i = -1, bub = null, ring = null, raf = null, target = null, onTarget = null;
+    function visible(el) { return el && el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden' && !el.hidden; }
+    function build() {
+      ring = document.createElement('div'); ring.className = 'cmp-tour-ring';
+      bub = document.createElement('div'); bub.className = 'cmp-tour'; bub.setAttribute('role', 'dialog'); bub.setAttribute('aria-live', 'polite');
+      root.appendChild(ring); root.appendChild(bub);
+      bub.addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        if (b.hasAttribute('data-skip')) end();
+        else if (b.hasAttribute('data-next')) go(i + 1);
+        else if (b.hasAttribute('data-back')) go(i - 1, -1);
+      });
+    }
+    function place() {
+      if (!target || !bub) return;
+      if (!visible(target)) { if (STEPS[i] && STEPS[i].optional) { go(i + 1); } return; }
+      var r = target.getBoundingClientRect(), pad = 5;
+      ring.style.cssText = 'left:' + (r.left - pad) + 'px;top:' + (r.top - pad) + 'px;width:' + (r.width + pad * 2) + 'px;height:' + (r.height + pad * 2) + 'px';
+      var bw = bub.offsetWidth, bh = bub.offsetHeight, vw = window.innerWidth, vh = window.innerHeight, gap = 12;
+      var below = r.bottom + gap + bh < vh - 8, above = r.top - gap - bh > 8;
+      var top = below ? r.bottom + gap : (above ? r.top - gap - bh : Math.max(8, Math.min(vh - bh - 8, r.top)));
+      var left = Math.max(8, Math.min(vw - bw - 8, r.left + r.width / 2 - bw / 2));
+      if (!below && !above) left = r.left - bw - gap > 8 ? r.left - bw - gap : Math.min(vw - bw - 8, r.right + gap);
+      bub.style.left = left + 'px'; bub.style.top = top + 'px';
+      bub.setAttribute('data-side', below ? 'below' : (above ? 'above' : 'side'));
+      var ax = Math.max(14, Math.min(bw - 14, r.left + r.width / 2 - left));
+      bub.style.setProperty('--ax', ax + 'px');
+    }
+    function loop() { place(); raf = requestAnimationFrame(loop); }
+    function detach() { if (target && onTarget) target.removeEventListener('click', onTarget, true); onTarget = null; }
+    function go(n, dir) {
+      if (!bub) return;   // tour already closed (e.g. a delayed step after Esc)
+      detach();
+      if (n >= STEPS.length) { end(true); return; }
+      if (n < 0) n = 0;
+      var st = STEPS[n], el = document.querySelector(st.sel);
+      if (!visible(el)) { if (st.optional || st.click == null) { i = n; return go(n + (dir || 1), dir); } }
+      i = n; target = el;
+      var count = STEPS.length;
+      bub.className = 'cmp-tour' + (st.click ? ' cmp-tour-click' : '');
+      bub.innerHTML =
+        '<button type="button" class="cmp-tour-x" data-skip="1" aria-label="Exit tour">' + (ICONS.close || '') + '</button>' +
+        '<div class="cmp-tour-step">' + (n + 1) + ' of ' + count + '</div>' +
+        '<div class="cmp-tour-title">' + st.title + '</div>' +
+        '<div class="cmp-tour-text">' + st.text + '</div>' +
+        '<div class="cmp-tour-a">' +
+          (st.last ? '' : '<button type="button" class="cmp-tour-skip" data-skip="1">Skip tour</button>') +
+          '<span class="cmp-tour-sp"></span>' +
+          (n > 0 && !st.last ? '<button type="button" class="cmp-tour-back" data-back="1">Back</button>' : '') +
+          (st.click ? '<span class="cmp-tour-wait">Waiting for your click</span>' : '<button type="button" class="cmp-tour-next" data-next="1">' + (st.last ? 'Done' : (n === 0 ? 'Start' : 'Next')) + '</button>') +
+        '</div>';
+      ring.classList.toggle('cmp-tour-ring-click', !!st.click);
+      bub.classList.remove('cmp-tour-in'); void bub.offsetWidth; bub.classList.add('cmp-tour-in');
+      if (st.click && el) {
+        onTarget = function () { detach(); setTimeout(function () { go(i + 1); }, 320); };
+        el.addEventListener('click', onTarget, true);
+      }
+      place();
+      var focusBtn = bub.querySelector('.cmp-tour-next'); if (focusBtn) try { focusBtn.focus({ preventScroll: true }); } catch (e) {}
+    }
+    function start() {
+      if (bub) end();
+      if (!isOpen()) openTo('chat');
+      build(); root.classList.add('cmp-touring');
+      setTimeout(function () { go(0); loop(); }, 120);
+      document.addEventListener('keydown', esc_, true);
+    }
+    function esc_(e) { if (e.key === 'Escape' && bub) { e.stopPropagation(); e.preventDefault(); end(); } }
+    function end(finished) {
+      detach(); cancelAnimationFrame(raf); raf = null;
+      document.removeEventListener('keydown', esc_, true);
+      [bub, ring].forEach(function (n) { if (n && n.parentNode) n.parentNode.removeChild(n); });
+      bub = ring = target = null; i = -1;
+      root.classList.remove('cmp-touring');
+      try { localStorage.setItem('cmp_tour_v1', 'done'); } catch (e) {}
+      var qr = $('cmp-qr');   // the starter pill has done its job
+      if (qr) [].forEach.call(qr.querySelectorAll('.cmp-pill'), function (p) { if (p.textContent === TOUR_LABEL) p.parentNode.removeChild(p); });
+    }
+    window.cmpTour = { start: start, end: end, active: function () { return !!bub; } };
+
+    // the header compass: a button that starts the tour, with a needle that spins up
+    // while the mouse rests on it and coasts to a stop (settling on north) after it leaves
+    logo.setAttribute('role', 'button'); logo.setAttribute('tabindex', '0');
+    logo.setAttribute('title', 'Take a quick tour'); logo.setAttribute('aria-label', 'Take a quick tour of Compass');
+    logo.addEventListener('click', function () { if (!bub) start(); });
+    logo.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!bub) start(); } });
+    var needle = logo.querySelector('.cmp-needle');
+    if (!needle || reduceMotion) return;
+    var ang = 0, vel = 0, hover = false, hoverAt = 0, spinRaf = null, last = 0;
+    var VMAX = 620, RAMP = 1100;   // deg/s at full speed; ms to reach it
+    function frame(t) {
+      var dt = Math.min(0.05, (t - (last || t)) / 1000); last = t;
+      if (hover) {
+        var k = Math.min(1, (t - hoverAt) / RAMP);
+        var goal = VMAX * k * k * (3 - 2 * k);          // smooth ease-in to full speed
+        vel += (goal - vel) * Math.min(1, dt * 6);
+        ang += vel * dt;
+      } else if (vel > 90) {
+        vel *= Math.exp(-dt * 1.3);                      // coast down over a couple of seconds
+        ang += vel * dt;
+      } else {
+        // keep slowing, but carry on to the next north and stop there
+        var rest = Math.ceil(ang / 360) * 360, diff = rest - ang;
+        if (diff < 0.5) { ang = 0; vel = 0; needle.style.transform = ''; logo.classList.remove('cmp-spinning'); spinRaf = null; last = 0; return; }
+        vel = Math.max(14, Math.min(vel, diff * 2.2));
+        ang += Math.min(diff, vel * dt);
+      }
+      needle.style.transform = 'rotate(' + (ang % 360) + 'deg)';
+      if (ang > 3600) ang -= 3600;
+      spinRaf = requestAnimationFrame(frame);
+    }
+    logo.addEventListener('pointerenter', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      hover = true; hoverAt = performance.now();
+      logo.classList.add('cmp-spinning');
+      if (!spinRaf) spinRaf = requestAnimationFrame(frame);
+    });
+    logo.addEventListener('pointerleave', function () { hover = false; });
+  });
+
   safeStart(function shortcuts() {
     var hint = $('cmp-nav-kbd');
     if (hint && canHover) { hint.textContent = isMac ? '\u2318K' : 'Ctrl K'; hint.hidden = false; }
@@ -2579,7 +2793,7 @@
     $('cmp-find-x').addEventListener('click', closeFind);
     $('cmp-find-more').addEventListener('click', function (e) {
       var b = e.target.closest ? e.target.closest('[data-hit],[data-ask]') : null; if (!b) return;
-      if (b.hasAttribute('data-ask')) { var t = findState.q; closeFind(); askCompass('I\'m trying to find ' + t + ' on FutureSelf. Where should I look?'); return; }
+      if (b.hasAttribute('data-ask')) { var t = findState.q; closeFind(); askCompass('Where can I find "' + t + '" on FutureSelf?'); return; }
       goHit(+b.getAttribute('data-hit'));
     });
   });
