@@ -68,6 +68,63 @@ function scrub(text, profileName) {
   return t;
 }
 
+// ---- cost + abuse limits for chat ----
+// Counts come from conversation_logs (every user message is logged), so no
+// extra table is needed. A per-instance IP window catches bursts. Any lookup
+// failure lets the message through: limits must never break normal use.
+const LIMITS = {
+  sessionPer10Min: +(process.env.LIMIT_SESSION_10MIN || 30),
+  sessionPerDay: +(process.env.LIMIT_SESSION_DAY || 200),
+  sitePerDay: +(process.env.LIMIT_SITE_DAY || 3000),
+  ipPer10Min: +(process.env.LIMIT_IP_10MIN || 60),
+  maxMessages: 60, maxCharsEach: 6000, maxCharsTotal: 80000
+};
+const ipHits = new Map();
+function clientIp(req) {
+  const xf = (req.headers && (req.headers['x-forwarded-for'] || req.headers['x-real-ip'])) || '';
+  return String(xf).split(',')[0].trim() || 'unknown';
+}
+function ipOver(req) {
+  const ip = clientIp(req), now = Date.now(), win = 10 * 60 * 1000;
+  const list = (ipHits.get(ip) || []).filter(function (t) { return now - t < win; });
+  list.push(now); ipHits.set(ip, list);
+  if (ipHits.size > 5000) ipHits.clear();
+  return list.length > LIMITS.ipPer10Min;
+}
+async function countLogs(filter) {
+  try {
+    const r = await fetch(process.env.SUPABASE_URL + '/rest/v1/conversation_logs?select=id&role=eq.user&' + filter, {
+      headers: { apikey: process.env.SUPABASE_SERVICE_KEY, Authorization: 'Bearer ' + process.env.SUPABASE_SERVICE_KEY, Prefer: 'count=exact', Range: '0-0' }
+    });
+    const cr = r.headers.get('content-range') || '';
+    const n = parseInt(cr.split('/')[1], 10);
+    return isNaN(n) ? 0 : n;
+  } catch (e) { return 0; }
+}
+async function chatLimit(req, sessionId, messages) {
+  if (!Array.isArray(messages) || messages.length > LIMITS.maxMessages) return 'too_long';
+  let total = 0;
+  for (const m of messages) { const c = String((m && m.content) || ''); if (c.length > LIMITS.maxCharsEach) return 'too_long'; total += c.length; }
+  if (total > LIMITS.maxCharsTotal) return 'too_long';
+  if (ipOver(req)) return 'busy';
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) return null;
+  const since = function (ms) { return encodeURIComponent(new Date(Date.now() - ms).toISOString()); };
+  const sid = encodeURIComponent(String(sessionId || 'none'));
+  const counts = await Promise.all([
+    countLogs('session_id=eq.' + sid + '&created_at=gte.' + since(10 * 60 * 1000)),
+    countLogs('session_id=eq.' + sid + '&created_at=gte.' + since(86400000)),
+    countLogs('created_at=gte.' + since(86400000))
+  ]);
+  if (counts[0] >= LIMITS.sessionPer10Min || counts[1] >= LIMITS.sessionPerDay) return 'busy';
+  if (counts[2] >= LIMITS.sitePerDay) return 'site';
+  return null;
+}
+const LIMIT_TEXT = {
+  busy: "You've sent a lot of messages in a short time. Give it a few minutes and try again.",
+  too_long: "This conversation has gotten too long for me to read in one go. Press reset to start a fresh one (your profile stays).",
+  site: "Compass is taking a short break because of heavy use today. Please try again later."
+};
+
 async function logTurn(sessionId, page, role, content, profileName, logExtra) {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) return { error: 'missing env' };
   try {
@@ -395,6 +452,7 @@ function buildSystemPrompt(ctx) {
     '  The visible reply must stay about the substance of what they asked. Never make the profile question the point of the reply, and never write the profile question in the reply text itself: it goes ONLY in "ask".',
     '  "ask": one short, natural question in your own voice that ties to what they are exploring right now and says briefly why it helps (others can see the interest, and it sharpens future advice). Vary the wording every time; never reuse a phrasing from earlier in the conversation and never start with "Want me to add". Do not use quotation marks inside it.',
     '  At most ONE per response, never more than one every few exchanges, never re-suggest something already declined, never suggest what is already on their profile. Omit the key entirely when nothing fits.',
+    '  EXCEPTION, the student asks you directly (e.g. "add AI to my profile", "put robotics club on my profile"): do it in THIS reply. Include profile_suggestion with ' + q + 'explicit' + q + ':true, pick the field that fits best (skills for abilities and tools, industries_of_interest for fields they want to work in, hobbies_interests for personal interests, clubs_and_organizations for groups), and write the value as they would want it shown (e.g. ' + q + 'Artificial Intelligence' + q + '). The visible reply is one short sentence saying it is ready to add below; do not ask exploratory questions first. Only ask which field they mean if it is truly unclear.',
     '- "notepad_suggestion": OPTIONAL and EVEN RARER. Shape: {' + q + 'kind' + q + ':' + q + 'task' + q + ',' + q + 'text' + q + ':' + q + '...' + q + ',' + q + 'ask' + q + ':' + q + '...' + q + '}. kind is "task" (a concrete next step) or "note" (something worth remembering).',
     '  WHEN: only when the student commits to a specific, doable next step (e.g. reaching out to a named person, an application deadline), or explicitly asks you to remind them or note something. Never suggest generic busywork. A full list overwhelms students, so if they already have several open tasks (see NOTEPAD below), hold back unless they ask. At most one per conversation unless the student asks for more.',
     '  "text": the task or note itself, under 12 words, starting with a verb for tasks. "ask": one short, varied, low-pressure question offering to save it, in your own voice. Omit the key entirely otherwise.',
@@ -599,7 +657,21 @@ export default async function handler(req, res) {
     }
 
     // ---- chat: proxy to OpenAI + log anonymously ----
+    // thumbs up on a reply. Stored as a tagged assistant row so it sits next to
+    // the conversation it rates (the table only allows user/assistant roles).
+    if (type === 'feedback') {
+      const text = String(req.body.reply || '').slice(0, 1200);
+      if (!sessionId || !text) return res.status(400).json({ error: 'sessionId and reply required' });
+      if (ipOver(req)) return res.status(200).json({ ok: false, limited: true });
+      const r = await logTurn(sessionId, page, 'assistant', text, profileName, { feature: 'feedback', category: 'thumbs_up' });
+      return res.status(200).json({ ok: !(r && r.error) });
+    }
+
     if (type === 'chat') {
+      const limited = await chatLimit(req, sessionId, messages);
+      if (limited) {
+        return res.status(200).json({ _limited: limited, choices: [{ message: { content: LIMIT_TEXT[limited] } }] });
+      }
       // messages arrives WITHOUT a system message; the proxy builds and
       // prepends it from the behavior files + context sent by the widget.
       // backward compatible: if messages already has a system message
@@ -977,6 +1049,21 @@ export default async function handler(req, res) {
     // ---- push_profile on the Partner API (admin-only, dry run by default) ----
     // reads the staging row, reads the member's current profile, builds the
     // update. Nothing is written unless dryRun:false is passed explicitly.
+    // admin-only, read-only: how Hivebrite stores built-in fields (skills, industries,
+    // languages) on this user, so profile adds for those fields can be wired up
+    if (type === 'profile_shape' && process.env.ADMIN_API_CLIENT_ID) {
+      if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
+      if (!userId) return res.status(400).json({ error: 'userId required' });
+      const tok = await partnerToken();
+      if (!tok.token) return res.status(200).json({ step: 'token', error: tok.error });
+      const cur = await partnerCall(tok.token, '/admin/v3.1/users/' + encodeURIComponent(userId));
+      if (!cur.ok) return res.status(200).json({ step: 'read_user', status: cur.status, error: cur.body });
+      const u = cur.body.user || cur.body;
+      const pick = {};
+      Object.keys(u).forEach(function (k) { if (/skill|industr|language|interest|expertise|tag/i.test(k)) pick[k] = u[k]; });
+      return res.status(200).json({ top_level_keys: Object.keys(u), related_fields: pick });
+    }
+
     if (type === 'push_profile' && process.env.ADMIN_API_CLIENT_ID) {
       if (!isAdminRequest(req)) return res.status(403).json({ error: 'forbidden' });
       if (!userId) return res.status(400).json({ error: 'userId required' });
