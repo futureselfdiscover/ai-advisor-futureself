@@ -241,6 +241,18 @@
   }
   .cmp-icon-btn:hover { background: rgba(255,255,255,0.10); color: #fff; }
   .cmp-icon-btn:active { background: rgba(255,255,255,0.16); }
+  /* header icons: each plays once on hover and doesn't reverse on leave (no back-and-forth jitter) */
+  .cmp-icon-btn .cmp-i { transform-origin: 50% 50%; backface-visibility: hidden; will-change: transform; }
+  .cmp-icon-btn:active .cmp-i { transform: scale(0.9); transition: transform 0.08s ease; }
+  .cmp-x:hover .cmp-i { animation: cmpXTurn 0.34s var(--cmp-ease) both; }
+  .cmp-reset:hover .cmp-i { animation: cmpResetSpin 0.62s var(--cmp-ease) both; }
+  .cmp-np-btn:hover .cmp-i { animation: cmpPageTilt 0.5s var(--cmp-ease) both; }
+  @keyframes cmpXTurn { from { transform: rotate(0deg); } to { transform: rotate(90deg); } }
+  @keyframes cmpResetSpin { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+  @keyframes cmpPageTilt {
+    0% { transform: none; } 35% { transform: translateY(-1.5px) rotate(-9deg); }
+    70% { transform: translateY(-0.5px) rotate(4deg); } 100% { transform: none; }
+  }
 
   /* tabs */
   .cmp-tabs {
@@ -483,6 +495,43 @@
     border: none; background: none; padding: 0; cursor: pointer; font: 700 11.5px var(--cmp-font); color: var(--cmp-blue);
   }
   .cmp-branch button:hover { text-decoration: underline; }
+  /* the flag on a resumed path: click to catch the answer up */
+  #cmp-widget-root .cmp-branch-flag {
+    width: 24px; height: 24px; padding: 5px; margin: 0 -4px; border-radius: 7px; color: var(--cmp-blue);
+    transform-origin: 30% 85%; transition: background 0.15s ease;
+  }
+  #cmp-widget-root .cmp-branch-flag:hover { background: var(--cmp-tint-2); text-decoration: none; }
+  #cmp-widget-root .cmp-branch-flag:focus-visible { outline: 2px solid #BCD0F0; outline-offset: 1px; }
+  #cmp-widget-root .cmp-branch-flag:disabled { cursor: default; }
+  .cmp-branch-flag svg { width: 14px !important; height: 14px !important; display: block; }
+  .cmp-branch-flag.done svg path { fill: currentColor; fill-opacity: 0.2; }
+  .cmp-branch-flag.cmp-wave-hint { animation: cmpFlagHint 0.7s ease-in-out 1; }
+  .cmp-branch-flag.cmp-wave { animation: cmpFlagWave 0.52s cubic-bezier(0.3, 0, 0.3, 1) 1; }
+  /* quick sideways shakes, like a flag snapping in the wind */
+  @keyframes cmpFlagWave {
+    0% { transform: none; } 12% { transform: translateX(-3px) rotate(-14deg); } 26% { transform: translateX(3px) rotate(12deg); }
+    40% { transform: translateX(-2.5px) rotate(-10deg); } 54% { transform: translateX(2px) rotate(7deg); }
+    70% { transform: translateX(-1px) rotate(-3deg); } 100% { transform: none; }
+  }
+  @keyframes cmpFlagHint { 0%, 100% { transform: none; } 30% { transform: rotate(-9deg); } 60% { transform: rotate(6deg); } }
+
+  /* confirmation pop-up above the reply box */
+  .cmp-view[data-view="chat"] { position: relative; }
+  .cmp-toast {
+    position: absolute; left: 16px; right: 16px; bottom: 78px; z-index: 4; margin: 0 auto; width: fit-content;
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 12px 9px 10px; border-radius: 12px; background: #F3F5F8; border: 1px solid #E2E8F0;
+    box-shadow: 0 10px 26px -8px rgba(23,37,58,0.22); font-size: 12.5px; color: var(--cmp-ink); line-height: 1.35;
+    animation: cmpToastIn 0.28s var(--cmp-ease) both;
+  }
+  .cmp-toast.out { animation: cmpToastOut 0.2s ease both; }
+  .cmp-toast b { font-weight: 650; color: var(--cmp-navy); }
+  .cmp-toast-i { width: 18px; height: 18px; flex-shrink: 0; color: var(--cmp-blue); }
+  .cmp-toast-i svg { width: 18px !important; height: 18px !important; }
+  .cmp-toast-i svg path { stroke-dasharray: 22; animation: cmpDraw 0.4s 0.1s ease both; }
+  #cmp-widget-root .cmp-toast button { border: 0; background: none; padding: 0 0 0 4px; cursor: pointer; font: 650 12.5px var(--cmp-font); color: var(--cmp-blue); flex-shrink: 0; }
+  @keyframes cmpToastIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
+  @keyframes cmpToastOut { to { opacity: 0; transform: translateY(6px); } }
 
 
   /* ================= notepad: floating, draggable, notes + to-do ================= */
@@ -641,6 +690,7 @@
   }
   #cmp-widget-root .cmp-np-opt-btn:hover { border-color: #BCD0F0; background: var(--cmp-tint-2); }
   .cmp-np-settings-f { font-size: 10.5px; color: #98A3B8; margin-top: 9px; }
+  #cmp-widget-root .cmp-np-opt-btn:disabled { color: #A3AFBE; cursor: default; background: #fff; border-color: var(--cmp-line); }
 
 
   /* settings extras */
