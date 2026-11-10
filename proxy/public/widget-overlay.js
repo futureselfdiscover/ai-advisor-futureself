@@ -29,6 +29,7 @@
     find: '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>',
     up: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="m6 15 6-6 6 6"/></svg>',
     down: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="m6 9 6 6 6-6"/></svg>',
+    thumb: '<svg viewBox="0 0 24 24" class="cmp-i"><path d="M7.5 10.5v9H5a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 5 10.5Z"/><path d="M7.5 10.5 11 4.2a1.9 1.9 0 0 1 3.4 1.5l-.9 3.8h4.6a2 2 0 0 1 2 2.4l-1.3 6a2 2 0 0 1-2 1.6H7.5"/></svg>',
     gear: '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>'
   };
 
@@ -225,6 +226,10 @@
     background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);
   }
   .cmp-hdr-icon .cmp-needle { animation: cmpNeedleIdle 6s ease-in-out infinite; }
+  /* the header compass starts the tour; while it spins the script drives the needle */
+  .cmp-hdr-icon { cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+  .cmp-hdr-icon:hover, .cmp-hdr-icon:focus-visible { background: rgba(255,255,255,0.17); border-color: rgba(255,255,255,0.3); box-shadow: 0 0 0 4px rgba(255,255,255,0.06); outline: none; }
+  .cmp-hdr-icon.cmp-spinning .cmp-needle { animation: none; transition: none; }
   @keyframes cmpNeedleIdle { 0%, 100% { transform: rotate(0deg); } 45% { transform: rotate(18deg); } 60% { transform: rotate(-8deg); } }
   .cmp-hdr-name { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 0.1px; }
   .cmp-hdr-beta {
@@ -242,17 +247,15 @@
   .cmp-icon-btn:hover { background: rgba(255,255,255,0.10); color: #fff; }
   .cmp-icon-btn:active { background: rgba(255,255,255,0.16); }
   /* header icons: each plays once on hover and doesn't reverse on leave (no back-and-forth jitter) */
-  .cmp-icon-btn .cmp-i { transform-origin: 50% 50%; backface-visibility: hidden; will-change: transform; }
-  .cmp-icon-btn:active .cmp-i { transform: scale(0.9); transition: transform 0.08s ease; }
-  .cmp-x:hover .cmp-i { animation: cmpXTurn 0.34s var(--cmp-ease) both; }
-  .cmp-reset:hover .cmp-i { animation: cmpResetSpin 0.62s var(--cmp-ease) both; }
-  .cmp-np-btn:hover .cmp-i { animation: cmpPageTilt 0.5s var(--cmp-ease) both; }
+  /* the widget adds .cmp-spin on mouse enter and removes it when the motion ends, so a
+     quick pass never cuts it short and snaps back (that snap was the jitter) */
+  .cmp-icon-btn .cmp-i { transform-origin: 50% 50%; }
+  .cmp-x .cmp-i.cmp-spin { animation: cmpXTurn 0.4s cubic-bezier(0.45, 0, 0.25, 1); }
+  .cmp-reset .cmp-i.cmp-spin { animation: cmpResetSpin 0.7s cubic-bezier(0.45, 0, 0.25, 1); }
+  .cmp-np-btn .cmp-i.cmp-spin { animation: cmpPageTilt 0.55s cubic-bezier(0.45, 0, 0.25, 1); }
   @keyframes cmpXTurn { from { transform: rotate(0deg); } to { transform: rotate(90deg); } }
   @keyframes cmpResetSpin { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
-  @keyframes cmpPageTilt {
-    0% { transform: none; } 35% { transform: translateY(-1.5px) rotate(-9deg); }
-    70% { transform: translateY(-0.5px) rotate(4deg); } 100% { transform: none; }
-  }
+  @keyframes cmpPageTilt { 0%, 100% { transform: none; } 50% { transform: translateY(-1px) rotate(-7deg); } }
 
   /* tabs */
   .cmp-tabs {
@@ -318,13 +321,8 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 12px; background: var(--cmp-tint); border-radius: 5px; padding: 1px 5px;
   }
-  .cmp-ai a {
-    color: #1D3A63; font-weight: 650; text-decoration: none;
-    background: #EDF1F6; border-radius: 5px; padding: 0 4px; margin: 0 -1px;
-    box-decoration-break: clone; -webkit-box-decoration-break: clone;
-    transition: background 0.18s ease, color 0.18s ease;
-  }
-  .cmp-ai a:hover { background: #DFE7F2; color: #14305A; }
+  .cmp-ai a { color: #4C6C93; font-weight: 650; text-decoration: none; transition: color 0.15s ease; }
+  .cmp-ai a:hover { color: #2F5583; }
   .cmp-usr {
     background: var(--cmp-tint); color: var(--cmp-navy);
     border-radius: 16px; border-bottom-right-radius: 5px;
@@ -408,25 +406,27 @@
   .cmp-view[data-view="chat"] { position: relative; }
   .cmp-wp-btn {
     position: absolute; top: 10px; right: 12px; z-index: 3;
-    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
-    padding: 5px 10px 5px 8px; border-radius: 999px; border: 1px solid var(--cmp-line);
+    display: inline-flex; align-items: center; gap: 5px; cursor: pointer;
+    padding: 5px 7px; border-radius: 999px; border: 1px solid var(--cmp-line);
     background: rgba(255,255,255,0.92); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
     font: 600 11.5px var(--cmp-font); color: var(--cmp-muted);
     box-shadow: 0 4px 12px rgba(43,62,80,0.08);
-    transition: color 0.15s, border-color 0.15s, box-shadow 0.2s, transform 0.2s var(--cmp-spring);
+    transition: color 0.15s, border-color 0.15s, box-shadow 0.2s;
     animation: cmpPillIn 0.3s var(--cmp-ease);
   }
   .cmp-wp-btn[hidden] { display: none; }
   /* reserve room for the chip, and fade messages softly as they scroll under it */
-  .cmp-has-wp #cmp-body { padding-top: 50px; }
-  .cmp-has-wp::before {
-    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 46px; z-index: 2; pointer-events: none;
-    background: linear-gradient(#fff 55%, rgba(255,255,255,0));
+  /* collapsed to flag + count so it covers almost nothing; the label slides out on hover */
+  .cmp-has-wp #cmp-body { padding-top: 40px; }
+  .cmp-wp-btn:hover, .cmp-wp-btn:focus-visible, .cmp-wp-btn[aria-expanded="true"] { color: var(--cmp-blue); border-color: #BCD0F0; box-shadow: 0 6px 16px rgba(43,62,80,0.12); }
+  .cmp-wp-btn-i { width: 14px; height: 14px; flex-shrink: 0; }
+  .cmp-wp-label {
+    display: inline-block; max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-right: -5px;
+    transition: max-width 0.28s var(--cmp-ease), opacity 0.2s ease, margin 0.28s var(--cmp-ease);
   }
-  .cmp-wp-btn:hover, .cmp-wp-btn[aria-expanded="true"] { color: var(--cmp-blue); border-color: #BCD0F0; transform: translateY(-1px); }
-  .cmp-wp-btn-i { width: 14px; height: 14px; }
-  .cmp-wp-btn:hover .cmp-wp-btn-i { animation: cmpFlag 0.6s ease; }
-  @keyframes cmpFlag { 30% { transform: rotate(-10deg); } 60% { transform: rotate(6deg); } }
+  .cmp-wp-btn:hover .cmp-wp-label, .cmp-wp-btn:focus-visible .cmp-wp-label, .cmp-wp-btn[aria-expanded="true"] .cmp-wp-label {
+    max-width: 80px; opacity: 1; margin-right: 0;
+  }
   .cmp-wp-count {
     min-width: 17px; height: 17px; padding: 0 5px; border-radius: 999px;
     background: var(--cmp-tint); color: var(--cmp-blue); font-size: 10.5px; font-weight: 700;
@@ -506,14 +506,13 @@
   .cmp-branch-flag svg { width: 14px !important; height: 14px !important; display: block; }
   .cmp-branch-flag.done svg path { fill: currentColor; fill-opacity: 0.2; }
   .cmp-branch-flag.cmp-wave-hint { animation: cmpFlagHint 0.7s ease-in-out 1; }
-  .cmp-branch-flag.cmp-wave { animation: cmpFlagWave 0.52s cubic-bezier(0.3, 0, 0.3, 1) 1; }
+  .cmp-branch-flag.cmp-wave { animation: cmpFlagWave 0.42s ease-in-out 1; }
   /* quick sideways shakes, like a flag snapping in the wind */
   @keyframes cmpFlagWave {
-    0% { transform: none; } 12% { transform: translateX(-3px) rotate(-14deg); } 26% { transform: translateX(3px) rotate(12deg); }
-    40% { transform: translateX(-2.5px) rotate(-10deg); } 54% { transform: translateX(2px) rotate(7deg); }
-    70% { transform: translateX(-1px) rotate(-3deg); } 100% { transform: none; }
+    0%, 100% { transform: none; } 25% { transform: translateX(-1px) rotate(-5deg); }
+    55% { transform: translateX(0.75px) rotate(3deg); } 80% { transform: rotate(-1deg); }
   }
-  @keyframes cmpFlagHint { 0%, 100% { transform: none; } 30% { transform: rotate(-9deg); } 60% { transform: rotate(6deg); } }
+  @keyframes cmpFlagHint { 0%, 100% { transform: none; } 45% { transform: rotate(-5deg); } }
 
   /* confirmation pop-up above the reply box */
   .cmp-view[data-view="chat"] { position: relative; }
@@ -662,8 +661,9 @@
   #cmp-widget-root.cmp-instant, #cmp-widget-root.cmp-instant * { animation: none !important; transition: none !important; }
 
   /* company / community mentions that have a FutureSelf page */
-  #cmp-widget-root .cmp-ai a, #cmp-widget-root .cmp-ai a:visited { color: #1D3A63; text-decoration: none; }
-  #cmp-widget-root .cmp-ai a:hover { color: #14305A; text-decoration: none; }
+  /* every link in a reply (FutureSelf pages, companies, communities) is grayish-blue text, no highlight */
+  #cmp-widget-root .cmp-ai a, #cmp-widget-root .cmp-ai a:visited { color: #4C6C93; text-decoration: none; background: none; padding: 0; margin: 0; }
+  #cmp-widget-root .cmp-ai a:hover { color: #2F5583; text-decoration: none; }
   /* companies and communities: quiet gray until they have a page, then a grayish-blue link (no chip) */
   .cmp-ai .cmp-entity { color: #6E7B8C; font-weight: 600; }
   #cmp-widget-root .cmp-ai a.cmp-dir-link, #cmp-widget-root .cmp-ai a.cmp-dir-link:visited {
@@ -1113,6 +1113,64 @@
   #cmp-widget-root .cmp-recal-tag button { font: 600 11.5px var(--cmp-font); color: var(--cmp-blue); background: none; border: 0; padding: 0; margin: 0 0 0 2px; cursor: pointer; }
   .cmp-recal-busy > .cmp-out { opacity: 0.38; transition: opacity 0.25s ease; }
 
+  /* thumbs up: fills in and pops once */
+  #cmp-widget-root .cmp-act.cmp-act-up.on { color: var(--cmp-blue); }
+  .cmp-act-up.on svg path { fill: currentColor; fill-opacity: 0.16; }
+  .cmp-act-up.cmp-pop svg { animation: cmpThumb 0.42s var(--cmp-spring); }
+  @keyframes cmpThumb { 0% { transform: scale(1); } 40% { transform: scale(1.28) rotate(-10deg); } 100% { transform: scale(1); } }
+  .cmp-row-ai.cmp-row-err .cmp-out { color: #6E7B8C; }
+  #cmp-widget-root .cmp-retry {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 6px 12px 6px 10px;
+    border: 1px solid var(--cmp-line); border-radius: 999px; background: #fff; cursor: pointer;
+    font: 600 12px var(--cmp-font); color: var(--cmp-navy); transition: border-color 0.15s, color 0.15s;
+  }
+  #cmp-widget-root .cmp-retry:hover { border-color: #BCD0F0; color: var(--cmp-blue); }
+  .cmp-retry svg { width: 13px !important; height: 13px !important; }
+
+  /* ---- tour ---- */
+  .cmp-tour-ring {
+    position: fixed; z-index: 2147483646; pointer-events: none; border-radius: 12px;
+    box-shadow: 0 0 0 2px rgba(42,103,216,0.55), 0 0 0 6px rgba(42,103,216,0.12);
+    transition: left 0.25s var(--cmp-ease), top 0.25s var(--cmp-ease), width 0.25s var(--cmp-ease), height 0.25s var(--cmp-ease);
+  }
+  .cmp-tour-ring.cmp-tour-ring-click { animation: cmpRingPulse 1.5s ease-in-out infinite; }
+  @keyframes cmpRingPulse { 0%, 100% { box-shadow: 0 0 0 2px rgba(42,103,216,0.6), 0 0 0 5px rgba(42,103,216,0.14); } 50% { box-shadow: 0 0 0 2px rgba(42,103,216,0.6), 0 0 0 10px rgba(42,103,216,0.04); } }
+  .cmp-tour {
+    position: fixed; z-index: 2147483647; width: 268px; max-width: calc(100vw - 16px);
+    background: #fff; border: 1px solid var(--cmp-line); border-radius: 14px; padding: 13px 14px 11px;
+    box-shadow: 0 16px 40px -10px rgba(23,37,58,0.3), 0 2px 6px rgba(23,37,58,0.06);
+    font-family: var(--cmp-font); color: var(--cmp-ink);
+  }
+  .cmp-tour.cmp-tour-in { animation: cmpTourIn 0.26s var(--cmp-ease) both; }
+  @keyframes cmpTourIn { from { opacity: 0; transform: translateY(4px) scale(0.98); } to { opacity: 1; transform: none; } }
+  .cmp-tour::before {
+    content: ""; position: absolute; left: var(--ax, 50%); width: 10px; height: 10px; margin-left: -5px;
+    background: #fff; border: 1px solid var(--cmp-line); transform: rotate(45deg);
+  }
+  .cmp-tour[data-side="below"]::before { top: -6px; border-right: 0; border-bottom: 0; }
+  .cmp-tour[data-side="above"]::before { bottom: -6px; border-left: 0; border-top: 0; }
+  .cmp-tour[data-side="side"]::before { display: none; }
+  .cmp-tour-step { font-size: 10.5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #8C99AA; }
+  .cmp-tour-title { font-size: 14px; font-weight: 700; color: var(--cmp-navy); margin: 3px 24px 4px 0; }
+  .cmp-tour-text { font-size: 12.5px; line-height: 1.5; color: #4A586A; }
+  .cmp-tour-text b { color: var(--cmp-navy); font-weight: 650; }
+  .cmp-tour-a { display: flex; align-items: center; gap: 6px; margin-top: 11px; }
+  .cmp-tour-sp { flex: 1; }
+  #cmp-widget-root .cmp-tour-skip, .cmp-tour-wait { white-space: nowrap; }
+  /* links inside suggestion cards match reply links */
+  #cmp-widget-root .cmp-sug a, #cmp-widget-root .cmp-sug a:visited { color: #4C6C93; font-weight: 650; text-decoration: none; }
+  #cmp-widget-root .cmp-sug a:hover { color: #2F5583; }
+  #cmp-widget-root .cmp-tour button { font: 600 12px var(--cmp-font); cursor: pointer; border-radius: 8px; }
+  #cmp-widget-root .cmp-tour-skip { border: 0; background: none; color: #8C99AA; padding: 5px 2px; }
+  #cmp-widget-root .cmp-tour-skip:hover { color: var(--cmp-navy); }
+  #cmp-widget-root .cmp-tour-back { border: 1px solid var(--cmp-line); background: #fff; color: var(--cmp-muted); padding: 5px 10px; }
+  #cmp-widget-root .cmp-tour-next { border: 1px solid var(--cmp-blue); background: var(--cmp-blue); color: #fff; padding: 5px 13px; }
+  #cmp-widget-root .cmp-tour-x { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; padding: 5px; border: 0; background: none; color: #A3AFBE; }
+  #cmp-widget-root .cmp-tour-x:hover { color: var(--cmp-navy); background: var(--cmp-tint-2); }
+  .cmp-tour-wait { font-size: 11.5px; color: var(--cmp-blue); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+  .cmp-tour-wait::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--cmp-blue); animation: cmpWait 1.2s ease-in-out infinite; }
+  @keyframes cmpWait { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+
   /* "Since last time": first pill after a fresh visit when there's history to draw on */
   #cmp-widget-root .cmp-pill.cmp-pill-since {
     background: linear-gradient(180deg, #F4F7FD, #EAF0FA); border-color: #C9D7EE; color: #234A86;
@@ -1245,7 +1303,7 @@
         '</section>' +
         '<section class="cmp-view active" data-view="chat">' +
           '<button class="cmp-wp-btn" id="cmp-wp-btn" type="button" aria-expanded="false" hidden>' +
-            '<span class="cmp-wp-btn-i">' + I.flag + '</span><span>Waypoints</span><span class="cmp-wp-count" id="cmp-wp-count"></span></button>' +
+            '<span class="cmp-wp-btn-i">' + I.flag + '</span><span class="cmp-wp-label">Waypoints</span><span class="cmp-wp-count" id="cmp-wp-count"></span></button>' +
           '<div class="cmp-wp-panel" id="cmp-wp-panel" hidden>' +
             '<div class="cmp-wp-head"><div class="cmp-wp-title">Waypoints</div>' +
             '<div class="cmp-wp-sub">Jump back to any question, or pick the conversation up from there.</div></div>' +
