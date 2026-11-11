@@ -1,4 +1,22 @@
 (function () {
+  // Old page blocks (the purple v0 widget) load this file directly, without the
+  // Compass markup. In that case fetch the markup (widget-overlay.js) instead; it
+  // removes the old widget, draws Compass, and loads this file again to start it.
+  var hasLook = document.getElementById('cmp-widget-root') || window.__FS_ICONS__;
+  if (!hasLook) {
+    if (!document.getElementById('fs-overlay-loader')) {
+      var ov = document.createElement('script');
+      ov.id = 'fs-overlay-loader';
+      ov.src = 'https://ai-advisor-futureself.vercel.app/widget-overlay.js?v=' + Date.now();
+      document.head.appendChild(ov);
+      if (window.console && console.info) console.info('[Compass] loaded by an old page block; fetching the Compass look first');
+    }
+    return;   // widget-overlay.js loads this file again once the markup is in place
+  }
+  // never start twice on one page (an old block and the overlay can both load this file)
+  if (window.__CMP_BOOTED__) return;
+  window.__CMP_BOOTED__ = true;
+
   function fsBoot() {
   // each feature starts on its own, so one failing on a page can't stop the others
   function safeStart(fn) {
