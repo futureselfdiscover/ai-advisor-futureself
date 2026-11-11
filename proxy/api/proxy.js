@@ -949,7 +949,26 @@ export default async function handler(req, res) {
           body[field] = value; // text fields overwrite
         }
         const log = existing.push_log || [];
-        log.push({ field: field, value: value, confirmed_at: new Date().toISOString(), pushed: false });
+        const entry = { field: field, value: value, confirmed_at: new Date().toISOString(), pushed: false };
+        // Skills, industries and languages are Hivebrite's built-in fields and aren't mapped
+        // yet. The first time one is added, record (server-side only, into this staging row)
+        // how Hivebrite stores them on this member, so they can be wired up without an
+        // admin call. Nothing here goes back to the browser.
+        if (['skills', 'industries_of_interest', 'languages'].indexOf(field) > -1 && process.env.ADMIN_API_CLIENT_ID &&
+            !log.some(function (e) { return e && e.hb_probe; })) {
+          try {
+            const tok = await partnerToken();
+            if (tok.token) {
+              const cur = await partnerCall(tok.token, '/admin/v3.1/users/' + encodeURIComponent(userId));
+              const u = cur.ok ? (cur.body.user || cur.body) : null;
+              const related = {};
+              if (u) Object.keys(u).forEach(function (k) { if (/skill|industr|language|expertise|interest|tag/i.test(k)) related[k] = u[k]; });
+              entry.hb_probe = { at: new Date().toISOString(), status: cur.status, top_level_keys: u ? Object.keys(u) : null, related_fields: related,
+                                 error: cur.ok ? undefined : cur.body };
+            } else entry.hb_probe = { at: new Date().toISOString(), token_error: tok.error || 'no token' };
+          } catch (e) { entry.hb_probe = { at: new Date().toISOString(), error: e.message }; }
+        }
+        log.push(entry);
         body.push_log = log;
 
         const up = await fetch(process.env.SUPABASE_URL + '/rest/v1/fsd_profile?on_conflict=user_hash', {
