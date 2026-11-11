@@ -27,6 +27,7 @@
     var path = window.location.pathname || '/';
     if (!cfg || matches(path, cfg.exclude)) return;
     if (cfg.site_wide === true || matches(path, cfg.pages)) load();
+    if (window.cmpBannerRefresh) window.cmpBannerRefresh();   // home banner wording depends on the rollout
   }
   function start() {
     // a new copy at most every 5 minutes, so a rollout change spreads quickly
