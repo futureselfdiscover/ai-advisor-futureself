@@ -45,7 +45,7 @@
   var sessionId = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
   try {
     var __snap = JSON.parse(sessionStorage.getItem('cmp_ui_v1') || 'null');
-    if (__snap && Date.now() - __snap.at < 1800000) { var __r = document.getElementById('cmp-widget-root'); if (__r) __r.classList.add('cmp-instant'); }
+    if (__snap && Date.now() - __snap.at < 1800000) { var __r = $('cmp-widget-root'); if (__r) __r.classList.add('cmp-instant'); }
   } catch (e) {}
 
   // grow the textarea with its content up to a max, then scroll.
@@ -244,8 +244,8 @@
   };
 
   function sugCard(id, kind, html, yesLabel, onYes, onNo) {
-    var body = document.getElementById('cmp-body'); if (!body) return;
-    var old = document.getElementById(id); if (old && old.parentNode) old.parentNode.removeChild(old);
+    var body = $('cmp-body'); if (!body) return;
+    var old = $(id); if (old && old.parentNode) old.parentNode.removeChild(old);
     var div = document.createElement('div');
     div.className = 'cmp-sug'; div.id = id;
     div.innerHTML = '<span class="cmp-sug-i">' + SUG_ICON[kind] + '</span>' +
@@ -372,7 +372,7 @@
     for (var i = 0; i < history.length; i++) if (history[i].timestamp === ts) { idx = i; break; }
     if (idx < 0) return;
     var u = idx; while (u >= 0 && history[u].role !== 'user') u--;
-    if (window.fsOpenView) window.fsOpenView('chat');
+    if (window.cmpOpenView) window.cmpOpenView('chat');
     setTimeout(function () { if (u >= 0) jumpTo(u); }, 120);
   };
 
@@ -547,7 +547,7 @@
   }
 
   function renderHistory() {
-    var body = document.getElementById('cmp-body');
+    var body = $('cmp-body');
     if (!body) return;
     body.innerHTML = '';
     for (var i = 0; i < history.length; i++) {
@@ -564,8 +564,8 @@
   function setConsent() { try { localStorage.setItem('fs_consent', '1'); } catch(e) {} }
 
   function clearBody() {
-    var body = document.getElementById('cmp-body');
-    var qr = document.getElementById('cmp-qr');
+    var body = $('cmp-body');
+    var qr = $('cmp-qr');
     var bar = document.querySelector('.cmp-bar');
     if (body) body.innerHTML = '';
     if (qr) qr.innerHTML = '';
@@ -574,7 +574,7 @@
 
   function showLoading() {
     clearBody();
-    var body = document.getElementById('cmp-body');
+    var body = $('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
     div.className = 'cmp-center-screen';
@@ -584,7 +584,7 @@
 
   function showGate(r) {
     clearBody();
-    var body = document.getElementById('cmp-body');
+    var body = $('cmp-body');
     if (!body) return;
     var checklistHTML = '';
     for (var i = 0; i < r.items.length; i++) {
@@ -608,7 +608,7 @@
 
   function showConsent() {
     clearBody();
-    var body = document.getElementById('cmp-body');
+    var body = $('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
     div.className = 'cmp-center-screen';
@@ -616,7 +616,7 @@
       '<div class="cmp-center-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>' +
       '<div class="cmp-center-title">Before we get started</div>' +
       '<div class="cmp-center-text">This conversation may be reviewed to improve the advisor. Don\'t share sensitive personal info like passwords or SSNs.</div>' +
-      '<button class="cmp-center-btn" onclick="fsConsent()">I understand.</button>';
+      '<button class="cmp-center-btn" onclick="cmpConsent()">I understand.</button>';
     body.appendChild(div);
   }
 
@@ -658,17 +658,17 @@
         applyRecals();
         if (history.length > 0) { renderHistory(); sinceLastTimePills(); }
         else startChat();
-        if (pendingAsk) { var q = pendingAsk; pendingAsk = null; window.fsPill(q); }
+        if (pendingAsk) { var q = pendingAsk; pendingAsk = null; window.cmpPill(q); }
       });
     });
   }
 
-  window.fsConsent = function() { setConsent(); verifyAndRoute(); };
+  window.cmpConsent = function() { setConsent(); verifyAndRoute(); };
 
   // Reset: Compass's own confirmation (the browser's confirm() can be blocked
   // silently, which made Reset do nothing), then a full wipe of the chat and
   // what Compass remembers. The notepad and the FutureSelf profile stay.
-  window.fsReset = function () {
+  window.cmpReset = function () {
     var panel = $('cmp-chat'); if (!panel) return;
     var box = $('cmp-reset-confirm');
     if (box) { box.parentNode.removeChild(box); return; }
@@ -699,9 +699,7 @@
     if (body) body.classList.add('cmp-resetting');
     function finish(ok) {
       if (body) body.classList.remove('cmp-resetting');
-      var textEl = $('cmp-banner-text'), ctaEl = $('cmp-banner-cta-label');
-      if (textEl) textEl.innerText = 'Hi, I\'m Compass, your FutureSelf advisor. I help students like you figure out what\'s next. Want to get started?';
-      if (ctaEl) ctaEl.innerText = 'Get started';
+      if (window.cmpBannerRefresh) window.cmpBannerRefresh();
       refreshWaypointBtn();
       verifyAndRoute();
       if (!ok && window.console) console.warn('[Compass] reset: saved history could not be cleared on the server');
@@ -726,9 +724,9 @@
     }, 220);
   }
 
-  window.fsDismiss = function (e) {
+  window.cmpDismiss = function (e) {
     e.stopPropagation();
-    var b = document.getElementById('cmp-banner');
+    var b = $('cmp-banner');
     if (b) b.className = b.className + ' hidden';
   };
 
@@ -740,25 +738,25 @@
     setPills((tourSeen() ? [] : [TOUR_LABEL]).concat(['Exploring options', 'Recruiting now', 'Interview prep', 'Totally unsure']));
   }
 
-  window.fsSend = function () {
+  window.cmpSend = function () {
     if (!routed || busy) return;
-    var input = document.getElementById('cmp-input');
+    var input = $('cmp-input');
     if (!input) return;
     var text = input.value.trim();
     if (!text) return;
     input.value = '';
     autoGrow(input);            // collapse back to one line after sending
-    document.getElementById('cmp-qr').innerHTML = '';
+    $('cmp-qr').innerHTML = '';
     addUser(text, true);
     history.push({ role: 'user', content: text, timestamp: new Date().toISOString() });
     callAPI();
   };
 
-  window.fsPill = function (text) {
+  window.cmpPill = function (text) {
     if (!routed || busy) return;
     if (text === SINCE_LABEL) text = SINCE_PROMPT;
     if (text === TOUR_LABEL) { if (window.cmpTour) window.cmpTour.start(); return; }
-    document.getElementById('cmp-qr').innerHTML = '';
+    $('cmp-qr').innerHTML = '';
     addUser(text, true);
     history.push({ role: 'user', content: text, timestamp: new Date().toISOString() });
     callAPI();
@@ -969,6 +967,20 @@
     };
   }
 
+  // did the student ask to add something to their profile in their last few messages?
+  // ("add AI to my profile" ... "Skills" ... "can you add it for me?")
+  function askedForProfileAdd() {
+    var seen = 0;
+    for (var i = history.length - 1; i >= 0 && seen < 3; i--) {
+      if (history[i].role !== 'user') continue;
+      seen++;
+      var t = String(history[i].content || '');
+      if (/\b(add|put|include|list|save)\b[\s\S]{0,60}\b(to|on|in)\s+(my\s+)?(fs\s+|futureself\s+)?profile\b/i.test(t)) return true;
+      if (/\b(add|put|save)\s+(it|that|this|them)\b/i.test(t)) return true;
+    }
+    return false;
+  }
+
   // a failed reply: say so plainly and offer one tap to try the same message again
   function showRetry(text, noRetry) {
     var body = $('cmp-body'); if (!body) return;
@@ -1027,7 +1039,7 @@
         // at most one gentle offer per reply; Compass writes the wording,
         // the widget paces it (see maybeProfileSuggestion / maybeNoteSuggestion)
         // a direct "add X to my profile" always gets its card, even if the model forgot to mark it
-        if (mu.profile_suggestion && lastUser && /\b(add|put|include|list|save)\b[\s\S]{0,60}\b(to|on|in)\s+(my\s+)?(fs\s+|futureself\s+)?profile\b/i.test(lastUser.content)) mu.profile_suggestion.explicit = true;
+        if (mu.profile_suggestion && (askedForProfileAdd() || /\bready to add\b/i.test(parsed.reply))) mu.profile_suggestion.explicit = true;
         if (!maybeTodoActions(mu.todo_actions) && !maybeNoteSuggestion(mu.notepad_suggestion)) maybeProfileSuggestion(mu.profile_suggestion);
       });
     });
@@ -1127,7 +1139,7 @@
   }
 
   function setPills(arr) {
-    var c = document.getElementById('cmp-qr');
+    var c = $('cmp-qr');
     if (!c) return;
     c.innerHTML = '';
     for (var i = 0; i < arr.length; i++) {
@@ -1136,7 +1148,7 @@
       if (arr[i] === SINCE_LABEL) { p.className += ' cmp-pill-since'; p.innerHTML = SINCE_ICON + '<span>' + SINCE_LABEL + '</span>'; }
       else if (arr[i] === TOUR_LABEL) { p.className += ' cmp-pill-since'; p.innerHTML = (ICONS.compass || '') + '<span>' + TOUR_LABEL + '</span>'; }
       else p.innerText = arr[i];
-      p.onclick = (function (t) { return function () { fsPill(t); }; })(arr[i]);
+      p.onclick = (function (t) { return function () { cmpPill(t); }; })(arr[i]);
       c.appendChild(p);
     }
   }
@@ -1192,7 +1204,7 @@
 
   // opts: ts (reply timestamp), ai (index in history), actions (show quick actions), recal (recalibrated)
   function addAI(text, scroll, opts) {
-    var body = document.getElementById('cmp-body');
+    var body = $('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
     div.className = 'cmp-row cmp-row-ai';
@@ -1242,7 +1254,7 @@
   }
 
   function addUser(text, scroll, idx) {
-    var body = document.getElementById('cmp-body');
+    var body = $('cmp-body');
     if (!body) return;
     var div = document.createElement('div');
     div.className = 'cmp-row cmp-row-usr';
@@ -1254,12 +1266,12 @@
 
   // auto-growing textarea: expands with content up to the CSS max-height,
   // then scrolls. Enter sends; Shift+Enter inserts a newline.
-  var inp = document.getElementById('cmp-input');
+  var inp = $('cmp-input');
   if (inp) {
     inp.onkeydown = function (e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        fsSend();
+        cmpSend();
       }
     };
     inp.oninput = function () { autoGrow(inp); };
@@ -1359,7 +1371,13 @@
     ]}
   ];
 
-  function $(id) { return document.getElementById(id); }
+  // look inside the live Compass first: a site that swaps pages can leave a dead
+  // copy with the same ids, and getElementById would find whichever comes first
+  function $(id) {
+    var r = window.__cmpRoot;
+    if (r && r.isConnected) { var el = r.querySelector('#' + id); if (el) return el; }
+    return document.getElementById(id);
+  }
   function chatEl() { return $('cmp-chat'); }
   function launcherEl() { return $('cmp-launcher'); }
   function isOpen() { var w = chatEl(); return !!(w && w.classList.contains('open')); }
@@ -1398,18 +1416,23 @@
     if (v === 'chat' && !routed) verifyAndRoute();
   }
 
-  window.fsOpenView = openTo;
-  window.fsOpenChat = function () { openTo('chat'); };
-  window.fsToggle = function () { if (isOpen()) setOpen(false); else openTo(currentView); };
+  window.cmpOpenView = openTo;
+  window.cmpOpenChat = function () { openTo('chat'); };
+  // home banner "Take the tour"
+  window.cmpBannerTour = function () {
+    openTo('chat');
+    setTimeout(function () { if (window.cmpTour) window.cmpTour.start(); }, 350);
+  };
+  window.cmpToggle = function () { if (isOpen()) setOpen(false); else openTo(currentView); };
 
   // send a question to Compass from any view (queued until the chat is ready)
   function askCompass(text) {
-    if (routed && isOpen() && currentView === 'chat') { window.fsPill(text); return; }
+    if (routed && isOpen() && currentView === 'chat') { window.cmpPill(text); return; }
     pendingAsk = text;
     openTo('chat');
-    if (routed) { var q = pendingAsk; pendingAsk = null; window.fsPill(q); }
+    if (routed) { var q = pendingAsk; pendingAsk = null; window.cmpPill(q); }
   }
-  window.fsAsk = askCompass;
+  window.cmpAsk = askCompass;
 
   function prefill(text) {
     openTo('chat');
@@ -1804,7 +1827,7 @@
   // small confirmation that floats above the reply box
   var toastT = null;
   function chatToast(html, undo) {
-    var host = document.querySelector('#cmp-widget-root .cmp-view[data-view="chat"]'); if (!host) return;
+    var host = (window.__cmpRoot || document).querySelector('.cmp-view[data-view="chat"]'); if (!host) return;
     var old = host.querySelector('.cmp-toast'); if (old) old.parentNode.removeChild(old);
     var t = document.createElement('div');
     t.className = 'cmp-toast'; t.setAttribute('role', 'status');
@@ -1919,9 +1942,9 @@
     branchBackup = null;
     var d = $('cmp-branch'); if (d) { var b2 = d.querySelector('.cmp-branch-undo'); if (b2) b2.parentNode.removeChild(b2); d.removeAttribute('id'); }
   }
-  var _fsSend = window.fsSend, _fsPill = window.fsPill;
-  window.fsSend = function () { commitBranch(); return _fsSend.apply(this, arguments); };
-  window.fsPill = function () { commitBranch(); return _fsPill.apply(this, arguments); };
+  var _fsSend = window.cmpSend, _fsPill = window.cmpPill;
+  window.cmpSend = function () { commitBranch(); return _fsSend.apply(this, arguments); };
+  window.cmpPill = function () { commitBranch(); return _fsPill.apply(this, arguments); };
 
   safeStart(function wireWaypoints() {
     var btn = $('cmp-wp-btn'), panel = $('cmp-wp-panel'), list = $('cmp-wp-list');
@@ -2224,7 +2247,7 @@
     list.addEventListener('click', function (e) {
       var tgt = e.target.closest ? e.target : null; if (!tgt) return;
       if (tgt.closest('.cmp-np-done-h')) { showDone = !showDone; renderTodos(); return; }
-      if (tgt.closest('.cmp-np-review')) { if (window.fsAsk) window.fsAsk('Can you review my to-do list and walk me through the steps for each?'); return; }
+      if (tgt.closest('.cmp-np-review')) { if (window.cmpAsk) window.cmpAsk('Can you review my to-do list and walk me through the steps for each?'); return; }
       var src = tgt.closest('[data-src]');
       if (src) { if (window.cmpJumpToTs) window.cmpJumpToTs(src.getAttribute('data-src')); return; }
       var rowEl = tgt.closest('.cmp-todo'); if (!rowEl) return;
@@ -2542,7 +2565,7 @@
   // "Skip tour", the X, or Esc ends it anywhere.
   // ===========================================================================
   safeStart(function tour() {
-    var root = $('cmp-widget-root'), logo = document.querySelector('#cmp-widget-root .cmp-hdr-icon');
+    var root = $('cmp-widget-root'), logo = (window.__cmpRoot || document).querySelector('.cmp-hdr-icon');
     if (!root || !logo) return;
     var isMacT = /Mac|iPhone|iPad/.test(navigator.platform || '');
     function tabSel(v) { return '#cmp-widget-root .cmp-tab[data-view="' + v + '"]'; }
@@ -2635,6 +2658,7 @@
       bub = ring = target = null; i = -1;
       root.classList.remove('cmp-touring');
       try { localStorage.setItem('cmp_tour_v1', 'done'); } catch (e) {}
+      if (window.cmpBannerRefresh) window.cmpBannerRefresh();
       var qr = $('cmp-qr');   // the starter pill has done its job
       if (qr) [].forEach.call(qr.querySelectorAll('.cmp-pill'), function (p) { if (p.textContent === TOUR_LABEL) p.parentNode.removeChild(p); });
     }
@@ -2854,7 +2878,7 @@
     f.hidden = true;
     if (HL) { HL.delete('cmp-find'); HL.delete('cmp-find-cur'); }
   }
-  window.fsFind = openFind;
+  window.cmpFind = openFind;
   if (window.console && console.info) console.info('[Compass] widget ready: find ' + (HL ? 'with highlights' : 'with selection fallback') + ', shortcuts on');
   safeStart(function wireFind() {
     var q = $('cmp-find-q'); if (!q) return;
