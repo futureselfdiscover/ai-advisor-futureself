@@ -2722,6 +2722,46 @@
     logo.addEventListener('pointerleave', function () { hover = false; });
   });
 
+  // ---- smoother page changes ----
+  // Hovering (or focusing) a FutureSelf link inside Compass asks Chrome to load that
+  // page in the background, so the click switches almost instantly. Browsers without
+  // this just get a normal prefetch. Clicking saves Compass's state first, so the
+  // next page opens Compass exactly where it was.
+  safeStart(function smoothNav() {
+    var root = window.__cmpRoot || $('cmp-widget-root'); if (!root) return;
+    var done = {}, count = 0;
+    var canSpec = !!(window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules'));
+    function sameSite(a) {
+      try { var u = new URL(a.href, location.href); return u.origin === location.origin && u.pathname !== location.pathname ? u : null; } catch (e) { return null; }
+    }
+    function preloadPage(u) {
+      var key = u.pathname + u.search;
+      if (done[key] || count >= 6) return;
+      done[key] = true; count++;
+      try {
+        if (canSpec) {
+          var sr = document.createElement('script'); sr.type = 'speculationrules';
+          sr.textContent = JSON.stringify({ prerender: [{ source: 'list', urls: [u.href] }] });
+          document.head.appendChild(sr);
+        } else {
+          var l = document.createElement('link'); l.rel = 'prefetch'; l.href = u.href; document.head.appendChild(l);
+        }
+      } catch (e) {}
+    }
+    function hover(e) {
+      var a = e.target.closest && e.target.closest('a[href]'); if (!a || !root.contains(a)) return;
+      var u = sameSite(a); if (!u) return;
+      clearTimeout(a.__cmpT); a.__cmpT = setTimeout(function () { preloadPage(u); }, 80);   // a brief rest, not a pass-over
+    }
+    root.addEventListener('pointerover', hover);
+    root.addEventListener('focusin', hover);
+    root.addEventListener('pointerout', function (e) { var a = e.target.closest && e.target.closest('a[href]'); if (a) clearTimeout(a.__cmpT); });
+    root.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]'); if (!a || !sameSite(a)) return;
+      if (window.__cmpSnapshot) try { window.__cmpSnapshot(); } catch (x) {}
+    }, true);
+  });
+
   safeStart(function shortcuts() {
     var hint = $('cmp-nav-kbd');
     if (hint && canHover) { hint.textContent = isMac ? '\u2318K' : 'Ctrl K'; hint.hidden = false; }
@@ -2939,6 +2979,7 @@
       } catch (e) {}
     }
     window.addEventListener('pagehide', snapshot);
+    window.__cmpSnapshot = snapshot;
     document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') snapshot(); });
 
     var root = $('cmp-widget-root');
@@ -2977,9 +3018,15 @@
   });
   }
 
+  // A page Chrome loaded ahead of time (see preloadPage) waits until the student
+  // actually arrives, so it restores the chat as it is at that moment.
+  function start() {
+    if (document.prerendering) { document.addEventListener('prerenderingchange', fsBoot, { once: true }); return; }
+    fsBoot();
+  }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fsBoot);
+    document.addEventListener('DOMContentLoaded', start);
   } else {
-    setTimeout(fsBoot, 0);
+    setTimeout(start, 0);
   }
 })();
