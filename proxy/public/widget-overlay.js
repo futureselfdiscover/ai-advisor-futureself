@@ -33,25 +33,44 @@
     gear: '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>'
   };
 
-  // Home banner. Once rollout.js turns Compass on site-wide, it tells students Compass
-  // is on every page and offers the tour (or just opens Compass if they've taken it).
+  // Home banner: the same slate look as the Compass panel, a one-line promise, three
+  // quick starts that open Compass and ask right away, and one clear button. Once
+  // rollout.js turns Compass on site-wide it also says so and offers the tour.
+  var BANNER_STARTS = [
+    ['Plan my week', 'Help me plan what to focus on this week for my career.'],
+    ['Find internships', 'Help me find internships that fit my background.'],
+    ['Prep for an interview', 'Help me prepare for an upcoming interview.']
+  ];
   function bannerHTML() {
     var everywhere = !!(window.__CMP_ROLLOUT__ && window.__CMP_ROLLOUT__.site_wide);
     var toured = false; try { toured = localStorage.getItem('cmp_tour_v1') === 'done'; } catch (e) {}
-    var text = everywhere
-      ? 'Hi, I\'m Compass, your FutureSelf advisor, now on every page. Find me in the bottom corner anytime.' + (toured ? '' : ' Want a quick tour?')
-      : 'Hi, I\'m Compass, your FutureSelf advisor. I help students like you figure out what\'s next. Want to get started?';
-    var cta = everywhere ? (toured ? 'Open Compass' : 'Take the tour') : 'Get started';
-    var go = everywhere && !toured ? 'cmpBannerTour()' : 'cmpOpenChat()';
+    var sub = everywhere
+      ? 'Now on every page. Find me in the bottom corner whenever you need a hand.'
+      : 'Ask about careers, classes or recruiting. I remember your goals and point you to the right pages.';
+    var chips = '';
+    for (var k = 0; k < BANNER_STARTS.length; k++) {
+      chips += '<button type="button" class="cmp-bn-chip" onclick="cmpBannerAsk(' + k + ')">' + BANNER_STARTS[k][0] + '</button>';
+    }
     return '<div id="cmp-banner">' +
       '<div class="cmp-banner-left">' +
         '<div class="cmp-banner-icon">' + I.compass + '</div>' +
-        '<div class="cmp-banner-text" id="cmp-banner-text">' + text + '</div>' +
+        '<div class="cmp-banner-copy">' +
+          '<div class="cmp-banner-title">Meet Compass, your FutureSelf advisor</div>' +
+          '<div class="cmp-banner-text" id="cmp-banner-text">' + sub + '</div>' +
+          '<div class="cmp-bn-chips">' + chips + '</div>' +
+        '</div>' +
       '</div>' +
-      '<span class="cmp-banner-cta" role="button" tabindex="0" onclick="' + go + '"><span id="cmp-banner-cta-label">' + cta + '</span>' + I.arrow + '</span>' +
+      '<div class="cmp-banner-right">' +
+        '<span class="cmp-banner-cta" role="button" tabindex="0" onclick="cmpOpenChat()"><span id="cmp-banner-cta-label">Open Compass</span>' + I.arrow + '</span>' +
+        (everywhere && !toured ? '<button type="button" class="cmp-bn-tour" onclick="cmpBannerTour()">Take the tour</button>' : '') +
+      '</div>' +
       '<button class="cmp-banner-x" onclick="cmpDismiss(event)" aria-label="Dismiss">' + I.close + '</button>' +
     '</div>';
   }
+  window.cmpBannerAsk = function (k) {
+    var q = BANNER_STARTS[k] && BANNER_STARTS[k][1];
+    if (q && window.cmpAsk) window.cmpAsk(q); else if (window.cmpOpenChat) window.cmpOpenChat();
+  };
 
   // fills the home-page slot if this page has one; safe to call repeatedly
   function mountBanner() {
@@ -282,6 +301,14 @@
     transform: none !important; translate: none !important; scale: none !important; rotate: none !important; animation: none !important;
   }
   #cmp-widget-root #cmp-np-x .cmp-i { animation: none !important; translate: none !important; scale: none !important; rotate: none !important; transform-origin: 50% 50% !important; }
+  #cmp-widget-root .cmp-icon-btn .cmp-i, #cmp-widget-root .cmp-icon-btn .cmp-i *,
+  #cmp-widget-root #cmp-np-x .cmp-i, #cmp-widget-root #cmp-np-x .cmp-i * {
+    shape-rendering: geometricPrecision !important; vector-effect: none !important;
+  }
+  #cmp-widget-root .cmp-icon-btn .cmp-i *, #cmp-widget-root #cmp-np-x .cmp-i * {
+    transform: none !important; transition: none !important; animation: none !important;
+    stroke-width: inherit !important; stroke: currentColor !important;
+  }
   #cmp-widget-root .cmp-x .cmp-i, #cmp-widget-root .cmp-reset .cmp-i, #cmp-widget-root #cmp-np-x .cmp-i {
     will-change: transform; transform: rotate(0deg) !important;
     transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -990,9 +1017,9 @@
   .cmp-link-i {
     width: 32px; height: 32px; padding: 7px; border-radius: 10px; flex-shrink: 0;
     background: var(--cmp-tint); color: var(--cmp-blue);
-    transition: transform 0.25s var(--cmp-spring), background 0.15s, color 0.15s;
+    transition: transform 0.2s ease, background 0.15s, color 0.15s;
   }
-  .cmp-link:hover .cmp-link-i { background: var(--cmp-blue); color: #fff; transform: rotate(-8deg) scale(1.05); }
+  .cmp-link:hover .cmp-link-i { background: var(--cmp-blue); color: #fff; transform: scale(1.08); }
   .cmp-link-t { flex: 1; min-width: 0; }
   .cmp-link-sub { display: block; font-size: 11.5px; font-weight: 500; color: var(--cmp-muted); margin-top: 1px; }
   .cmp-link-go { width: 16px; height: 16px; color: #8290A2; transition: transform 0.2s var(--cmp-ease), color 0.15s; }
@@ -1068,41 +1095,79 @@
   .cmp-rec-why { font-size: 12.5px; color: var(--cmp-muted); margin-top: 3px; line-height: 1.45; }
   .cmp-rec .cmp-link-i { margin-top: 1px; }
 
+  /* ---- page changes: a soft crossfade where the browser supports it, with Compass held
+     in place (both pages carry these names, so the panel doesn't blink) ---- */
+  @view-transition { navigation: auto; }
+  #cmp-chat { view-transition-name: cmp-panel; }
+  #cmp-launcher { view-transition-name: cmp-launcher; }
+  #cmp-notepad { view-transition-name: cmp-notepad; }
+  ::view-transition-group(cmp-panel), ::view-transition-group(cmp-launcher), ::view-transition-group(cmp-notepad) { animation-duration: 0s; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.22s; }
+  @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+
   /* ================= home page banner (only where #fs-banner-slot exists) ================= */
   #cmp-banner {
-    display: flex; align-items: center; justify-content: space-between; gap: 14px;
-    background: #FFFFFF; border: 1px solid var(--cmp-line);
-    border-radius: 18px; padding: 14px 18px; margin: 12px 0; font-family: var(--cmp-font);
-    box-shadow: 0 6px 18px rgba(43,62,80,0.05);
+    position: relative; overflow: hidden; display: flex; align-items: center; gap: 20px;
+    margin: 12px 0; padding: 20px 56px 20px 22px; border-radius: 20px; font-family: var(--cmp-font);
+    color: #fff; isolation: isolate;
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(42,103,216,0.38) 0%, rgba(42,103,216,0) 55%),
+      linear-gradient(135deg, #2B3E50 0%, #314A63 60%, #2E4660 100%);
+    box-shadow: 0 14px 34px -14px rgba(23,37,58,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
     animation: cmpRise 0.45s var(--cmp-ease);
   }
+  /* one soft light sweep when it appears */
+  #cmp-banner::after {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.10) 50%, transparent 65%);
+    transform: translateX(-100%); animation: cmpBnSweep 1.6s 0.5s var(--cmp-ease) both;
+  }
+  @keyframes cmpBnSweep { to { transform: translateX(100%); } }
   #cmp-banner.hidden { display: none; }
-  .cmp-banner-left { display: flex; align-items: center; gap: 14px; flex: 1; }
+  .cmp-banner-left { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
   .cmp-banner-icon {
-    width: 40px; height: 40px; border-radius: 12px; padding: 8px; flex-shrink: 0; color: #fff;
-    background: var(--cmp-navy);
+    width: 52px; height: 52px; border-radius: 15px; padding: 11px; flex-shrink: 0; color: #fff;
+    background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.16);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
   }
   .cmp-banner-icon .cmp-needle { animation: cmpNeedleIdle 6s ease-in-out infinite; }
-  .cmp-banner-text { font-size: 14px; color: var(--cmp-ink); line-height: 1.5; }
+  .cmp-banner-copy { min-width: 0; }
+  .cmp-banner-title { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; color: #fff; line-height: 1.3; }
+  .cmp-banner-text { font-size: 13.5px; color: rgba(255,255,255,0.78); line-height: 1.5; margin-top: 2px; }
+  .cmp-bn-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  #cmp-banner .cmp-bn-chip {
+    font: 600 12px var(--cmp-font); color: #fff; cursor: pointer; padding: 6px 11px; border-radius: 999px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.20);
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  #cmp-banner .cmp-bn-chip:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.34); }
+  .cmp-banner-right { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
   .cmp-banner-cta {
-    display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; cursor: pointer;
-    font-size: 13px; font-weight: 700; color: #fff; background: var(--cmp-blue);
-    padding: 9px 14px; border-radius: 11px; transition: background 0.15s;
+    display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; cursor: pointer;
+    font-size: 13.5px; font-weight: 700; color: var(--cmp-navy); background: #fff;
+    padding: 10px 16px; border-radius: 12px; box-shadow: 0 6px 16px -6px rgba(0,0,0,0.35);
+    transition: background 0.15s ease, box-shadow 0.15s ease;
   }
   .cmp-banner-cta .cmp-i { width: 15px; height: 15px; transition: transform 0.2s var(--cmp-ease); }
-  .cmp-banner-cta:hover { background: var(--cmp-blue-dk); }
+  .cmp-banner-cta:hover { background: #EEF3FB; }
   .cmp-banner-cta:hover .cmp-i { transform: translateX(3px); }
-  .cmp-banner-x {
-    width: 28px; height: 28px; padding: 6px; border: none; border-radius: 8px; cursor: pointer;
-    background: transparent; color: #8290A2; flex-shrink: 0;
+  #cmp-banner .cmp-bn-tour {
+    font: 600 12px var(--cmp-font); color: rgba(255,255,255,0.82); background: none; border: 0; cursor: pointer; padding: 2px 4px;
   }
-  .cmp-banner-x:hover { background: var(--cmp-tint); color: var(--cmp-navy); }
+  #cmp-banner .cmp-bn-tour:hover { color: #fff; text-decoration: underline; }
+  .cmp-banner-x {
+    position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; padding: 6px; border: none;
+    border-radius: 8px; cursor: pointer; background: transparent; color: rgba(255,255,255,0.6);
+  }
+  .cmp-banner-x:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  @media (max-width: 760px) {
+    #cmp-banner { flex-direction: column; align-items: stretch; padding: 18px 46px 18px 18px; gap: 14px; }
+    .cmp-banner-right { flex-direction: row; justify-content: flex-start; }
+  }
   @media (max-width: 560px) {
-    #cmp-banner { flex-wrap: wrap; position: relative; padding: 14px 16px; }
-    .cmp-banner-left { flex: 1 1 100%; padding-right: 26px; }
+    .cmp-banner-icon { width: 44px; height: 44px; padding: 9px; }
+    .cmp-banner-title { font-size: 15.5px; }
     .cmp-banner-text { font-size: 13px; }
-    .cmp-banner-cta { margin-left: 54px; }
-    .cmp-banner-x { position: absolute; top: 8px; right: 8px; }
   }
 
   /* ================= phones: full-screen window, tap the bubble for actions ================= */
@@ -1313,6 +1378,7 @@
     #cmp-widget-root *, #cmp-banner * { animation: none !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
     #cmp-banner { animation: none !important; }
     #cmp-widget-root .cmp-orbit i { transform: translateX(7px) !important; }
+    #cmp-banner::after { animation: none; display: none; }
     #cmp-widget-root .cmp-x .cmp-i, #cmp-widget-root .cmp-reset .cmp-i, #cmp-widget-root #cmp-np-x .cmp-i { transition: none !important; }
   }
 `;
