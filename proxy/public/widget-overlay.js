@@ -33,21 +33,36 @@
     gear: '<svg viewBox="0 0 24 24" class="cmp-i"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>'
   };
 
-  var BANNER_HTML =
-    '<div id="cmp-banner">' +
+  // Home banner. Once rollout.js turns Compass on site-wide, it tells students Compass
+  // is on every page and offers the tour (or just opens Compass if they've taken it).
+  function bannerHTML() {
+    var everywhere = !!(window.__CMP_ROLLOUT__ && window.__CMP_ROLLOUT__.site_wide);
+    var toured = false; try { toured = localStorage.getItem('cmp_tour_v1') === 'done'; } catch (e) {}
+    var text = everywhere
+      ? 'Hi, I\'m Compass, your FutureSelf advisor, now on every page. Find me in the bottom corner anytime.' + (toured ? '' : ' Want a quick tour?')
+      : 'Hi, I\'m Compass, your FutureSelf advisor. I help students like you figure out what\'s next. Want to get started?';
+    var cta = everywhere ? (toured ? 'Open Compass' : 'Take the tour') : 'Get started';
+    var go = everywhere && !toured ? 'cmpBannerTour()' : 'cmpOpenChat()';
+    return '<div id="cmp-banner">' +
       '<div class="cmp-banner-left">' +
         '<div class="cmp-banner-icon">' + I.compass + '</div>' +
-        '<div class="cmp-banner-text" id="cmp-banner-text">Hi, I\'m Compass, your FutureSelf advisor. I help students like you figure out what\'s next. Want to get started?</div>' +
+        '<div class="cmp-banner-text" id="cmp-banner-text">' + text + '</div>' +
       '</div>' +
-      '<span class="cmp-banner-cta" onclick="fsOpenChat()"><span id="cmp-banner-cta-label">Get started</span>' + I.arrow + '</span>' +
-      '<button class="cmp-banner-x" onclick="fsDismiss(event)" aria-label="Dismiss">' + I.close + '</button>' +
+      '<span class="cmp-banner-cta" role="button" tabindex="0" onclick="' + go + '"><span id="cmp-banner-cta-label">' + cta + '</span>' + I.arrow + '</span>' +
+      '<button class="cmp-banner-x" onclick="cmpDismiss(event)" aria-label="Dismiss">' + I.close + '</button>' +
     '</div>';
+  }
 
   // fills the home-page slot if this page has one; safe to call repeatedly
   function mountBanner() {
     var slot = document.getElementById('fs-banner-slot');
-    if (slot && !document.getElementById('cmp-banner')) slot.innerHTML = BANNER_HTML;
+    if (slot && !document.getElementById('cmp-banner')) slot.innerHTML = bannerHTML();
   }
+  // rollout.js can arrive after the banner is drawn; redraw it with the right wording
+  window.cmpBannerRefresh = function () {
+    var b = document.getElementById('cmp-banner');
+    if (b && b.className.indexOf('hidden') === -1 && b.parentNode) b.parentNode.innerHTML = bannerHTML();
+  };
 
   // widget already on the page (overlay loaded twice): just make sure the banner is there
   if (document.getElementById('cmp-bubble')) { mountBanner(); return; }
@@ -246,15 +261,34 @@
   }
   .cmp-icon-btn:hover { background: rgba(255,255,255,0.10); color: #fff; }
   .cmp-icon-btn:active { background: rgba(255,255,255,0.16); }
-  /* X and reset turn halfway while hovered and ease back when the mouse leaves. The icon
-     keeps its own layer, so the rest position is drawn the same way before and after */
-  .cmp-x .cmp-i, .cmp-reset .cmp-i, #cmp-np-x .cmp-i {
-    transform-origin: 50% 50%; will-change: transform; transform: rotate(0deg);
-    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  /* X turns a quarter and reset a half while hovered, easing back when the mouse leaves.
+     Locked with !important: a site-wide rule (e.g. every button lifting or scaling on
+     hover, or every svg getting its own transition) would otherwise stack on top, move
+     the button under the cursor, flip hover on and off, and make the icon twitch. */
+  #cmp-widget-root .cmp-icon-btn, #cmp-widget-root .cmp-icon-btn:hover,
+  #cmp-widget-root .cmp-icon-btn:active, #cmp-widget-root .cmp-icon-btn:focus {
+    transform: none !important; translate: none !important; scale: none !important; rotate: none !important;
+    animation: none !important; filter: none !important; box-shadow: none !important;
+    transition: background 0.2s ease, color 0.2s ease !important;
+    width: 32px !important; height: 32px !important; padding: 7px !important; flex-shrink: 0;
+  }
+  #cmp-widget-root .cmp-icon-btn .cmp-i {
+    width: 18px !important; height: 18px !important; margin: 0 !important;
+    transform-origin: 50% 50% !important; animation: none !important;
+    translate: none !important; scale: none !important; rotate: none !important;
+    transition: none !important; transform: none !important;
+  }
+  #cmp-widget-root #cmp-np-x, #cmp-widget-root #cmp-np-x:hover, #cmp-widget-root #cmp-np-x:active {
+    transform: none !important; translate: none !important; scale: none !important; rotate: none !important; animation: none !important;
+  }
+  #cmp-widget-root #cmp-np-x .cmp-i { animation: none !important; translate: none !important; scale: none !important; rotate: none !important; transform-origin: 50% 50% !important; }
+  #cmp-widget-root .cmp-x .cmp-i, #cmp-widget-root .cmp-reset .cmp-i, #cmp-widget-root #cmp-np-x .cmp-i {
+    will-change: transform; transform: rotate(0deg) !important;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
   @media (hover: hover) {
-    .cmp-x:hover .cmp-i, #cmp-np-x:hover .cmp-i { transform: rotate(180deg); }
-    .cmp-reset:hover .cmp-i { transform: rotate(-180deg); }
+    #cmp-widget-root .cmp-x:hover .cmp-i, #cmp-widget-root #cmp-np-x:hover .cmp-i { transform: rotate(90deg) !important; }
+    #cmp-widget-root .cmp-reset:hover .cmp-i { transform: rotate(-180deg) !important; }
   }
 
   /* tabs */
@@ -420,13 +454,13 @@
   .cmp-has-wp #cmp-body { padding-top: 40px; }
   .cmp-wp-btn:hover, .cmp-wp-btn:focus-visible, .cmp-wp-btn[aria-expanded="true"] { color: var(--cmp-blue); border-color: #BCD0F0; box-shadow: 0 6px 16px rgba(43,62,80,0.12); }
   .cmp-wp-btn-i { width: 14px; height: 14px; flex-shrink: 0; }
-  /* the label opens to the LEFT of the flag, so the flag and count never move. Animating
-     a grid column from 0fr to 1fr lands exactly on the label's own width (smooth, no stall) */
+  /* the label slides open after the flag. Animating a grid column from 0fr to 1fr lands
+     exactly on the label's own width (smooth, no stall at the end) */
   .cmp-wp-label {
     display: inline-grid; grid-template-columns: 0fr; margin-right: -5px; opacity: 0;
     transition: grid-template-columns 0.34s cubic-bezier(0.22, 0.8, 0.24, 1) 0.06s, margin 0.34s cubic-bezier(0.22, 0.8, 0.24, 1) 0.06s, opacity 0.18s ease 0.04s;
   }
-  .cmp-wp-label > span { min-width: 0; overflow: hidden; white-space: nowrap; text-align: right; }
+  .cmp-wp-label > span { min-width: 0; overflow: hidden; white-space: nowrap; }
   .cmp-wp-btn:hover .cmp-wp-label, .cmp-wp-btn:focus-visible .cmp-wp-label, .cmp-wp-btn[aria-expanded="true"] .cmp-wp-label {
     grid-template-columns: 1fr; margin-right: 0; opacity: 1;
     transition: grid-template-columns 0.34s cubic-bezier(0.22, 0.8, 0.24, 1), margin 0.34s cubic-bezier(0.22, 0.8, 0.24, 1), opacity 0.22s ease 0.08s;
@@ -1279,7 +1313,7 @@
     #cmp-widget-root *, #cmp-banner * { animation: none !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
     #cmp-banner { animation: none !important; }
     #cmp-widget-root .cmp-orbit i { transform: translateX(7px) !important; }
-    .cmp-x .cmp-i, .cmp-reset .cmp-i, #cmp-np-x .cmp-i { transition: none; }
+    #cmp-widget-root .cmp-x .cmp-i, #cmp-widget-root .cmp-reset .cmp-i, #cmp-widget-root #cmp-np-x .cmp-i { transition: none !important; }
   }
 `;
 
@@ -1319,8 +1353,8 @@
         '</div>' +
         '<div class="cmp-hdr-right">' +
           '<button class="cmp-icon-btn cmp-np-btn" id="cmp-np-btn" type="button" title="Notepad" aria-label="Open notepad">' + I.notepad + '<span class="cmp-np-dot" id="cmp-np-dot" hidden></span></button>' +
-          '<button class="cmp-icon-btn cmp-reset" type="button" onclick="fsReset()" title="Reset conversation" aria-label="Reset conversation">' + I.reset + '</button>' +
-          '<button class="cmp-icon-btn cmp-x" type="button" onclick="fsToggle()" title="Close" aria-label="Close">' + I.close + '</button>' +
+          '<button class="cmp-icon-btn cmp-reset" type="button" onclick="cmpReset()" title="Reset conversation" aria-label="Reset conversation">' + I.reset + '</button>' +
+          '<button class="cmp-icon-btn cmp-x" type="button" onclick="cmpToggle()" title="Close" aria-label="Close">' + I.close + '</button>' +
         '</div>' +
       '</div>' +
       '<div class="cmp-tabs" role="tablist">' + tabHTML + '<span class="cmp-tab-ink" style="--t:1"></span></div>' +
@@ -1335,7 +1369,7 @@
         '</section>' +
         '<section class="cmp-view active" data-view="chat">' +
           '<button class="cmp-wp-btn" id="cmp-wp-btn" type="button" aria-expanded="false" hidden>' +
-            '<span class="cmp-wp-label"><span>Waypoints</span></span><span class="cmp-wp-btn-i">' + I.flag + '</span><span class="cmp-wp-count" id="cmp-wp-count"></span></button>' +
+            '<span class="cmp-wp-btn-i">' + I.flag + '</span><span class="cmp-wp-label"><span>Waypoints</span></span><span class="cmp-wp-count" id="cmp-wp-count"></span></button>' +
           '<div class="cmp-wp-panel" id="cmp-wp-panel" hidden>' +
             '<div class="cmp-wp-head"><div class="cmp-wp-title">Waypoints</div>' +
             '<div class="cmp-wp-sub">Jump back to any question, or pick the conversation up from there.</div></div>' +
@@ -1345,7 +1379,7 @@
           '<div id="cmp-qr"></div>' +
           '<div class="cmp-bar">' +
             '<textarea id="cmp-input" rows="1" placeholder="Reply..."></textarea>' +
-            '<button class="cmp-send" type="button" onclick="fsSend()" aria-label="Send">' + I.send + '</button>' +
+            '<button class="cmp-send" type="button" onclick="cmpSend()" aria-label="Send">' + I.send + '</button>' +
           '</div>' +
         '</section>' +
         '<section class="cmp-view" data-view="profile"><div id="cmp-profile" class="cmp-scroll"></div></section>' +
@@ -1427,6 +1461,26 @@
   mountBanner();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountBanner);
 
+  // ---- retire the old purple "AI Advisor" widget (v0) wherever Compass runs ----
+  // Old page blocks still carry it. It used the same global button names Compass once
+  // did, so the two fought over clicks. Compass now uses its own names, and removes the
+  // old bubble, chat and banner (its banner spot becomes the Compass banner).
+  var LEGACY = '#fs-bubble, #fs-chat, #fs-banner';
+  function retireLegacy() {
+    var olds = document.querySelectorAll(LEGACY);
+    if (!olds.length) return;
+    var oldBanner = document.getElementById('fs-banner');
+    if (oldBanner && oldBanner.parentNode && !document.getElementById('fs-banner-slot')) {
+      var slot = document.createElement('div'); slot.id = 'fs-banner-slot';
+      oldBanner.parentNode.insertBefore(slot, oldBanner);
+    }
+    for (var i = 0; i < olds.length; i++) if (olds[i].parentNode) olds[i].parentNode.removeChild(olds[i]);
+    mountBanner();
+    if (window.console && console.info) console.info('[Compass] replaced the old AI Advisor widget on this page');
+  }
+  retireLegacy();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', retireLegacy);
+
   // ---- keep Compass alive when the site swaps pages without a full reload ----
   // Some sites replace <body> on navigation, or briefly show a cached copy of the
   // previous page. Either way our live elements get dropped and a lifeless copy
@@ -1438,8 +1492,9 @@
     fixing = true;
     try {
       if (!document.getElementById('cmp-widget-style')) document.head.appendChild(styleEl);
-      var copies = document.querySelectorAll('#cmp-widget-root');
-      for (var k = 0; k < copies.length; k++) if (copies[k] !== container && copies[k].parentNode) copies[k].parentNode.removeChild(copies[k]);
+      var copies = document.querySelectorAll('[id="cmp-widget-root"]'), removed = 0;
+      for (var k = 0; k < copies.length; k++) if (copies[k] !== container && copies[k].parentNode) { copies[k].parentNode.removeChild(copies[k]); removed++; }
+      if (removed && window.console && console.info) console.info('[Compass] removed ' + removed + ' inactive copy after a page change');
       if (document.body && container.parentNode !== document.body) {
         document.body.appendChild(container);
         if (window.console && console.info) console.info('[Compass] page changed without a reload (' + reason + '); reattached');
@@ -1452,8 +1507,19 @@
     } finally { fixing = false; }
   }
   if (window.MutationObserver) {
-    new MutationObserver(function () { if (!container.isConnected || container.parentNode !== document.body) keepAlive('page swap'); })
-      .observe(document.documentElement, { childList: true, subtree: true });
+    new MutationObserver(function (muts) {
+      // a copy of Compass dropped into the page (e.g. from a cached snapshot): remove it right away
+      for (var a = 0; a < muts.length; a++) {
+        var added = muts[a].addedNodes;
+        for (var b = 0; b < added.length; b++) {
+          var n = added[b];
+          if (n.nodeType !== 1 || n === container) continue;
+          if (n.id === 'fs-bubble' || n.id === 'fs-chat' || n.id === 'fs-banner' || (n.querySelector && n.querySelector(LEGACY))) retireLegacy();
+          if (n.id === 'cmp-widget-root' || (n.querySelector && n.querySelector('#cmp-widget-root'))) { keepAlive('copy removed'); a = muts.length; break; }
+        }
+      }
+      if (!container.isConnected || container.parentNode !== document.body) keepAlive('page swap');
+    }).observe(document.documentElement, { childList: true, subtree: true });
   }
   // page-swapping libraries: keep our live elements out of their cached copies
   ['turbolinks:before-cache', 'turbo:before-cache'].forEach(function (ev) {
