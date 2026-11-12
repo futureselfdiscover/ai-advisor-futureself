@@ -453,6 +453,7 @@ function buildSystemPrompt(ctx) {
     '  "ask": one short, natural question in your own voice that ties to what they are exploring right now and says briefly why it helps (others can see the interest, and it sharpens future advice). Vary the wording every time; never reuse a phrasing from earlier in the conversation and never start with "Want me to add". Do not use quotation marks inside it.',
     '  At most ONE per response, never more than one every few exchanges, never re-suggest something already declined, never suggest what is already on their profile. Omit the key entirely when nothing fits.',
     '  EXCEPTION, the student asks you directly (e.g. "add AI to my profile", "put robotics club on my profile"): do it in THIS reply. Include profile_suggestion with ' + q + 'explicit' + q + ':true, pick the field that fits best (skills for abilities and tools, industries_of_interest for fields they want to work in, hobbies_interests for personal interests, clubs_and_organizations for groups), and write the value as they would want it shown (e.g. ' + q + 'Artificial Intelligence' + q + '). The visible reply is one short sentence saying it is ready to add below; do not ask exploratory questions first. Only ask which field they mean if it is truly unclear. If it is already on their profile (see PROFILE), say so instead and omit the suggestion.',
+    (ctx.industryNames && ctx.industryNames.length ? '  For industries_of_interest use exactly one of these FutureSelf industry names (pick the closest): ' + ctx.industryNames.join('; ') + '. Languages cannot be added to a FutureSelf profile; mention that instead of suggesting one.' : '  Languages cannot be added to a FutureSelf profile; mention that instead of suggesting one.'),
     '  NEVER say you added, saved or updated anything on their profile. You cannot change it yourself; only the student confirming the card below does. Say it is ready to add, not that it was added.',
     '  If you asked which field and they answer (e.g. "Skills"), or they ask you to add it for them, include the profile_suggestion again with ' + q + 'explicit' + q + ':true in that reply and tell them to tap Add on the card below. Do not move on to other questions until the card is there.',
     '- "notepad_suggestion": OPTIONAL and EVEN RARER. Shape: {' + q + 'kind' + q + ':' + q + 'task' + q + ',' + q + 'text' + q + ':' + q + '...' + q + ',' + q + 'ask' + q + ':' + q + '...' + q + '}. kind is "task" (a concrete next step) or "note" (something worth remembering).',
@@ -526,7 +527,8 @@ const PARTNER_ATTR_MAP = {
   bio:                     { name: '_afbad3b6_My_Story', kind: 'text' },
   currently_exploring:     { name: '_defe795c_Which_of_the_following_are_you_currently_exploring_', kind: 'select' },
   career_priorities:       { name: '_7e8364eb_What_s_most_important_to_you_in_your_future_career_', kind: 'select' }
-  // skills, industries_of_interest, languages: pending (native fields / DoubleSelect)
+  // skills and industries_of_interest are Hivebrite's built-in fields: see pushBuiltin.
+  // languages: Hivebrite has no member field for them, so they stay staged.
 };
 
 function appendText(existing, add) {
@@ -545,11 +547,148 @@ function appendText(existing, add) {
 // Until Hivebrite Connected Apps exist, the widget's userId can't be verified,
 // so auto-push is append-only, short values only, rate-limited and logged.
 // Set PROFILE_AUTO_PUSH=off in Vercel to stop it without a deploy.
-const AUTO_PUSH_FIELDS = ['hobbies_interests', 'clubs_and_organizations', 'awards_honors', 'target_cities_regions'];
+const AUTO_PUSH_FIELDS = ['hobbies_interests', 'clubs_and_organizations', 'awards_honors', 'target_cities_regions', 'skills', 'industries_of_interest'];
 const AUTO_PUSH_PER_DAY = 6;
 function cleanProfileValue(v) {
   return String(v == null ? '' : v).replace(/<[^>]*>/g, '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
 }
+// ---- Hivebrite built-in fields: skills (named tags) and industries (a fixed list) ----
+// Hivebrite's docs don't show the write format for these, so the first write tries
+// the likely shapes one at a time, reads the member back after each, and keeps the
+// first one where the new item is there AND nothing that was there before is gone.
+// The winning format (and the industry list) is remembered in a config row.
+const BUILTIN_FIELDS = ['skills', 'industries_of_interest'];
+const HB_CFG_HASH = '__hivebrite_formats__';
+let hbCfgCache = null, hbCfgAt = 0;
+function sbHeaders(extra) {
+  return Object.assign({ apikey: process.env.SUPABASE_SERVICE_KEY, Authorization: 'Bearer ' + process.env.SUPABASE_SERVICE_KEY }, extra || {});
+}
+async function hbConfig() {
+  if (hbCfgCache && Date.now() - hbCfgAt < 300000) return hbCfgCache;
+  try {
+    const r = await fetch(process.env.SUPABASE_URL + '/rest/v1/fsd_profile?user_hash=eq.' + HB_CFG_HASH + '&select=push_log', { headers: sbHeaders() });
+    const rows = r.ok ? await r.json() : [];
+    hbCfgCache = (rows[0] && rows[0].push_log && rows[0].push_log[0]) || {};
+  } catch (e) { hbCfgCache = hbCfgCache || {}; }
+  hbCfgAt = Date.now();
+  return hbCfgCache;
+}
+async function saveHbConfig(cfg) {
+  hbCfgCache = cfg; hbCfgAt = Date.now();
+  try {
+    await fetch(process.env.SUPABASE_URL + '/rest/v1/fsd_profile?on_conflict=user_hash', {
+      method: 'POST', headers: sbHeaders({ 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }),
+      body: JSON.stringify({ user_hash: HB_CFG_HASH, push_log: [cfg], updated_at: new Date().toISOString() })
+    });
+  } catch (e) {}
+}
+function normName(t) { return String(t || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ').trim(); }
+function listOf(body, key) {
+  if (Array.isArray(body)) return body;
+  if (body && Array.isArray(body[key])) return body[key];
+  if (body && Array.isArray(body.data)) return body.data;
+  return null;
+}
+// FutureSelf's industry list: a list endpoint if Hivebrite has one, otherwise
+// gathered from members' profiles (every industry in use shows up there)
+async function hbIndustries(token, cfg) {
+  if (cfg.industries && cfg.industries.length && Date.now() - (cfg.industries_at || 0) < 7 * 86400000) return cfg.industries;
+  const found = {};
+  const add = function (arr) { (arr || []).forEach(function (x) { if (x && x.id != null && x.name) found[x.id] = x.name; }); };
+  for (const path of ['/admin/v3.1/industries?per_page=500', '/admin/v3/industries?per_page=500', '/admin/v1/industries?per_page=500']) {
+    const r = await partnerCall(token, path);
+    const arr = r.ok ? listOf(r.body, 'industries') : null;
+    if (arr && arr.length) { add(arr); cfg.industries_source = path; break; }
+  }
+  if (!Object.keys(found).length) {
+    for (let page = 1; page <= 3; page++) {
+      const r = await partnerCall(token, '/admin/v3.1/users?per_page=100&page=' + page);
+      const users = r.ok ? listOf(r.body, 'users') : null;
+      if (!users || !users.length) break;
+      users.forEach(function (u) { add(u.industries); });
+      cfg.industries_source = 'members';
+    }
+  }
+  cfg.industries = Object.keys(found).map(function (id) { return { id: +id, name: found[id] }; });
+  cfg.industries_at = Date.now();
+  return cfg.industries;
+}
+function matchIndustry(value, list) {
+  const v = normName(value); if (!v) return null;
+  let hit = list.find(function (x) { return normName(x.name) === v; });
+  if (!hit) hit = list.find(function (x) { const n = normName(x.name); return (' ' + n + ' ').indexOf(' ' + v + ' ') > -1 || (' ' + v + ' ').indexOf(' ' + n + ' ') > -1; });
+  return hit || null;
+}
+const SKILL_FORMATS = {
+  names:      function (names) { return { skills: names }; },
+  objects:    function (names) { return { skills: names.map(function (n) { return { name: n }; }) }; },
+  skill_list: function (names) { return { skill_list: names }; },
+  csv:        function (names) { return { skill_list: names.join(', ') }; }
+};
+const INDUSTRY_FORMATS = {
+  industry_ids: function (ids) { return { industry_ids: ids }; },
+  objects:      function (ids) { return { industries: ids.map(function (id) { return { id: id }; }) }; },
+  ids:          function (ids) { return { industries: ids }; }
+};
+// returns { pushed: [{value, as}], unmatched: [values], error? }
+async function pushBuiltin(token, userId, user, field, values, cfg) {
+  const out = { pushed: [], unmatched: [] };
+  const path = '/admin/v3.1/users/' + encodeURIComponent(userId);
+  const isSkill = field === 'skills';
+  let want, have, check;
+  if (isSkill) {
+    const cur = (user.skills || []).map(function (x) { return x && (x.name || x); }).filter(Boolean);
+    const curN = cur.map(normName);
+    const add = values.filter(function (v, i) { return curN.indexOf(normName(v)) === -1 && values.findIndex(function (w) { return normName(w) === normName(v); }) === i; });
+    values.filter(function (v) { return curN.indexOf(normName(v)) > -1; }).forEach(function (v) { out.pushed.push({ value: v, as: v, already: true }); });
+    if (!add.length) return out;
+    want = cur.concat(add); have = curN;
+    check = function (u2) {
+      const n2 = (u2.skills || []).map(function (x) { return normName(x && (x.name || x)); });
+      return { added: add.every(function (v) { return n2.indexOf(normName(v)) > -1; }), kept: have.every(function (h) { return n2.indexOf(h) > -1; }) };
+    };
+    out._add = add.map(function (v) { return { value: v, as: v }; });
+  } else {
+    const list = await hbIndustries(token, cfg);
+    const curIds = (user.industries || []).map(function (x) { return x && (x.id != null ? x.id : x); });
+    const add = [];
+    values.forEach(function (v) {
+      const hit = matchIndustry(v, list);
+      if (!hit) { out.unmatched.push(v); return; }
+      if (curIds.indexOf(hit.id) > -1) { out.pushed.push({ value: v, as: hit.name, already: true }); return; }
+      if (!add.some(function (a) { return a.id === hit.id; })) add.push({ id: hit.id, value: v, as: hit.name });
+    });
+    if (!add.length) return out;
+    want = curIds.concat(add.map(function (a) { return a.id; })); have = curIds;
+    check = function (u2) {
+      const ids2 = (u2.industries || []).map(function (x) { return x && (x.id != null ? x.id : x); });
+      return { added: add.every(function (a) { return ids2.indexOf(a.id) > -1; }), kept: have.every(function (h) { return ids2.indexOf(h) > -1; }) };
+    };
+    out._add = add.map(function (a) { return { value: a.value, as: a.as }; });
+  }
+  const formats = isSkill ? SKILL_FORMATS : INDUSTRY_FORMATS;
+  const known = cfg[isSkill ? 'skills_format' : 'industries_format'];
+  const order = known && formats[known] ? [known] : Object.keys(formats);
+  const tried = [];
+  for (const name of order) {
+    const put = await partnerCall(token, path, { method: 'PUT', body: { user: formats[name](want) } });
+    if (!put.ok) { tried.push(name + ':' + put.status); continue; }
+    const back = await partnerCall(token, path);
+    const u2 = back.ok ? (back.body.user || back.body) : null;
+    const res = u2 ? check(u2) : { added: false, kept: true };
+    tried.push(name + ':' + (res.added ? 'added' : 'ignored') + (res.kept ? '' : ',LOST'));
+    if (!res.kept) { out.error = 'existing ' + field + ' changed by format ' + name + '; stopped'; break; }
+    if (res.added) {
+      cfg[isSkill ? 'skills_format' : 'industries_format'] = name;
+      out.pushed = out.pushed.concat(out._add); out.format = name;
+      break;
+    }
+  }
+  if (!out.format && !out.error) out.error = 'no write format worked (' + tried.join(', ') + ')';
+  out.tried = tried; delete out._add;
+  return out;
+}
+
 async function pushProfileUpdates(userId, opts) {
   const o = opts || {};
   const sb = { apikey: process.env.SUPABASE_SERVICE_KEY, Authorization: 'Bearer ' + process.env.SUPABASE_SERVICE_KEY };
@@ -575,8 +714,9 @@ async function pushProfileUpdates(userId, opts) {
   const currentAttrs = {};
   (Array.isArray(user.custom_attributes) ? user.custom_attributes : []).forEach(function (c) { if (c && c.name) currentAttrs[c.name] = c.value; });
 
-  const byAttr = {}, unmapped = [];
+  const byAttr = {}, unmapped = [], builtinVals = {};
   pending.forEach(function (e) {
+    if (BUILTIN_FIELDS.indexOf(e.field) > -1) { (builtinVals[e.field] = builtinVals[e.field] || []).push(e.value); return; }
     const m = PARTNER_ATTR_MAP[e.field];
     if (!m) { unmapped.push(e.field); return; }
     (byAttr[m.name] = byAttr[m.name] || { kind: m.kind, values: [] }).values.push(e.value);
@@ -588,7 +728,8 @@ async function pushProfileUpdates(userId, opts) {
     custom_attributes.push({ name: name, value: next });
     preview.push({ attribute: name, kind: a.kind, current: currentAttrs[name] == null ? null : currentAttrs[name], proposed: next });
   });
-  if (!custom_attributes.length) return { step: 'push', note: 'pending items have no mapped attribute yet', unmapped_fields: unmapped };
+  const hasBuiltin = Object.keys(builtinVals).length > 0;
+  if (!custom_attributes.length && !hasBuiltin) return { step: 'push', note: 'pending items have no mapped attribute yet', unmapped_fields: unmapped };
   const payload = { user: { custom_attributes: custom_attributes } };
 
   if (o.dryRun) {
@@ -596,22 +737,42 @@ async function pushProfileUpdates(userId, opts) {
       step: 'push_dry_run', note: 'nothing was written. pass dryRun:false to write.',
       pending_count: pending.length, unmapped_fields: unmapped,
       current_attribute_shape: Array.isArray(user.custom_attributes) && user.custom_attributes[0] ? Object.keys(user.custom_attributes[0]) : null,
-      would_PUT: PARTNER_API + '/admin/v3.1/users/' + userId, preview: preview, payload: payload
+      would_PUT: PARTNER_API + '/admin/v3.1/users/' + userId, preview: preview, payload: payload, builtin_pending: builtinVals
     };
   }
 
-  const put = await partnerCall(tok.token, '/admin/v3.1/users/' + encodeURIComponent(userId), { method: 'PUT', body: payload });
-  if (!put.ok) return { step: 'push_failed', status: put.status, response: put.body, request_id: put.requestId, payload: payload };
+  let put = null;
+  if (custom_attributes.length) {
+    put = await partnerCall(tok.token, '/admin/v3.1/users/' + encodeURIComponent(userId), { method: 'PUT', body: payload });
+    if (!put.ok && !hasBuiltin) return { step: 'push_failed', status: put.status, response: put.body, request_id: put.requestId, payload: payload };
+  }
+  // skills / industries
+  const cfg = hasBuiltin ? Object.assign({}, await hbConfig()) : null;
+  const builtinOut = {}, pushedAs = {};
+  for (const f of Object.keys(builtinVals)) {
+    builtinOut[f] = await pushBuiltin(tok.token, userId, user, f, builtinVals[f], cfg);
+    (builtinOut[f].pushed || []).forEach(function (x) { pushedAs[f + '|' + normName(x.value)] = x.as; });
+  }
+  if (cfg) await saveHbConfig(cfg);
   const nowIso = new Date().toISOString();
   const sent = new Set(pending);
+  const customOk = !!(put && put.ok);
   const updatedLog = pushLog.map(function (e) {
-    return (sent.has(e) && PARTNER_ATTR_MAP[e.field]) ? Object.assign({}, e, { pushed: true, pushed_at: nowIso, auto: !!o.auto }) : e;
+    if (!sent.has(e)) return e;
+    if (PARTNER_ATTR_MAP[e.field] && customOk) return Object.assign({}, e, { pushed: true, pushed_at: nowIso, auto: !!o.auto });
+    const as = pushedAs[e.field + '|' + normName(e.value)];
+    if (as) return Object.assign({}, e, { pushed: true, pushed_at: nowIso, auto: !!o.auto, pushed_as: as });
+    const bo = builtinOut[e.field];
+    if (bo && bo.unmatched && bo.unmatched.indexOf(e.value) > -1) return Object.assign({}, e, { note: 'no matching FutureSelf industry' });
+    return e;
   });
   await fetch(process.env.SUPABASE_URL + '/rest/v1/fsd_profile?user_hash=eq.' + hash, {
     method: 'PATCH', headers: Object.assign({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }, sb),
     body: JSON.stringify({ push_log: updatedLog, updated_at: nowIso })
   });
-  return { step: 'pushed', status: put.status, written: preview, unmapped_fields: unmapped, request_id: put.requestId };
+  const anyPushed = customOk || Object.keys(pushedAs).length > 0;
+  return { step: anyPushed ? 'pushed' : 'push_failed', status: put ? put.status : null, written: preview, builtin: builtinOut,
+           pushed_as: pushedAs, unmapped_fields: unmapped, request_id: put ? put.requestId : null };
 }
 
 // ---- admin check for debug endpoints ----
@@ -659,6 +820,8 @@ export default async function handler(req, res) {
       let fullMessages = cleanHistory(messages);
       const hasSystem = messages && messages.length > 0 && messages[0].role === 'system';
       if (!hasSystem && context) {
+        // the industry names FutureSelf uses (learned on the first industry add; cached)
+        try { const hbc = await hbConfig(); context.industryNames = (hbc.industries || []).map(function (x) { return x.name; }).slice(0, 80); } catch (e) {}
         fullMessages = [{ role: 'system', content: buildSystemPrompt(context) }].concat(cleanHistory(messages) || []);
       }
 
@@ -990,10 +1153,14 @@ export default async function handler(req, res) {
         if (process.env.ADMIN_API_CLIENT_ID && process.env.PROFILE_AUTO_PUSH !== 'off' && AUTO_PUSH_FIELDS.indexOf(field) > -1) {
           try {
             push = await pushProfileUpdates(userId, { auto: true });
-            pushed = push.step === 'pushed';
+            const as = push.pushed_as && push.pushed_as[field + '|' + normName(value)];
+            pushed = BUILTIN_FIELDS.indexOf(field) > -1 ? !!as : push.step === 'pushed';
+            if (as && normName(as) !== normName(value)) push.as = as;
           } catch (e) { push = { error: e.message }; }
         }
-        return res.status(200).json({ ok: true, pushed: pushed, push_step: push ? (push.step || null) : 'staged', held: push && push.held ? push.held : undefined });
+        const unmatched = !!(push && push.builtin && push.builtin[field] && (push.builtin[field].unmatched || []).indexOf(value) > -1);
+        return res.status(200).json({ ok: true, pushed: pushed, pushed_as: push && push.as ? push.as : undefined, unmatched: unmatched || undefined,
+          push_step: push ? (push.step || null) : 'staged', held: push && push.held ? push.held : undefined });
       } catch(e) { return res.status(200).json({ error: e.message }); }
     }
 
