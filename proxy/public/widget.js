@@ -325,8 +325,10 @@
         if (r.ok === true) {
           sugState.accepted.push(String(sug.value));
           var line = r.pushed
-            ? pick(['Added to your profile.', 'Done, it\'s on your profile now.', 'Your profile has it now.'])
-            : pick(['Saved. It\'ll show on your profile soon.', 'Got it, it\'s queued for your profile.', 'Done. Your profile will pick that up shortly.']);
+            ? (r.pushed_as ? 'Added to your profile as <strong>' + esc(r.pushed_as) + '</strong>.' : pick(['Added to your profile.', 'Done, it\'s on your profile now.', 'Your profile has it now.']))
+            : r.unmatched
+              ? 'Saved. FutureSelf\'s industry list doesn\'t include that one, so it can\'t go on your profile yet.'
+              : pick(['Saved. It\'ll show on your profile soon.', 'Got it, it\'s queued for your profile.', 'Done. Your profile will pick that up shortly.']);
           var link = r.pushed ? ' <a href="' + esc(editURL()) + '" target="_top">View profile</a>' : '';
           resolveCard(el, '<span class="cmp-sug-tick">' + SUG_ICON.task + '</span>' + line + link);
         } else resolveCard(el, 'That didn\'t save. I\'ll offer again another time.');
