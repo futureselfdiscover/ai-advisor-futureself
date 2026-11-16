@@ -20,14 +20,16 @@ MANUAL = [
     ("Biological Sciences", r"^@@H4@@Requirements for the Integrative Biology", None, "Integrative Biology", "major"),
     ("Peabody Minors", r"^@@H4@@Child Psych and Mental Health", None, "Child Psychology and Mental Health", "minor"),
     ("Peabody Minors", r"^@@H4@@Multilingual Learner Education", None, "Multilingual Learner Education", "minor"),
-    ("Additional Programs in the Blair School of Music", r"(?i)^@@H\d@@[^@]*\bcomposition\b", None, "Music Composition", "minor"),
-    ("Additional Programs in the Blair School of Music", r"(?i)^(@@H\d@@)?\s*(minor in )?music performance( minor)?\b", None, "Music Performance", "minor"),
-    ("Additional Programs in the Blair School of Music", r"(?i)^(@@H\d@@)?\s*(the )?(music minor|minor in music)\b(?!.*(composition|performance))", None, "Music", "minor"),
-    ("Philosophy", r"(?i)^(@@H\d@@)?\s*(the )?(minor in philosophy|philosophy minor)\b", None, "Philosophy", "minor"),
-    ("School of Engineering Minors", r"(?i)^(@@H\d@@)?\s*(minor in )?engineering management( minor)?\b", None, "Engineering Management", "minor"),
+    ("Philosophy", r"^@@H\d@@\s*Minor in Philosophy", None, "Philosophy", "minor"),
+    ("School of Engineering Minors", r"(?i)^@@H\d@@\s*(minor in )?engineering management", None, "Engineering Management", "minor"),
+    ("Classes for Students in Other Vanderbilt Schools and Colleges", r"^@@H4@@Music Minor\.", None, "Music", "minor"),
+    ("Classes for Students in Other Vanderbilt Schools and Colleges", r"^@@H4@@Musicology/Ethnomusicology Minor", None, "Musicology/Ethnomusicology", "minor"),
+    ("Classes for Students in Other Vanderbilt Schools and Colleges", r"^@@H4@@Music Composition Minor", None, "Music Composition", "minor"),
+    ("Classes for Students in Other Vanderbilt Schools and Colleges", r"^@@H4@@Music Performance Minor", None, "Music Performance", "minor"),
+    ("Classes for Students in Other Vanderbilt Schools and Colleges", r"^@@H4@@Jazz Music Minor", None, "Jazz Music", "minor"),
 ]
 RENAME = {"Education Studies minor": "Educational Studies minor", "Undergraduate Business minor": "Business minor"}
-DROP = {"The Undergraduate Business minor"}
+DROP = {"The Undergraduate Business minor", "Musicology minor", "Jazz Studies minor"}
 
 
 def main():
