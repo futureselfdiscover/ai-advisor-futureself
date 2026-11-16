@@ -97,7 +97,10 @@ def _check(url, domain, name):
     try:
         r = requests.get(url, headers=UA, timeout=5, allow_redirects=True)
     except Exception:
-        return None
+        # many big sites drop connections from cloud servers; trust the company's own domain
+        host = (urlparse(url).hostname or "").lower()
+        on_site = bool(domain) and (host == domain or host.endswith("." + domain))
+        return "blocked" if on_site and any(t in host for t in _tokens(name)) else None
     host = (urlparse(r.url).hostname or "").lower()
     on_site = bool(domain) and (host == domain or host.endswith("." + domain))
     if not (on_site or any(host.endswith(s) for s in JOB_SITES)):
