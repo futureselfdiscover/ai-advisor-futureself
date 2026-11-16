@@ -323,6 +323,11 @@ if "explore_cities" in globals():
         return _explore_cities_raw(*args, **kwargs)
 
 
+
+# --- Guided job search (see job_search.py) ---
+from job_search import wrap_route  # noqa: E402
+route = wrap_route(route)
+
 if __name__ == "__main__":
     test_message = sys.argv[1] if len(sys.argv) > 1 else "What courses should I take?"
     test_hash = sys.argv[2] if len(sys.argv) > 2 else None

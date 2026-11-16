@@ -272,3 +272,7 @@ def suggest_companies(*args, **kwargs):
         seen.add(fixed.lower())
         out.append({**it, "name": fixed} if isinstance(it, dict) else fixed)
     return out
+
+
+# --- Any-company careers links (see careers_any.py) ---
+from careers_any import careers_links, careers_html, careers_brief, explorer_html, explorer_brief  # noqa: E402,F401

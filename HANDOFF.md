@@ -155,3 +155,7 @@ changed programs (usually cents to a few dollars).
 - Links come from `backend/data/companies.json` (hand-checked list). Unknown companies are looked up live and only shown if the page loads on the company's own domain or a known job board.
 - Monthly: `python data/scrapers/verify_companies.py` re-checks every link. Sites that block automatic checks: open in a browser, then `--approve "Company Name"`.
 - To add or fix a company: edit `companies.json`, run the verify script, commit.
+- Any company: names not in `companies.json` are looked up live (`advisor/careers_any.py`): AI guesses the official
+  site, the page is opened to confirm it is on the company's own domain or a hiring site; otherwise a search link is shown.
+- Job searches ("find a job in Chicago") are guided in `advisor/job_search.py`: one question about what they want,
+  then companies that fit with careers links.
