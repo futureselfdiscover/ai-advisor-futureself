@@ -64,7 +64,7 @@ course_planner - the student wants a personal plan for what THEY should take nex
   not name a specific major or minor. ("what should I take next semester", "plan my spring")
 club_matcher - student organizations, clubs, groups, getting involved on campus
 city_explorer - which cities or places to live or work, salaries or pay for a job, cost of
-  living, relocating (not internship or job searches in a city)
+  living, relocating. NOT for finding, searching for, or applying to jobs or internships, even when a city is named ("find a job in Chicago" is general)
 industry_path - how to break into or build a career in a field, what the path looks like,
   skills or experience needed for a kind of job
 interview_prep - preparing for interviews, practice interview questions

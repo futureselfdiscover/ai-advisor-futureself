@@ -182,5 +182,17 @@
   {
     "message": "link me to Tesla jobs",
     "feature": "company_careers"
+  },
+  {
+    "message": "im trying to find a job in chicago",
+    "feature": "general"
+  },
+  {
+    "message": "how do I get a job in Boston after graduation",
+    "feature": "general"
+  },
+  {
+    "message": "how much do accountants make in Chicago",
+    "feature": "city_explorer"
   }
 ]

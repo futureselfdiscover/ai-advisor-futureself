@@ -78,7 +78,7 @@ backend/
 ## Deploying
 
 - Proxy/widget: merge to `main` -> Vercel deploys automatically.
-- Backend: merge to `main` -> Railway deploys automatically (if GitHub deploys are connected;
+- Backend: merge to `main` -> Railway deploys automatically (Railway settings live in `backend/.railway/railway.ts`; it deploys from GitHub `main`.
   otherwise run `railway up --detach` from `backend/` while logged in as the company account).
 - Always work on a branch and open a pull request; never commit secrets.
 
