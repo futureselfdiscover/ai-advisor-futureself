@@ -341,7 +341,7 @@ def requirements_html(program_name: str, note: str = None):
         if detail:
             line += f": {detail}"
         if codes:
-            line += f"<br>&nbsp;&nbsp;{esc(codes)}"
+            line += (" — " if detail else ": ") + esc(codes)
         lines.append(line)
     lines.append(f"<i>2025–26 Vanderbilt Undergraduate Catalog, pp. {chosen['start_page']}–{chosen['end_page']}. "
                  f"Confirm with your advisor before registering.</i>")

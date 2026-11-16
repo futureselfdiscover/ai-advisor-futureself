@@ -123,7 +123,7 @@ def pick_feature(message: str) -> dict:
 def clean_turn(content) -> str:
     """Drops the suggestions/memory JSON lines the widget appends to replies."""
     text = re.sub(r"<br\s*/?>", "\n", str(content))
-    text = re.sub(r"<[^>]+>", " ", text).replace("&nbsp;", " ").replace("&amp;", "&")
+    text = re.sub(r"<[^>]+>", " ", text).replace(" ", " ").replace("&amp;", "&")
     lines = [
         line for line in text.splitlines()
         if not line.strip().startswith(('{"suggestions"', '{"memory"'))
