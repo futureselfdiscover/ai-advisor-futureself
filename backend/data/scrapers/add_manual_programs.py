@@ -20,6 +20,8 @@ MANUAL = [
     ("Biological Sciences", r"^@@H4@@Requirements for the Integrative Biology", None, "Integrative Biology", "major"),
     ("Peabody Minors", r"^@@H4@@Child Psych and Mental Health", None, "Child Psychology and Mental Health", "minor"),
     ("Peabody Minors", r"^@@H4@@Multilingual Learner Education", None, "Multilingual Learner Education", "minor"),
+    ("Additional Programs in the Blair School of Music", r"(?i)^@@H\d@@[^@]*\bcomposition\b", None, "Music Composition", "minor"),
+    ("Additional Programs in the Blair School of Music", r"(?i)^@@H\d@@[^@]*\bperformance\b", None, "Music Performance", "minor"),
 ]
 RENAME = {"Education Studies minor": "Educational Studies minor"}
 DROP = {"The Undergraduate Business minor"}
@@ -33,8 +35,7 @@ def main():
             p["name"] = RENAME[p["name"]]
             p["subject"] = p["name"].rsplit(" ", 1)[0].lower()
     names = {p["name"] for p in progs}
-    progs = [p for p in progs if not (p.get("placeholder") and p["name"] in {f"{n} {k}" for _, _, _, n, k in MANUAL}
-                                     | set(RENAME.values()))]
+    progs = [p for p in progs if not (p.get("placeholder") and p["name"] in set(RENAME.values()))]
     nav = b.get(f"/public/catalogs/{b.CATALOG}")["settings"]["catalog"]["navigation"]
     pages = {it["title"].strip(): it["to"].split("/")[-1] for top in nav for it in (top.get("nestedItems") or [])}
     cache = {}

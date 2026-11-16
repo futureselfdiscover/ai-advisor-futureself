@@ -2590,11 +2590,46 @@
  },
  {
   "program": "Child Psychology and Mental Health minor",
-  "total_hours": null,
-  "summary": "The requirements for the Child Psychology and Mental Health minor are not yet available in the 2026\u201327 undergraduate catalog.",
-  "groups": [],
-  "other_rules": [],
-  "has_requirements": false,
+  "total_hours": "15",
+  "summary": "The minor in Child Psychology and Mental Health requires 6 credit hours of core courses and 9 credit hours of elective courses, focusing on psychopathology, assessment, treatment, and clinical research methods.",
+  "groups": [
+   {
+    "name": "Required (Core) Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "6",
+    "courses": [
+     "PSY-PC 3200",
+     "PSY-PC 2700"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Elective Courses",
+    "type": "elective",
+    "rule": "Choose courses totaling 9 credit hours",
+    "hours": "9",
+    "courses": [
+     "PSY-PC 2520",
+     "PSY-PC 2257",
+     "PSY-PC 3650",
+     "PSY-PC 3230",
+     "PSY-PC 3860",
+     "PSY 3625",
+     "PSY 3100",
+     "SPEDS 2120",
+     "SPEDH 3308",
+     "SPEDH 3318"
+    ],
+    "level_or_range": null,
+    "notes": "PSY-PC 3860 must involve work on a study or project related to clinical psychology; maximum 3 hours."
+   }
+  ],
+  "other_rules": [
+   "There must be 15 unique hours for the minor that are not being used for any other major or minor."
+  ],
+  "has_requirements": true,
   "subject": "child psychology and mental health",
   "kind": "minor",
   "start_page": null,
@@ -5131,10 +5166,43 @@
  {
   "program": "Educational Studies minor",
   "total_hours": null,
-  "summary": "The requirements for the Educational Studies minor are not yet available in the 2026\u201327 undergraduate catalog.",
-  "groups": [],
+  "summary": "The Educational Studies minor requires 6 credit hours of core courses and 4 additional courses chosen from a specified list.",
+  "groups": [
+   {
+    "name": "Required Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "6 credit hours",
+    "courses": [
+     "EDUC 1220",
+     "EDUC 1127",
+     "SPED 1210"
+    ],
+    "level_or_range": null,
+    "notes": "EDUC 1220 or EDUC 1127 must be taken."
+   },
+   {
+    "name": "Additional Courses",
+    "type": "depth_elective",
+    "rule": "Choose 4",
+    "hours": null,
+    "courses": [
+     "EDUC 3310",
+     "EDUC 3620",
+     "PSY-PC 2550",
+     "HMED 2250",
+     "ENED 6200",
+     "ENED 3357",
+     "AADS 3258",
+     "EDUC 3120",
+     "EDUC 3140"
+    ],
+    "level_or_range": null,
+    "notes": "Other EDUC/ENED/MTED/SCED/SSED or HMED course with permission of advisor."
+   }
+  ],
   "other_rules": [],
-  "has_requirements": false,
+  "has_requirements": true,
   "subject": "educational studies",
   "kind": "minor",
   "start_page": null,
@@ -5592,7 +5660,7 @@
  {
   "program": "Engineering Management minor",
   "total_hours": null,
-  "summary": "The Engineering Management minor is an interdisciplinary program designed to equip students with management skills for technology development and innovation.",
+  "summary": "The Engineering Management minor is an interdisciplinary program designed to equip students with the skills to manage technology development and innovation, linking engineering, science, and management disciplines.",
   "groups": [],
   "other_rules": [],
   "has_requirements": false,
@@ -5605,9 +5673,31 @@
  {
   "program": "Engineering Science major",
   "total_hours": null,
-  "summary": "The requirements for the Engineering Science major are not yet available in the 2026\u201327 undergraduate catalog.",
-  "groups": [],
-  "other_rules": [],
+  "summary": "The engineering science major is flexible and interdisciplinary, allowing students to select a program of study to meet special interests or objectives, with defined areas of concentration and individual programs developed for various career paths.",
+  "groups": [
+   {
+    "name": "Engineering Management",
+    "type": "concentration",
+    "rule": "Select courses related to engineering management",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Topics include entrepreneurship, human resources management, finance in technology-based organizations, technology strategy, communications, and operations."
+   },
+   {
+    "name": "Communication of Science and Technology",
+    "type": "concentration",
+    "rule": "Select courses related to communication of science and technology",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Program combines traditional engineering and science courses with communications and humanities courses."
+   }
+  ],
+  "other_rules": [
+   "Engineering science majors will not qualify for engineering licensure in most states.",
+   "Accreditation has not been sought for these programs of study."
+  ],
   "has_requirements": false,
   "subject": "engineering science",
   "kind": "major",
@@ -7481,10 +7571,82 @@
  {
   "program": "Integrative Biology major",
   "total_hours": null,
-  "summary": "The requirements for the Integrative Biology major are not listed in the 2026\u201327 undergraduate catalog.",
-  "groups": [],
-  "other_rules": [],
-  "has_requirements": false,
+  "summary": "The Integrative Biology major requires foundational courses in chemistry and biology, a selection of advanced biology courses, and research or laboratory experience.",
+  "groups": [
+   {
+    "name": "General Chemistry and Organic Chemistry",
+    "type": "science",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": "These 19 credit hours do not count toward the major. AP credit may satisfy some of these requirements."
+   },
+   {
+    "name": "Introductory Biology",
+    "type": "core",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
+     "BSCI 1510",
+     "BSCI 1511",
+     "BSCI 1510L",
+     "BSCI 1511L"
+    ],
+    "level_or_range": null,
+    "notes": "BSCI 1511L can be substituted with BSCI 1512L."
+   },
+   {
+    "name": "Advanced Biology Courses",
+    "type": "depth_elective",
+    "rule": "Take BSCI 2105 plus two additional 2000-level courses",
+    "hours": null,
+    "courses": [
+     "BSCI 2105"
+    ],
+    "level_or_range": "2000-level",
+    "notes": null
+   },
+   {
+    "name": "Research/Laboratory Requirement Option 1",
+    "type": "project_capstone",
+    "rule": "Choose this option",
+    "hours": "6-11",
+    "courses": [
+     "BSCI 3861",
+     "BSCI 3961"
+    ],
+    "level_or_range": "2000-level",
+    "notes": "Includes laboratory associated with 2119."
+   },
+   {
+    "name": "Research/Laboratory Requirement Option 2",
+    "type": "project_capstone",
+    "rule": "Choose this option",
+    "hours": "12",
+    "courses": [
+     "BSCI 3861",
+     "BSCI 3961",
+     "BSCI 4999"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Elective Courses",
+    "type": "elective",
+    "rule": "At least 2 credit hours must be at the 4000-level",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "2000-, 3000-, or 4000-level",
+    "notes": "Excluding BSCI 4999."
+   }
+  ],
+  "other_rules": [
+   "No more than 2 credit hours of BSCI 4965 may count toward the major.",
+   "A total of no more than 7 total credit hours of directed readings or directed/independent/Honors research (BSCI 3850, 3860, 3861, 3961, or 4999) may count toward the major."
+  ],
+  "has_requirements": true,
   "subject": "integrative biology",
   "kind": "major",
   "start_page": null,
@@ -10029,11 +10191,66 @@
  },
  {
   "program": "Music Composition minor",
-  "total_hours": null,
-  "summary": "The requirements for the Music Composition minor are not listed in the 2026\u201327 undergraduate catalog; students should consult the official program page or their academic advisor for details.",
-  "groups": [],
+  "total_hours": "20",
+  "summary": "The Music Composition minor requires a minimum of 20 credit hours, including core composition courses, electives in music theory, and additional courses from specified arts and humanities disciplines.",
+  "groups": [
+   {
+    "name": "Prerequisite",
+    "type": "other",
+    "rule": "Must complete",
+    "hours": null,
+    "courses": [
+     "COMP 1100"
+    ],
+    "level_or_range": null,
+    "notes": "Submission of portfolio of three representative works, with recordings; department approval required."
+   },
+   {
+    "name": "Composition",
+    "type": "concentration",
+    "rule": "4-6 hours over a minimum of 4 semesters",
+    "hours": null,
+    "courses": [
+     "COMP 1150"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Music Theory Electives",
+    "type": "depth_elective",
+    "rule": "Choose 4",
+    "hours": null,
+    "courses": [
+     "MUTH 3110",
+     "MUTH 3120",
+     "MUTH 3130",
+     "MUTH 3140",
+     "MUTH 3170",
+     "MUTH 3200",
+     "MUTH 3210",
+     "MUTH 3220",
+     "MUTH 3222"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Arts and Humanities Electives",
+    "type": "elective",
+    "rule": "Choose 2 (6-7 hours)",
+    "hours": null,
+    "courses": [
+     "ENGL 1250W",
+     "ENGL 1290",
+     "HART 1105"
+    ],
+    "level_or_range": "HART 1105 or higher",
+    "notes": null
+   }
+  ],
   "other_rules": [],
-  "has_requirements": false,
+  "has_requirements": true,
   "subject": "music composition",
   "kind": "minor",
   "start_page": null,
@@ -10310,10 +10527,229 @@
  {
   "program": "Music Integrated Studies major",
   "total_hours": null,
-  "summary": "The requirements for the Music Integrated Studies major are not yet available in the 2026\u201327 undergraduate catalog.",
-  "groups": [],
+  "summary": "The Music Integrated Studies major at Vanderbilt requires a combination of core music courses, ensemble participation, individual performance instruction, and liberal arts courses, totaling a minimum of 126 credit hours.",
+  "groups": [
+   {
+    "name": "Music Theory, Aural Skills, and Keyboard Harmony",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "19",
+    "courses": [
+     "MUTH 2100",
+     "MUTH 2200",
+     "MUTH 2300",
+     "MUTH 2400",
+     "MUTH 2110",
+     "MUTH 2220",
+     "MUTH 2330",
+     "MUTH 2440",
+     "MUKH 1131",
+     "MUKH 1132",
+     "MUKH 1133",
+     "MUKH 1134"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Musicology/Ethnomusicology",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "12",
+    "courses": [
+     "MUSL 2100",
+     "MUSL 2200W",
+     "MUSL 3100"
+    ],
+    "level_or_range": "MUSL 3220-3241",
+    "notes": "One course chosen from MUSL 3220-3241"
+   },
+   {
+    "name": "Conducting",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "2",
+    "courses": [
+     "MCON 3000"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Technology",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "1",
+    "courses": [
+     "MTEC 1340"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Ensemble: Strings, Woodwinds, Brass, Harp, Percussion",
+    "type": "core",
+    "rule": "10 hours minimum",
+    "hours": "10",
+    "courses": [
+     "MUSE 1010",
+     "MUSE 2210",
+     "MUSE 2230",
+     "MUSE 2240",
+     "MUSE 2270",
+     "MUSE 2280"
+    ],
+    "level_or_range": null,
+    "notes": "Eight semesters MUSE 1010 including four semesters of MUSE 2210, 2230, or 2240, \u00bd credit minimum each semester, taken both semesters of the first year, with two additional courses taken during career. Double bass majors may choose MUSE 2270 instead of 2210, 2220, or 2240. MUSE 2280 may substitute for one required semester of MUSE 2210, 2220, 2230, or 2240 after completing two semesters of MUSE 2210, 2220, 2230, or 2240."
+   },
+   {
+    "name": "Ensemble: Piano",
+    "type": "core",
+    "rule": "8 hours",
+    "hours": "8",
+    "courses": [
+     "MUSE 2300",
+     "MUSE 2310",
+     "MUSE 2320",
+     "MUSE 1010",
+     "MUSE 1020",
+     "MUSE 1030",
+     "MUSE 2120",
+     "MUSE 1310",
+     "MUSE 2210",
+     "MUSE 2230",
+     "MUSE 2270",
+     "MUSE 2280",
+     "MUSE 2330"
+    ],
+    "level_or_range": null,
+    "notes": "Participation in 1010 or 1030 is contingent upon approval of ensemble conductor and piano instructor."
+   },
+   {
+    "name": "Ensemble: Voice",
+    "type": "core",
+    "rule": "8 hours",
+    "hours": "8",
+    "courses": [
+     "MUSE 1020",
+     "MUSE 2120",
+     "MUSE 2330",
+     "MUSE 1030"
+    ],
+    "level_or_range": null,
+    "notes": "Eight semesters MUSE 1020 or 2120 as assigned (or 2330 if demonstrated schedule conflict exists); juniors or seniors cast in principal roles in MUSE 1030 (as defined by the voice faculty) may substitute MUSE 1030 for one semester only of MUSE 1020 or 2120."
+   },
+   {
+    "name": "Ensemble: Composition",
+    "type": "core",
+    "rule": "8 hours",
+    "hours": "8",
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Eight semesters of any ensemble"
+   },
+   {
+    "name": "Individual Performance or Composition Instruction",
+    "type": "core",
+    "rule": "16 hours, 8 semesters",
+    "hours": "16",
+    "courses": [],
+    "level_or_range": "2100 and 4100 level",
+    "notes": "Including corresponding studio class seminar"
+   },
+   {
+    "name": "Recital Attendance",
+    "type": "other",
+    "rule": "Every semester in residence except penultimate or final semester",
+    "hours": "No credit",
+    "courses": [
+     "MUSO 1000"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Required Concentration in Music",
+    "type": "concentration",
+    "rule": "18-20 hours",
+    "hours": "18-20",
+    "courses": [],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Performance",
+    "type": "core",
+    "rule": "Studio class seminar corresponding to individual performance instruction",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Other Music",
+    "type": "core",
+    "rule": "4 hours",
+    "hours": "4",
+    "courses": [
+     "MUSO 1201",
+     "MUSO 1400",
+     "MUSO 1410",
+     "MUSO 1420",
+     "MUTH 3110",
+     "MUSO 1130"
+    ],
+    "level_or_range": "1100-level",
+    "notes": "MUSO 1420 required for voice only; 4 hours of 1100-level performance instruction or MUED 1010-1040 and 3 hours MUTH 3110 required for composition only; MUSO 1130 required for percussion only"
+   },
+   {
+    "name": "Pedagogy",
+    "type": "core",
+    "rule": "2 hours",
+    "hours": "2",
+    "courses": [],
+    "level_or_range": null,
+    "notes": "In the area of individual performance"
+   },
+   {
+    "name": "Music Electives",
+    "type": "elective",
+    "rule": "To complete a minimum of 80 hours in music",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Liberal Arts",
+    "type": "liberal_arts_core",
+    "rule": "30 hours",
+    "hours": "30",
+    "courses": [],
+    "level_or_range": null,
+    "notes": "See full requirements below"
+   },
+   {
+    "name": "Immersion Vanderbilt",
+    "type": "project_capstone",
+    "rule": null,
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Free Electives",
+    "type": "elective",
+    "rule": "To complete 126 hours",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": null
+   }
+  ],
   "other_rules": [],
-  "has_requirements": false,
+  "has_requirements": true,
   "subject": "music integrated studies",
   "kind": "major",
   "start_page": null,
@@ -10488,9 +10924,11 @@
  {
   "program": "Music Performance minor",
   "total_hours": null,
-  "summary": "The requirements for the Music Performance minor are not listed in the 2026\u201327 undergraduate catalog; students should consult the official program page or their academic advisor for details.",
+  "summary": "The requirements for the Music Performance minor are not listed in the 2026\u201327 undergraduate catalog.",
   "groups": [],
-  "other_rules": [],
+  "other_rules": [
+   "Students should check the official program page or consult their academic advisor for the current requirements."
+  ],
   "has_requirements": false,
   "subject": "music performance",
   "kind": "minor",
