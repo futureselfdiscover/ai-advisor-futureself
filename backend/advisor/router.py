@@ -229,7 +229,7 @@ def _route(message: str, user_hash: str = None) -> dict:
             return done(plan_courses(user_hash)["plan"], "course_planner")
         if program:
             return done(
-                f'I couldn\'t find a program matching "{program}" in the 2025/2026 Vanderbilt catalog. '
+                f'I couldn\'t find a program matching "{program}" in the 2026/2027 Vanderbilt catalog. '
                 "What's the exact name of the major or minor you're asking about?",
                 "clarifying_question",
             )
