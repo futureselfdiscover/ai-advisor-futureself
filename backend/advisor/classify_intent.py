@@ -150,3 +150,20 @@ def classify_intent(message, *args, **kwargs):
         elif result == "out_of_scope":
             result = "career_coaching"
     return result
+
+
+# --- Messages that name a real major or minor ("business major") are academic planning, never vague ---
+_classify_before_programs = classify_intent
+
+
+def classify_intent(message, *args, **kwargs):
+    result = _classify_before_programs(message, *args, **kwargs)
+    cat = result.get("category") if isinstance(result, dict) else result
+    if cat in ("clarification_needed", "out_of_scope") and _re.search(r"(?i)\b(major|minor)s?\b", message or ""):
+        try:
+            from requirements import find_program
+            if find_program(message):
+                return {**result, "category": "academic_planning"} if isinstance(result, dict) else "academic_planning"
+        except Exception:
+            pass
+    return result

@@ -5825,15 +5825,49 @@
  {
   "program": "Engineering Management minor",
   "total_hours": "15",
-  "summary": "A minor in Engineering Management consists of a minimum of 15 credit hours within the discipline.",
-  "groups": [],
-  "other_rules": [
-   "Courses may not be taken on a Pass/Fail basis.",
-   "A minor for which all designated courses are completed with a grade point average of at least 2.000 will be entered on the transcript at the time of graduation.",
-   "When a minor is offered in a discipline that offers a major, only those courses that count toward the major may be counted toward the minor.",
-   "Students declare their intention to pursue a minor by completing the online Major/Minor Declaration/Change workflow process."
+  "summary": "The minor program consists of 15 hours of course work, including four core courses and one elective course.",
+  "groups": [
+   {
+    "name": "Core Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "12",
+    "courses": [
+     "ENGM 2210",
+     "ENGM 2440",
+     "ENGM 3010",
+     "ENGM 3000",
+     "ENGM 3700"
+    ],
+    "level_or_range": null,
+    "notes": "Students majoring in civil engineering may substitute CE 4400 for ENGM 3700."
+   },
+   {
+    "name": "Elective Course",
+    "type": "elective",
+    "rule": "Choose 1",
+    "hours": "3",
+    "courses": [
+     "ENGM 2160",
+     "ENGM 3100",
+     "ENGM 3200",
+     "ENGM 3300",
+     "ENGM 3350",
+     "ENGM 3600",
+     "ENGM 3650",
+     "ENGM 4500",
+     "CE 4300",
+     "ENVE 4305",
+     "ES 1151",
+     "ES 2900",
+     "ES 3885"
+    ],
+    "level_or_range": null,
+    "notes": "Students may substitute IDS 4500 for ENGM 4500. ES 3885 counts for 3 hours only."
+   }
   ],
-  "has_requirements": false,
+  "other_rules": [],
+  "has_requirements": true,
   "subject": "engineering management",
   "kind": "minor",
   "start_page": null,
@@ -7957,6 +7991,108 @@
   ],
   "has_requirements": true,
   "subject": "japanese language and culture",
+  "kind": "minor",
+  "start_page": null,
+  "end_page": null,
+  "removed_codes": []
+ },
+ {
+  "program": "Jazz Music minor",
+  "total_hours": "26",
+  "summary": "The Jazz Music minor requires 26 credit hours, including courses in music theory, musicology/ethnomusicology, performance, ensemble participation, other jazz requirements, and electives.",
+  "groups": [
+   {
+    "name": "Music Theory",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "3",
+    "courses": [
+     "MUTH 3120",
+     "MUTH 2446"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Musicology/Ethnomusicology",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "3",
+    "courses": [
+     "MUSL 3238"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Performance",
+    "type": "core",
+    "rule": "Individual instruction in a single instrument for at least 6 semesters",
+    "hours": "8\u201311",
+    "courses": [
+     "JAZZ 1100"
+    ],
+    "level_or_range": null,
+    "notes": "Students must meet minimum performance standards for admission to the program. Repertoire information and declaration forms are available at blair.vanderbilt.edu/academics."
+   },
+   {
+    "name": "Ensemble",
+    "type": "core",
+    "rule": "Participation for two semesters in appropriate performing ensemble",
+    "hours": "2",
+    "courses": [
+     "MUSE 1310",
+     "MUSE 1320",
+     "MUSE 1330",
+     "MUSE 1340"
+    ],
+    "level_or_range": null,
+    "notes": "Participation is assigned following audition. Jazz students may choose from the listed courses."
+   },
+   {
+    "name": "Other Jazz Requirements",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "6",
+    "courses": [
+     "JAZZ 2310",
+     "JAZZ 2315",
+     "JAZZ 2320",
+     "JAZZ 2330",
+     "MREP 2160",
+     "MREP 2170",
+     "MUKH 1135"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Elective for Jazz students",
+    "type": "elective",
+    "rule": "Choose 1 or more",
+    "hours": "3",
+    "courses": [
+     "MUSE 1310",
+     "MUSE 1320",
+     "MUSE 1330",
+     "MUSE 1340",
+     "MUSL 1250",
+     "MUSL 1620",
+     "MENT 1120",
+     "MENT 3100",
+     "MENT 3880",
+     "MENT 3881",
+     "MTEC 1340",
+     "MTEC 2342",
+     "MTEC 3346"
+    ],
+    "level_or_range": null,
+    "notes": null
+   }
+  ],
+  "other_rules": [],
+  "has_requirements": true,
+  "subject": "jazz music",
   "kind": "minor",
   "start_page": null,
   "end_page": null,
@@ -10361,65 +10497,55 @@
  },
  {
   "program": "Music Composition minor",
-  "total_hours": "20",
-  "summary": "The Music Composition minor requires a minimum of 20 credit hours, including core composition courses, electives in music theory, and additional courses from specified arts and humanities disciplines.",
+  "total_hours": "26",
+  "summary": "The Music Composition minor requires 26 credit hours, including courses in music theory, musicology/ethnomusicology, and composition.",
   "groups": [
    {
-    "name": "Prerequisite",
-    "type": "other",
-    "rule": "Must complete",
-    "hours": null,
+    "name": "Music Theory",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "13",
     "courses": [
-     "COMP 1100"
+     "MUTH 2100",
+     "MUTH 2200",
+     "MUTH 2300",
+     "MUTH 2400",
+     "MUTH 2110",
+     "MUTH 2220"
     ],
     "level_or_range": null,
-    "notes": "Submission of portfolio of three representative works, with recordings; department approval required."
+    "notes": null
+   },
+   {
+    "name": "Musicology/Ethnomusicology",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "6",
+    "courses": [
+     "MUSL 1200",
+     "MUSL 3100"
+    ],
+    "level_or_range": null,
+    "notes": "MUSL 1200 can be substituted with MUSL 2200W"
    },
    {
     "name": "Composition",
-    "type": "concentration",
-    "rule": "4-6 hours over a minimum of 4 semesters",
-    "hours": null,
+    "type": "core",
+    "rule": "Take all",
+    "hours": "7",
     "courses": [
+     "COMP 1100",
      "COMP 1150"
     ],
     "level_or_range": null,
-    "notes": null
-   },
-   {
-    "name": "Music Theory Electives",
-    "type": "depth_elective",
-    "rule": "Choose 4",
-    "hours": null,
-    "courses": [
-     "MUTH 3110",
-     "MUTH 3120",
-     "MUTH 3130",
-     "MUTH 3140",
-     "MUTH 3170",
-     "MUTH 3200",
-     "MUTH 3210",
-     "MUTH 3220",
-     "MUTH 3222"
-    ],
-    "level_or_range": null,
-    "notes": null
-   },
-   {
-    "name": "Arts and Humanities Electives",
-    "type": "elective",
-    "rule": "Choose 2 (6-7 hours)",
-    "hours": null,
-    "courses": [
-     "ENGL 1250W",
-     "ENGL 1290",
-     "HART 1105"
-    ],
-    "level_or_range": "HART 1105 or higher",
-    "notes": null
+    "notes": "COMP 1150 must be taken for 4 semesters"
    }
   ],
-  "other_rules": [],
+  "other_rules": [
+   "Formal admission into the music composition minor requires departmental approval.",
+   "Successful completion of COMP 1100 is a pre-requisite to applying.",
+   "Applicants must submit a portfolio of three completed works, with scores and recordings (MIDI is acceptable) for evaluation."
+  ],
   "has_requirements": true,
   "subject": "music composition",
   "kind": "minor",
@@ -11093,29 +11219,252 @@
  },
  {
   "program": "Music Performance minor",
-  "total_hours": null,
-  "summary": "The requirements for the Music Performance minor are not listed in the 2026\u201327 undergraduate catalog; students should consult the official program page or their academic advisor for details.",
-  "groups": [],
-  "other_rules": [],
-  "has_requirements": false,
+  "total_hours": "25 or 26",
+  "summary": "The Music Performance minor requires coursework in music theory, musicology/ethnomusicology, performance, and ensemble participation.",
+  "groups": [
+   {
+    "name": "Music Theory",
+    "type": "core",
+    "rule": "Choose 2",
+    "hours": "6 or 7",
+    "courses": [
+     "MUTH 1200",
+     "MUTH 1210",
+     "MUTH 2100",
+     "MUTH 2110",
+     "MUTH 2200",
+     "MUTH 2220"
+    ],
+    "level_or_range": null,
+    "notes": "Choose MUTH 1200 and 1210; or MUTH 2100/2110 and MUTH 2200/2220"
+   },
+   {
+    "name": "Musicology/Ethnomusicology",
+    "type": "core",
+    "rule": "Choose 2",
+    "hours": "6",
+    "courses": [
+     "MUSL 2200W",
+     "MUSL 1200",
+     "MUSL 3220",
+     "MUSL 3221",
+     "MUSL 3222",
+     "MUSL 3223",
+     "MUSL 3224",
+     "MUSL 3225",
+     "MUSL 3226",
+     "MUSL 3227",
+     "MUSL 3228",
+     "MUSL 3229",
+     "MUSL 3230",
+     "MUSL 3231",
+     "MUSL 3232",
+     "MUSL 3234",
+     "MUSL 3235",
+     "MUSL 3236",
+     "MUSL 3237",
+     "MUSL 3238",
+     "MUSL 3239",
+     "MUSL 3240",
+     "MUSL 3241",
+     "MUSL 3890"
+    ],
+    "level_or_range": null,
+    "notes": "Choose MUSL 2200W or 1200; and one course from MUSL 3220-3241 or 3890"
+   },
+   {
+    "name": "Performance",
+    "type": "core",
+    "rule": "At least 6 semesters of individual instruction",
+    "hours": "8\u201311",
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Individual instruction in a single instrument for at least 6 semesters. Students must meet minimum performance standards for admission to the program."
+   },
+   {
+    "name": "Ensemble",
+    "type": "core",
+    "rule": "Participation for two semesters",
+    "hours": "2",
+    "courses": [
+     "MUSE 1010",
+     "MUSE 1020",
+     "MUSE 2300",
+     "MUSE 2310",
+     "MUSE 2320",
+     "MUSE 2330",
+     "MUSE 2210",
+     "MUSE 2230",
+     "MUSE 2270",
+     "MUSE 1030",
+     "MUSE 2120"
+    ],
+    "level_or_range": null,
+    "notes": "Participation in an appropriate performing ensemble, as assigned following audition. Specific ensemble requirements vary by instrument."
+   }
+  ],
+  "other_rules": [
+   "Students must meet minimum performance standards for admission to the program.",
+   "Repertoire information and declaration forms are available at blair.vanderbilt.edu/academics."
+  ],
+  "has_requirements": true,
   "subject": "music performance",
   "kind": "minor",
   "start_page": null,
   "end_page": null,
-  "removed_codes": []
+  "removed_codes": [
+   "MUSL 3233"
+  ]
  },
  {
   "program": "Music minor",
-  "total_hours": null,
-  "summary": "This text does not provide specific requirements for the Music minor program.",
-  "groups": [],
-  "other_rules": [],
-  "has_requirements": false,
+  "total_hours": "24 or 25",
+  "summary": "The Music minor requires 24 or 25 credit hours, including courses in music theory, musicology/ethnomusicology, performance, and ensemble participation.",
+  "groups": [
+   {
+    "name": "Music Theory",
+    "type": "core",
+    "rule": "Choose 1 group",
+    "hours": "6 or 7",
+    "courses": [
+     "MUTH 1200",
+     "MUTH 1210",
+     "MUTH 2100",
+     "MUTH 2110",
+     "MUTH 2200",
+     "MUTH 2220"
+    ],
+    "level_or_range": null,
+    "notes": "Choose MUTH 1200 and 1210 for 6 hours, or MUTH 2100/2110 and MUTH 2200/2220 for 7 hours."
+   },
+   {
+    "name": "Musicology/Ethnomusicology",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "12",
+    "courses": [
+     "MUSL 2200W",
+     "MUSL 1200"
+    ],
+    "level_or_range": null,
+    "notes": "Choose MUSL 2200W or 1200."
+   },
+   {
+    "name": "Musicology/Ethnomusicology Elective 1",
+    "type": "depth_elective",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "MUTH 3890",
+     "MUSL 1210",
+     "MUSL 1220",
+     "MUSL 1240",
+     "MUSL 3220",
+     "MUSL 3221",
+     "MUSL 3222",
+     "MUSL 3223",
+     "MUSL 3224",
+     "MUSL 3225",
+     "MUSL 3226",
+     "MUSL 3227",
+     "MUSL 3228",
+     "MUSL 3229",
+     "MUSL 3230",
+     "MUSL 3231",
+     "MUSL 3232",
+     "MUSL 3234",
+     "MUSL 3235",
+     "MUSL 3236",
+     "MUSL 3237",
+     "MUSL 3238",
+     "MUSL 3239",
+     "MUSL 3240",
+     "MUSL 3241",
+     "MUSL 3890"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Musicology/Ethnomusicology Elective 2",
+    "type": "depth_elective",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "MUSL 1100",
+     "MUSL 1105",
+     "MUSL 2110",
+     "MUSL 2150",
+     "MUSL 2600",
+     "MUSL 3220",
+     "MUSL 3221",
+     "MUSL 3222",
+     "MUSL 3223",
+     "MUSL 3224",
+     "MUSL 3225",
+     "MUSL 3226",
+     "MUSL 3227",
+     "MUSL 3228",
+     "MUSL 3229",
+     "MUSL 3230",
+     "MUSL 3231",
+     "MUSL 3232",
+     "MUSL 3234",
+     "MUSL 3235",
+     "MUSL 3236",
+     "MUSL 3237",
+     "MUSL 3238",
+     "MUSL 3239",
+     "MUSL 3240",
+     "MUSL 3241",
+     "MUSL 3890"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Musicology/Ethnomusicology Elective 3",
+    "type": "depth_elective",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "MUTH 3890"
+    ],
+    "level_or_range": "any MUSL course",
+    "notes": null
+   },
+   {
+    "name": "Performance",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "4",
+    "courses": [
+     "JAZZ 1100"
+    ],
+    "level_or_range": null,
+    "notes": "Individual performance instruction in a single instrument for at least 4 semesters (any orchestral instrument, piano, organ, guitar, saxophone, euphonium, voice, or JAZZ 1100). Students must meet minimum performance standards for admission to the program, earning a total of 4 hours."
+   },
+   {
+    "name": "Ensemble",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "2",
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Participation for two semesters in an appropriate performing ensemble, after consultation with the minor adviser."
+   }
+  ],
+  "other_rules": [
+   "Declaration forms are available at blair.vanderbilt.edu/academics"
+  ],
+  "has_requirements": true,
   "subject": "music",
   "kind": "minor",
   "start_page": null,
   "end_page": null,
-  "removed_codes": []
+  "removed_codes": [
+   "MUSL 3233"
+  ]
  },
  {
   "program": "Musical Arts major",
@@ -11321,51 +11670,133 @@
   "removed_codes": []
  },
  {
-  "program": "Musicology minor",
-  "total_hours": "20",
-  "summary": "The Musicology minor requires a minimum of 20 credit hours, including courses in musicology/ethnomusicology, composition/theory, and a cognate area or foreign language.",
+  "program": "Musicology/Ethnomusicology minor",
+  "total_hours": "18 or 19",
+  "summary": "The Musicology/Ethnomusicology minor requires 18 or 19 credit hours, including courses in music theory and musicology/ethnomusicology.",
   "groups": [
    {
-    "name": "Musicology/Ethnomusicology",
-    "type": "depth_elective",
-    "rule": "Choose 9-12 hours",
-    "hours": "9-12",
-    "courses": [],
-    "level_or_range": "MUSL 3000-level or above, except MUSL 3100",
-    "notes": null
+    "name": "Music Theory",
+    "type": "core",
+    "rule": "Choose one set",
+    "hours": "6 or 7",
+    "courses": [
+     "MUTH 1200",
+     "MUTH 1210",
+     "MUTH 2100",
+     "MUTH 2110",
+     "MUTH 2200",
+     "MUTH 2220"
+    ],
+    "level_or_range": null,
+    "notes": "Choose either MUTH 1200 and 1210; or MUTH 2100/2110 and MUTH 2200/2220."
    },
    {
-    "name": "Composition/Theory",
-    "type": "depth_elective",
-    "rule": "Choose 3-6 hours",
-    "hours": "3-6",
+    "name": "Musicology/Ethnomusicology",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "12",
     "courses": [
-     "MUTH 3140",
-     "MUTH 3200",
-     "MUTH 3210"
+     "MUSL 2100",
+     "MUSL 2200W",
+     "MUSL 3100"
+    ],
+    "level_or_range": null,
+    "notes": "Students who have completed MUSL 1200 must substitute another course for MUSL 2200W."
+   },
+   {
+    "name": "Musicology/Ethnomusicology Elective",
+    "type": "depth_elective",
+    "rule": "Choose 1",
+    "hours": null,
+    "courses": [
+     "MUSL 3220",
+     "MUSL 3221",
+     "MUSL 3222",
+     "MUSL 3223",
+     "MUSL 3224",
+     "MUSL 3225",
+     "MUSL 3226",
+     "MUSL 3227",
+     "MUSL 3228",
+     "MUSL 3229",
+     "MUSL 3230",
+     "MUSL 3231",
+     "MUSL 3232",
+     "MUSL 3234",
+     "MUSL 3235",
+     "MUSL 3236",
+     "MUSL 3237",
+     "MUSL 3238",
+     "MUSL 3239",
+     "MUSL 3240",
+     "MUSL 3241",
+     "MUSL 3890"
     ],
     "level_or_range": null,
     "notes": null
    },
    {
-    "name": "Cognate Area or Foreign Language",
-    "type": "depth_elective",
-    "rule": "Choose 6-16 hours",
-    "hours": "6-16",
-    "courses": [],
+    "name": "Substitution for MUSL 2200W",
+    "type": "other",
+    "rule": "Substitute one course",
+    "hours": null,
+    "courses": [
+     "MUSL 1100",
+     "MUSL 1105",
+     "MUSL 1210",
+     "MUSL 1220",
+     "MUSL 1240",
+     "MUSL 1300",
+     "MUSL 1600",
+     "MUSL 1610",
+     "MUSL 1620",
+     "MUSL 1630",
+     "MUSL 1640",
+     "MUSL 1650",
+     "MUSL 1660",
+     "MUSL 1670",
+     "MUSL 2110",
+     "MUSL 2150",
+     "MUSL 2320",
+     "MUSL 2600",
+     "MUSL 2610",
+     "MUSL 3220",
+     "MUSL 3221",
+     "MUSL 3222",
+     "MUSL 3223",
+     "MUSL 3224",
+     "MUSL 3225",
+     "MUSL 3226",
+     "MUSL 3227",
+     "MUSL 3228",
+     "MUSL 3229",
+     "MUSL 3230",
+     "MUSL 3231",
+     "MUSL 3232",
+     "MUSL 3234",
+     "MUSL 3235",
+     "MUSL 3236",
+     "MUSL 3237",
+     "MUSL 3238",
+     "MUSL 3239",
+     "MUSL 3240",
+     "MUSL 3241",
+     "MUSL 3160",
+     "MUSL 3890"
+    ],
     "level_or_range": null,
-    "notes": "Cognate area in AADS, AMER, ANTH, CMA, EUS, GSS, HIST, LAS, PHIL, SOC, or other area with department approval, 6-9 hours, or Foreign Language, 6\u201316 hours, 4 semesters: Introductory-level competence, or one-year may be satisfied through placement exam, AP/IB credit, or for-credit course work. Students who test out of introductory-level competence need only 2 semesters (minimum 6 hours) of 2000-level or above, 6-8 hours, 2 semesters. 2000-level or above language and/or culture courses, 6-8 hours, 2 semesters."
+    "notes": "Applicable only if MUSL 1200 has been completed."
    }
   ],
-  "other_rules": [
-   "Department approval required for the Musicology minor."
-  ],
+  "other_rules": [],
   "has_requirements": true,
-  "subject": "musicology",
+  "subject": "musicology ethnomusicology",
   "kind": "minor",
   "start_page": null,
   "end_page": null,
-  "removed_codes": []
+  "removed_codes": [
+   "MUSL 3233"
+  ]
  },
  {
   "program": "Nanoscience and Nanotechnology minor",
@@ -12165,11 +12596,23 @@
  },
  {
   "program": "Philosophy minor",
-  "total_hours": null,
-  "summary": "The Department of Philosophy at Vanderbilt offers a wide range of courses relating philosophy to various dimensions of human concern, emphasizing ethics, social and political philosophy, and the history of philosophy.",
-  "groups": [],
-  "other_rules": [],
-  "has_requirements": false,
+  "total_hours": "18",
+  "summary": "The minor in philosophy consists of 18 credit hours, including at least 12 credit hours in courses beyond the 1000 level.",
+  "groups": [
+   {
+    "name": "Philosophy Courses",
+    "type": "core",
+    "rule": "At least 12 hours beyond the 1000 level",
+    "hours": null,
+    "courses": [],
+    "level_or_range": "beyond the 1000 level",
+    "notes": null
+   }
+  ],
+  "other_rules": [
+   "Each program must be approved by the director of undergraduate studies."
+  ],
+  "has_requirements": true,
   "subject": "philosophy",
   "kind": "minor",
   "start_page": null,
