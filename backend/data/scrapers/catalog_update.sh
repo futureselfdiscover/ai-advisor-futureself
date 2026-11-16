@@ -7,6 +7,7 @@ source backend/venv/bin/activate
 cd backend
 echo "===== 1. Reading the catalog pages ====="
 python data/scrapers/build_from_kuali.py 2>/dev/null
+python data/scrapers/add_manual_programs.py 2>/dev/null
 echo ""
 echo "===== 2. Checking against the official admissions lists ====="
 AUDIT=$(python data/scrapers/audit_programs.py); echo "$AUDIT"
