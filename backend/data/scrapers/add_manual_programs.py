@@ -21,9 +21,12 @@ MANUAL = [
     ("Peabody Minors", r"^@@H4@@Child Psych and Mental Health", None, "Child Psychology and Mental Health", "minor"),
     ("Peabody Minors", r"^@@H4@@Multilingual Learner Education", None, "Multilingual Learner Education", "minor"),
     ("Additional Programs in the Blair School of Music", r"(?i)^@@H\d@@[^@]*\bcomposition\b", None, "Music Composition", "minor"),
-    ("Additional Programs in the Blair School of Music", r"(?i)^@@H\d@@[^@]*\bperformance\b", None, "Music Performance", "minor"),
+    ("Additional Programs in the Blair School of Music", r"(?i)^(@@H\d@@)?\s*(minor in )?music performance( minor)?\b", None, "Music Performance", "minor"),
+    ("Additional Programs in the Blair School of Music", r"(?i)^(@@H\d@@)?\s*(the )?(music minor|minor in music)\b(?!.*(composition|performance))", None, "Music", "minor"),
+    ("Philosophy", r"(?i)^(@@H\d@@)?\s*(the )?(minor in philosophy|philosophy minor)\b", None, "Philosophy", "minor"),
+    ("School of Engineering Minors", r"(?i)^(@@H\d@@)?\s*(minor in )?engineering management( minor)?\b", None, "Engineering Management", "minor"),
 ]
-RENAME = {"Education Studies minor": "Educational Studies minor"}
+RENAME = {"Education Studies minor": "Educational Studies minor", "Undergraduate Business minor": "Business minor"}
 DROP = {"The Undergraduate Business minor"}
 
 
@@ -45,7 +48,11 @@ def main():
         lines = cache.setdefault(page, b.page_lines((b.get("/content/" + pages[page]) or {}).get("body", "")))
         s = next((i for i, l in enumerate(lines) if re.search(start, l)), None)
         if s is None:
-            print(f"HEADING NOT FOUND for {name}: {start}"); continue
+            print(f"HEADING NOT FOUND for {name} on '{page}'. Lines there with 'minor':")
+            for i, l in enumerate(lines):
+                if "minor" in l.lower() and len(l) < 120:
+                    print(f"     {i}: {l}")
+            continue
         lvl = int(re.match(r"@@H(\d)@@", lines[s]).group(1)) if lines[s].startswith("@@H") else 6
         if end:
             e = next((i for i in range(s + 1, len(lines)) if re.search(end, lines[i])), len(lines))
