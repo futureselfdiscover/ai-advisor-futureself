@@ -292,3 +292,40 @@ if __name__ == "__main__":
     result = route(test_message, test_hash)
     print(f"[{result['category']} -> {result['feature']}]\n")
     print(result["answer"])
+
+
+# --- Fixed rules on top of the AI picker ---
+_JOB_SEARCH = re.compile(r"\b(find|get|land|looking for|look for|search(ing)? for|apply(ing)?( to| for)?|hunt(ing)?)\b.*"
+                         r"\b(jobs?|internships?|work|positions?|roles?)\b|\bjob (search|hunt)", re.I)
+_PAY_WORDS = re.compile(r"\b(make|makes|salary|salaries|pay|paid|earn|wages?|cost of living|afford|rent|"
+                        r"where should i live|which city|best cit)", re.I)
+_pick_feature_ai = pick_feature
+
+
+def pick_feature(message, *args, **kwargs):
+    result = _pick_feature_ai(message, *args, **kwargs)
+    if result.get("feature") == "city_explorer" and _JOB_SEARCH.search(message or "") \
+            and not _PAY_WORDS.search(message or ""):
+        result = {**result, "feature": "general"}
+    return result
+
+
+_FIELD_NAMES = {
+    "accounting": "accountant", "accountants": "accountant", "finance": "financial analyst",
+    "nursing": "registered nurse", "nurses": "registered nurse", "nurse": "registered nurse",
+    "software": "software developer", "software engineering": "software developer",
+    "software engineer": "software developer", "computer science": "software developer", "tech": "software developer",
+    "consulting": "management analyst", "consultant": "management analyst", "data science": "data scientist",
+}
+
+if "explore_cities" in globals():
+    _explore_cities_raw = explore_cities
+
+    def explore_cities(*args, **kwargs):
+        def norm(f):
+            return _FIELD_NAMES.get(str(f).strip().lower(), f) if f else f
+        if "field" in kwargs:
+            kwargs["field"] = norm(kwargs["field"])
+        elif args:
+            args = (norm(args[0]),) + tuple(args[1:])
+        return _explore_cities_raw(*args, **kwargs)
