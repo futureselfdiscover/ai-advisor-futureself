@@ -191,7 +191,7 @@ def find_program(mention: str):
         return None
 
 
-REQUIREMENTS_PROMPT = """You are a Vanderbilt academic advisor answering from the official 2025/2026 Vanderbilt
+REQUIREMENTS_PROMPT = """You are a Vanderbilt academic advisor answering from the official 2026/2027 Vanderbilt
 Undergraduate Catalog. The student asked about "{name}" ({subject}).
 
 STRUCTURED REQUIREMENTS (extracted from the catalog and checked against it):
@@ -241,7 +241,7 @@ def program_requirements(question: str, program_name: str) -> str:
         ],
     )
     answer = response.choices[0].message.content.strip()
-    source = (f"Source: {program['name']}, 2025/2026 Vanderbilt Undergraduate Catalog "
+    source = (f"Source: {program['name']}, 2026/2027 Vanderbilt Undergraduate Catalog "
               f"(pages {program['start_page']}-{program['end_page']}).")
     if truncated:
         source += " This section is long, so confirm details with the department."
@@ -261,9 +261,9 @@ def requirements_outline(program_name: str):
               if p["name"] in structured and structured[p["name"]].get("groups")]
     if not blocks:
         return None
-    return (f"Official requirements from the 2025/2026 Vanderbilt Undergraduate Catalog. "
+    return (f"Official requirements from the 2026/2027 Vanderbilt Undergraduate Catalog. "
             f"The student asked about: {program['name']}.\n\n" + "\n\n".join(blocks)
-            + f"\n\nSource: {program['name']}, 2025/2026 Vanderbilt Undergraduate Catalog "
+            + f"\n\nSource: {program['name']}, 2026/2027 Vanderbilt Undergraduate Catalog "
               f"(pages {program['start_page']}-{program['end_page']}).")
 
 def compact_codes(codes: list, titles: dict) -> str:
@@ -343,7 +343,7 @@ def requirements_html(program_name: str, note: str = None):
         if codes:
             line += (" — " if detail else ": ") + esc(codes)
         lines.append(line)
-    lines.append(f"<i>2025–26 Vanderbilt Undergraduate Catalog, pp. {chosen['start_page']}–{chosen['end_page']}. "
+    lines.append(f"<i>2026–27 Vanderbilt Undergraduate Catalog. "
                  f"Confirm with your advisor before registering.</i>")
     return "<br>".join(lines)
 
@@ -380,15 +380,28 @@ def kind_note(program_name: str, wanted: str):
         return None
     base = re.sub(r" (major|minor)$", "", _display_title(chosen or program))
     if wanted == "major":
-        return (f"Vanderbilt doesn't offer a {base} major (2025–26 catalog), but it does offer a {base} minor. "
+        return (f"Vanderbilt doesn't offer a {base} major (2026–27 catalog), but it does offer a {base} minor. "
                 f"Here are its requirements:")
     words = set(program["subject"].split()) - STOPWORDS
     related = [p["name"] for p in load_programs()
                if p["kind"] == "minor" and p["subject"] != program["subject"]
                and words & (set(p["subject"].split()) - STOPWORDS)][:3]
     also = f" Related minors: {', '.join(related)}." if related else ""
-    return (f"Vanderbilt doesn't offer a {base} minor (2025–26 catalog), but it does offer a {base} major.{also} "
+    return (f"Vanderbilt doesn't offer a {base} minor (2026–27 catalog), but it does offer a {base} major.{also} "
             f"Here are the major requirements:")
+
+# --- remap aliases to current names ---
+try:
+    _names = {p["name"] for p in load_programs()}
+    for _k, _v in list(ALIASES.items()):
+        if isinstance(_v, str) and _v not in _names:
+            _base = re.sub(r"\s*\(department overview\)$|\s+(major|minor)$", "", _v).strip().lower()
+            _c = next((n for n in sorted(_names) if n.lower().startswith(_base + " major")), None) or \
+                 next((n for n in sorted(_names) if n.lower().startswith(_base)), None)
+            if _c:
+                ALIASES[_k] = _c
+except Exception:
+    pass
 
 if __name__ == "__main__":
     q = sys.argv[1] if len(sys.argv) > 1 else "what classes do cs majors need to take"

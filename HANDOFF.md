@@ -93,23 +93,18 @@ python advisor/router.py "what do I need for the econ minor"
 
 ## Yearly catalog update (each new academic year)
 
-1. Get the new Undergraduate Catalog PDF and regenerate `catalog_pages.json` and
-   `toc_entries.json` with the existing catalog scraper in `backend/data/scrapers/`.
-2. Rebuild and re-extract only what changed:
-```bash
-   cd backend && source venv/bin/activate
-   cp data/scrapers/programs.json /tmp/programs_old.json
-   python data/scrapers/build_programs.py > /tmp/build_report.txt; tail -1 /tmp/build_report.txt
-   python data/scrapers/add_peabody_programs.py   # Peabody majors/minors the builder misses; check page numbers
-   python data/scrapers/extract_requirements.py --since /tmp/programs_old.json
-   python data/scrapers/extract_requirements.py --recheck-choices
-   python tests/test_router_wording.py
-```
-3. Search-and-replace "2025–26" / "2025/2026" in `advisor/requirements.py` to the new year.
-4. Spot-check a few majors and minors, open a pull request, merge.
+Requirements come from Vanderbilt's live Kuali undergraduate catalog. No PDF needed.
 
-Cost: a full re-extraction (`--force`) is roughly $5–10 of gpt-4o; `--since` only redoes
-changed programs (usually cents to a few dollars).
+1. In `backend/data/scrapers/build_from_kuali.py`, set `CATALOG` to the new catalog id (open the new catalog
+   page, view source, search "catalogId") and update `PAGE_URL`.
+2. Update `OFFICIAL` in `backend/data/scrapers/audit_programs.py` from admissions.vanderbilt.edu/major/ and
+   admissions.vanderbilt.edu/academics/minors/.
+3. On a new branch, run `bash backend/data/scrapers/catalog_update.sh`. It reads every catalog page, checks
+   every official major/minor is found (stops safely if not), extracts requirements, runs the tests, and ships.
+4. Search-and-replace the catalog year (e.g. "2026–27" -> "2027–28") in `backend/advisor/*.py` first.
+
+Cost: about $5–10 of OpenAI use per full update.
+
 
 ## Logs, review, and the weekly digest
 
