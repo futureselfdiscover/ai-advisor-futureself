@@ -12350,5 +12350,631 @@
   "start_page": 443,
   "end_page": 444,
   "removed_codes": []
+ },
+ {
+  "program": "Elementary Education major",
+  "total_hours": "120",
+  "summary": "The specialization in elementary education is field-oriented and designed to prepare students to teach children in grades K-5, requiring a combination with a second major.",
+  "groups": [
+   {
+    "name": "General Education Core Requirements",
+    "type": "liberal_arts_core",
+    "rule": "Minimum 31 hours",
+    "hours": "31",
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Composed of required course work from the areas of Humanities/Fine Arts, Mathematics, Science, and Social Science. Listings of all courses that may fulfill these areas are located online in the Peabody Undergraduate Handbook."
+   },
+   {
+    "name": "Writing Requirement",
+    "type": "writing",
+    "rule": "See the 'Writing Requirement' section of the general Peabody academic policy section of the Undergraduate Catalog.",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": "First-year Seminars (courses numbered 1111) offered through the College of Arts and Science and the Blair School of Music may count as writing intensive courses. Peabody freshmen may only register for First-year Seminars when open registration begins."
+   },
+   {
+    "name": "Foundation Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "9",
+    "courses": [
+     "EDUC 1220",
+     "EDUC 1227",
+     "PSY-PC 2660",
+     "SPED 1210"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Pedagogical Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "20",
+    "courses": [
+     "EDUC 3212",
+     "EDUC 3214",
+     "EDUC 3215",
+     "HMED 2250",
+     "MTED 2200",
+     "MTED 3250",
+     "SCED 3240",
+     "SSED 3240"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Practicum Experiences",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "9",
+    "courses": [
+     "EDUC 3216",
+     "EDUC 3240",
+     "MTED 3251"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Student Teaching and Seminar",
+    "type": "project_capstone",
+    "rule": "Take all",
+    "hours": "12",
+    "courses": [
+     "EDUC 4952",
+     "EDUC 4962"
+    ],
+    "level_or_range": null,
+    "notes": null
+   }
+  ],
+  "other_rules": [
+   "Students must combine a specialization in elementary education with a second major in the liberal arts, an interdisciplinary major, or another major offered by Peabody College or the College of Arts and Science.",
+   "Course work beyond the standard 120-hour program may be required for some double majors.",
+   "Vanderbilt students seeking teacher licensure must apply through the Office of Teacher Licensure at Vanderbilt and must meet licensure requirements in effect at the time of their graduation."
+  ],
+  "has_requirements": true,
+  "subject": "elementary education",
+  "kind": "major",
+  "start_page": 248,
+  "end_page": 250,
+  "removed_codes": []
+ },
+ {
+  "program": "Secondary Education major",
+  "total_hours": "120",
+  "summary": "The major in secondary education prepares students to teach subjects at the secondary level, requiring completion of general education, professional education, and a primary area of emphasis.",
+  "groups": [
+   {
+    "name": "General Education Core Requirements",
+    "type": "liberal_arts_core",
+    "rule": "Minimum 31 hours",
+    "hours": "31",
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Includes Humanities/Fine Arts, Mathematics, Science, and Social Science. Specific courses listed in the Peabody Undergraduate Handbook."
+   },
+   {
+    "name": "Writing Requirement",
+    "type": "writing",
+    "rule": "Successfully complete two writing courses",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Writing-intensive courses have a 'W' after the course number (A&S courses) or end with the digit '7' (Peabody courses). ENGL 1220W, 1230W, and 1300W earned by testing credit do not satisfy the Writing requirement."
+   },
+   {
+    "name": "Foundational and Core Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
+     "EDUC 1220",
+     "SPED 1210",
+     "PSY-PC 2550",
+     "EDUC 3620",
+     "EDUC 3310"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Field Based Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
+     "EDUC 3871",
+     "EDUC 3280",
+     "ENED 3371",
+     "MTED 3371",
+     "SCED 3371",
+     "SSED 3371",
+     "EDUC 4953"
+    ],
+    "level_or_range": null,
+    "notes": "ENED, MTED, SCED, or SSED 3371 depends on the content area."
+   },
+   {
+    "name": "Content Area Courses: English",
+    "type": "concentration",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
+     "ENED 3340",
+     "ENED 3357",
+     "ENED 3370",
+     "ENED 3380",
+     "ENED 4963"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Content Area Courses: Mathematics",
+    "type": "concentration",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
+     "MTED 3320",
+     "MTED 3360",
+     "MTED 3370",
+     "MTED 4963"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Content Area Courses: Science",
+    "type": "concentration",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
+     "SCED 3320",
+     "SCED 3400",
+     "SCED 3370",
+     "SCED 4963"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Content Area Courses: Social Studies",
+    "type": "concentration",
+    "rule": "Take all",
+    "hours": null,
+    "courses": [
+     "SSED 3320",
+     "SSED 3260",
+     "SSED 3370",
+     "SSED 4963"
+    ],
+    "level_or_range": null,
+    "notes": null
+   }
+  ],
+  "other_rules": [
+   "Students must apply for licensure through the Peabody Office of Teacher Licensure and meet licensure requirements in effect at the time they entered Vanderbilt.",
+   "Licensure requirements are subject to change; students should consult the current catalog and guides annually."
+  ],
+  "has_requirements": true,
+  "subject": "secondary education",
+  "kind": "major",
+  "start_page": 250,
+  "end_page": 252,
+  "removed_codes": []
+ },
+ {
+  "program": "Educational Studies major",
+  "total_hours": "120",
+  "summary": "The Educational Studies major requires a minimum of 120 credit hours, including general education, major foundations, specialization, fieldwork, and elective courses.",
+  "groups": [
+   {
+    "name": "General Education Core Requirements",
+    "type": "liberal_arts_core",
+    "rule": "Minimum 31 hours",
+    "hours": "31",
+    "courses": [],
+    "level_or_range": null,
+    "notes": "Composed of required coursework from Humanities/Fine Arts, Mathematics, Science, and Social Science."
+   },
+   {
+    "name": "Writing Requirement",
+    "type": "writing",
+    "rule": "See the 'Writing Requirement' section",
+    "hours": null,
+    "courses": [],
+    "level_or_range": null,
+    "notes": "First-year Seminars may count as writing intensive courses."
+   },
+   {
+    "name": "Major Foundations",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "9",
+    "courses": [
+     "EDUC 1220",
+     "SPED 1210",
+     "PC-PSY 1250",
+     "PC-PSY 2550"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Learning, Development and Context Core",
+    "type": "concentration",
+    "rule": "Choose 3",
+    "hours": "9",
+    "courses": [
+     "EDUC 3140",
+     "EDUC 2160",
+     "EDUC 3120",
+     "EDUC 2920"
+    ],
+    "level_or_range": null,
+    "notes": "Focus on learning, design, and context in out-of-school settings."
+   },
+   {
+    "name": "Field Work in Educational Studies",
+    "type": "project_capstone",
+    "rule": "Take all",
+    "hours": "12",
+    "courses": [
+     "EDUC 3861",
+     "EDUC 3862",
+     "EDUC 4950"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Elective Courses",
+    "type": "elective",
+    "rule": "Choose 1",
+    "hours": "3",
+    "courses": [
+     "EDUC 3180",
+     "EDUC 3270",
+     "ENED 2430",
+     "ENED 3350",
+     "HMED 2150",
+     "HMED 2250",
+     "MTED 2200",
+     "MTED 3320",
+     "MTED 3360",
+     "PSY-PC 2600",
+     "PHIL 3603",
+     "SCED 3320",
+     "SSED 2200",
+     "SSED 3260",
+     "SPED 3332"
+    ],
+    "level_or_range": null,
+    "notes": "Additional courses as approved by adviser and UAC."
+   }
+  ],
+  "other_rules": [
+   "Educational Studies can serve as a student's first or second major, but must be a third major or minor if combined with a licensure program.",
+   "Students must use the Change of Major/Minor Declaration/Change form to declare educational studies as their first, second, or third major."
+  ],
+  "has_requirements": true,
+  "subject": "educational studies",
+  "kind": "major",
+  "start_page": 252,
+  "end_page": 255,
+  "removed_codes": []
+ },
+ {
+  "program": "Child Psychology and Mental Health minor",
+  "total_hours": "15",
+  "summary": "The minor in Child Psychology and Mental Health requires 6 credit hours of core courses and 9 credit hours of electives, focusing on psychopathology, assessment, treatment, and research methods related to children and adolescents.",
+  "groups": [
+   {
+    "name": "Required (Core) Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "6",
+    "courses": [
+     "PSY-PC 3200",
+     "PSY-PC 2700"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Elective Courses",
+    "type": "elective",
+    "rule": "Choose 9 credit hours",
+    "hours": "9",
+    "courses": [
+     "PSY-PC 2520",
+     "PSY-PC 3650",
+     "PSY-PC 3230",
+     "PSY-PC 3860",
+     "PSY 3625",
+     "PSY 3100",
+     "SPEDS 2120",
+     "SPEDH 3308",
+     "SPEDH 3318"
+    ],
+    "level_or_range": null,
+    "notes": "PSY-PC 3860 must involve work on a study or project related to clinical psychology; maximum 3 hours."
+   }
+  ],
+  "other_rules": [
+   "There must be 15 unique hours for the minor that are not being used for any other major or minor."
+  ],
+  "has_requirements": true,
+  "subject": "child psychology and mental health",
+  "kind": "minor",
+  "start_page": 256,
+  "end_page": 257,
+  "removed_codes": []
+ },
+ {
+  "program": "Cognitive Studies minor",
+  "total_hours": "15",
+  "summary": "The minor in cognitive studies consists of 15 credit hours, including 6 hours of required courses and 9 hours of elective courses.",
+  "groups": [
+   {
+    "name": "Required Courses",
+    "type": "core",
+    "rule": "Choose 1 from each pair",
+    "hours": "6",
+    "courses": [
+     "PSY-PC 1205",
+     "PSY-PC 1207",
+     "PSY-PC 2200",
+     "PSY 2220"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Elective Courses",
+    "type": "elective",
+    "rule": "Choose 9 hours",
+    "hours": "9",
+    "courses": [
+     "ANTH 2601",
+     "ENED 2430",
+     "PSY 3270",
+     "NSC 3270",
+     "PSY-PC 1115",
+     "PSY-PC 1157",
+     "PSY-PC 2250",
+     "PSY-PC 2300",
+     "PSY-PC 2400",
+     "PSY-PC 3150",
+     "PSY-PC 3650",
+     "PSY-PC 3775",
+     "PSY-PC 3635",
+     "PSY-PC 3200",
+     "PSY-PC 3860",
+     "PSY-PC 3980",
+     "PSY-PC 3981",
+     "PSY-PC 4998",
+     "PSY-PC 4999",
+     "SPEDS 2430"
+    ],
+    "level_or_range": null,
+    "notes": "PSY-PC 3650 may be repeated if no duplication of content. PSY-PC 3860, 3980, 3981, 4998, 4999 may not be repeated for minor credit."
+   }
+  ],
+  "other_rules": [],
+  "has_requirements": true,
+  "subject": "cognitive studies",
+  "kind": "minor",
+  "start_page": 257,
+  "end_page": 258,
+  "removed_codes": []
+ },
+ {
+  "program": "Language Sciences minor",
+  "total_hours": "15",
+  "summary": "The minor in Language Sciences requires a total of 15 credit hours, focusing on language theory and research in the behavioral sciences.",
+  "groups": [
+   {
+    "name": "Program or track requirements",
+    "type": "core",
+    "rule": "Choose 2",
+    "hours": "6",
+    "courses": [
+     "PSY-PC 3130",
+     "PSY-PC 3140",
+     "PSY-PC 3190"
+    ],
+    "level_or_range": null,
+    "notes": null
+   },
+   {
+    "name": "Program or track requirements",
+    "type": "depth_elective",
+    "rule": "Choose 3",
+    "hours": "9",
+    "courses": [
+     "ANTH 1601",
+     "PSY-PC 3150",
+     "PSY-PC 3160",
+     "PSY-PC 3170",
+     "PSY-PC 3180",
+     "PSY-PC 3190",
+     "PSY-PC 3860",
+     "SPEDH 3348",
+     "SPEDS 2430",
+     "PHIL 3617"
+    ],
+    "level_or_range": null,
+    "notes": "PSY-PC 3860 must work on a study or project related to language sciences. You may also use the additional third class from the required courses for this credit."
+   }
+  ],
+  "other_rules": [],
+  "has_requirements": true,
+  "subject": "language sciences",
+  "kind": "minor",
+  "start_page": 258,
+  "end_page": 259,
+  "removed_codes": []
+ },
+ {
+  "program": "Quantitative Methods minor",
+  "total_hours": "18",
+  "summary": "The quantitative methods minor requires 18 credit hours, consisting of 6 hours of required courses and 12 hours of electives.",
+  "groups": [
+   {
+    "name": "Required Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "6",
+    "courses": [
+     "PSY-PC 2110",
+     "PSY 2100",
+     "ECON 1500",
+     "MATH 2810",
+     "PSY-PC 2120"
+    ],
+    "level_or_range": null,
+    "notes": "PSY-PC 2110, PSY 2100, ECON 1500, MATH 2810, or a 5 on AP Stat Exam can fulfill the first requirement."
+   },
+   {
+    "name": "Electives",
+    "type": "elective",
+    "rule": "Choose 4",
+    "hours": "12",
+    "courses": [
+     "PSY-PC 3722",
+     "PSY-PC 3724",
+     "PSY-PC 3727",
+     "PSY-PC 3730",
+     "PSY-PC 3732",
+     "PSY-PC 3735",
+     "PSY-PC 3738",
+     "PSY-PC 3743",
+     "PSY-PC 3746",
+     "PSY-PC 3749",
+     "PSY-PC 3850"
+    ],
+    "level_or_range": null,
+    "notes": "At most, three hours of directed research/independent study (PSY-PC 3850) can count toward the minor. Undergraduates may request to enroll in QM graduate courses not yet cross-listed as undergraduate courses by using a substitution form, with permission of instructor."
+   }
+  ],
+  "other_rules": [],
+  "has_requirements": true,
+  "subject": "quantitative methods",
+  "kind": "minor",
+  "start_page": 259,
+  "end_page": 259,
+  "removed_codes": []
+ },
+ {
+  "program": "Education Studies minor",
+  "total_hours": null,
+  "summary": "The Education Studies minor requires 6 credit hours of core courses and 4 additional courses chosen from a specified list.",
+  "groups": [
+   {
+    "name": "Required Courses",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "6",
+    "courses": [
+     "EDUC 1220",
+     "EDUC 1127",
+     "SPED 1210"
+    ],
+    "level_or_range": null,
+    "notes": "EDUC 1220 or EDUC 1127 must be taken."
+   },
+   {
+    "name": "Additional Courses",
+    "type": "depth_elective",
+    "rule": "Choose 4",
+    "hours": null,
+    "courses": [
+     "EDUC 3310",
+     "EDUC 3620",
+     "PSY-PC 2550",
+     "HMED 2250",
+     "ENED 6200",
+     "ENED 3357",
+     "AADS 3258",
+     "EDUC 3120",
+     "EDUC 3140"
+    ],
+    "level_or_range": null,
+    "notes": "Other EDUC/ENED/MTED/SCED/SSED or HMED course with permission of advisor."
+   }
+  ],
+  "other_rules": [],
+  "has_requirements": true,
+  "subject": "education studies",
+  "kind": "minor",
+  "start_page": 261,
+  "end_page": 261,
+  "removed_codes": []
+ },
+ {
+  "program": "Multilingual Learner Education minor",
+  "total_hours": "15",
+  "summary": "The Multilingual Learner Education minor requires 15 credit hours of core courses focused on English language learning and assessment.",
+  "groups": [
+   {
+    "name": "Required Core",
+    "type": "core",
+    "rule": "Take all",
+    "hours": "15",
+    "courses": [
+     "EDUC 3730",
+     "EDUC 3740",
+     "EDUC 3742",
+     "EDUC 3750",
+     "EDUC 3760"
+    ],
+    "level_or_range": null,
+    "notes": null
+   }
+  ],
+  "other_rules": [],
+  "has_requirements": true,
+  "subject": "multilingual learner education",
+  "kind": "minor",
+  "start_page": 261,
+  "end_page": 261,
+  "removed_codes": []
+ },
+ {
+  "program": "Literacy Education minor",
+  "total_hours": "18",
+  "summary": "The Literacy Education minor requires 18 credit hours, consisting of six courses selected from a specified list.",
+  "groups": [
+   {
+    "name": "Reading/Literacy Education",
+    "type": "core",
+    "rule": "Choose 6",
+    "hours": "18",
+    "courses": [
+     "EDUC 3214",
+     "EDUC 2160",
+     "EDUC 3212",
+     "ENED 2200",
+     "PSY-PC 2600",
+     "EDUC 3215",
+     "EDUC 3216"
+    ],
+    "level_or_range": null,
+    "notes": null
+   }
+  ],
+  "other_rules": [],
+  "has_requirements": true,
+  "subject": "literacy education",
+  "kind": "minor",
+  "start_page": 261,
+  "end_page": 261,
+  "removed_codes": []
  }
 ]
