@@ -20,3 +20,4 @@ backend/data/scrapers/chunks.json
 !.env.example
 
 .idea/
+backend/data/scrapers/kuali_programs_raw.json
