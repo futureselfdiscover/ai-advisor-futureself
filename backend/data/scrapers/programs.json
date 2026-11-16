@@ -1683,16 +1683,16 @@
     "name": "Music Composition minor",
     "subject": "music composition",
     "kind": "minor",
-    "school": "Blair School of Music",
-    "url": "https://admissions.vanderbilt.edu/academics/minors/",
+    "school": "",
+    "page": "Additional Programs in the Blair School of Music",
+    "url": "https://www.vanderbilt.edu/catalogs/kuali/undergraduate-26-27/#/content/69861621adcd935bcbec0629",
     "start_page": null,
     "end_page": null,
-    "found": "admissions-only",
-    "placeholder": true,
+    "found": "manual-heading",
     "capped": false,
-    "text": "Music Composition minor\nVanderbilt Admissions lists Music Composition as an undergraduate minor (Blair School of Music), but its requirements are not in the 2026–27 undergraduate catalog yet; it may be a new program. Official program page: https://admissions.vanderbilt.edu/academics/minors/\nStudents should check that page or ask their academic advisor for the current requirements.",
-    "chars": 383,
-    "course_codes": 0
+    "text": "CONCENTRATION IN COMPOSITION. 20 hours minimum\nPrerequisite: COMP 1100; submission of portfolio of three representative works, with recordings; department approval. Composition: 4-6 hours over a minimum of 4 semesters in COMP 1150\nChoice of four from MUTH 3110, 3120, 3130, 3140, 3170, 3200, 3210, 3220, 3222\nChoice of two (6-7 hours) from ARTS, CMA, ENGL 1250W, ENGL 1290, HART 1105 or higher, THTR",
+    "chars": 399,
+    "course_codes": 6
   },
   {
     "name": "Music Education major",
