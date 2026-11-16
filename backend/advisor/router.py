@@ -285,18 +285,10 @@ def _route(message: str, user_hash: str = None) -> dict:
     return done(result["answer"], "general_answer")
 
 
-if __name__ == "__main__":
-    test_message = sys.argv[1] if len(sys.argv) > 1 else "What courses should I take?"
-    test_hash = sys.argv[2] if len(sys.argv) > 2 else None
-
-    result = route(test_message, test_hash)
-    print(f"[{result['category']} -> {result['feature']}]\n")
-    print(result["answer"])
-
 
 # --- Fixed rules on top of the AI picker ---
 _JOB_SEARCH = re.compile(r"\b(find|get|land|looking for|look for|search(ing)? for|apply(ing)?( to| for)?|hunt(ing)?)\b.*"
-                         r"\b(jobs?|internships?|work|positions?|roles?)\b|\bjob (search|hunt)", re.I)
+                         r"\b(jobs?|internships?|work|positions?|roles?)\b|\bjob (search|hunt)|\binternships?\b|\bjobs? (in|at|near)\b", re.I)
 _PAY_WORDS = re.compile(r"\b(make|makes|salary|salaries|pay|paid|earn|wages?|cost of living|afford|rent|"
                         r"where should i live|which city|best cit)", re.I)
 _pick_feature_ai = pick_feature
@@ -329,3 +321,12 @@ if "explore_cities" in globals():
         elif args:
             args = (norm(args[0]),) + tuple(args[1:])
         return _explore_cities_raw(*args, **kwargs)
+
+
+if __name__ == "__main__":
+    test_message = sys.argv[1] if len(sys.argv) > 1 else "What courses should I take?"
+    test_hash = sys.argv[2] if len(sys.argv) > 2 else None
+
+    result = route(test_message, test_hash)
+    print(f"[{result['category']} -> {result['feature']}]\n")
+    print(result["answer"])
