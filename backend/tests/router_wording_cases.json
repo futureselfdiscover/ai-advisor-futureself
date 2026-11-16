@@ -194,5 +194,20 @@
   {
     "message": "how much do accountants make in Chicago",
     "feature": "city_explorer"
+  },
+  {
+    "message": "what do i need for a secondary education major",
+    "feature": "program_requirements",
+    "program": "secondary education"
+  },
+  {
+    "message": "elementary education requirements",
+    "feature": "program_requirements",
+    "program": "elementary education"
+  },
+  {
+    "message": "what classes are in the cognitive studies minor",
+    "feature": "program_requirements",
+    "program": "cognitive studies"
   }
 ]

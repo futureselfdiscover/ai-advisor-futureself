@@ -100,6 +100,7 @@ python advisor/router.py "what do I need for the econ minor"
    cd backend && source venv/bin/activate
    cp data/scrapers/programs.json /tmp/programs_old.json
    python data/scrapers/build_programs.py > /tmp/build_report.txt; tail -1 /tmp/build_report.txt
+   python data/scrapers/add_peabody_programs.py   # Peabody majors/minors the builder misses; check page numbers
    python data/scrapers/extract_requirements.py --since /tmp/programs_old.json
    python data/scrapers/extract_requirements.py --recheck-choices
    python tests/test_router_wording.py
