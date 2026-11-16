@@ -5825,7 +5825,7 @@
  {
   "program": "Engineering Management minor",
   "total_hours": "15",
-  "summary": "A minor consists of a minimum of 15 credit hours within a recognized area of knowledge.",
+  "summary": "A minor in Engineering Management consists of a minimum of 15 credit hours within the discipline.",
   "groups": [],
   "other_rules": [
    "Courses may not be taken on a Pass/Fail basis.",
@@ -11094,7 +11094,7 @@
  {
   "program": "Music Performance minor",
   "total_hours": null,
-  "summary": "The requirements for the Music Performance minor are not listed in the 2026\u201327 undergraduate catalog; students should consult the official program page or their academic advisor for current requirements.",
+  "summary": "The requirements for the Music Performance minor are not listed in the 2026\u201327 undergraduate catalog; students should consult the official program page or their academic advisor for details.",
   "groups": [],
   "other_rules": [],
   "has_requirements": false,
