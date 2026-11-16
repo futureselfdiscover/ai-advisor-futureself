@@ -109,6 +109,19 @@ def _check(url, domain, name):
     return None
 
 
+def _legacy(name):
+    """The original careers.py lookup, used before falling back to a search link."""
+    try:
+        import careers
+        h = careers._legacy_careers_html(careers._legacy_careers_links([name]))
+        m = re.search(r'href="([^"]+)"', h or "")
+        if m and "google.com" not in m.group(1):
+            return html.unescape(m.group(1))
+    except Exception:
+        pass
+    return None
+
+
 def search_link(name):
     return "https://www.google.com/search?q=" + quote_plus(f"{name} careers official site")
 
@@ -129,7 +142,7 @@ def find_careers_link(name):
         res = likely = None
         candidates = [x for x in (g.get("careers_urls") or [])[:3] if isinstance(x, str) and x.startswith("http")]
         if domain:
-            candidates += [f"https://www.{domain}/careers", f"https://careers.{domain}"]
+            candidates += [f"https://www.{domain}/careers/", f"https://www.{domain}/careers", f"https://careers.{domain}/"]
         for url in candidates:
             status = _check(url, domain, official)
             if status == "ok":
@@ -137,7 +150,11 @@ def find_careers_link(name):
                 break
             if status == "blocked" and not likely:
                 likely = {"name": official, "url": url, "kind": "likely"}
-        res = res or likely or {"name": official, "url": search_link(official), "kind": "search"}
+        res = res or likely
+        if not res:
+            legacy = _legacy(name)
+            res = ({"name": official, "url": legacy, "kind": "verified"} if legacy
+                   else {"name": official, "url": search_link(official), "kind": "search"})
     _cache[key] = (time.time(), res)
     return res
 
