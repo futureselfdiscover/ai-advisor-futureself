@@ -218,7 +218,7 @@ def program_requirements(question: str, program_name: str) -> str:
 
     # the chosen program first, then the rest of the department's sections
     related = [program] + [p for p in load_programs()
-                           if p["subject"] == program["subject"] and p["name"] != program["name"]]
+                           if p["subject"] == program["subject"] and p["name"] != program["name"] and p["kind"] == program["kind"]]
 
     structured = load_structured()
     outline = "\n\n".join(render_structured(structured[p["name"]]) for p in related
@@ -255,7 +255,7 @@ def requirements_outline(program_name: str):
     if not program:
         return None
     related = [program] + [p for p in load_programs()
-                           if p["subject"] == program["subject"] and p["name"] != program["name"]]
+                           if p["subject"] == program["subject"] and p["name"] != program["name"] and p["kind"] == program["kind"]]
     structured = load_structured()
     blocks = [render_structured(structured[p["name"]]) for p in related
               if p["name"] in structured and structured[p["name"]].get("groups")]
@@ -312,7 +312,7 @@ def _chosen_structured(program_name: str):
         return None, None
     structured = load_structured()
     related = [program] + [p for p in load_programs()
-                           if p["subject"] == program["subject"] and p["name"] != program["name"]]
+                           if p["subject"] == program["subject"] and p["name"] != program["name"] and p["kind"] == program["kind"]]
     chosen = next((p for p in related if structured.get(p["name"], {}).get("groups")), None)
     return (chosen, structured[chosen["name"]]) if chosen else (None, None)
 
