@@ -218,12 +218,17 @@ def careers_brief(links):
 def explorer_html(picks, field=None, location=None):
     picks = [p for p in picks if _name(p)][:8]
     links = find_many([_name(p) for p in picks])
-    title = "Companies to explore" + (f" for {field}" if field else "") + (f" in {location}" if location else "")
+    ct = next((p.get("ctype") for p in picks if isinstance(p, dict) and p.get("ctype")), None)
+    head = {"startup": "Startups", "fortune_500": "Fortune 500 companies", "big_tech": "Big Tech companies",
+            "big_four": "Big Four firms", "consulting": "Consulting firms", "nonprofit": "Nonprofits",
+            "government": "Government employers", "small_business": "Small businesses"}.get(ct, "Companies")
+    extra = " Startup details change quickly, so confirm on each company's site." if ct == "startup" else ""
+    title = head + " to explore" + (f" for {field}" if field else "") + (f" in {location}" if location else "")
     lines = [f"<b>{html.escape(title)}</b>"]
     for i, (p, r) in enumerate(zip(picks, links), 1):
         note = _note(p)
         lines.append(f"{i}. <b>{html.escape(_name(p))}</b>" + (f": {html.escape(note)}" if note else "") + f" · {_link(r)}")
-    lines.append("<i>Links open each company's official careers site. Tell me more about what you want and I can narrow the list.</i>")
+    lines.append("<i>Links open each company's official careers site. Tell me more about what you want and I can narrow the list." + extra + "</i>")
     return "<br>".join(lines)
 
 

@@ -46,7 +46,8 @@ def _context(message, history):
                    "advisor's question during a job or internship search, otherwise false, "
                    '"field": the kind of work or industry they want (e.g. "marketing", "nursing"), or null, '
                    '"location": US city or region, or null, '
-                   '"preferences": short phrase of anything else they care about (company size, mission, pay, remote), or null}'},
+                   '"preferences": short phrase of anything else they care about (company size, mission, pay, remote), or null, '
+                   '"company_type": kind of employer they asked for (startup, fortune 500, big tech, big four, consulting firm, nonprofit, government, small business), or null}'},
                   {"role": "user", "content": f"Conversation:\n{convo}\n\nLatest message: {message}"}])
     return json.loads(r.choices[0].message.content) or {}
 
@@ -69,7 +70,7 @@ def wrap_route(route_fn):
                  f"are you looking for, and what matters most to you (industry, company size, mission, pay, remote)?")
             return {"answer": q, "feature": "clarifying_question", "category": "career_coaching", "question": message}
         want = " ".join(x for x in [field, f"in {location}" if location else "", f"({prefs})" if prefs else ""] if x)
-        picks = suggest_companies(field=field, location=location, message=f"Student wants a job: {want}. {message}")
+        picks = suggest_companies(field=field, location=location, message=f"Student wants a job: {want}. Company type: {ctx.get('company_type') or 'any'}. {message}")
         if not picks:
             return route_fn(message, user_hash, history)
         return {"answer": explorer_brief(picks), "feature": "company_explorer", "category": "career_coaching",

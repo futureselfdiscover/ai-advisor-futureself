@@ -277,3 +277,8 @@ def suggest_companies(*args, **kwargs):
 _legacy_careers_links, _legacy_careers_html = careers_links, careers_html
 # --- Any-company careers links (see careers_any.py) ---
 from careers_any import careers_links, careers_html, careers_brief, explorer_html, explorer_brief  # noqa: E402,F401
+
+
+# --- Company types: startup, Fortune 500, Big Tech... (see company_types.py) ---
+from company_types import wrap_suggest  # noqa: E402
+suggest_companies = wrap_suggest(suggest_companies)
