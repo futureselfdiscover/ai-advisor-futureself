@@ -155,3 +155,11 @@ Cost: about $5–10 of OpenAI use per full update.
   site, the page is opened to confirm it is on the company's own domain or a hiring site; otherwise a search link is shown.
 - Job searches ("find a job in Chicago") are guided in `advisor/job_search.py`: one question about what they want,
   then companies that fit with careers links.
+
+## Company types (startup, Fortune 500, Big Tech, Big Four...)
+
+- Every company in `backend/data/companies.json` has `categories` (e.g. big_tech, big_four, fortune_500, consulting,
+  finance, healthcare, nashville). A spreadsheet view is in `backend/data/companies_by_category.csv`.
+- When a student asks for a type ("accounting job at a startup"), `advisor/company_types.py` only suggests that type:
+  Big Four/Big Tech from fixed lists; startups and others from gpt-4o, each checked (startup = private, founded in the
+  last ~15 years, still independent, under ~3,000 employees). Fortune 500 tags reflect recent lists; review yearly.
