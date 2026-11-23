@@ -636,8 +636,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "special_education"
@@ -1945,8 +1944,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "business_operations",
@@ -2151,36 +2149,6 @@
   ],
   "founded": 2008,
   "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "AGL Resources",
-  "careers_url": "https://careers.aglresources.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size",
-   "tennessee"
-  ],
-  "fields": [
-   "energy"
-  ],
-  "states": [
-   "GA",
-   "IL",
-   "TN"
-  ],
-  "why": {
-   "energy": "Work on natural gas infrastructure"
-  },
-  "hq": "Atlanta, GA",
-  "locations": [
-   "Atlanta, GA",
-   "Naperville, IL",
-   "Chattanooga, TN"
-  ],
-  "founded": 1856,
-  "employees": 4500,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -2501,8 +2469,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "special_education"
@@ -5249,8 +5216,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -5355,33 +5321,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Alere Scarborough, Inc.",
-  "careers_url": "https://careers.alere.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "biomedical_devices",
-   "biotech_pharma"
-  ],
-  "states": [
-   "ME"
-  ],
-  "why": {
-   "biomedical_devices": "Produce rapid diagnostic tests",
-   "biotech_pharma": "Produce rapid diagnostic tests"
-  },
-  "hq": "Scarborough, ME",
-  "locations": [
-   "Scarborough, ME"
-  ],
-  "founded": 1992,
-  "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Aleris Rolled Products",
   "careers_url": "https://www.aleris.com/careers",
   "verified": false,
@@ -5463,35 +5402,6 @@
   ],
   "founded": 1992,
   "employees": 3000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "AlienVault",
-  "careers_url": "https://careers.alienvault.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "cybersecurity"
-  ],
-  "states": [
-   "CA",
-   "TX",
-   "VA"
-  ],
-  "why": {
-   "cybersecurity": "Create unified security management"
-  },
-  "hq": "San Mateo, CA",
-  "locations": [
-   "San Mateo, CA",
-   "Austin, TX",
-   "Reston, VA"
-  ],
-  "founded": 2007,
-  "employees": 500,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -5700,31 +5610,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Allconnect",
-  "careers_url": "https://allconnect.com/about/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "software_tech"
-  ],
-  "states": [
-   "KY"
-  ],
-  "why": {
-   "software_tech": "Develop consumer connection platforms"
-  },
-  "hq": "Louisville, KY",
-  "locations": [
-   "Louisville, KY"
-  ],
-  "founded": 1998,
-  "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Allegiant Air",
   "careers_url": "https://www.allegiantair.com/careers",
   "verified": false,
@@ -5805,33 +5690,6 @@
   ],
   "founded": 2003,
   "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Allergan",
-  "careers_url": "https://www.allergan.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "biotech_pharma"
-  ],
-  "states": [
-   "NV",
-   "OK"
-  ],
-  "why": {
-   "biotech_pharma": "Pharmaceutical development and manufacturing"
-  },
-  "hq": "Dublin, Ireland",
-  "locations": [
-   "Las Vegas, NV",
-   "Oklahoma City, OK"
-  ],
-  "founded": 1948,
-  "employees": 17000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -6094,8 +5952,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -6599,32 +6456,6 @@
   ],
   "founded": 1997,
   "employees": 3800,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "AltSchool",
-  "careers_url": "https://altschool.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "k12_education"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "k12_education": "Create personalized learning experiences"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA"
-  ],
-  "founded": 2013,
-  "employees": 100,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -9100,8 +8931,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "hr_org_development",
@@ -10716,8 +10546,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "mechanical_aerospace"
@@ -10843,41 +10672,6 @@
   ],
   "founded": 1950,
   "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Argo AI",
-  "careers_url": "https://www.argo.ai/careers/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "data_ai",
-   "electrical_hardware",
-   "software_tech"
-  ],
-  "states": [
-   "CA",
-   "MI",
-   "PA"
-  ],
-  "why": {
-   "data_ai": "Create AI for self-driving cars",
-   "electrical_hardware": "Build autonomous vehicle technology",
-   "software_tech": "Work on autonomous vehicle technology"
-  },
-  "hq": "Pittsburgh, PA",
-  "locations": [
-   "Pittsburgh, PA",
-   "Palo Alto, CA",
-   "Dearborn, MI",
-   "Detroit, MI"
-  ],
-  "founded": 2016,
-  "employees": 1500,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -12726,31 +12520,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Arkansas Western Gas Company",
-  "careers_url": "https://www.awgc.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "energy"
-  ],
-  "states": [
-   "AR"
-  ],
-  "why": {
-   "energy": "Natural gas distribution"
-  },
-  "hq": "Fayetteville, AR",
-  "locations": [
-   "Fayetteville, AR"
-  ],
-  "founded": 1929,
-  "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Armanino LLP",
   "careers_url": "https://www.armanino.com/careers/",
   "verified": false,
@@ -13031,8 +12800,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -13121,8 +12889,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -13881,8 +13648,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "mechanical_aerospace"
@@ -14518,32 +14284,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Atrium",
-  "careers_url": "https://atriumstaff.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "law_legal"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "law_legal": "Assist with legal document automation"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA"
-  ],
-  "founded": 2017,
-  "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Atrium Health",
   "careers_url": "https://atriumhealth.org/locations",
   "verified": true,
@@ -14692,8 +14432,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "speech_language"
@@ -14944,8 +14683,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "electrical_hardware"
@@ -15026,43 +14764,12 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Auth0",
-  "careers_url": "https://careers.auth0.com/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "cybersecurity"
-  ],
-  "states": [
-   "CA",
-   "NY",
-   "WA"
-  ],
-  "why": {
-   "cybersecurity": "Identity management and security"
-  },
-  "hq": "Bellevue, WA",
-  "locations": [
-   "Bellevue, WA",
-   "San Francisco, CA",
-   "New York, NY"
-  ],
-  "founded": 2013,
-  "employees": 900,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Autism Learning Partners",
   "careers_url": "https://careers.autismlearningpartners.com/",
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "special_education"
@@ -15513,31 +15220,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Avisa Pharma",
-  "careers_url": "https://www.avisapharma.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "biomedical_devices"
-  ],
-  "states": [
-   "NM"
-  ],
-  "why": {
-   "biomedical_devices": "Develop breath-based diagnostics"
-  },
-  "hq": "Santa Fe, NM",
-  "locations": [
-   "Santa Fe, NM"
-  ],
-  "founded": 2010,
-  "employees": 15,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Avmax Montana",
   "careers_url": "https://www.avmax.com/careers",
   "verified": true,
@@ -15596,8 +15278,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "performing_arts"
@@ -15614,32 +15295,6 @@
   ],
   "founded": 2012,
   "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Axiom Exergy",
-  "careers_url": "https://axiomexergy.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "energy"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "energy": "Develop thermal energy storage"
-  },
-  "hq": "Richmond, CA",
-  "locations": [
-   "Richmond, CA"
-  ],
-  "founded": 2015,
-  "employees": 40,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -15766,10 +15421,12 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
+   "large",
    "mid_size"
   ],
   "fields": [
    "business_operations",
+   "civil_construction",
    "real_estate_planning"
   ],
   "states": [
@@ -15793,8 +15450,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "languages_culture"
@@ -18028,33 +17684,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "BBVA USA",
-  "careers_url": "https://bbva.wd3.myworkdayjobs.com/en-US/BBVA",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "cybersecurity",
-   "data_ai"
-  ],
-  "states": [
-   "AL"
-  ],
-  "why": {
-   "data_ai": "Offer banking and financial services",
-   "cybersecurity": "Offer banking and financial services"
-  },
-  "hq": "Birmingham, AL",
-  "locations": [
-   "Birmingham, AL"
-  ],
-  "founded": 1964,
-  "employees": 10000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "BD (Becton, Dickinson and Company)",
   "careers_url": "https://jobs.bd.com/en",
   "verified": true,
@@ -18154,8 +17783,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -18386,8 +18014,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -18412,8 +18039,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "special_education"
@@ -18547,33 +18173,6 @@
   ],
   "founded": 1971,
   "employees": 300,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Bench Accounting",
-  "careers_url": "https://bench.co/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "accounting"
-  ],
-  "states": [
-   "NY"
-  ],
-  "why": {
-   "accounting": "Provide bookkeeping and financial analysis"
-  },
-  "hq": "Vancouver, BC",
-  "locations": [
-   "Vancouver, BC",
-   "New York, NY"
-  ],
-  "founded": 2012,
-  "employees": 600,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -19582,33 +19181,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Bigelow Aerospace",
-  "careers_url": "https://www.bigelowaerospace.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "electrical_hardware",
-   "software_tech"
-  ],
-  "states": [
-   "NV"
-  ],
-  "why": {
-   "electrical_hardware": "Space habitat technology",
-   "software_tech": "Space habitat technology"
-  },
-  "hq": "North Las Vegas, NV",
-  "locations": [
-   "North Las Vegas, NV"
-  ],
-  "founded": 1999,
-  "employees": 150,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Bilingual Therapies",
   "careers_url": "https://www.bilingualtherapies.com/careers",
   "verified": false,
@@ -20238,106 +19810,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Biomet Microfixation",
-  "careers_url": "https://www.biometmicrofixation.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "biomedical_devices"
-  ],
-  "states": [
-   "IN"
-  ],
-  "why": {
-   "biomedical_devices": "Produce cranial and maxillofacial devices"
-  },
-  "hq": "Warsaw, IN",
-  "locations": [
-   "Warsaw, IN"
-  ],
-  "founded": 1977,
-  "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Biomimetic Therapeutics",
-  "careers_url": "https://careers.biomimetic.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "biotech_pharma"
-  ],
-  "states": [
-   "LA"
-  ],
-  "why": {
-   "biotech_pharma": "Develop regenerative medicine products"
-  },
-  "hq": "Shreveport, LA",
-  "locations": [
-   "Shreveport, LA"
-  ],
-  "founded": 2000,
-  "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "BioProtection Systems Corporation",
-  "careers_url": "https://bioprotectionsystems.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "biotech_pharma"
-  ],
-  "states": [
-   "IA"
-  ],
-  "why": {
-   "biotech_pharma": "Vaccine development and infectious disease"
-  },
-  "hq": "Ames, IA",
-  "locations": [
-   "Ames, IA"
-  ],
-  "founded": 2005,
-  "employees": 50,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "BioReliance",
-  "careers_url": "https://www.bioreliance.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "biotech_pharma"
-  ],
-  "states": [
-   "MD"
-  ],
-  "why": {
-   "biotech_pharma": "Biosafety testing, pharmaceutical services"
-  },
-  "hq": "Rockville, MD",
-  "locations": [
-   "Rockville, MD"
-  ],
-  "founded": 1947,
-  "employees": 1000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "BioSTL",
   "careers_url": "https://careers.biostl.org/",
   "verified": false,
@@ -20449,8 +19921,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "business_operations"
@@ -20810,31 +20281,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "BL Harbert International",
-  "careers_url": "https://www.blharbert.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "civil_construction"
-  ],
-  "states": [
-   "AL"
-  ],
-  "why": {
-   "civil_construction": "Global construction and engineering projects"
-  },
-  "hq": "Birmingham, AL",
-  "locations": [
-   "Birmingham, AL"
-  ],
-  "founded": 2000,
-  "employees": 7000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Black & Veatch",
   "careers_url": "https://www.bv.com/careers",
   "verified": true,
@@ -21031,35 +20477,6 @@
    "Austin, TX"
   ],
   "founded": 1981,
-  "employees": 3000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Blackboard Inc.",
-  "careers_url": "https://www.blackboard.com/careers/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "higher_ed_edtech"
-  ],
-  "states": [
-   "DC",
-   "TX",
-   "VA"
-  ],
-  "why": {
-   "higher_ed_edtech": "Create educational technology solutions"
-  },
-  "hq": "Reston, VA",
-  "locations": [
-   "Reston, VA",
-   "Washington, DC",
-   "Austin, TX"
-  ],
-  "founded": 1997,
   "employees": 3000,
   "source": "AI-suggested; careers page checked live"
  },
@@ -21788,8 +21205,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "mechanical_aerospace"
@@ -21923,31 +21339,6 @@
   ],
   "founded": 1945,
   "employees": 6000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Bluegrass Cellular",
-  "careers_url": "https://bluegrasscellular.com/about/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "electrical_hardware"
-  ],
-  "states": [
-   "KY"
-  ],
-  "why": {
-   "electrical_hardware": "Develop mobile network technologies"
-  },
-  "hq": "Elizabethtown, KY",
-  "locations": [
-   "Elizabethtown, KY"
-  ],
-  "founded": 1991,
-  "employees": 400,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -24836,8 +24227,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "healthcare_systems",
@@ -26004,8 +25394,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "languages_culture"
@@ -26118,8 +25507,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biomedical_devices"
@@ -26242,8 +25630,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "data_ai"
@@ -27158,32 +26545,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Canoo",
-  "careers_url": "https://careers.canoo.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "mechanical_aerospace"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "mechanical_aerospace": "Design electric vehicles"
-  },
-  "hq": "Torrance, CA",
-  "locations": [
-   "Torrance, CA"
-  ],
-  "founded": 2017,
-  "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Canopy Children's Solutions",
   "careers_url": "https://www.canopychildrensolutions.org/careers/",
   "verified": false,
@@ -27480,35 +26841,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Carbon Black",
-  "careers_url": "https://careers.carbonblack.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "cybersecurity"
-  ],
-  "states": [
-   "CO",
-   "MA",
-   "OR"
-  ],
-  "why": {
-   "cybersecurity": "Develop endpoint protection platforms"
-  },
-  "hq": "Waltham, MA",
-  "locations": [
-   "Waltham, MA",
-   "Boulder, CO",
-   "Portland, OR"
-  ],
-  "founded": 2002,
-  "employees": 1000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Carbon Health",
   "careers_url": "https://carbonhealth.com/careers",
   "verified": true,
@@ -27543,8 +26875,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "environment_climate"
@@ -27768,36 +27099,6 @@
   ],
   "founded": 1945,
   "employees": 800,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Care.com",
-  "careers_url": "https://www.care.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "child_family_services"
-  ],
-  "states": [
-   "MA",
-   "NY",
-   "TX"
-  ],
-  "why": {
-   "child_family_services": "Facilitate family care services"
-  },
-  "hq": "Waltham, MA",
-  "locations": [
-   "Waltham, MA",
-   "Austin, TX",
-   "New York, NY"
-  ],
-  "founded": 2012,
-  "employees": 500,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -28607,8 +27908,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "consumer_retail"
@@ -28712,8 +28012,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "nonprofit_advocacy"
@@ -30713,31 +30012,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Cetero Research",
-  "careers_url": "https://www.ceteroresearch.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "research_labs"
-  ],
-  "states": [
-   "ND"
-  ],
-  "why": {
-   "research_labs": "Clinical research and trials"
-  },
-  "hq": "Fargo, ND",
-  "locations": [
-   "Fargo, ND"
-  ],
-  "founded": 2003,
-  "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "CFD Research Corporation",
   "careers_url": "https://careers.cfdrc.com/",
   "verified": false,
@@ -31206,8 +30480,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "higher_ed_edtech",
@@ -31403,31 +30676,6 @@
   ],
   "founded": 1950,
   "employees": 9000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Cherwell Software",
-  "careers_url": "https://careers.cherwell.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "software_tech"
-  ],
-  "states": [
-   "CO"
-  ],
-  "why": {
-   "software_tech": "Develop IT service management software"
-  },
-  "hq": "Colorado Springs, CO",
-  "locations": [
-   "Colorado Springs, CO"
-  ],
-  "founded": 2004,
-  "employees": 500,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -33670,8 +32918,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "religion_faith"
@@ -33731,8 +32978,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "religion_faith"
@@ -35487,8 +34733,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "government_policy"
@@ -35539,8 +34784,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "government_policy"
@@ -35950,8 +35194,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "energy"
@@ -36370,37 +35613,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Cloud Peak Energy",
-  "careers_url": null,
-  "verified": false,
-  "link_check": "on_request",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "business_operations",
-   "data_ai",
-   "energy"
-  ],
-  "states": [
-   "CO",
-   "WY"
-  ],
-  "why": {
-   "data_ai": "Optimize mining operations with AI",
-   "energy": "Coal mining and energy production",
-   "business_operations": "Support business operations and management"
-  },
-  "hq": "Gillette, WY",
-  "locations": [
-   "Gillette, WY",
-   "Broomfield, CO"
-  ],
-  "founded": 2008,
-  "employees": 1300,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Cloudera",
   "careers_url": "https://www.cloudera.com/careers.html",
   "verified": true,
@@ -36441,7 +35653,6 @@
   "categories": [
    "consulting",
    "small_business",
-   "startup",
    "tennessee"
   ],
   "fields": [
@@ -36675,36 +35886,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Cobalt",
-  "careers_url": "https://cobalt.io/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "cybersecurity"
-  ],
-  "states": [
-   "CA",
-   "DE",
-   "NY"
-  ],
-  "why": {
-   "cybersecurity": "Pentesting as a service"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA",
-   "Berlin, DE",
-   "New York, NY"
-  ],
-  "founded": 2013,
-  "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "CoBank",
   "careers_url": "https://www.cobank.com/careers",
   "verified": true,
@@ -36890,32 +36071,6 @@
   ],
   "founded": 2013,
   "employees": 60,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Codiak BioSciences",
-  "careers_url": "https://careers.codiakbio.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "biotech_pharma"
-  ],
-  "states": [
-   "MA"
-  ],
-  "why": {
-   "biotech_pharma": "Engineer exosome-based therapeutics"
-  },
-  "hq": "Cambridge, MA",
-  "locations": [
-   "Cambridge, MA"
-  ],
-  "founded": 2015,
-  "employees": 100,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -39473,34 +38628,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Connections Community Support Programs",
-  "careers_url": "https://careers.connectionscsp.org/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size",
-   "nonprofit"
-  ],
-  "fields": [
-   "child_family_services",
-   "psychology_mental_health"
-  ],
-  "states": [
-   "DE"
-  ],
-  "why": {
-   "psychology_mental_health": "Mental health and substance abuse services",
-   "child_family_services": "Mental health and substance abuse services"
-  },
-  "hq": "Wilmington, DE",
-  "locations": [
-   "Wilmington, DE"
-  ],
-  "founded": 1985,
-  "employees": 1000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Conner Prairie",
   "careers_url": "https://careers.connerprairie.org/",
   "verified": false,
@@ -39599,8 +38726,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "philosophy_ethics"
@@ -39722,37 +38848,6 @@
   ],
   "founded": 1886,
   "employees": 8600,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Convoy",
-  "careers_url": "https://convoy.com/careers/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "consulting",
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "consulting",
-   "economics_research"
-  ],
-  "states": [
-   "GA",
-   "WA"
-  ],
-  "why": {
-   "consulting": "Freight logistics and strategy consulting",
-   "economics_research": "Research economic trends in freight logistics"
-  },
-  "hq": "Seattle, WA",
-  "locations": [
-   "Seattle, WA",
-   "Atlanta, GA"
-  ],
-  "founded": 2015,
-  "employees": 1000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -40193,32 +39288,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Cortexyme",
-  "careers_url": "https://cortexyme.com/careers/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "research_labs"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "research_labs": "Develop therapies for neurodegenerative diseases"
-  },
-  "hq": "South San Francisco, CA",
-  "locations": [
-   "South San Francisco, CA"
-  ],
-  "founded": 2012,
-  "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Cortica",
   "careers_url": "https://careers.cortica.com/",
   "verified": false,
@@ -40416,38 +39485,6 @@
   ],
   "founded": 2013,
   "employees": 1500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Covance",
-  "careers_url": "https://careers.covance.com",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "biotech_pharma",
-   "research_labs"
-  ],
-  "states": [
-   "IN",
-   "KY",
-   "NJ",
-   "WI"
-  ],
-  "why": {
-   "research_labs": "Conduct clinical trials and research",
-   "biotech_pharma": "Conduct clinical trials and research"
-  },
-  "hq": "Indianapolis, IN",
-  "locations": [
-   "Indianapolis, IN",
-   "Harrodsburg, KY",
-   "Madison, WI"
-  ],
-  "founded": 1968,
-  "employees": 50000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -40820,8 +39857,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -40866,36 +39902,6 @@
   ],
   "founded": 1966,
   "employees": 2000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Credit Suisse",
-  "careers_url": "https://careers.credit-suisse.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "cybersecurity",
-   "data_ai"
-  ],
-  "states": [
-   "NC",
-   "NY"
-  ],
-  "why": {
-   "data_ai": "Develop financial data analytics solutions",
-   "cybersecurity": "Develop financial data analytics solutions"
-  },
-  "hq": "Zurich, Switzerland",
-  "locations": [
-   "Raleigh, NC",
-   "New York, NY",
-   "Zurich, Switzerland"
-  ],
-  "founded": 1856,
-  "employees": 48000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -41273,32 +40279,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Crowdpac",
-  "careers_url": "https://careers.crowdpac.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "government_policy"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "government_policy": "Facilitate political donations"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA"
-  ],
-  "founded": 2014,
-  "employees": 30,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "CrowdStrike",
   "careers_url": "https://www.crowdstrike.com/careers/",
   "verified": true,
@@ -41639,8 +40619,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "history_heritage"
@@ -41666,8 +40645,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "history_heritage"
@@ -41692,8 +40670,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "history_heritage"
@@ -42433,33 +41410,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Cypress Semiconductor",
-  "careers_url": "https://www.cypress.com/en/company/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "electrical_hardware"
-  ],
-  "states": [
-   "CA",
-   "WA"
-  ],
-  "why": {
-   "electrical_hardware": "Work on microcontrollers and memory solutions"
-  },
-  "hq": "San Jose, CA",
-  "locations": [
-   "San Jose, CA",
-   "Lynnwood, WA"
-  ],
-  "founded": 1982,
-  "employees": 5800,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "CyraCom",
   "careers_url": "https://www.cyracom.com/careers/",
   "verified": false,
@@ -42979,8 +41929,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "cybersecurity"
@@ -43274,8 +42223,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "finance_banking"
@@ -43559,8 +42507,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -45144,8 +44091,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -46556,8 +45502,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "accounting"
@@ -46739,8 +45684,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "law_legal"
@@ -47144,31 +46088,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Dow AgroSciences",
-  "careers_url": "https://www.dow.com/en-us/careers.html",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "chemical_materials"
-  ],
-  "states": [
-   "IN"
-  ],
-  "why": {
-   "chemical_materials": "Develop agricultural chemicals and solutions"
-  },
-  "hq": "Indianapolis, IN",
-  "locations": [
-   "Indianapolis, IN"
-  ],
-  "founded": 1989,
-  "employees": 7000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Dow Chemical Company",
   "careers_url": "https://corporate.dow.com/en-us/careers.html",
   "verified": false,
@@ -47554,8 +46473,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -47628,34 +46546,6 @@
   ],
   "founded": 2016,
   "employees": 50,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "DST Systems",
-  "careers_url": "https://careers.dstsystems.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "consulting",
-   "large"
-  ],
-  "fields": [
-   "consulting",
-   "finance_banking"
-  ],
-  "states": [
-   "MO"
-  ],
-  "why": {
-   "finance_banking": "Financial services technology",
-   "consulting": "Financial services technology"
-  },
-  "hq": "Kansas City, MO",
-  "locations": [
-   "Kansas City, MO"
-  ],
-  "founded": 1969,
-  "employees": 14000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -47962,8 +46852,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "data_ai",
@@ -48329,8 +47218,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biomedical_devices"
@@ -49463,8 +48351,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -49508,33 +48395,6 @@
   ],
   "founded": 1960,
   "employees": 1000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Edmodo",
-  "careers_url": "https://careers.edmodo.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "higher_ed_edtech",
-   "k12_education"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "k12_education": "Provide a social learning platform",
-   "higher_ed_edtech": "Create educational networking platforms"
-  },
-  "hq": "San Mateo, CA",
-  "locations": [
-   "San Mateo, CA"
-  ],
-  "founded": 2008,
-  "employees": 200,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -49928,33 +48788,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Element AI",
-  "careers_url": "https://elementai.com/careers/jobs",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "data_ai"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "data_ai": "Create AI solutions for enterprise clients"
-  },
-  "hq": "Montreal, QC",
-  "locations": [
-   "Montreal, QC",
-   "San Francisco, CA"
-  ],
-  "founded": 2016,
-  "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Element Fleet Management",
   "careers_url": "https://www.elementfleet.com/en/careers",
   "verified": true,
@@ -50135,34 +48968,6 @@
   ],
   "founded": 1876,
   "employees": 35,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Elixiter",
-  "careers_url": "https://elixiter.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "data_ai",
-   "software_tech"
-  ],
-  "states": [
-   "MT"
-  ],
-  "why": {
-   "data_ai": "Marketing automation and data analytics",
-   "software_tech": "Marketing automation and data analytics"
-  },
-  "hq": "Bozeman, MT",
-  "locations": [
-   "Bozeman, MT"
-  ],
-  "founded": 2011,
-  "employees": 50,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -50605,8 +49410,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "energy"
@@ -50807,36 +49611,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Energy Corporation of America",
-  "careers_url": null,
-  "verified": false,
-  "link_check": "on_request",
-  "categories": [
-   "consulting",
-   "small_business"
-  ],
-  "fields": [
-   "business_operations",
-   "consulting",
-   "energy"
-  ],
-  "states": [
-   "WV"
-  ],
-  "why": {
-   "energy": "Natural gas exploration and production",
-   "business_operations": "Manage business operations and energy projects",
-   "consulting": "Manage business operations and energy projects"
-  },
-  "hq": "Charleston, WV",
-  "locations": [
-   "Charleston, WV"
-  ],
-  "founded": 1973,
-  "employees": 400,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Energy Laboratories, Inc.",
   "careers_url": "https://www.energylabs.com/careers",
   "verified": false,
@@ -50867,8 +49641,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "energy"
@@ -50940,39 +49713,6 @@
   ],
   "founded": 2008,
   "employees": 3000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Engility Corporation",
-  "careers_url": "https://www.engilitycorp.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "national_security"
-  ],
-  "states": [
-   "AL",
-   "CA",
-   "CO",
-   "FL",
-   "VA"
-  ],
-  "why": {
-   "national_security": "Provide engineering services for defense"
-  },
-  "hq": "Chantilly, VA",
-  "locations": [
-   "Chantilly, VA",
-   "San Diego, CA",
-   "Huntsville, AL",
-   "Colorado Springs, CO",
-   "Orlando, FL"
-  ],
-  "founded": 2012,
-  "employees": 6000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -51657,36 +50397,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Epiq Systems",
-  "careers_url": "https://www.epiqglobal.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "cybersecurity",
-   "software_tech"
-  ],
-  "states": [
-   "KS",
-   "NY"
-  ],
-  "why": {
-   "software_tech": "Provide legal services and technology",
-   "cybersecurity": "Provide legal services and technology"
-  },
-  "hq": "Kansas City, KS",
-  "locations": [
-   "Kansas City, KS",
-   "New York, NY",
-   "London, UK"
-  ],
-  "founded": 1988,
-  "employees": 5000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Epirus",
   "careers_url": "https://careers.epirus.com/",
   "verified": false,
@@ -52305,8 +51015,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "philosophy_ethics"
@@ -52387,8 +51096,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "art_design",
@@ -52512,8 +51220,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "consumer_retail"
@@ -52540,8 +51247,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "law_legal"
@@ -53409,7 +52115,6 @@
   "categories": [
    "nashville",
    "small_business",
-   "startup",
    "tennessee"
   ],
   "fields": [
@@ -53436,8 +52141,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "religion_faith"
@@ -53464,8 +52168,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "religion_faith"
@@ -53492,8 +52195,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "religion_faith"
@@ -54714,40 +53416,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Feeding America Thrift Stores",
-  "careers_url": "https://feedingamericathriftstores.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size",
-   "nonprofit"
-  ],
-  "fields": [
-   "consumer_retail"
-  ],
-  "states": [
-   "CA",
-   "FL",
-   "IL",
-   "MA",
-   "OR"
-  ],
-  "why": {
-   "consumer_retail": "Retail management and logistics"
-  },
-  "hq": "Chicago, IL",
-  "locations": [
-   "Chicago, IL",
-   "San Diego, CA",
-   "Boston, MA",
-   "Orlando, FL",
-   "Portland, OR"
-  ],
-  "founded": 1979,
-  "employees": 2000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Fermilab",
   "careers_url": "https://www.fermilab.gov/careers/",
   "verified": false,
@@ -54861,32 +53529,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Fiddlehead Theatre Company",
-  "careers_url": "https://careers.fiddleheadtheatre.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "nonprofit",
-   "small_business"
-  ],
-  "fields": [
-   "performing_arts"
-  ],
-  "states": [
-   "NH"
-  ],
-  "why": {
-   "performing_arts": "Theatrical production and performance"
-  },
-  "hq": "Manchester, NH",
-  "locations": [
-   "Manchester, NH"
-  ],
-  "founded": 1991,
-  "employees": 15,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Fidelity Investments",
   "careers_url": "https://jobs.fidelity.com/",
   "industries": [
@@ -54981,8 +53623,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "civil_construction"
@@ -55085,8 +53726,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "art_design",
@@ -55203,35 +53843,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "FireEye",
-  "careers_url": "https://careers.fireeye.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "cybersecurity"
-  ],
-  "states": [
-   "CA",
-   "NY",
-   "VA"
-  ],
-  "why": {
-   "cybersecurity": "Analyze and respond to cyber threats"
-  },
-  "hq": "Milpitas, CA",
-  "locations": [
-   "Milpitas, CA",
-   "Reston, VA",
-   "New York, NY"
-  ],
-  "founded": 2004,
-  "employees": 3000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "First Citizens Bank",
   "careers_url": "https://careers.firstcitizens.com/",
   "verified": false,
@@ -55315,40 +53926,6 @@
   ],
   "founded": 1864,
   "employees": 7000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "First Horizon National Corporation",
-  "careers_url": "https://www.firsthorizon.com/Careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "mid_size",
-   "nashville",
-   "tennessee"
-  ],
-  "fields": [
-   "finance_banking"
-  ],
-  "states": [
-   "AL",
-   "GA",
-   "NC",
-   "TN"
-  ],
-  "why": {
-   "finance_banking": "Work in regional banking operations"
-  },
-  "hq": "Memphis, TN",
-  "locations": [
-   "Memphis, TN",
-   "Nashville, TN",
-   "Charlotte, NC",
-   "Atlanta, GA",
-   "Birmingham, AL"
-  ],
-  "founded": 1864,
-  "employees": 4900,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -55669,8 +54246,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "government_policy"
@@ -55821,31 +54397,6 @@
   ],
   "founded": 1902,
   "employees": 75000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Fitbit",
-  "careers_url": "https://careers.fitbit.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "sports_recreation"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "sports_recreation": "Develop wearable fitness technology"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA"
-  ],
-  "founded": 2007,
-  "employees": 1700,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -56692,34 +55243,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Fluent City",
-  "careers_url": "https://careers.fluentcity.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "languages_culture"
-  ],
-  "states": [
-   "CA",
-   "NY"
-  ],
-  "why": {
-   "languages_culture": "Teach language and cultural workshops"
-  },
-  "hq": "Brooklyn, NY",
-  "locations": [
-   "Brooklyn, NY",
-   "Los Angeles, CA"
-  ],
-  "founded": 2012,
-  "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Fluor Corporation",
   "careers_url": "https://www.fluor.com/careers",
   "verified": true,
@@ -56930,8 +55453,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -57350,31 +55872,6 @@
   ],
   "founded": 1878,
   "employees": 1500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Foss Manufacturing",
-  "careers_url": "https://www.fossmfg.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "chemical_materials"
-  ],
-  "states": [
-   "NH"
-  ],
-  "why": {
-   "chemical_materials": "Nonwoven fabrics and specialty fibers"
-  },
-  "hq": "Hampton, NH",
-  "locations": [
-   "Hampton, NH"
-  ],
-  "founded": 1954,
-  "employees": 300,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -57989,8 +56486,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "finance_banking"
@@ -58007,31 +56503,6 @@
   ],
   "founded": 2012,
   "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Funny or Die",
-  "careers_url": "https://www.funnyordie.com/contact",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "performing_arts"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "performing_arts": "Produce comedy videos and series"
-  },
-  "hq": "Los Angeles, CA",
-  "locations": [
-   "Los Angeles, CA"
-  ],
-  "founded": 2007,
-  "employees": 100,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -60415,39 +58886,12 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Gimlet Media",
-  "careers_url": "https://www.gimletmedia.com/careers/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "performing_arts"
-  ],
-  "states": [
-   "NY"
-  ],
-  "why": {
-   "performing_arts": "Produce narrative podcasts"
-  },
-  "hq": "Brooklyn, NY",
-  "locations": [
-   "Brooklyn, NY"
-  ],
-  "founded": 2014,
-  "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Ginger",
   "careers_url": "https://careers.ginger.com/",
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "psychology_mental_health"
@@ -60468,40 +58912,12 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Ginger.io",
-  "careers_url": "https://careers.ginger.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "psychology_mental_health"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "psychology_mental_health": "Offer mental health analytics services"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA",
-   "Remote"
-  ],
-  "founded": 2011,
-  "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Ginkgo Bioworks",
   "careers_url": "https://careers.ginkgobioworks.com/",
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "biotech_pharma",
@@ -62077,8 +60493,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "biomedical_devices"
@@ -62986,8 +61401,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "energy"
@@ -63240,41 +61654,6 @@
   ],
   "founded": 2000,
   "employees": 94000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "GTECH Corporation",
-  "careers_url": null,
-  "verified": false,
-  "link_check": "on_request",
-  "categories": [
-   "consulting",
-   "mid_size"
-  ],
-  "fields": [
-   "art_design",
-   "business_operations",
-   "communications_pr",
-   "consulting"
-  ],
-  "states": [
-   "NV",
-   "RI"
-  ],
-  "why": {
-   "art_design": "Develop gaming software",
-   "communications_pr": "Develop gaming software",
-   "business_operations": "Lottery systems and business operations",
-   "consulting": "Lottery systems and business operations"
-  },
-  "hq": "Providence, RI",
-  "locations": [
-   "Providence, RI",
-   "Las Vegas, NV",
-   "Rome, IT"
-  ],
-  "founded": 1980,
-  "employees": 800,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -67123,8 +65502,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "speech_language"
@@ -67421,31 +65799,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Helena Industries",
-  "careers_url": "https://www.helenaindustries.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "electrical_hardware"
-  ],
-  "states": [
-   "MT"
-  ],
-  "why": {
-   "electrical_hardware": "Manufacture and distribute agricultural products"
-  },
-  "hq": "Helena, MT",
-  "locations": [
-   "Helena, MT"
-  ],
-  "founded": 1968,
-  "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Helena Public Schools",
   "careers_url": "https://careers.helenaschools.org/",
   "verified": false,
@@ -67477,8 +65830,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "civil_construction"
@@ -67787,8 +66139,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "history_heritage"
@@ -67840,8 +66191,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "history_heritage"
@@ -68029,49 +66379,12 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Hewlett-Packard (HP)",
-  "careers_url": "https://jobs.hp.com",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "fortune_500",
-   "large"
-  ],
-  "fields": [
-   "business_operations",
-   "chemical_materials",
-   "hr_org_development",
-   "mechanical_aerospace"
-  ],
-  "states": [
-   "CA",
-   "ID",
-   "TX"
-  ],
-  "why": {
-   "business_operations": "Business operations and management",
-   "hr_org_development": "Business operations and management",
-   "mechanical_aerospace": "Innovate in printing technologies",
-   "chemical_materials": "Innovate in printing technologies"
-  },
-  "hq": "Palo Alto, CA",
-  "locations": [
-   "Boise, ID",
-   "Palo Alto, CA",
-   "Houston, TX"
-  ],
-  "founded": 1939,
-  "employees": 51000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Hexagon US Federal",
   "careers_url": "https://careers.hexagon.com/",
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "cybersecurity",
@@ -68359,33 +66672,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Hilo Hattie",
-  "careers_url": "https://hilohattie.com/pages/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "business_operations",
-   "consumer_retail"
-  ],
-  "states": [
-   "HI"
-  ],
-  "why": {
-   "consumer_retail": "Participate in retail operations and customer service",
-   "business_operations": "Participate in retail operations and customer service"
-  },
-  "hq": "Honolulu, HI",
-  "locations": [
-   "Honolulu, HI"
-  ],
-  "founded": 1963,
-  "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Hilo Medical Center",
   "careers_url": "https://careers.hilomedicalcenter.org/",
   "verified": false,
@@ -68557,8 +66843,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "communications_pr",
@@ -68683,8 +66968,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "insurance_risk"
@@ -68792,8 +67076,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "history_heritage"
@@ -73977,8 +72260,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -74109,32 +72391,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Inphi Corporation",
-  "careers_url": "https://careers.inphi.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "electrical_hardware"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "electrical_hardware": "Develop high-speed data movement products"
-  },
-  "hq": "Santa Clara, CA",
-  "locations": [
-   "Santa Clara, CA",
-   "Westlake Village, CA"
-  ],
-  "founded": 2000,
-  "employees": 1000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "InsideClimate News",
   "careers_url": "https://insideclimatenews.org/about/careers/",
   "verified": false,
@@ -74192,8 +72448,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "hospitality_tourism"
@@ -74490,8 +72745,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "higher_ed_edtech",
@@ -75214,35 +73468,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Interstate Hotels & Resorts",
-  "careers_url": "https://www.interstatehotelsandresorts.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "hospitality_tourism"
-  ],
-  "states": [
-   "CA",
-   "GA",
-   "VA"
-  ],
-  "why": {
-   "hospitality_tourism": "Manage hotel properties"
-  },
-  "hq": "Arlington, VA",
-  "locations": [
-   "Arlington, VA",
-   "Atlanta, GA",
-   "Los Angeles, CA"
-  ],
-  "founded": 1960,
-  "employees": 5000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Interstates",
   "careers_url": null,
   "verified": false,
@@ -75432,34 +73657,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "InVision",
-  "careers_url": "https://careers.invisionapp.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "art_design"
-  ],
-  "states": [
-   "CA",
-   "NY"
-  ],
-  "why": {
-   "art_design": "Design and prototype web and mobile apps"
-  },
-  "hq": "New York, NY",
-  "locations": [
-   "New York, NY",
-   "San Francisco, CA"
-  ],
-  "founded": 2012,
-  "employees": 1000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Invo Healthcare",
   "careers_url": "https://invohealthcare.com/careers/",
   "verified": false,
@@ -75519,8 +73716,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "healthcare_systems"
@@ -76189,8 +74385,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "biomedical_devices"
@@ -76355,8 +74550,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "languages_culture"
@@ -76582,31 +74776,6 @@
   ],
   "founded": 1976,
   "employees": 6500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Jackson Free Press",
-  "careers_url": "https://www.jacksonfreepress.com/jobs/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "media_journalism"
-  ],
-  "states": [
-   "MS"
-  ],
-  "why": {
-   "media_journalism": "Report and publish local news"
-  },
-  "hq": "Jackson, MS",
-  "locations": [
-   "Jackson, MS"
-  ],
-  "founded": 2002,
-  "employees": 25,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -76840,34 +75009,6 @@
   ],
   "founded": 2002,
   "employees": 2000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Jammber",
-  "careers_url": "https://jammber.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "nashville",
-   "small_business",
-   "startup",
-   "tennessee"
-  ],
-  "fields": [
-   "music"
-  ],
-  "states": [
-   "TN"
-  ],
-  "why": {
-   "music": "Streamline music rights and payments"
-  },
-  "hq": "Nashville, TN",
-  "locations": [
-   "Nashville, TN"
-  ],
-  "founded": 2013,
-  "employees": 40,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -77966,17 +76107,22 @@
   "verified": false,
   "link_check": "list",
   "categories": [
+   "finance",
    "fortune_500",
    "large"
   ],
   "fields": [
    "cybersecurity",
+   "data_ai",
    "economics_research",
    "finance_banking",
+   "law_legal",
    "software_tech"
   ],
   "states": [
+   "CA",
    "DE",
+   "FL",
    "IL",
    "NY",
    "OH",
@@ -77990,77 +76136,20 @@
   },
   "hq": "New York, NY",
   "locations": [
-   "New York, NY",
-   "Columbus, OH",
+   "Austin, TX",
    "Chicago, IL",
-   "Wilmington, DE",
+   "Columbus, OH",
    "Dallas, TX",
    "Houston, TX",
-   "Austin, TX"
+   "New York, NY",
+   "Plano, TX",
+   "San Francisco, CA",
+   "Tampa, FL",
+   "Wilmington, DE"
   ],
   "founded": 1799,
   "employees": 250000,
   "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "JPMorgan Chase",
-  "careers_url": "https://careers.jpmorgan.com/",
-  "industries": [
-   "finance",
-   "investment banking",
-   "banking"
-  ],
-  "cities": [
-   "New York",
-   "Chicago",
-   "Columbus"
-  ],
-  "aliases": [
-   "JP Morgan",
-   "J.P. Morgan",
-   "Chase"
-  ],
-  "verified": true,
-  "final_url": "https://www.jpmorganchase.com/careers?redirect=careers_jpm",
-  "checked": "2026-10-15",
-  "note": "ok",
-  "categories": [
-   "finance",
-   "fortune_500",
-   "large"
-  ],
-  "fields": [
-   "cybersecurity",
-   "data_ai",
-   "finance_banking",
-   "law_legal"
-  ],
-  "states": [
-   "CA",
-   "DE",
-   "FL",
-   "IL",
-   "NY",
-   "OH",
-   "TX"
-  ],
-  "why": {
-   "data_ai": "Utilize AI for banking analytics",
-   "law_legal": "Support in banking and finance law",
-   "cybersecurity": "Implement cybersecurity and data solutions"
-  },
-  "locations": [
-   "New York, NY",
-   "Columbus, OH",
-   "Chicago, IL",
-   "Wilmington, DE",
-   "Plano, TX",
-   "San Francisco, CA",
-   "Dallas, TX",
-   "Houston, TX",
-   "Tampa, FL"
-  ],
-  "hq": "New York, NY"
  },
  {
   "name": "JPMorgan Chase & Co.",
@@ -78516,34 +76605,6 @@
   ],
   "founded": 1998,
   "employees": 20,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Kansas Bioscience Authority",
-  "careers_url": "https://www.kansasbioauthority.org/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "government",
-   "small_business"
-  ],
-  "fields": [
-   "biotech_pharma",
-   "research_labs"
-  ],
-  "states": [
-   "KS"
-  ],
-  "why": {
-   "biotech_pharma": "Investment, research funding, biotech development",
-   "research_labs": "Investment, research funding, biotech development"
-  },
-  "hq": "Olathe, KS",
-  "locations": [
-   "Olathe, KS"
-  ],
-  "founded": 2004,
-  "employees": 25,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -79361,36 +77422,6 @@
   ],
   "founded": 1995,
   "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Katerra",
-  "careers_url": "https://www.katerra.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "civil_construction"
-  ],
-  "states": [
-   "AZ",
-   "CA",
-   "WA"
-  ],
-  "why": {
-   "civil_construction": "Design and build sustainable structures"
-  },
-  "hq": "Menlo Park, CA",
-  "locations": [
-   "Menlo Park, CA",
-   "Seattle, WA",
-   "Phoenix, AZ"
-  ],
-  "founded": 2015,
-  "employees": 2500,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -80637,36 +78668,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "KentuckyOne Health",
-  "careers_url": "https://www.kentuckyonehealth.org/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large",
-   "nonprofit"
-  ],
-  "fields": [
-   "business_operations",
-   "hr_org_development"
-  ],
-  "states": [
-   "KY"
-  ],
-  "why": {
-   "hr_org_development": "Healthcare administration and HR roles",
-   "business_operations": "Healthcare administration and HR roles"
-  },
-  "hq": "Louisville, KY",
-  "locations": [
-   "Louisville, KY",
-   "Lexington, KY",
-   "Bardstown, KY"
-  ],
-  "founded": 2012,
-  "employees": 12000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Kepware Technologies",
   "careers_url": "https://careers.kepware.com/",
   "verified": false,
@@ -81564,8 +79565,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "data_ai",
@@ -81708,34 +79708,6 @@
   ],
   "founded": 1949,
   "employees": 30,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Knotel",
-  "careers_url": "https://www.knotel.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "real_estate_planning"
-  ],
-  "states": [
-   "CA",
-   "NY"
-  ],
-  "why": {
-   "real_estate_planning": "Assist in flexible workspace design"
-  },
-  "hq": "New York, NY",
-  "locations": [
-   "New York, NY",
-   "San Francisco, CA"
-  ],
-  "founded": 2016,
-  "employees": 200,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -82424,8 +80396,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -82478,8 +80449,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "hospitality_tourism"
@@ -84097,8 +82067,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "law_legal"
@@ -84269,8 +82238,7 @@
   "link_check": "likely",
   "categories": [
    "consulting",
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "consulting",
@@ -84868,6 +82836,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
+   "large",
    "mid_size"
   ],
   "fields": [
@@ -84886,12 +82855,12 @@
   },
   "hq": "Chanhassen, MN",
   "locations": [
-   "Chanhassen, MN",
-   "Houston, TX",
-   "Phoenix, AZ",
-   "Chicago, IL",
    "Atlanta, GA",
-   "New York, NY"
+   "Chanhassen, MN",
+   "Chicago, IL",
+   "Houston, TX",
+   "New York, NY",
+   "Phoenix, AZ"
   ],
   "founded": 1992,
   "employees": 4000,
@@ -84969,35 +82938,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Lifetime Fitness, Inc.",
-  "careers_url": "https://careers.lifetime.life/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "sports_recreation"
-  ],
-  "states": [
-   "GA",
-   "MN",
-   "TX"
-  ],
-  "why": {
-   "sports_recreation": "Manage fitness centers and programs"
-  },
-  "hq": "Chanhassen, MN",
-  "locations": [
-   "Chanhassen, MN",
-   "Houston, TX",
-   "Atlanta, GA"
-  ],
-  "founded": 1992,
-  "employees": 36000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "LifeWorks NW",
   "careers_url": "https://www.lifeworksnw.org/careers",
   "verified": true,
@@ -85057,38 +82997,12 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Lightyear Network Solutions",
-  "careers_url": "https://lightyear.net/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "software_tech"
-  ],
-  "states": [
-   "KY"
-  ],
-  "why": {
-   "software_tech": "Develop telecom software solutions"
-  },
-  "hq": "Louisville, KY",
-  "locations": [
-   "Louisville, KY"
-  ],
-  "founded": 1993,
-  "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Lilium",
   "careers_url": "https://lilium.com/careers",
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "electrical_hardware",
@@ -85149,8 +83063,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "speech_language"
@@ -85449,8 +83362,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "speech_language"
@@ -85477,8 +83389,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "speech_language"
@@ -85585,32 +83496,6 @@
   ],
   "founded": 1959,
   "employees": 10000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Little Rock Film Festival",
-  "careers_url": "https://www.littlerockfilmfestival.org/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "nonprofit",
-   "small_business"
-  ],
-  "fields": [
-   "performing_arts"
-  ],
-  "states": [
-   "AR"
-  ],
-  "why": {
-   "performing_arts": "Organize film events"
-  },
-  "hq": "Little Rock, AR",
-  "locations": [
-   "Little Rock, AR"
-  ],
-  "founded": 2007,
-  "employees": 20,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -85849,8 +83734,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "law_legal"
@@ -85867,33 +83751,6 @@
   ],
   "founded": 2013,
   "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "LogMeIn",
-  "careers_url": "https://www.logmein.com/company/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "cybersecurity",
-   "software_tech"
-  ],
-  "states": [
-   "MA"
-  ],
-  "why": {
-   "software_tech": "Develop remote work and communication software",
-   "cybersecurity": "Develop remote work and communication software"
-  },
-  "hq": "Boston, MA",
-  "locations": [
-   "Boston, MA"
-  ],
-  "founded": 2003,
-  "employees": 4000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -86008,37 +83865,6 @@
   ],
   "founded": 1897,
   "employees": 15000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Looker",
-  "careers_url": "https://careers.looker.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "data_ai"
-  ],
-  "states": [
-   "CA",
-   "IL",
-   "NY"
-  ],
-  "why": {
-   "data_ai": "Develop data exploration platforms"
-  },
-  "hq": "Santa Cruz, CA",
-  "locations": [
-   "Santa Cruz, CA",
-   "San Francisco, CA",
-   "New York, NY",
-   "Chicago, IL"
-  ],
-  "founded": 2012,
-  "employees": 800,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -88078,8 +85904,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -91205,8 +89030,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "civil_construction"
@@ -91383,37 +89207,6 @@
   ],
   "founded": 1998,
   "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Maxim Integrated",
-  "careers_url": "https://www.maximintegrated.com/en/aboutus/careers.html",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "electrical_hardware"
-  ],
-  "states": [
-   "AZ",
-   "CA",
-   "OR",
-   "TX"
-  ],
-  "why": {
-   "electrical_hardware": "Develop integrated circuits for electronics"
-  },
-  "hq": "San Jose, CA",
-  "locations": [
-   "San Jose, CA",
-   "Dallas, TX",
-   "Beaverton, OR",
-   "Chandler, AZ"
-  ],
-  "founded": 1983,
-  "employees": 7000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -91653,40 +89446,6 @@
   ],
   "founded": 1864,
   "employees": 5000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "McClatchy Company",
-  "careers_url": "https://www.mcclatchy.com/careers/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "media_journalism"
-  ],
-  "states": [
-   "CA",
-   "FL",
-   "MO",
-   "NC",
-   "TX"
-  ],
-  "why": {
-   "media_journalism": "Produce content for newspapers and digital platforms"
-  },
-  "hq": "Sacramento, CA",
-  "locations": [
-   "Sacramento, CA",
-   "Miami, FL",
-   "Kansas City, MO",
-   "Charlotte, NC",
-   "Raleigh, NC",
-   "Fort Worth, TX"
-  ],
-  "founded": 1857,
-  "employees": 2900,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -92333,8 +90092,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "languages_culture"
@@ -92627,8 +90385,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "international_affairs"
@@ -92731,47 +90488,6 @@
   ],
   "founded": 1998,
   "employees": 20000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Meredith Corporation",
-  "careers_url": "https://careers.meredith.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "business_operations",
-   "communications_pr",
-   "consumer_retail",
-   "media_journalism"
-  ],
-  "states": [
-   "AL",
-   "AZ",
-   "CA",
-   "IA",
-   "NY",
-   "WA"
-  ],
-  "why": {
-   "media_journalism": "Produce content for magazines and digital media",
-   "communications_pr": "Create content for lifestyle publications",
-   "business_operations": "Media operations and content management",
-   "consumer_retail": "Media operations and content management"
-  },
-  "hq": "Des Moines, IA",
-  "locations": [
-   "Des Moines, IA",
-   "New York, NY",
-   "Birmingham, AL",
-   "Phoenix, AZ",
-   "Seattle, WA",
-   "San Francisco, CA"
-  ],
-  "founded": 1902,
-  "employees": 5000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -93148,36 +90864,6 @@
   ],
   "founded": 2006,
   "employees": 150,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Metromile",
-  "careers_url": "https://www.metromile.com/careers/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "insurance_risk"
-  ],
-  "states": [
-   "AZ",
-   "CA",
-   "MA"
-  ],
-  "why": {
-   "insurance_risk": "Develop pay-per-mile insurance models"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA",
-   "Tempe, AZ",
-   "Boston, MA"
-  ],
-  "founded": 2011,
-  "employees": 400,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -95163,8 +92849,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -96526,8 +94211,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "music"
@@ -96900,40 +94584,6 @@
   ],
   "founded": 2007,
   "employees": 4000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Monsanto (Bayer)",
-  "careers_url": "https://careers.bayer.com/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "fortune_500",
-   "large"
-  ],
-  "fields": [
-   "biotech_pharma",
-   "chemical_materials",
-   "environment_climate"
-  ],
-  "states": [
-   "CA",
-   "MO",
-   "NC"
-  ],
-  "why": {
-   "biotech_pharma": "Agricultural biotech research",
-   "chemical_materials": "Develop agricultural chemicals",
-   "environment_climate": "Develop agricultural chemicals"
-  },
-  "hq": "St. Louis, MO",
-  "locations": [
-   "St. Louis, MO",
-   "Raleigh, NC",
-   "San Francisco, CA"
-  ],
-  "founded": 1901,
-  "employees": 20000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -98422,8 +96072,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "philosophy_ethics"
@@ -98559,8 +96208,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "media_journalism"
@@ -99657,56 +97305,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "NanoMech",
-  "careers_url": "https://careers.nanomech.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "biomedical_devices"
-  ],
-  "states": [
-   "AR"
-  ],
-  "why": {
-   "biomedical_devices": "Nanotechnology and material sciences"
-  },
-  "hq": "Springdale, AR",
-  "locations": [
-   "Springdale, AR"
-  ],
-  "founded": 2002,
-  "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "NantKwest",
-  "careers_url": "https://careers.nantkwest.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "biotech_pharma"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "biotech_pharma": "Develop immunotherapy treatments"
-  },
-  "hq": "Culver City, CA",
-  "locations": [
-   "Culver City, CA"
-  ],
-  "founded": 2002,
-  "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "NASA",
   "careers_url": "https://www.nasa.gov/careers",
   "verified": true,
@@ -99937,31 +97535,6 @@
   ],
   "founded": 1845,
   "employees": 1500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Nashua Telegraph",
-  "careers_url": "https://www.nashuatelegraph.com/contact-us/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "media_journalism"
-  ],
-  "states": [
-   "NH"
-  ],
-  "why": {
-   "media_journalism": "Journalism and news reporting"
-  },
-  "hq": "Nashua, NH",
-  "locations": [
-   "Nashua, NH"
-  ],
-  "founded": 1832,
-  "employees": 60,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -101679,8 +99252,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "government_policy"
@@ -101968,43 +99540,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Navigant Consulting",
-  "careers_url": "https://www.navigant.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "consulting",
-   "large"
-  ],
-  "fields": [
-   "consulting"
-  ],
-  "states": [
-   "CA",
-   "DC",
-   "GA",
-   "IL",
-   "NY",
-   "TX"
-  ],
-  "why": {
-   "consulting": "Provide management and strategy consulting"
-  },
-  "hq": "Chicago, IL",
-  "locations": [
-   "Chicago, IL",
-   "New York, NY",
-   "San Francisco, CA",
-   "Washington, DC",
-   "Dallas, TX",
-   "Los Angeles, CA",
-   "Atlanta, GA"
-  ],
-  "founded": 1983,
-  "employees": 6000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Navistar International",
   "careers_url": "https://www.navistar.com/careers/",
   "verified": true,
@@ -102266,8 +99801,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "higher_ed_edtech",
@@ -103453,8 +100987,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "special_education"
@@ -103479,8 +101012,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biomedical_devices"
@@ -103505,8 +101037,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "special_education"
@@ -103606,34 +101137,6 @@
   ],
   "founded": 2010,
   "employees": 30,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Nevada Cancer Institute",
-  "careers_url": "https://www.nvcc.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "nonprofit",
-   "small_business"
-  ],
-  "fields": [
-   "biotech_pharma",
-   "research_labs"
-  ],
-  "states": [
-   "NV"
-  ],
-  "why": {
-   "biotech_pharma": "Cancer research and clinical trials",
-   "research_labs": "Cancer research and clinical trials"
-  },
-  "hq": "Las Vegas, NV",
-  "locations": [
-   "Las Vegas, NV"
-  ],
-  "founded": 2002,
-  "employees": 200,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -105291,32 +102794,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "New Mexico Health Connections",
-  "careers_url": "https://www.nmhealthconnections.org/careers/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "nonprofit",
-   "small_business"
-  ],
-  "fields": [
-   "public_health"
-  ],
-  "states": [
-   "NM"
-  ],
-  "why": {
-   "public_health": "Offer health insurance plans"
-  },
-  "hq": "Albuquerque, NM",
-  "locations": [
-   "Albuquerque, NM"
-  ],
-  "founded": 2013,
-  "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "New Mexico Highlands University",
   "careers_url": "https://www.nmhu.edu/human-resources/",
   "verified": true,
@@ -106615,11 +104092,13 @@
   ],
   "fields": [
    "child_family_services",
+   "healthcare_systems",
    "hr_org_development",
    "psychology_mental_health",
    "speech_language"
   ],
   "states": [
+   "CT",
    "NY"
   ],
   "why": {
@@ -106630,7 +104109,12 @@
   },
   "hq": "New York, NY",
   "locations": [
-   "New York, NY"
+   "Bronx, NY",
+   "Brooklyn, NY",
+   "New York, NY",
+   "Queens, NY",
+   "Stamford, CT",
+   "White Plains, NY"
   ],
   "founded": 1771,
   "employees": 20000,
@@ -106662,31 +104146,6 @@
   ],
   "founded": 1857,
   "employees": 6000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "NewLink Genetics",
-  "careers_url": "https://www.newlinkgenetics.com/careers/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "biotech_pharma"
-  ],
-  "states": [
-   "IA"
-  ],
-  "why": {
-   "biotech_pharma": "Cancer immunotherapy research"
-  },
-  "hq": "Ames, IA",
-  "locations": [
-   "Ames, IA"
-  ],
-  "founded": 1999,
-  "employees": 100,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -106833,42 +104292,6 @@
   ],
   "founded": 1988,
   "employees": 700,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "NewYork-Presbyterian Hospital",
-  "careers_url": "https://careers.nyp.org",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "large",
-   "nonprofit"
-  ],
-  "fields": [
-   "healthcare_systems",
-   "psychology_mental_health",
-   "speech_language"
-  ],
-  "states": [
-   "CT",
-   "NY"
-  ],
-  "why": {
-   "psychology_mental_health": "Provide mental health services",
-   "healthcare_systems": "Provide patient care and support",
-   "speech_language": "Conduct audiology research"
-  },
-  "hq": "New York, NY",
-  "locations": [
-   "New York, NY",
-   "White Plains, NY",
-   "Brooklyn, NY",
-   "Queens, NY",
-   "Bronx, NY",
-   "Stamford, CT"
-  ],
-  "founded": 1771,
-  "employees": 47000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -107355,8 +104778,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "psychology_mental_health"
@@ -107415,8 +104837,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "media_journalism"
@@ -108685,35 +106106,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Northeast Utilities",
-  "careers_url": "https://www.nu.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "energy"
-  ],
-  "states": [
-   "CT",
-   "MA",
-   "NH"
-  ],
-  "why": {
-   "energy": "Provide electric and gas services"
-  },
-  "hq": "Berlin, CT",
-  "locations": [
-   "Berlin, CT",
-   "Springfield, MA",
-   "Manchester, NH"
-  ],
-  "founded": 1966,
-  "employees": 8000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Northeastern University",
   "careers_url": "https://careers.northeastern.edu/",
   "verified": true,
@@ -108839,35 +106231,6 @@
   ],
   "founded": 1983,
   "employees": 12000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Northern Power Systems",
-  "careers_url": null,
-  "verified": false,
-  "link_check": "on_request",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "electrical_hardware",
-   "energy",
-   "mechanical_aerospace"
-  ],
-  "states": [
-   "VT"
-  ],
-  "why": {
-   "electrical_hardware": "Design wind turbine technology",
-   "energy": "Wind turbine technology",
-   "mechanical_aerospace": "Wind turbine technology"
-  },
-  "hq": "Barre, VT",
-  "locations": [
-   "Barre, VT"
-  ],
-  "founded": 1974,
-  "employees": 50,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -109716,8 +107079,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "media_journalism"
@@ -112099,8 +109461,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "real_estate_planning"
@@ -112867,8 +110228,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "healthcare_systems",
@@ -113111,8 +110471,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "electrical_hardware"
@@ -113163,34 +110522,6 @@
   ],
   "founded": 1990,
   "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Outdoor Voices",
-  "careers_url": "https://www.outdoorvoices.com/pages/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "consumer_retail"
-  ],
-  "states": [
-   "NY",
-   "TX"
-  ],
-  "why": {
-   "consumer_retail": "Design activewear for recreation"
-  },
-  "hq": "Austin, TX",
-  "locations": [
-   "Austin, TX",
-   "New York, NY"
-  ],
-  "founded": 2013,
-  "employees": 200,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -113293,8 +110624,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "biomedical_devices"
@@ -113508,8 +110838,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "hospitality_tourism"
@@ -113667,34 +110996,6 @@
   ],
   "founded": 2000,
   "employees": 1200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Ozy Media",
-  "careers_url": "https://careers.ozy.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "media_journalism"
-  ],
-  "states": [
-   "CA",
-   "NY"
-  ],
-  "why": {
-   "media_journalism": "Produce multimedia content"
-  },
-  "hq": "Mountain View, CA",
-  "locations": [
-   "Mountain View, CA",
-   "New York, NY"
-  ],
-  "founded": 2013,
-  "employees": 100,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -114199,8 +111500,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "chemical_materials",
@@ -114532,8 +111832,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "history_heritage"
@@ -114799,39 +112098,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Payless ShoeSource",
-  "careers_url": "https://careers.payless.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "business_operations",
-   "consumer_retail",
-   "software_tech"
-  ],
-  "states": [
-   "FL",
-   "KS",
-   "TX"
-  ],
-  "why": {
-   "software_tech": "Retail footwear and accessories",
-   "consumer_retail": "Retail management and operations",
-   "business_operations": "Retail management and operations"
-  },
-  "hq": "Topeka, KS",
-  "locations": [
-   "Topeka, KS",
-   "Dallas, TX",
-   "Miami, FL"
-  ],
-  "founded": 1956,
-  "employees": 18000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Paylocity",
   "careers_url": "https://www.paylocity.com/careers/",
   "verified": true,
@@ -115089,34 +112355,6 @@
   ],
   "founded": 1890,
   "employees": 16000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Pear Therapeutics",
-  "careers_url": "https://careers.peartherapeutics.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "public_health"
-  ],
-  "states": [
-   "CA",
-   "MA"
-  ],
-  "why": {
-   "public_health": "Develop digital therapeutics"
-  },
-  "hq": "Boston, MA",
-  "locations": [
-   "Boston, MA",
-   "San Francisco, CA"
-  ],
-  "founded": 2013,
-  "employees": 200,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -116055,93 +113293,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Perspecta",
-  "careers_url": "https://careers.perspecta.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "national_security"
-  ],
-  "states": [
-   "AL",
-   "CA",
-   "CO",
-   "FL",
-   "MD",
-   "VA"
-  ],
-  "why": {
-   "national_security": "Provide IT and mission services"
-  },
-  "hq": "Chantilly, VA",
-  "locations": [
-   "Herndon, VA",
-   "San Diego, CA",
-   "Colorado Springs, CO",
-   "Annapolis Junction, MD",
-   "Huntsville, AL",
-   "Chantilly, VA",
-   "Orlando, FL"
-  ],
-  "founded": 2018,
-  "employees": 14000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Petal",
-  "careers_url": "https://careers.petalcard.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "finance_banking"
-  ],
-  "states": [
-   "NY"
-  ],
-  "why": {
-   "finance_banking": "Support credit card services"
-  },
-  "hq": "New York, NY",
-  "locations": [
-   "New York, NY"
-  ],
-  "founded": 2016,
-  "employees": 150,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Peter Mayer Advertising",
-  "careers_url": "https://careers.petermayer.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "communications_pr"
-  ],
-  "states": [
-   "LA"
-  ],
-  "why": {
-   "communications_pr": "Develop marketing campaigns"
-  },
-  "hq": "New Orleans, LA",
-  "locations": [
-   "New Orleans, LA"
-  ],
-  "founded": 1967,
-  "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "PetSmart",
   "careers_url": "https://careers.petsmart.com",
   "verified": true,
@@ -116907,8 +114058,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "languages_culture"
@@ -117083,32 +114233,6 @@
    "Raleigh, NC"
   ],
   "hq": "Nashville, TN"
- },
- {
-  "name": "Pinnacle Foods",
-  "careers_url": "https://www.pinnaclefoods.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "data_ai"
-  ],
-  "states": [
-   "AR",
-   "NJ"
-  ],
-  "why": {
-   "data_ai": "Optimize food production data"
-  },
-  "hq": "Parsippany, NJ",
-  "locations": [
-   "Fayetteville, AR"
-  ],
-  "founded": 1998,
-  "employees": 4700,
-  "source": "AI-suggested; careers page checked live"
  },
  {
   "name": "Pinnacle West Capital Corporation",
@@ -117390,34 +114514,6 @@
   ],
   "founded": 2019,
   "employees": 50,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "PlanGrid",
-  "careers_url": "https://careers.plangrid.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "civil_construction"
-  ],
-  "states": [
-   "CA",
-   "NY"
-  ],
-  "why": {
-   "civil_construction": "Digitize construction blueprints"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA",
-   "New York, NY"
-  ],
-  "founded": 2012,
-  "employees": 400,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -117987,35 +115083,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "PolyOne Corporation",
-  "careers_url": "https://careers.polyone.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "chemical_materials"
-  ],
-  "states": [
-   "IL",
-   "OH",
-   "TX"
-  ],
-  "why": {
-   "chemical_materials": "Create specialized polymer materials"
-  },
-  "hq": "Avon Lake, OH",
-  "locations": [
-   "Avon Lake, OH",
-   "McHenry, IL",
-   "Seabrook, TX"
-  ],
-  "founded": 2000,
-  "employees": 8900,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Pony.ai",
   "careers_url": "https://www.pony.ai/careers",
   "verified": true,
@@ -118040,33 +115107,6 @@
   ],
   "founded": 2016,
   "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "PopSugar",
-  "careers_url": "https://www.popsugar.com/careers/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "media_journalism"
-  ],
-  "states": [
-   "CA",
-   "NY"
-  ],
-  "why": {
-   "media_journalism": "Write pop culture and lifestyle content"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA",
-   "New York, NY"
-  ],
-  "founded": 2006,
-  "employees": 300,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -118643,33 +115683,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "PRA Health Sciences",
-  "careers_url": "https://www.prahs.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "biotech_pharma",
-   "research_labs"
-  ],
-  "states": [
-   "NC"
-  ],
-  "why": {
-   "biotech_pharma": "Clinical development services",
-   "research_labs": "Clinical development services"
-  },
-  "hq": "Raleigh, NC",
-  "locations": [
-   "Raleigh, NC"
-  ],
-  "founded": 1976,
-  "employees": 17000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Prairie Public Broadcasting",
   "careers_url": "https://www.prairiepublic.org/about/jobs/",
   "verified": true,
@@ -118764,42 +115777,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Praxair, Inc.",
-  "careers_url": "https://careers.praxair.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "fortune_500",
-   "large"
-  ],
-  "fields": [
-   "chemical_materials",
-   "energy"
-  ],
-  "states": [
-   "CT",
-   "DE",
-   "LA",
-   "NY",
-   "TX"
-  ],
-  "why": {
-   "chemical_materials": "Produce industrial gases and applications",
-   "energy": "Produce industrial gases and applications"
-  },
-  "hq": "Danbury, CT",
-  "locations": [
-   "Danbury, CT",
-   "Tonawanda, NY",
-   "The Woodlands, TX",
-   "New Castle, DE",
-   "Geismar, LA"
-  ],
-  "founded": 1907,
-  "employees": 26000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Preble Street",
   "careers_url": "https://www.preblestreet.org/contact-us/",
   "verified": true,
@@ -118887,7 +115864,8 @@
   "link_check": "verified",
   "categories": [
    "mid_size",
-   "nonprofit"
+   "nonprofit",
+   "small_business"
   ],
   "fields": [
    "religion_faith"
@@ -118902,38 +115880,12 @@
   },
   "hq": "Louisville, KY",
   "locations": [
+   "Denver, CO",
    "Louisville, KY",
-   "Philadelphia, PA",
-   "Denver, CO"
+   "Philadelphia, PA"
   ],
   "founded": 1983,
   "employees": 800,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Presbyterian Church (USA)",
-  "careers_url": "https://www.pcusa.org/careers/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "nonprofit",
-   "small_business"
-  ],
-  "fields": [
-   "religion_faith"
-  ],
-  "states": [
-   "KY"
-  ],
-  "why": {
-   "religion_faith": "Support church operations and mission work"
-  },
-  "hq": "Louisville, KY",
-  "locations": [
-   "Louisville, KY"
-  ],
-  "founded": 1983,
-  "employees": 300,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -118979,39 +115931,12 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Presence Health",
-  "careers_url": "https://www.presencehealth.org/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large",
-   "nonprofit"
-  ],
-  "fields": [
-   "healthcare_systems"
-  ],
-  "states": [
-   "IL"
-  ],
-  "why": {
-   "healthcare_systems": "Healthcare services and management"
-  },
-  "hq": "Chicago, IL",
-  "locations": [
-   "Chicago, IL"
-  ],
-  "founded": 2011,
-  "employees": 15000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "PresenceLearning",
   "careers_url": "https://careers.presencelearning.com/",
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "special_education",
@@ -119514,8 +116439,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biomedical_devices"
@@ -119540,8 +116464,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "civil_construction"
@@ -119914,33 +116837,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Proterra",
-  "careers_url": "https://www.proterra.com/careers/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "electrical_hardware"
-  ],
-  "states": [
-   "CA",
-   "SC"
-  ],
-  "why": {
-   "electrical_hardware": "Create electric buses and charging systems"
-  },
-  "hq": "Burlingame, CA",
-  "locations": [
-   "Burlingame, CA",
-   "Greenville, SC"
-  ],
-  "founded": 2004,
-  "employees": 600,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Protiviti",
   "careers_url": "https://www.protiviti.com/US-en/careers",
   "verified": true,
@@ -120001,34 +116897,6 @@
   ],
   "founded": 1999,
   "employees": 2400,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Protocol",
-  "careers_url": "https://careers.protocol.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "media_journalism"
-  ],
-  "states": [
-   "CA",
-   "DC"
-  ],
-  "why": {
-   "media_journalism": "Cover technology and policy news"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA",
-   "Washington, DC"
-  ],
-  "founded": 2020,
-  "employees": 50,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -120671,8 +117539,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "religion_faith"
@@ -121731,8 +118598,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "business_operations",
@@ -122213,32 +119079,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Reconnecting America",
-  "careers_url": "https://reconnectingamerica.org/about/careers/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "nonprofit",
-   "small_business"
-  ],
-  "fields": [
-   "real_estate_planning"
-  ],
-  "states": [
-   "DC"
-  ],
-  "why": {
-   "real_estate_planning": "Transit-oriented development and planning"
-  },
-  "hq": "Washington, DC",
-  "locations": [
-   "Washington, DC"
-  ],
-  "founded": 2004,
-  "employees": 20,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Red Canary",
   "careers_url": "https://careers.redcanary.com/",
   "verified": false,
@@ -122394,35 +119234,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Red Lion Hotels Corporation",
-  "careers_url": "https://careers.redlion.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "hospitality_tourism"
-  ],
-  "states": [
-   "CO",
-   "OR",
-   "WA"
-  ],
-  "why": {
-   "hospitality_tourism": "Oversee hotel operations"
-  },
-  "hq": "Denver, CO",
-  "locations": [
-   "Denver, CO",
-   "Spokane, WA",
-   "Portland, OR"
-  ],
-  "founded": 1959,
-  "employees": 1000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Red Mountain Theatre Company",
   "careers_url": "https://redmountaintheatre.org/about-us/jobs/",
   "verified": false,
@@ -122568,8 +119379,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -123187,8 +119997,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -123790,8 +120599,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "special_education"
@@ -123871,8 +120679,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -124248,8 +121055,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "electrical_hardware",
@@ -124269,39 +121075,6 @@
   ],
   "founded": 2013,
   "employees": 150,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "RigUp",
-  "careers_url": "https://rigup.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "consulting",
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "consulting",
-   "economics_research",
-   "energy"
-  ],
-  "states": [
-   "CO",
-   "TX"
-  ],
-  "why": {
-   "energy": "Connect energy workers to jobs",
-   "consulting": "Energy sector consulting and staffing",
-   "economics_research": "Research economic trends in energy staffing"
-  },
-  "hq": "Austin, TX",
-  "locations": [
-   "Austin, TX",
-   "Denver, CO"
-  ],
-  "founded": 2014,
-  "employees": 500,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -124794,8 +121567,7 @@
   "link_check": "verified",
   "categories": [
    "consulting",
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "business_operations",
@@ -125148,33 +121920,6 @@
   ],
   "founded": 2006,
   "employees": 1000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Rockfish Interactive",
-  "careers_url": "https://careers.rockfishdigital.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "software_tech"
-  ],
-  "states": [
-   "AR",
-   "TX"
-  ],
-  "why": {
-   "software_tech": "Create digital marketing tech"
-  },
-  "hq": "Rogers, AR",
-  "locations": [
-   "Rogers, AR",
-   "Dallas, TX"
-  ],
-  "founded": 2006,
-  "employees": 200,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -125694,8 +122439,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "insurance_risk"
@@ -126136,8 +122880,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -126446,8 +123189,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -127229,8 +123971,7 @@
   "link_check": "verified",
   "categories": [
    "consulting",
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "consulting",
@@ -127586,8 +124327,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biomedical_devices",
@@ -128750,32 +125490,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "ScaleFactor",
-  "careers_url": "https://careers.scalefactor.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "accounting"
-  ],
-  "states": [
-   "TX"
-  ],
-  "why": {
-   "accounting": "Automate accounting and finance tasks"
-  },
-  "hq": "Austin, TX",
-  "locations": [
-   "Austin, TX"
-  ],
-  "founded": 2014,
-  "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "ScanSource",
   "careers_url": null,
   "verified": false,
@@ -128931,35 +125645,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Schoology",
-  "careers_url": "https://careers.schoology.com/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "higher_ed_edtech",
-   "k12_education"
-  ],
-  "states": [
-   "IL",
-   "NY"
-  ],
-  "why": {
-   "k12_education": "Develop a learning management system",
-   "higher_ed_edtech": "Develop learning management systems"
-  },
-  "hq": "New York, NY",
-  "locations": [
-   "New York, NY",
-   "Chicago, IL"
-  ],
-  "founded": 2009,
-  "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Schweitzer Engineering Laboratories",
   "careers_url": "https://www.selinc.com/careers/",
   "verified": true,
@@ -128988,35 +125673,6 @@
   ],
   "founded": 1982,
   "employees": 5000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Scientific Games",
-  "careers_url": "https://www.scientificgames.com/careers/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "data_ai",
-   "software_tech"
-  ],
-  "states": [
-   "GA",
-   "NV"
-  ],
-  "why": {
-   "software_tech": "Lottery and gaming technology solutions",
-   "data_ai": "Lottery and gaming technology solutions"
-  },
-  "hq": "Las Vegas, NV",
-  "locations": [
-   "Las Vegas, NV",
-   "Alpharetta, GA"
-  ],
-  "founded": 1973,
-  "employees": 9000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -129214,35 +125870,6 @@
   ],
   "founded": 1924,
   "employees": 2500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "SDL plc",
-  "careers_url": "https://careers.sdl.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "languages_culture"
-  ],
-  "states": [
-   "CA",
-   "CO",
-   "NY"
-  ],
-  "why": {
-   "languages_culture": "Translate and manage multilingual content"
-  },
-  "hq": "Maidenhead, UK",
-  "locations": [
-   "Boulder, CO",
-   "San Jose, CA",
-   "New York, NY"
-  ],
-  "founded": 1992,
-  "employees": 4000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -129905,8 +126532,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "hospitality_tourism"
@@ -130210,31 +126836,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Severstal Columbus",
-  "careers_url": "https://careers.severstal.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "chemical_materials"
-  ],
-  "states": [
-   "MS"
-  ],
-  "why": {
-   "chemical_materials": "Produce steel products"
-  },
-  "hq": "Columbus, MS",
-  "locations": [
-   "Columbus, MS"
-  ],
-  "founded": 2007,
-  "employees": 650,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Seyfarth Shaw LLP",
   "careers_url": "https://careers.seyfarth.com/",
   "verified": true,
@@ -130507,8 +127108,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "business_operations",
@@ -131050,31 +127650,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Sigma-Aldrich (Merck KGaA)",
-  "careers_url": "https://www.sigmaaldrich.com/US/en/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "biotech_pharma"
-  ],
-  "states": [
-   "MO"
-  ],
-  "why": {
-   "biotech_pharma": "Chemical and biochemical product development"
-  },
-  "hq": "St. Louis, MO",
-  "locations": [
-   "St. Louis, MO"
-  ],
-  "founded": 1975,
-  "employees": 20000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Signature Theatre",
   "careers_url": "https://careers.sigtheatre.org/",
   "verified": false,
@@ -131349,8 +127924,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "law_legal"
@@ -131701,8 +128275,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "child_family_services"
@@ -131829,8 +128402,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -131923,8 +128495,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -132540,8 +129111,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -132566,8 +129136,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "finance_banking"
@@ -132740,8 +129309,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "hospitality_tourism"
@@ -132770,8 +129338,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "music"
@@ -133070,8 +129637,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "music"
@@ -133200,33 +129766,6 @@
   ],
   "founded": 1937,
   "employees": 4500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "South Carolina Electric & Gas",
-  "careers_url": null,
-  "verified": false,
-  "link_check": "on_request",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "electrical_hardware",
-   "energy"
-  ],
-  "states": [
-   "SC"
-  ],
-  "why": {
-   "electrical_hardware": "Manage energy distribution",
-   "energy": "Manage electric and gas utilities"
-  },
-  "hq": "Cayce, SC",
-  "locations": [
-   "Cayce, SC"
-  ],
-  "founded": 1924,
-  "employees": 3400,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -134513,37 +131052,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Sport & Health",
-  "careers_url": "https://www.sportandhealth.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "sports_recreation"
-  ],
-  "states": [
-   "DC",
-   "MD",
-   "VA"
-  ],
-  "why": {
-   "sports_recreation": "Oversee gym operations and fitness programming"
-  },
-  "hq": "McLean, VA",
-  "locations": [
-   "McLean, VA",
-   "Washington, DC",
-   "Bethesda, MD",
-   "Arlington, VA",
-   "Reston, VA"
-  ],
-  "founded": 1973,
-  "employees": 1500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Sports Basement",
   "careers_url": "https://www.sportsbasement.com/pages/jobs",
   "verified": true,
@@ -135667,8 +132175,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "performing_arts"
@@ -136479,35 +132986,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Stay Alfred",
-  "careers_url": "https://careers.stayalfred.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "hospitality_tourism"
-  ],
-  "states": [
-   "OR",
-   "WA"
-  ],
-  "why": {
-   "hospitality_tourism": "Oversee urban vacation rentals"
-  },
-  "hq": "Spokane, WA",
-  "locations": [
-   "Spokane, WA",
-   "Seattle, WA",
-   "Portland, OR"
-  ],
-  "founded": 2012,
-  "employees": 350,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Steelcase",
   "careers_url": "https://www.steelcase.com/careers/",
   "verified": true,
@@ -136555,8 +133033,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "music"
@@ -136726,31 +133203,6 @@
   ],
   "founded": 1890,
   "employees": 4500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Stillwater Mining Company",
-  "careers_url": "https://www.stillwatermining.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "chemical_materials"
-  ],
-  "states": [
-   "MT"
-  ],
-  "why": {
-   "chemical_materials": "Extract and process precious metals"
-  },
-  "hq": "Columbus, MT",
-  "locations": [
-   "Columbus, MT"
-  ],
-  "founded": 1983,
-  "employees": 1500,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -137396,8 +133848,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "religion_faith"
@@ -137788,70 +134239,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "SunTrust Bank (now Truist Financial)",
-  "careers_url": "https://www.truist.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "fortune_500",
-   "large"
-  ],
-  "fields": [
-   "finance_banking"
-  ],
-  "states": [
-   "GA",
-   "NC",
-   "VA"
-  ],
-  "why": {
-   "finance_banking": "Finance and banking analyst roles"
-  },
-  "hq": "Atlanta, GA",
-  "locations": [
-   "Atlanta, GA",
-   "Charlotte, NC",
-   "Richmond, VA"
-  ],
-  "founded": 1891,
-  "employees": 54000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "SunTrust Banks (now Truist)",
-  "careers_url": "https://www.truist.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "fortune_500",
-   "large"
-  ],
-  "fields": [
-   "finance_banking"
-  ],
-  "states": [
-   "FL",
-   "GA",
-   "NC",
-   "VA"
-  ],
-  "why": {
-   "finance_banking": "Support wealth management services"
-  },
-  "hq": "Charlotte, NC",
-  "locations": [
-   "Charlotte, NC",
-   "Atlanta, GA",
-   "Orlando, FL",
-   "Richmond, VA",
-   "Raleigh, NC",
-   "Tampa, FL"
-  ],
-  "founded": 1891,
-  "employees": 54000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "SUNY Upstate Medical University",
   "careers_url": "https://www.upstate.edu/hr/jobs/",
   "verified": false,
@@ -138119,8 +134506,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "energy"
@@ -138780,8 +135166,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "psychology_mental_health"
@@ -138998,8 +135383,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "biomedical_devices"
@@ -139024,8 +135408,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -139213,8 +135596,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -139231,35 +135613,6 @@
   ],
   "founded": 2015,
   "employees": 150,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "TD Ameritrade",
-  "careers_url": "https://jobs.tdameritrade.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "consulting",
-   "fortune_500",
-   "large"
-  ],
-  "fields": [
-   "consulting",
-   "finance_banking"
-  ],
-  "states": [
-   "NE"
-  ],
-  "why": {
-   "finance_banking": "Support investment strategies and client portfolios",
-   "consulting": "Support investment strategies and client portfolios"
-  },
-  "hq": "Omaha, NE",
-  "locations": [
-   "Omaha, NE"
-  ],
-  "founded": 1975,
-  "employees": 9000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -140637,40 +136990,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "The Advisory Board Company",
-  "careers_url": null,
-  "verified": false,
-  "link_check": "on_request",
-  "categories": [
-   "consulting",
-   "mid_size"
-  ],
-  "fields": [
-   "biotech_pharma",
-   "consulting",
-   "hr_org_development",
-   "public_health"
-  ],
-  "states": [
-   "DC",
-   "TX"
-  ],
-  "why": {
-   "public_health": "Healthcare consulting and research",
-   "biotech_pharma": "Healthcare consulting and research",
-   "consulting": "Provide healthcare consulting services",
-   "hr_org_development": "Provide healthcare consulting services"
-  },
-  "hq": "Washington, DC",
-  "locations": [
-   "Washington, DC",
-   "Austin, TX"
-  ],
-  "founded": 1979,
-  "employees": 3500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "The Advocate",
   "careers_url": "https://careers.theadvocate.com/",
   "verified": false,
@@ -141384,8 +137703,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "media_journalism"
@@ -142945,8 +139263,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "media_journalism"
@@ -145792,32 +142109,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "The Outline",
-  "careers_url": "https://theoutline.com/about#jobs",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "media_journalism"
-  ],
-  "states": [
-   "NY"
-  ],
-  "why": {
-   "media_journalism": "Create digital media stories"
-  },
-  "hq": "New York, NY",
-  "locations": [
-   "New York, NY"
-  ],
-  "founded": 2016,
-  "employees": 50,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "The Palace Theatre",
   "careers_url": "https://careers.palacetheatre.org/",
   "verified": true,
@@ -146638,8 +142929,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "special_education",
@@ -147392,8 +143682,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "speech_language"
@@ -147751,8 +144040,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "art_design"
@@ -148086,42 +144374,6 @@
   ],
   "founded": 1952,
   "employees": 5000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Time Warner Inc.",
-  "careers_url": "https://www.warnerbros.com/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "fortune_500",
-   "large"
-  ],
-  "fields": [
-   "media_journalism"
-  ],
-  "states": [
-   "CA",
-   "FL",
-   "GA",
-   "IL",
-   "NY",
-   "WA"
-  ],
-  "why": {
-   "media_journalism": "Develop and produce media content"
-  },
-  "hq": "New York, NY",
-  "locations": [
-   "New York, NY",
-   "Burbank, CA",
-   "Atlanta, GA",
-   "Chicago, IL",
-   "Seattle, WA",
-   "Miami, FL"
-  ],
-  "founded": 1990,
-  "employees": 26000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -148514,8 +144766,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "higher_ed_edtech"
@@ -148592,39 +144843,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Town Sports International",
-  "careers_url": "https://www.townsportsinternational.com/careers/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "sports_recreation"
-  ],
-  "states": [
-   "CT",
-   "DC",
-   "MA",
-   "NY",
-   "PA"
-  ],
-  "why": {
-   "sports_recreation": "Manage gym operations and fitness programs"
-  },
-  "hq": "New York, NY",
-  "locations": [
-   "New York, NY",
-   "Boston, MA",
-   "Philadelphia, PA",
-   "Washington, DC",
-   "Stamford, CT"
-  ],
-  "founded": 1973,
-  "employees": 2500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Towson University",
   "careers_url": "https://www.towson.edu/hr/index.html",
   "verified": true,
@@ -148674,35 +144892,6 @@
   ],
   "founded": 1986,
   "employees": 10000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Toys 'R' Us",
-  "careers_url": "https://careers.toysrus.com/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "consumer_retail"
-  ],
-  "states": [
-   "IL",
-   "NJ",
-   "NY"
-  ],
-  "why": {
-   "consumer_retail": "Retail management and operations"
-  },
-  "hq": "Wayne, NJ",
-  "locations": [
-   "Wayne, NJ",
-   "New York, NY",
-   "Chicago, IL"
-  ],
-  "founded": 1948,
-  "employees": 700,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -149690,8 +145879,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "performing_arts"
@@ -150027,33 +146215,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Turner Broadcasting System",
-  "careers_url": "https://www.turner.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "communications_pr",
-   "media_journalism"
-  ],
-  "states": [
-   "GA"
-  ],
-  "why": {
-   "media_journalism": "Create and manage media content",
-   "communications_pr": "Create and manage media content"
-  },
-  "hq": "Atlanta, GA",
-  "locations": [
-   "Atlanta, GA"
-  ],
-  "founded": 1970,
-  "employees": 8000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Turner Construction",
   "careers_url": "https://www.turnerconstruction.com/careers",
   "verified": true,
@@ -150120,8 +146281,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "communications_pr"
@@ -150272,8 +146432,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "k12_education"
@@ -152356,38 +148515,6 @@
   ],
   "founded": 1944,
   "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Ultimate Software",
-  "careers_url": "https://careers.ultimatesoftware.com",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "consulting",
-   "large"
-  ],
-  "fields": [
-   "consulting",
-   "data_ai",
-   "hr_org_development",
-   "software_tech"
-  ],
-  "states": [
-   "FL"
-  ],
-  "why": {
-   "software_tech": "Develop HR software solutions",
-   "data_ai": "Develop HR software solutions",
-   "hr_org_development": "HR software development and consulting",
-   "consulting": "HR software development and consulting"
-  },
-  "hq": "Weston, FL",
-  "locations": [
-   "Weston, FL"
-  ],
-  "founded": 1990,
-  "employees": 5600,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -156983,32 +153110,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "UpCounsel",
-  "careers_url": "https://www.upcounsel.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "law_legal"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "law_legal": "Connect with freelance attorneys"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA"
-  ],
-  "founded": 2012,
-  "employees": 100,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Uplift Education",
   "careers_url": "https://careers.uplifteducation.org/",
   "verified": false,
@@ -157315,8 +153416,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "child_family_services"
@@ -158240,36 +154340,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "UTC Aerospace Systems",
-  "careers_url": "https://careers.utcaerospacesystems.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "mechanical_aerospace"
-  ],
-  "states": [
-   "CA",
-   "CT",
-   "IL",
-   "NC"
-  ],
-  "why": {
-   "mechanical_aerospace": "Develop aerospace and defense systems"
-  },
-  "hq": "Charlotte, NC",
-  "locations": [
-   "Windsor Locks, CT",
-   "Rockford, IL",
-   "Chula Vista, CA"
-  ],
-  "founded": 2012,
-  "employees": 41000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Vacasa",
   "careers_url": "https://www.vacasa.com/careers",
   "verified": true,
@@ -158726,8 +154796,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "religion_faith"
@@ -159029,8 +155098,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "cybersecurity"
@@ -159171,8 +155239,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "electrical_hardware",
@@ -159224,39 +155291,6 @@
   ],
   "founded": 1900,
   "employees": 1500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Vencore",
-  "careers_url": "https://www.vencore.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "national_security"
-  ],
-  "states": [
-   "AL",
-   "CO",
-   "FL",
-   "TX",
-   "VA"
-  ],
-  "why": {
-   "national_security": "Systems engineering for defense"
-  },
-  "hq": "Chantilly, VA",
-  "locations": [
-   "Chantilly, VA",
-   "San Antonio, TX",
-   "Colorado Springs, CO",
-   "Huntsville, AL",
-   "Orlando, FL"
-  ],
-  "founded": 2014,
-  "employees": 4000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -159344,8 +155378,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "healthcare_systems"
@@ -159372,8 +155405,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "languages_culture"
@@ -159426,8 +155458,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "biomedical_devices",
@@ -160667,8 +156698,7 @@
   "verified": false,
   "link_check": "likely",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "data_ai"
@@ -160693,8 +156723,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "electrical_hardware"
@@ -160830,8 +156859,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "biotech_pharma"
@@ -160847,32 +156875,6 @@
    "San Francisco, CA"
   ],
   "founded": 2016,
-  "employees": 300,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Virgin Hyperloop",
-  "careers_url": "https://virginhyperloop.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "mechanical_aerospace"
-  ],
-  "states": [
-   "CA"
-  ],
-  "why": {
-   "mechanical_aerospace": "Develop high-speed transportation systems"
-  },
-  "hq": "Los Angeles, CA",
-  "locations": [
-   "Los Angeles, CA"
-  ],
-  "founded": 2014,
   "employees": 300,
   "source": "AI-suggested; careers page checked live"
  },
@@ -161459,34 +157461,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "VocalTech",
-  "careers_url": "https://vocaltech.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "speech_language"
-  ],
-  "states": [
-   "MD",
-   "PA"
-  ],
-  "why": {
-   "speech_language": "Create vocal training applications"
-  },
-  "hq": "Philadelphia, PA",
-  "locations": [
-   "Philadelphia, PA",
-   "Baltimore, MD"
-  ],
-  "founded": 2016,
-  "employees": 85,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Voice of San Diego",
   "careers_url": "https://www.voiceofsandiego.org/about/jobs/",
   "verified": true,
@@ -161754,8 +157728,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "small_business",
-   "startup"
+   "small_business"
   ],
   "fields": [
    "languages_culture"
@@ -161802,37 +157775,6 @@
   ],
   "founded": 2012,
   "employees": 500,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Vulcan Inc.",
-  "careers_url": null,
-  "verified": false,
-  "link_check": "on_request",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "art_design",
-   "communications_pr",
-   "economics_research",
-   "philosophy_ethics"
-  ],
-  "states": [
-   "WA"
-  ],
-  "why": {
-   "art_design": "Manage cultural projects, marketing",
-   "communications_pr": "Manage cultural projects, marketing",
-   "economics_research": "Policy research and philanthropy roles",
-   "philosophy_ethics": "Policy research and philanthropy roles"
-  },
-  "hq": "Seattle, WA",
-  "locations": [
-   "Seattle, WA"
-  ],
-  "founded": 1986,
-  "employees": 700,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -162280,36 +158222,6 @@
   ],
   "founded": 1992,
   "employees": 200,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "WanderJaunt",
-  "careers_url": "https://wanderjaunt.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "hospitality_tourism"
-  ],
-  "states": [
-   "AZ",
-   "CA",
-   "TX"
-  ],
-  "why": {
-   "hospitality_tourism": "Manage short-term rental properties"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA",
-   "Phoenix, AZ",
-   "Austin, TX"
-  ],
-  "founded": 2017,
-  "employees": 300,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -163861,39 +159773,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Westar Energy",
-  "careers_url": "https://www.westarenergy.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "mid_size"
-  ],
-  "fields": [
-   "business_operations",
-   "electrical_hardware",
-   "energy",
-   "real_estate_planning"
-  ],
-  "states": [
-   "KS"
-  ],
-  "why": {
-   "electrical_hardware": "Provide electric utility services",
-   "energy": "Electric utility services",
-   "business_operations": "Operations in energy sector",
-   "real_estate_planning": "Operations in energy sector"
-  },
-  "hq": "Topeka, KS",
-  "locations": [
-   "Topeka, KS",
-   "Wichita, KS",
-   "Lawrence, KS"
-  ],
-  "founded": 1924,
-  "employees": 2400,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Westat",
   "careers_url": "https://www.westat.com/careers",
   "verified": true,
@@ -164170,33 +160049,6 @@
   ],
   "founded": 1922,
   "employees": 400,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Western Refining",
-  "careers_url": "https://www.westernrefining.com/careers",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "large"
-  ],
-  "fields": [
-   "energy"
-  ],
-  "states": [
-   "NM",
-   "TX"
-  ],
-  "why": {
-   "energy": "Petroleum refining and distribution"
-  },
-  "hq": "El Paso, TX",
-  "locations": [
-   "Gallup, NM",
-   "El Paso, TX"
-  ],
-  "founded": 1997,
-  "employees": 6000,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -164699,31 +160551,6 @@
   ],
   "founded": 1982,
   "employees": 300,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Whiting Petroleum Corporation",
-  "careers_url": "https://whiting.com/careers/job-openings/",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business"
-  ],
-  "fields": [
-   "energy"
-  ],
-  "states": [
-   "CO"
-  ],
-  "why": {
-   "energy": "Explore and produce oil and gas"
-  },
-  "hq": "Denver, CO",
-  "locations": [
-   "Denver, CO"
-  ],
-  "founded": 1980,
-  "employees": 400,
   "source": "AI-suggested; careers page checked live"
  },
  {
@@ -165597,36 +161424,8 @@
   },
   "hq": "San Francisco, CA",
   "locations": [
-   "San Francisco, CA",
-   "New York, NY"
-  ],
-  "founded": 2016,
-  "employees": 50,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Wonderschool",
-  "careers_url": "https://wonderschool.com/careers",
-  "verified": true,
-  "link_check": "verified",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "child_family_services"
-  ],
-  "states": [
-   "CA",
-   "NY"
-  ],
-  "why": {
-   "child_family_services": "Support educators in running childcare programs"
-  },
-  "hq": "San Francisco, CA",
-  "locations": [
-   "San Francisco, CA",
-   "New York, NY"
+   "New York, NY",
+   "San Francisco, CA"
   ],
   "founded": 2016,
   "employees": 50,
@@ -168183,44 +163982,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "YRC Worldwide",
-  "careers_url": "https://careers.yrcw.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "consulting",
-   "large"
-  ],
-  "fields": [
-   "business_operations",
-   "consulting",
-   "data_ai",
-   "software_tech"
-  ],
-  "states": [
-   "ID",
-   "IL",
-   "KS",
-   "OH"
-  ],
-  "why": {
-   "software_tech": "Offer transportation and logistics services",
-   "data_ai": "Offer transportation and logistics services",
-   "business_operations": "Logistics and operations management",
-   "consulting": "Logistics and operations management"
-  },
-  "hq": "Overland Park, KS",
-  "locations": [
-   "Overland Park, KS",
-   "Akron, OH",
-   "Boise, ID",
-   "Chicago, IL"
-  ],
-  "founded": 1924,
-  "employees": 19000,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Yulista Holding, LLC",
   "careers_url": "https://careers.yulistaholding.com/",
   "verified": false,
@@ -168435,8 +164196,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "art_design"
@@ -169170,8 +164930,7 @@
   "verified": true,
   "link_check": "verified",
   "categories": [
-   "mid_size",
-   "startup"
+   "mid_size"
   ],
   "fields": [
    "electrical_hardware",
@@ -169285,34 +165044,6 @@
   "source": "AI-suggested; careers page checked live"
  },
  {
-  "name": "Zume",
-  "careers_url": "https://careers.zume.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "small_business",
-   "startup"
-  ],
-  "fields": [
-   "environment_climate"
-  ],
-  "states": [
-   "CA",
-   "MA"
-  ],
-  "why": {
-   "environment_climate": "Develop sustainable packaging solutions"
-  },
-  "hq": "Cambridge, MA",
-  "locations": [
-   "Cambridge, MA",
-   "San Francisco, CA"
-  ],
-  "founded": 2015,
-  "employees": 250,
-  "source": "AI-suggested; careers page checked live"
- },
- {
   "name": "Zwift",
   "careers_url": "https://www.zwift.com/careers",
   "verified": true,
@@ -169336,41 +165067,6 @@
   ],
   "founded": 2014,
   "employees": 700,
-  "source": "AI-suggested; careers page checked live"
- },
- {
-  "name": "Zymergen",
-  "careers_url": "https://careers.zymergen.com/",
-  "verified": false,
-  "link_check": "likely",
-  "categories": [
-   "consulting",
-   "mid_size",
-   "startup"
-  ],
-  "fields": [
-   "biomedical_devices",
-   "chemical_materials",
-   "consulting",
-   "research_labs"
-  ],
-  "states": [
-   "CA",
-   "MA"
-  ],
-  "why": {
-   "research_labs": "Engineer microbes for sustainable chemicals",
-   "chemical_materials": "Engineer microbes for material innovation",
-   "biomedical_devices": "Engineer biological systems",
-   "consulting": "Biotech strategy and innovation consulting"
-  },
-  "hq": "Emeryville, CA",
-  "locations": [
-   "Emeryville, CA",
-   "Boston, MA"
-  ],
-  "founded": 2013,
-  "employees": 600,
   "source": "AI-suggested; careers page checked live"
  }
 ]
