@@ -288,7 +288,7 @@ def _route(message: str, user_hash: str = None) -> dict:
 
 # --- Fixed rules on top of the AI picker ---
 _JOB_SEARCH = re.compile(r"\b(find|get|land|looking for|look for|search(ing)? for|apply(ing)?( to| for)?|hunt(ing)?)\b.*"
-                         r"\b(jobs?|internships?|work|positions?|roles?)\b|\bjob (search|hunt)|\binternships?\b|\bjobs? (in|at|near)\b", re.I)
+                         r"\b(jobs?|internships?|work|positions?|roles?)\b|\bjob (search|hunt)|\binternships?\b|\bjobs? (in|at|near)\b|\bwhere (can|could|should|would|do|does)\b.{0,50}\bwork\b|\b(companies|employers|organizations|places|nonprofits|startups)\b.{0,30}\b(hire|hires|hiring|for)\b|\bwho hires\b", re.I)
 _PAY_WORDS = re.compile(r"\b(make|makes|salary|salaries|pay|paid|earn|wages?|cost of living|afford|rent|"
                         r"where should i live|which city|best cit)", re.I)
 _pick_feature_ai = pick_feature

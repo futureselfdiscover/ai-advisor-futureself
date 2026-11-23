@@ -61,7 +61,7 @@ def wrap_route(route_fn):
             ctx = _context(message, history)
         except Exception:
             return route_fn(message, user_hash, history)
-        if not ctx.get("job_search"):
+        if not ctx.get("job_search") and not _is_job(message):
             return route_fn(message, user_hash, history)
         field, location, prefs = ctx.get("field"), ctx.get("location"), ctx.get("preferences")
         if not field:
