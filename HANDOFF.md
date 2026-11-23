@@ -168,7 +168,7 @@ Cost: about $5–10 of OpenAI use per full update.
 
 - `backend/data/companies.json` holds the employers the advisor suggests, across all 50 states and DC, each with career
   fields, company type, states, HQ and main offices. Spreadsheet: `backend/data/companies_by_category.csv`.
-- Built by `backend/data/scrapers/build_company_db.py` (OpenAI only; resumable). Employers are kept if their careers page
+- Built by `backend/data/scrapers/build_company_db.py` (OpenAI only; resumable), then cleaned by `clean_companies.py` (closed/absorbed employers removed, startup labels re-checked; re-run every few months). Employers are kept if their careers page
   was already confirmed or they appear in 2+ separate lists. Do NOT mass-check websites from a laptop: macOS flags it.
 - Careers pages are checked on the server when a student asks; employers whose official page can't be confirmed are
   left out of the answer (`advisor/careers_any.py`, `advisor/company_db.py`).

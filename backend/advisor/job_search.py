@@ -17,7 +17,7 @@ from careers import suggest_companies, explorer_html, explorer_brief
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 JOB = re.compile(r"\b(find|get|land|looking for|look for|search(ing)? for|apply(ing)?( to| for)?|hunt(ing)?)\b.*"
-                 r"\b(jobs?|internships?|work|positions?|roles?)\b|\bjob (search|hunt)|\binternships? in\b|\bjobs? (in|at|near)\b",
+                 r"\b(jobs?|internships?|work|positions?|roles?)\b|\bjob (search|hunt)|\binternships? in\b|\bjobs? (in|at|near)\b|\bwhere (can|could|should|would|do|does)\b.{0,50}\bwork\b|\b(companies|employers|organizations|places|nonprofits|startups)\b.{0,30}\b(hire|hires|hiring|for)\b|\bwho hires\b",
                  re.I)
 PAY = re.compile(r"\b(make|makes|salary|salaries|pay|paid|earn|wages?|cost of living|afford|rent|where should i live|which city)",
                  re.I)

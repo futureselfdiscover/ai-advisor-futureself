@@ -230,7 +230,8 @@ def explorer_html(picks, field=None, location=None):
             "big_four": "Big Four firms", "consulting": "Consulting firms", "nonprofit": "Nonprofits",
             "government": "Government employers", "small_business": "Small businesses"}.get(ct, "Companies")
     extra = " Startup details change quickly, so confirm on each company's site." if ct == "startup" else ""
-    title = head + " to explore" + (f" for {field}" if field else "") + (f" in {location}" if location else "")
+    show_field = field and not re.search(r"(?i)^(non-?profits?|startups?|government|companies)$", str(field).strip())
+    title = head + " to explore" + (f" for {field}" if show_field else "") + (f" in {location}" if location else "")
     lines = [f"<b>{html.escape(title)}</b>"]
     for i, (p, r) in enumerate(zip(picks, links), 1):
         note = _note(p)
