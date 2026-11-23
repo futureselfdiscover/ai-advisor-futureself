@@ -282,3 +282,8 @@ from careers_any import careers_links, careers_html, careers_brief, explorer_htm
 # --- Company types: startup, Fortune 500, Big Tech... (see company_types.py) ---
 from company_types import wrap_suggest  # noqa: E402
 suggest_companies = wrap_suggest(suggest_companies)
+
+
+# --- Large employer list by major/field, type and location (see company_db.py) ---
+from company_db import wrap_db  # noqa: E402
+suggest_companies = wrap_db(suggest_companies)

@@ -1,0 +1,641 @@
+{
+ "AI Design and Practice major": [
+  "software_tech",
+  "art_design"
+ ],
+ "African American and Diaspora Studies major": [
+  "nonprofit_advocacy",
+  "government_policy"
+ ],
+ "African American and Diaspora Studies minor": [
+  "nonprofit_advocacy",
+  "government_policy"
+ ],
+ "Anthropology major": [
+  "nonprofit_advocacy",
+  "international_affairs"
+ ],
+ "Anthropology minor": [
+  "nonprofit_advocacy",
+  "international_affairs"
+ ],
+ "Arabic Language minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Architecture and the Built Environment major": [
+  "real_estate_planning",
+  "civil_construction"
+ ],
+ "Architecture and the Built Environment minor": [
+  "real_estate_planning",
+  "civil_construction"
+ ],
+ "Art major": [
+  "art_design",
+  "nonprofit_advocacy"
+ ],
+ "Art minor": [
+  "art_design",
+  "nonprofit_advocacy"
+ ],
+ "Asian American and Asian Diaspora Studies major": [
+  "nonprofit_advocacy",
+  "government_policy"
+ ],
+ "Asian American and Asian Diaspora Studies minor": [
+  "nonprofit_advocacy",
+  "government_policy"
+ ],
+ "Asian Studies major": [
+  "international_affairs",
+  "nonprofit_advocacy"
+ ],
+ "Asian Studies minor": [
+  "international_affairs",
+  "nonprofit_advocacy"
+ ],
+ "Astronomy minor": [
+  "research_labs",
+  "higher_ed_edtech"
+ ],
+ "Biochemistry and Chemical Biology major": [
+  "biotech_pharma",
+  "research_labs"
+ ],
+ "Biological Sciences major": [
+  "biotech_pharma",
+  "healthcare_systems"
+ ],
+ "Biological Sciences minor": [
+  "biotech_pharma",
+  "healthcare_systems"
+ ],
+ "Biomedical Engineering major": [
+  "biomedical_devices",
+  "biotech_pharma"
+ ],
+ "Brazilian Studies minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Business minor": [
+  "business_operations",
+  "finance_banking"
+ ],
+ "Caribbean Studies minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Chemical Engineering major": [
+  "chemical_materials",
+  "biotech_pharma"
+ ],
+ "Chemistry major": [
+  "biotech_pharma",
+  "research_labs"
+ ],
+ "Chemistry minor": [
+  "biotech_pharma",
+  "research_labs"
+ ],
+ "Child Development major": [
+  "child_family_services",
+  "k12_education"
+ ],
+ "Child Development minor": [
+  "child_family_services",
+  "k12_education"
+ ],
+ "Child Psychology and Mental Health minor": [
+  "psychology_mental_health",
+  "child_family_services"
+ ],
+ "Child Studies major": [
+  "child_family_services",
+  "k12_education"
+ ],
+ "Chinese Language and Culture minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Cinema and Media Arts major": [
+  "media_journalism",
+  "communications_pr"
+ ],
+ "Cinema and Media Arts minor": [
+  "media_journalism",
+  "communications_pr"
+ ],
+ "Civil Engineering major": [
+  "civil_construction",
+  "mechanical_aerospace"
+ ],
+ "Classical and Mediterranean Studies major": [
+  "history_heritage",
+  "nonprofit_advocacy"
+ ],
+ "Climate and Environmental Studies major": [
+  "environment_climate",
+  "public_health"
+ ],
+ "Cognitive Studies major": [
+  "psychology_mental_health",
+  "research_labs"
+ ],
+ "Cognitive Studies minor": [
+  "psychology_mental_health",
+  "research_labs"
+ ],
+ "Communication Studies major": [
+  "communications_pr",
+  "media_journalism"
+ ],
+ "Communication Studies minor": [
+  "communications_pr",
+  "media_journalism"
+ ],
+ "Communication of Science and Technology major": [
+  "media_journalism",
+  "communications_pr"
+ ],
+ "Communication of Science and Technology minor": [
+  "media_journalism",
+  "communications_pr"
+ ],
+ "Computer Science major": [
+  "software_tech",
+  "data_ai"
+ ],
+ "Computer Science minor": [
+  "software_tech",
+  "data_ai"
+ ],
+ "Computing Society minor": [
+  "software_tech",
+  "data_ai"
+ ],
+ "Creative Writing minor": [
+  "media_journalism",
+  "art_design"
+ ],
+ "Culture, Advocacy, and Leadership major": [
+  "nonprofit_advocacy",
+  "government_policy"
+ ],
+ "Culture, Advocacy, and Leadership minor": [
+  "nonprofit_advocacy",
+  "government_policy"
+ ],
+ "Data Science major": [
+  "data_ai",
+  "software_tech"
+ ],
+ "Data Science minor": [
+  "data_ai",
+  "software_tech"
+ ],
+ "Digital Fabrication minor": [
+  "art_design",
+  "software_tech"
+ ],
+ "Earth and Environmental Sciences major": [
+  "environment_climate",
+  "public_health"
+ ],
+ "Earth and Environmental Sciences minor": [
+  "environment_climate",
+  "public_health"
+ ],
+ "Economics and History major": [
+  "economics_research",
+  "history_heritage"
+ ],
+ "Economics major": [
+  "economics_research",
+  "finance_banking"
+ ],
+ "Economics minor": [
+  "economics_research",
+  "finance_banking"
+ ],
+ "Educational Studies major": [
+  "k12_education",
+  "higher_ed_edtech"
+ ],
+ "Educational Studies minor": [
+  "k12_education",
+  "higher_ed_edtech"
+ ],
+ "Electrical and Computer Engineering major": [
+  "electrical_hardware",
+  "software_tech"
+ ],
+ "Electrical and Computer Engineering minor": [
+  "electrical_hardware",
+  "software_tech"
+ ],
+ "Elementary Education major": [
+  "k12_education"
+ ],
+ "Energy and Environmental Systems minor": [
+  "energy",
+  "environment_climate"
+ ],
+ "Engineering Management minor": [
+  "business_operations",
+  "consulting"
+ ],
+ "Engineering Science major": [
+  "mechanical_aerospace",
+  "civil_construction"
+ ],
+ "English major": [
+  "media_journalism",
+  "communications_pr"
+ ],
+ "Environmental Engineering major": [
+  "environment_climate",
+  "civil_construction"
+ ],
+ "Environmental Engineering minor": [
+  "environment_climate",
+  "civil_construction"
+ ],
+ "Environmental and Sustainability Studies minor": [
+  "environment_climate",
+  "public_health"
+ ],
+ "European Studies major": [
+  "international_affairs",
+  "languages_culture"
+ ],
+ "European Studies minor": [
+  "international_affairs",
+  "languages_culture"
+ ],
+ "French major": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "French minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Gender and Sexuality Studies major": [
+  "nonprofit_advocacy",
+  "government_policy"
+ ],
+ "Gender and Sexuality Studies minor": [
+  "nonprofit_advocacy",
+  "government_policy"
+ ],
+ "Generative AI minor": [
+  "data_ai",
+  "software_tech"
+ ],
+ "German Studies major": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "German Studies minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "History major": [
+  "history_heritage",
+  "government_policy"
+ ],
+ "History minor": [
+  "history_heritage",
+  "government_policy"
+ ],
+ "History of Art major": [
+  "art_design",
+  "history_heritage"
+ ],
+ "History of Art minor": [
+  "art_design",
+  "history_heritage"
+ ],
+ "Human and Organizational Development major": [
+  "business_operations",
+  "hr_org_development",
+  "consulting"
+ ],
+ "Human and Organizational Development minor": [
+  "business_operations",
+  "hr_org_development",
+  "consulting"
+ ],
+ "Innovation and Design Strategy minor": [
+  "art_design",
+  "software_tech",
+  "consulting"
+ ],
+ "Integrative Biology major": [
+  "biotech_pharma",
+  "research_labs",
+  "healthcare_systems"
+ ],
+ "Islamic Studies minor": [
+  "international_affairs",
+  "nonprofit_advocacy",
+  "government_policy"
+ ],
+ "Italian Studies minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Japanese Language and Culture minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Jazz Music minor": [
+  "music",
+  "performing_arts"
+ ],
+ "Jazz Studies major": [
+  "music",
+  "performing_arts"
+ ],
+ "Jewish Studies major": [
+  "history_heritage",
+  "international_affairs",
+  "nonprofit_advocacy"
+ ],
+ "Jewish Studies minor": [
+  "history_heritage",
+  "international_affairs",
+  "nonprofit_advocacy"
+ ],
+ "Korean Language and Culture minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Language Sciences major": [
+  "speech_language",
+  "languages_culture"
+ ],
+ "Language Sciences minor": [
+  "speech_language",
+  "languages_culture"
+ ],
+ "Latin American and Latinx Studies minor": [
+  "international_affairs",
+  "nonprofit_advocacy"
+ ],
+ "Latin American, Caribbean, and Latinx Studies major": [
+  "international_affairs",
+  "nonprofit_advocacy"
+ ],
+ "Law, History, and Society major": [
+  "law_legal",
+  "government_policy"
+ ],
+ "Legal Studies minor": [
+  "law_legal",
+  "government_policy"
+ ],
+ "Literacy Education minor": [
+  "k12_education",
+  "special_education"
+ ],
+ "Literary Studies minor": [
+  "media_journalism",
+  "communications_pr"
+ ],
+ "Materials Science and Engineering minor": [
+  "chemical_materials",
+  "biotech_pharma"
+ ],
+ "Mathematics major": [
+  "data_ai",
+  "finance_banking",
+  "consulting"
+ ],
+ "Mathematics minor": [
+  "data_ai",
+  "finance_banking",
+  "consulting"
+ ],
+ "Mechanical Engineering major": [
+  "mechanical_aerospace",
+  "civil_construction"
+ ],
+ "Medicine, Health, and Society major": [
+  "healthcare_systems",
+  "public_health"
+ ],
+ "Medicine, Health, and Society minor": [
+  "healthcare_systems",
+  "public_health"
+ ],
+ "Mediterranean Archaeology minor": [
+  "history_heritage",
+  "nonprofit_advocacy"
+ ],
+ "Mediterranean Studies minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Molecular and Cellular Biology major": [
+  "biotech_pharma",
+  "research_labs"
+ ],
+ "Multilingual Learner Education minor": [
+  "k12_education",
+  "special_education"
+ ],
+ "Multilingual and Multicultural Studies major": [
+  "languages_culture",
+  "k12_education"
+ ],
+ "Multilingual and Multicultural Studies minor": [
+  "languages_culture",
+  "k12_education"
+ ],
+ "Museum Studies minor": [
+  "art_design",
+  "history_heritage"
+ ],
+ "Music Composition major": [
+  "music",
+  "performing_arts"
+ ],
+ "Music Composition minor": [
+  "music",
+  "performing_arts"
+ ],
+ "Music Education major": [
+  "k12_education",
+  "music"
+ ],
+ "Music Integrated Studies major": [
+  "music",
+  "k12_education"
+ ],
+ "Music Performance major": [
+  "music",
+  "performing_arts"
+ ],
+ "Music Performance minor": [
+  "music",
+  "performing_arts"
+ ],
+ "Music minor": [
+  "music",
+  "performing_arts"
+ ],
+ "Musical Arts major": [
+  "music"
+ ],
+ "Musicology/Ethnomusicology minor": [
+  "music"
+ ],
+ "Nanoscience and Nanotechnology minor": [
+  "biotech_pharma",
+  "research_labs"
+ ],
+ "National Security major": [
+  "national_security",
+  "government_policy"
+ ],
+ "National Security minor": [
+  "national_security",
+  "government_policy"
+ ],
+ "Neuroscience major": [
+  "psychology_mental_health",
+  "biotech_pharma"
+ ],
+ "Neuroscience minor": [
+  "psychology_mental_health",
+  "biotech_pharma"
+ ],
+ "Nuclear Energy Systems minor": [
+  "energy"
+ ],
+ "Philosophy major": [
+  "philosophy_ethics"
+ ],
+ "Philosophy minor": [
+  "philosophy_ethics"
+ ],
+ "Physics major": [
+  "research_labs",
+  "software_tech"
+ ],
+ "Physics minor": [
+  "research_labs",
+  "software_tech"
+ ],
+ "Political Economy minor": [
+  "economics_research",
+  "government_policy"
+ ],
+ "Political Science major": [
+  "government_policy",
+  "international_affairs"
+ ],
+ "Political Science minor": [
+  "government_policy",
+  "international_affairs"
+ ],
+ "Portuguese minor": [
+  "languages_culture"
+ ],
+ "Psychology major": [
+  "psychology_mental_health",
+  "child_family_services"
+ ],
+ "Psychology minor": [
+  "psychology_mental_health",
+  "child_family_services"
+ ],
+ "Public Policy Studies major": [
+  "government_policy",
+  "nonprofit_advocacy"
+ ],
+ "Quantitative Methods minor": [
+  "data_ai",
+  "economics_research"
+ ],
+ "Quantum Information Science and Engineering minor": [
+  "software_tech",
+  "data_ai"
+ ],
+ "Religious Studies major": [
+  "religion_faith",
+  "nonprofit_advocacy"
+ ],
+ "Religious Studies minor": [
+  "religion_faith",
+  "nonprofit_advocacy"
+ ],
+ "Romance Languages, Cultures, and Diasporas major": [
+  "languages_culture"
+ ],
+ "Russian Studies major": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "Russian Studies minor": [
+  "languages_culture",
+  "international_affairs"
+ ],
+ "STEM Education minor": [
+  "k12_education",
+  "higher_ed_edtech"
+ ],
+ "Scientific Computing minor": [
+  "software_tech",
+  "data_ai"
+ ],
+ "Secondary Education major": [
+  "k12_education"
+ ],
+ "Sociology major": [
+  "child_family_services",
+  "government_policy"
+ ],
+ "Sociology minor": [
+  "child_family_services",
+  "government_policy"
+ ],
+ "South Asian Language and Culture minor": [
+  "languages_culture"
+ ],
+ "Spanish and Portuguese major": [
+  "languages_culture"
+ ],
+ "Spanish for the Professions minor": [
+  "languages_culture"
+ ],
+ "Spanish major": [
+  "languages_culture"
+ ],
+ "Spanish minor": [
+  "languages_culture"
+ ],
+ "Special Education major": [
+  "special_education",
+  "k12_education"
+ ],
+ "Special Education minor": [
+  "special_education",
+  "k12_education"
+ ],
+ "Sports and Society minor": [
+  "sports_recreation"
+ ],
+ "Teaching Linguistically Diverse Students minor": [
+  "k12_education"
+ ],
+ "Theatre major": [
+  "performing_arts"
+ ],
+ "Theatre minor": [
+  "performing_arts"
+ ]
+}
