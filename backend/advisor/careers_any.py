@@ -216,8 +216,15 @@ def careers_brief(links):
 
 
 def explorer_html(picks, field=None, location=None):
-    picks = [p for p in picks if _name(p)][:8]
-    links = find_many([_name(p) for p in picks])
+    from_db = any(isinstance(p, dict) and p.get("from_db") for p in picks)
+    picks = [p for p in picks if _name(p)][:12 if from_db else 8]
+    links = find_many([_name(p) for p in picks], deadline=18 if from_db else 15)
+    if from_db:
+        # employers from the big list: only show ones whose official careers page was confirmed just now
+        pairs = [(p, r) for p, r in zip(picks, links) if r["kind"] != "search"]
+        if len(pairs) >= 3:
+            picks, links = [p for p, _ in pairs], [r for _, r in pairs]
+        picks, links = picks[:6], links[:6]
     ct = next((p.get("ctype") for p in picks if isinstance(p, dict) and p.get("ctype")), None)
     head = {"startup": "Startups", "fortune_500": "Fortune 500 companies", "big_tech": "Big Tech companies",
             "big_four": "Big Four firms", "consulting": "Consulting firms", "nonprofit": "Nonprofits",

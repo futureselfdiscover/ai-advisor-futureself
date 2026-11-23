@@ -21,3 +21,5 @@ backend/data/scrapers/chunks.json
 
 .idea/
 backend/data/scrapers/kuali_programs_raw.json
+backend/data/scrapers/company_candidates.json
+backend/data/scrapers/company_links.json

@@ -1,0 +1,549 @@
+{
+ "art_design": {
+  "label": "Art, design & museums",
+  "keywords": [
+   "art",
+   "design",
+   "museum",
+   "gallery",
+   "studio art",
+   "illustration",
+   "graphic design"
+  ],
+  "hint": "art, design, museum, gallery, studio art, illustration"
+ },
+ "music": {
+  "label": "Music & the music industry",
+  "keywords": [
+   "music",
+   "jazz",
+   "composition",
+   "musicology",
+   "recording",
+   "orchestra",
+   "musician"
+  ],
+  "hint": "music, jazz, composition, musicology, recording, orchestra"
+ },
+ "performing_arts": {
+  "label": "Theatre, film & performing arts",
+  "keywords": [
+   "theatre",
+   "theater",
+   "film",
+   "cinema",
+   "media arts",
+   "acting",
+   "dance",
+   "production"
+  ],
+  "hint": "theatre, theater, film, cinema, media arts, acting"
+ },
+ "media_journalism": {
+  "label": "Journalism, media & publishing",
+  "keywords": [
+   "journalism",
+   "media",
+   "publishing",
+   "writing",
+   "english",
+   "creative writing",
+   "editor",
+   "literature"
+  ],
+  "hint": "journalism, media, publishing, writing, english, creative writing"
+ },
+ "communications_pr": {
+  "label": "Communications, PR & marketing",
+  "keywords": [
+   "communication",
+   "communications",
+   "public relations",
+   "pr",
+   "marketing",
+   "advertising",
+   "brand"
+  ],
+  "hint": "communication, communications, public relations, pr, marketing, advertising"
+ },
+ "k12_education": {
+  "label": "K-12 teaching & schools",
+  "keywords": [
+   "teach",
+   "teacher",
+   "teaching",
+   "elementary",
+   "secondary",
+   "education",
+   "school",
+   "classroom"
+  ],
+  "hint": "teach, teacher, teaching, elementary, secondary, education"
+ },
+ "special_education": {
+  "label": "Special education & disability services",
+  "keywords": [
+   "special education",
+   "disability",
+   "disabilities",
+   "autism"
+  ],
+  "hint": "special education, disability, disabilities, autism"
+ },
+ "child_family_services": {
+  "label": "Child development, family & social services",
+  "keywords": [
+   "child",
+   "children",
+   "child development",
+   "child studies",
+   "social work",
+   "family",
+   "youth"
+  ],
+  "hint": "child, children, child development, child studies, social work, family"
+ },
+ "higher_ed_edtech": {
+  "label": "Higher education & edtech",
+  "keywords": [
+   "edtech",
+   "higher education",
+   "educational studies",
+   "university",
+   "curriculum",
+   "learning"
+  ],
+  "hint": "edtech, higher education, educational studies, university, curriculum, learning"
+ },
+ "psychology_mental_health": {
+  "label": "Psychology & mental health",
+  "keywords": [
+   "psychology",
+   "mental health",
+   "counseling",
+   "therapy",
+   "behavioral"
+  ],
+  "hint": "psychology, mental health, counseling, therapy, behavioral"
+ },
+ "healthcare_systems": {
+  "label": "Hospitals & health systems",
+  "keywords": [
+   "hospital",
+   "healthcare",
+   "health care",
+   "nurse",
+   "nursing",
+   "clinical",
+   "pre-med",
+   "physician"
+  ],
+  "hint": "hospital, healthcare, health care, nurse, nursing, clinical"
+ },
+ "public_health": {
+  "label": "Public health & health policy",
+  "keywords": [
+   "public health",
+   "health policy",
+   "global health",
+   "medicine health and society",
+   "epidemiology"
+  ],
+  "hint": "public health, health policy, global health, medicine health and society, epidemiology"
+ },
+ "biotech_pharma": {
+  "label": "Biotech, pharma & life sciences",
+  "keywords": [
+   "biotech",
+   "pharma",
+   "pharmaceutical",
+   "biology",
+   "biological",
+   "biochemistry",
+   "molecular",
+   "life sciences",
+   "chemistry"
+  ],
+  "hint": "biotech, pharma, pharmaceutical, biology, biological, biochemistry"
+ },
+ "research_labs": {
+  "label": "Research institutes & labs",
+  "keywords": [
+   "research",
+   "lab",
+   "laboratory",
+   "scientist",
+   "physics",
+   "astronomy",
+   "neuroscience"
+  ],
+  "hint": "research, lab, laboratory, scientist, physics, astronomy"
+ },
+ "software_tech": {
+  "label": "Software & tech",
+  "keywords": [
+   "software",
+   "computer science",
+   "tech",
+   "developer",
+   "programming",
+   "it"
+  ],
+  "hint": "software, computer science, tech, developer, programming, it"
+ },
+ "data_ai": {
+  "label": "Data science & AI",
+  "keywords": [
+   "data",
+   "data science",
+   "ai",
+   "artificial intelligence",
+   "machine learning",
+   "analytics",
+   "statistics",
+   "quantitative"
+  ],
+  "hint": "data, data science, ai, artificial intelligence, machine learning, analytics"
+ },
+ "cybersecurity": {
+  "label": "Cybersecurity",
+  "keywords": [
+   "cyber",
+   "cybersecurity",
+   "security",
+   "information security"
+  ],
+  "hint": "cyber, cybersecurity, security, information security"
+ },
+ "electrical_hardware": {
+  "label": "Electrical engineering & hardware",
+  "keywords": [
+   "electrical",
+   "computer engineering",
+   "semiconductor",
+   "hardware",
+   "electronics"
+  ],
+  "hint": "electrical, computer engineering, semiconductor, hardware, electronics"
+ },
+ "mechanical_aerospace": {
+  "label": "Mechanical, aerospace & manufacturing",
+  "keywords": [
+   "mechanical",
+   "aerospace",
+   "manufacturing",
+   "automotive",
+   "robotics"
+  ],
+  "hint": "mechanical, aerospace, manufacturing, automotive, robotics"
+ },
+ "civil_construction": {
+  "label": "Civil engineering, construction & infrastructure",
+  "keywords": [
+   "civil",
+   "construction",
+   "infrastructure",
+   "structural",
+   "transportation"
+  ],
+  "hint": "civil, construction, infrastructure, structural, transportation"
+ },
+ "environment_climate": {
+  "label": "Environment, climate & sustainability",
+  "keywords": [
+   "environment",
+   "environmental",
+   "climate",
+   "sustainability",
+   "conservation",
+   "earth",
+   "ecology"
+  ],
+  "hint": "environment, environmental, climate, sustainability, conservation, earth"
+ },
+ "energy": {
+  "label": "Energy & utilities",
+  "keywords": [
+   "energy",
+   "utilities",
+   "utility",
+   "renewable",
+   "nuclear",
+   "solar",
+   "oil",
+   "gas"
+  ],
+  "hint": "energy, utilities, utility, renewable, nuclear, solar"
+ },
+ "chemical_materials": {
+  "label": "Chemical engineering & materials",
+  "keywords": [
+   "chemical engineering",
+   "materials",
+   "materials science",
+   "nanotechnology",
+   "nanoscience",
+   "polymers"
+  ],
+  "hint": "chemical engineering, materials, materials science, nanotechnology, nanoscience, polymers"
+ },
+ "biomedical_devices": {
+  "label": "Biomedical engineering & medical devices",
+  "keywords": [
+   "biomedical",
+   "medical device",
+   "medical devices",
+   "bioengineering"
+  ],
+  "hint": "biomedical, medical device, medical devices, bioengineering"
+ },
+ "finance_banking": {
+  "label": "Banking & investment",
+  "keywords": [
+   "finance",
+   "financial",
+   "banking",
+   "bank",
+   "investment",
+   "investing",
+   "wall street",
+   "asset management",
+   "economics"
+  ],
+  "hint": "finance, financial, banking, bank, investment, investing"
+ },
+ "accounting": {
+  "label": "Accounting, audit & tax",
+  "keywords": [
+   "accounting",
+   "accountant",
+   "audit",
+   "tax",
+   "cpa"
+  ],
+  "hint": "accounting, accountant, audit, tax, cpa"
+ },
+ "consulting": {
+  "label": "Consulting",
+  "keywords": [
+   "consulting",
+   "consultant",
+   "strategy"
+  ],
+  "hint": "consulting, consultant, strategy"
+ },
+ "insurance_risk": {
+  "label": "Insurance & risk",
+  "keywords": [
+   "insurance",
+   "actuarial",
+   "actuary",
+   "risk"
+  ],
+  "hint": "insurance, actuarial, actuary, risk"
+ },
+ "real_estate_planning": {
+  "label": "Real estate, architecture & urban planning",
+  "keywords": [
+   "real estate",
+   "property",
+   "urban planning",
+   "architecture",
+   "built environment"
+  ],
+  "hint": "real estate, property, urban planning, architecture, built environment"
+ },
+ "law_legal": {
+  "label": "Law & legal services",
+  "keywords": [
+   "law",
+   "legal",
+   "paralegal",
+   "pre-law",
+   "attorney",
+   "lawyer"
+  ],
+  "hint": "law, legal, paralegal, pre-law, attorney, lawyer"
+ },
+ "government_policy": {
+  "label": "Government & public policy",
+  "keywords": [
+   "government",
+   "public policy",
+   "political science",
+   "policy",
+   "politics",
+   "legislative"
+  ],
+  "hint": "government, public policy, political science, policy, politics, legislative"
+ },
+ "national_security": {
+  "label": "National security & defense",
+  "keywords": [
+   "national security",
+   "defense",
+   "intelligence",
+   "military"
+  ],
+  "hint": "national security, defense, intelligence, military"
+ },
+ "international_affairs": {
+  "label": "International affairs & NGOs",
+  "keywords": [
+   "international",
+   "global",
+   "foreign affairs",
+   "diplomacy",
+   "ngo",
+   "humanitarian"
+  ],
+  "hint": "international, global, foreign affairs, diplomacy, ngo, humanitarian"
+ },
+ "nonprofit_advocacy": {
+  "label": "Nonprofits, advocacy & community",
+  "keywords": [
+   "nonprofit",
+   "non-profit",
+   "advocacy",
+   "community",
+   "social justice",
+   "civic",
+   "diaspora",
+   "gender",
+   "leadership"
+  ],
+  "hint": "nonprofit, non-profit, advocacy, community, social justice, civic"
+ },
+ "religion_faith": {
+  "label": "Faith-based organizations",
+  "keywords": [
+   "religion",
+   "religious",
+   "ministry",
+   "faith",
+   "church",
+   "jewish",
+   "islamic"
+  ],
+  "hint": "religion, religious, ministry, faith, church, jewish"
+ },
+ "languages_culture": {
+  "label": "Languages, translation & cultural organizations",
+  "keywords": [
+   "spanish",
+   "french",
+   "german",
+   "russian",
+   "arabic",
+   "chinese",
+   "japanese",
+   "korean",
+   "portuguese",
+   "italian",
+   "translation",
+   "language"
+  ],
+  "hint": "spanish, french, german, russian, arabic, chinese"
+ },
+ "speech_language": {
+  "label": "Speech, language & hearing",
+  "keywords": [
+   "language sciences",
+   "speech",
+   "linguistics",
+   "audiology",
+   "hearing"
+  ],
+  "hint": "language sciences, speech, linguistics, audiology, hearing"
+ },
+ "history_heritage": {
+  "label": "History, archives & cultural heritage",
+  "keywords": [
+   "history",
+   "archive",
+   "archives",
+   "heritage",
+   "classics",
+   "archaeology",
+   "historic"
+  ],
+  "hint": "history, archive, archives, heritage, classics, archaeology"
+ },
+ "sports_recreation": {
+  "label": "Sports & recreation",
+  "keywords": [
+   "sports",
+   "athletic",
+   "athletics",
+   "recreation",
+   "fitness"
+  ],
+  "hint": "sports, athletic, athletics, recreation, fitness"
+ },
+ "hospitality_tourism": {
+  "label": "Hospitality, events & tourism",
+  "keywords": [
+   "hospitality",
+   "hotel",
+   "events",
+   "tourism",
+   "travel"
+  ],
+  "hint": "hospitality, hotel, events, tourism, travel"
+ },
+ "consumer_retail": {
+  "label": "Consumer brands & retail",
+  "keywords": [
+   "retail",
+   "consumer",
+   "fashion",
+   "apparel",
+   "consumer goods"
+  ],
+  "hint": "retail, consumer, fashion, apparel, consumer goods"
+ },
+ "hr_org_development": {
+  "label": "HR, people & organizational development",
+  "keywords": [
+   "human resources",
+   "hr",
+   "organizational development",
+   "human and organizational development",
+   "people operations",
+   "talent"
+  ],
+  "hint": "human resources, hr, organizational development, human and organizational development, people operations, talent"
+ },
+ "business_operations": {
+  "label": "Business operations & management",
+  "keywords": [
+   "business",
+   "operations",
+   "management",
+   "entrepreneur",
+   "entrepreneurship",
+   "supply chain",
+   "logistics"
+  ],
+  "hint": "business, operations, management, entrepreneur, entrepreneurship, supply chain"
+ },
+ "economics_research": {
+  "label": "Economics & policy research",
+  "keywords": [
+   "economics",
+   "economist",
+   "think tank",
+   "policy research"
+  ],
+  "hint": "economics, economist, think tank, policy research"
+ },
+ "philosophy_ethics": {
+  "label": "Ethics, philosophy & public affairs",
+  "keywords": [
+   "philosophy",
+   "ethics",
+   "bioethics"
+  ],
+  "hint": "philosophy, ethics, bioethics"
+ }
+}
